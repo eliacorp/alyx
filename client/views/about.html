@@ -1,0 +1,35 @@
+<div class="anchor-about" ng-controller="aboutCtrl" id="aboutHash">
+
+
+
+  <div class="about-portrait" style="background-image: url('{{aboutData.matthewImg}}');" ></div>
+
+
+
+      <div class="about-wrapper" >
+
+        <div class="about-mft" style="background-image: url('{{aboutData.mftLogo}}')"></div>
+
+
+        <!-- <h3 class="about-h3">"{{aboutData.title}}"</h3> -->
+
+        <ul class="about-intro">
+          <li class="about-intro-li" ng-repeat="i in aboutData.intro">
+            <p class="about-intro-p">{{i}}</p>
+          </li>
+        </ul>
+
+        <ul class="about-text">
+          <li class="about-text-li" ng-repeat="t in aboutData.text">
+            <p class="about-text-p">{{t}}</p>
+          </li>
+        </ul>
+
+        <!-- <p class="about-credit">{{aboutData.credit}}</p> -->
+
+
+      </div>
+
+
+
+</div>

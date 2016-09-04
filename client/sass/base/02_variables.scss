@@ -1,0 +1,92 @@
+/*VARIABLES*/
+
+/*.......LETTER-SPACING......*/
+$letter-spacing-global: 1px;
+$letter-spacing-title: 4px;
+/*.......LETTER SPACING......*/
+$letter-spacing: 2px;
+$letter-spacing-nav: 4px;
+$letter-spacing-paragraph: 1px;
+
+/*.......FONT-SIZES......*/
+
+$font-size-title: 28px;
+$font-size-subtitle: 15px;
+$font-size-nav: 14px;
+$font-size-nav-small: 12px;
+$font-size-paragraph: 13px;
+
+$font-size-subtitle-mobile: 15px;
+$font-size-paragraph-mobile: 10px;
+
+/*.......FONT-FAMILY......*/
+$font-family-title: "akzidenz-grotesk-condensed";
+$font-family-subtitle: "akzidenz-grotesk-condensed";
+$font-family-paragraph: "akzidenz-grotesk";
+
+
+/*.......MARGINS......*/
+$margin-sides: 30px;
+$margin-sides-mobile: 15px;
+
+
+
+/*.......DISTANCES......*/
+$header-padding-bottom: 20px;
+
+
+
+
+/*.......COLORS......*/
+$black: rgba(0,0,0,1);;
+$black-transparent: rgba(0,0,0,0.3);
+$dark-grey: #666666;
+$light-grey: #ADADAD;
+$red: #CC0000;
+$color-subtext: rgba(156, 156, 156, 1);
+
+
+
+/*.......LINE HEIGHTS......*/
+$line-height-overall: 20px;
+$line-height-overall-mobile:19px;
+$line-height-paragraph: 19px;
+$line-height-editorsletter: 22px;
+
+
+$animation-speed: 0.6s;
+
+
+// ........................................................TRANSITION TIMINGS
+$transition-extreme-slow: 1.4s;
+$transition-slow: .6s;
+$transition-medium: .4s;
+$transition-fast: .2s;
+
+
+/*.......Z-INDEX......*/
+$z-loader: 14;
+$z-mobile-burger-bar: 10;
+$z-close-button: 11;
+$z-pop: 11;
+$z-pop-table: 13;
+$z-header-mobile: 13;
+$z-pop-background: 12;
+$z-nav: 11;
+$z-swipe:11;
+$z-header: 10;
+$z-scroll-bar: 9;
+$z-horizontal-scroll: 8;
+$z-social-load:8;
+$z-social-view-on-instagram:8;
+$z-social-main:7;
+$z-lookbook-close: 8;
+$z-lookbook-main: 7;
+$z-catalogue-ul:7;
+$z-support: 7;
+$z-lookbook-ul: 6;
+$z-lookbook-story: 5;
+
+$z-stickers: 4;
+$z-contributors: 2;
+$z-main: 1;

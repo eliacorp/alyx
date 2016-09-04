@@ -1,0 +1,420 @@
+//............................POP...................//
+
+.pop-background{
+  width: 100%;
+  height: 100%;
+  z-index: $z-pop-background;
+  display: block;
+  position: absolute;
+}
+.pop-wrapper.ng-hide{
+  opacity: 0 !important;
+  @include transitionOpacity;
+}
+
+
+.pop-wrapper{
+  position: fixed;
+  z-index: $z-pop;
+  background-color: #FFFFFF;
+  opacity: 0.9;
+  width: 100vw;
+  height: 100vh;
+  @include transitionOpacity;
+  @include respond-to(phone){
+    position: relative;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0.9;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    margin-top: 22px;
+  }
+}
+
+
+
+.pop{
+  @include respond-to(phone) {
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    top: 0px;
+    right: 0px;
+    z-index: $z-pop;
+    background-color: rgba(255, 255, 255, 0.8);
+    background-attachment: fixed;
+  }
+  @include respond-to(phone-device){
+    animation: none;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -ms-animation: none;
+    -o-animation: none;
+  }
+}
+
+
+
+
+
+
+  .pop-header-wrapper{
+    position: absolute;
+    width: 165px;
+    height: 70px;
+    left: $margin-sides;
+    top: 20px;
+    display: block;
+    z-index: $z-pop;
+    @include respond-to(phone){
+      position: fixed;
+      width: 170px;
+      height: 70px;
+      left: 10px;
+      bottom: 10px;
+      display: block;
+      z-index: $z-pop;
+    }
+    .pop-header-A-logo{
+      width: 45px;
+      height: 45px;
+      display: inline-block;
+      z-index: $z-pop;
+      @include respond-to(phone){
+        width: 70px;
+        height: 70px;
+        display: inline-block;
+        z-index: 11;
+      }
+      .header-logo-svg{
+        width: 100%;
+        height: 100%;
+        svg{
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+  }
+
+
+
+
+
+  .pop-table{
+    z-index: $z-pop-table;
+    position: absolute;
+    display: block;
+    top: 90px;
+    left: $margin-sides;
+    width: 300px;
+    height: 500px;
+    animation:all $fade-nav ease-in 0.9;
+    -webkit-animation:all $fade-nav ease-in 0.9;
+    -moz-animation:all $fade-nav ease-in $fade-in;
+    -ms-animation:all $fade-nav ease-in $fade-in;
+    -o-animation:all $fade-nav ease-in $fade-in;
+    @include respond-to(phone){
+      top: 0px;
+      left: $margin-sides-mobile;
+    }
+    .pop-tr{
+      .pop-td{
+          z-index: $z-pop-table;
+        .pop-season{
+          z-index: $z-pop-table;
+          width: 100%;
+          padding: 0 0;
+          margin-bottom: 10px;
+          &:nth-child(3){
+            margin-top: 25px;
+          }
+
+          p{
+            position: relative;
+            width: 200px;
+            margin-bottom: 5px;
+            font-size: $font-size-nav;
+            height:$font-size-nav;
+            color: $light-grey;
+            letter-spacing: $letter-spacing-nav;
+            font-family: "akzidenz-grotesk-condensed";
+            letter-spacing: $letter-spacing-nav;
+            @include hover-effect-color-black();
+            @include respond-to(phone){
+              margin-bottom: 10px;
+              line-height: 20px;
+              height:20px;
+            }
+
+          }
+
+
+          .pop-ul{
+            display: block;
+            position: relative;
+            width: 200px;
+            margin-top: 13px;
+            @include respond-to(phone){
+              margin: 0;
+            }
+              .pop-li{
+                display: block;
+                position: relative;
+                padding-bottom: 10px;
+                height: $font-size-nav;
+                z-index: $z-pop-table;
+                @include respond-to(phone){
+                  height: $line-height-overall;
+                }
+                .pop-a{
+                  display: block;
+                  width: 100%;
+                  line-height: $font-size-nav-small;
+                  height: $font-size-nav-small;
+                  text-transform: none;
+                  @include respond-to(phone){
+                    height: auto;
+                    line-height: $line-height-overall;
+                  }
+                  .pop-text{
+                    display: block;
+                    position: absolute;
+                    width: auto;
+                    z-index: $z-pop-table;
+                    color: $light-grey;
+                    font-size: $font-size-nav-small;
+                    height: $font-size-nav-small;
+                    line-height: $font-size-nav-small;
+                    text-transform:uppercase;
+                    font-family: "akzidenz-grotesk-condensed";
+                    letter-spacing: $letter-spacing-nav;
+                    @include hover-effect-color-black();
+                  }
+                }
+              }
+            }
+        }
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+//....................MOBILE
+.mobile-nav{
+  z-index: $z-header;
+  position: fixed;
+  width: 100vw;
+  height: calc(100vh + 60px);
+  background-color: rgba(255, 255, 255, 1);
+  bottom: -100vh;
+  transform: translateY(0px);
+  -webkit-transform: translateY(0px);
+  border-top: 1px solid #000000;
+  box-shadow: 1px 0px 22px -3px rgba(0,0,0,0.16);
+  -webkit-box-shadow: 1px 0px 22px -3px rgba(0,0,0,0.16);
+  -moz-box-shadow: 1px 0px 22px -3px rgba(0,0,0,0.16);
+  -o-box-shadow: 1px 0px 22px -3px rgba(0,0,0,0.16);
+}
+
+
+.mobile-header-wrapper{
+  width: 100vw;
+  height: 60px;
+  left: 0;
+  bottom: 0;
+  display: block;
+  z-index: $z-header-mobile;
+  .mobile-header-A-logo{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    z-index: $z-header-mobile;
+    margin-left: 10px;
+    margin-top: 10px;
+
+
+    .header-logo-svg{
+      width: 100%;
+      height: 100%;
+      svg{
+        height: 100%;
+        width: 100%;
+        fill: #000000 !important;
+        path{
+          fill: #000000 !important;
+        }
+      }
+    }
+  }
+  .mobile-header-section-status{
+    position: absolute;
+    left: 60px;
+    top: 0px;
+    width: 100px;
+    height: 70px;
+    margin-left: 5px;
+    .mobile-header-section-status-p{
+      font-size: $font-size-nav;
+      letter-spacing: $letter-spacing-nav;
+      font-family: "akzidenz-grotesk-condensed";
+      line-height: $font-size-nav;
+      vertical-align: middle;
+      fill: #000000;
+      POSITION: absolute;
+      top: 50%;
+      margin-top: -12px;
+    }
+  }
+}
+
+@keyframes shiftUpPop {
+  from {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+   }
+  to {
+    transform: translateY(-499px);
+    -webkit-transform: translateY(-499px);
+  }
+}
+
+@-webkit-keyframes shiftUpPop {
+  from {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+   }
+  to {
+    transform: translateY(-499px);
+    -webkit-transform: translateY(-499px);
+  }
+}
+
+@-moz-keyframes shiftUpPop {
+  from {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+   }
+  to {
+    transform: translateY(-499px);
+    -webkit-transform: translateY(-499px);
+  }
+}
+
+@-ms-keyframes shiftUpPop {
+  from {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+   }
+  to {
+    transform: translateY(-499px);
+    -webkit-transform: translateY(-499px);
+  }
+}
+
+@-o-keyframes shiftUpPop {
+  from {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+   }
+  to {
+    transform: translateY(-499px);
+    -webkit-transform: translateY(-499px);
+  }
+}
+
+
+
+
+@keyframes shiftDownPop {
+  from {
+     transform: translateY(-499px);
+     -webkit-transform: translateY(-499px);
+   }
+  to {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+}
+
+@-webkit-keyframes shiftDownPop {
+  from {
+     transform: translateY(-499px);
+     -webkit-transform: translateY(-499px);
+   }
+  to {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+}
+
+@-moz-keyframes shiftDownPop {
+  from {
+     transform: translateY(-499px);
+     -webkit-transform: translateY(-499px);
+   }
+  to {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+}
+
+@-ms-keyframes shiftDownPop {
+  from {
+     transform: translateY(-499px);
+     -webkit-transform: translateY(-499px);
+   }
+  to {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+}
+
+@-o-keyframes shiftDownPop {
+  from {
+     transform: translateY(-499px);
+     -webkit-transform: translateY(-499px);
+   }
+  to {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+}
+
+
+.shift-pop{
+transform: translateY(-499px) !important;
+-webkit-transform: translateY(-499px) !important;
+}
+
+
+
+
+.mobile-nav.shift-pop-remove.shift-pop-remove-active{
+  -webkit-animation: shiftDownPop $animation-speed ease;
+  -moz-animation: shiftDownPop $animation-speed ease;
+  -ms-animation: shiftDownPop $animation-speed ease;
+  -o-animation: shiftDownPop $animation-speed ease;
+  animation: shiftDownPop $animation-speed ease;
+}
+
+.mobile-nav.shift-pop-add.shift-pop-add-active{
+  -webkit-animation: shiftUpPop $animation-speed ease;
+  -moz-animation: shiftUpPop $animation-speed ease;
+  -ms-animation: shiftUpPop $animation-speed ease;
+  -o-animation: shiftUpPop $animation-speed ease;
+  animation: shiftUpPop $animation-speed ease;
+}

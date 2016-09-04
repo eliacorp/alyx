@@ -1,0 +1,799 @@
+$fade-in: 0.4s;
+$fade-nav: 0.9s;
+$fade-out: 0.4s;
+
+.blackNavActive{
+  color: black !important;
+}
+
+.navigation-placeholder{
+  display: block;
+  height: 100vh;
+  position: relative;
+  margin: 0 0;
+  z-index: 0;
+}
+
+
+
+
+
+
+@mixin navigation{
+  display: block;
+  position: fixed;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  top: 0px;
+  right: 0px;
+  z-index: $z-nav;
+  background-color: rgba(255, 255, 255, 1);
+  background-attachment: fixed;
+}
+@mixin navigation-header-wrapper{
+  position: fixed;
+  display: block;
+  top: 50%;
+  left: 50%;
+  margin-left: -47.5px;
+  margin-top: -47px;
+  width: 95px;
+  height: auto;
+  z-index: $z-nav;
+  @include respond-to(phone){
+    position: fixed;
+    display: block;
+    top: 50%;
+    left: 50%;
+    margin-left: 20px;
+    margin-top: -75px;
+    width: 150px;
+    height: 150px;
+    z-index: $z-nav;
+  }
+}
+
+@mixin navigation-table($display){
+  width: 100%;
+  height: 100%;
+  display: $display;
+  animation:all $fade-nav ease-in 0.9;
+  -webkit-animation:all $fade-nav ease-in 0.9;
+  -moz-animation:all $fade-nav ease-in $fade-in;
+  -ms-animation:all $fade-nav ease-in $fade-in;
+  -o-animation:all $fade-nav ease-in $fade-in;
+}
+@mixin navigation-season{
+  width: 100%;
+  padding: 0 0;
+  margin-bottom: 10px;
+  &:nth-child(3){
+    margin-top: 25px;
+  }
+  p{
+    position: relative;
+    width: 170px;
+    left: 50%;
+    margin-left: -85px;
+    margin-bottom: 5px;
+    font-size: $font-size-nav;
+    height:$font-size-nav;
+    color: $light-grey;
+    letter-spacing: $letter-spacing-nav;
+    font-family: "akzidenz-grotesk-condensed";
+    @include hover-effect-color-black();
+
+    @include respond-to(phone){
+      width: 200px;
+      margin-left: -27px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+@mixin navigation-ul{
+  display: block;
+  left: 50%;
+  margin-left: -100px;
+  position: relative;
+  width: 200px;
+  margin-top: 13px;
+}
+@mixin navigation-li{
+  display: block;
+  position: relative;
+  padding-bottom: 10px;
+  height: $font-size-nav;
+}
+@mixin navigation-a{
+  display: block;
+  width: 100%;
+  height: $font-size-nav-small;
+  line-height: $line-height-overall;
+  font-family: "akzidenz-grotesk-condensed";
+  letter-spacing: $letter-spacing-nav;
+
+
+}
+@mixin navigation-text{
+  display: block;
+  position: absolute;
+  width: auto;
+  height: $font-size-nav-small;
+  text-transform:uppercase;
+  display: block;
+  font-size: $font-size-nav-small;
+  color: $light-grey;
+  line-height: $font-size-nav-small;
+  letter-spacing: $letter-spacing-nav;
+  font-family: "akzidenz-grotesk-condensed";
+  letter-spacing: $letter-spacing-nav;
+  @include hover-effect-color-black();
+
+}
+
+
+
+.navigation{
+
+  @include navigation;
+
+  @include respond-to(phone-device){
+    animation: none;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -ms-animation: none;
+    -o-animation: none;
+  }
+  @include respond-to(phone) {
+    height: 100%;
+    width: 100%;
+  }
+
+
+
+//arrow
+.navigation-arrow{
+  width: 40px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  bottom:5px;
+  margin-left: -20px;
+    svg{
+      width: 100%;
+      height: 100%;
+
+    }
+
+}
+
+
+  .navigation-header-wrapper{
+
+      @include navigation-header-wrapper;
+
+      .navigation-header-content{
+        .navigation-header-a{
+        }
+      }
+  }
+
+
+
+
+  .navigation-table{
+    @include navigation-table(none);
+
+    .navigation-tr{
+      .navigation-td{
+        .navigation-season{
+          @include navigation-season;
+
+          .navigation-ul{
+            @include navigation-ul;
+
+              .navigation-li{
+                @include navigation-li;
+
+                .navigation-a{
+                  @include navigation-a;
+
+                  .navigation-text{
+                    @include navigation-text;
+
+
+                  }
+                }
+              }
+            }
+
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//.................................................................................nav ONE
+
+
+
+
+.navigation-one-placeholder{
+  display: block;
+  height: 100vh;
+  position: relative;
+  margin: 0 0;
+  z-index: 0;
+}
+
+
+
+.navigation-one{
+  @include navigation;
+  @include respond-to(phone-device){
+    animation: none;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -ms-animation: none;
+    -o-animation: none;
+  }
+  @include respond-to(phone) {
+    height: 100%;
+    width: 100%;
+  }
+  .navigation-one-header-wrapper{
+    position: fixed;
+    display: block;
+    top: 50%;
+    left: 50%;
+    margin-left: -242.5px;
+    margin-top: -47px;
+    width: 95px;
+    height: 94px;
+    z-index: $z-nav;
+    @include respond-to(phone){
+      margin-left: -275px;
+      margin-top: -75px;
+      width: 150px;
+      height: 150px;
+    }
+    .navigation-one-header-content{
+      .navigation-one-header-a{
+      }
+    }
+  }
+
+
+
+
+  .navigation-one-table{
+    @include navigation-table(table);
+    .navigation-one-tr{
+      .navigation-one-td{
+        .navigation-one-season{
+          @include navigation-season;
+          .navigation-one-ul{
+          @include navigation-ul;
+              .navigation-one-li{
+              @include navigation-li;
+                .navigation-one-a{
+                @include navigation-a;
+                  .navigation-one-text{
+                  @include navigation-text;
+                  }
+                }
+              }
+            }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+// //.................................................................................nav SUPPORT...........................................
+//
+//
+//
+//
+// .navigation-support-placeholder{
+//   display: block;
+//   height: 100vh;
+//   position: relative;
+//   margin: 0 0;
+//   z-index: 0;
+// }
+//
+//
+//
+// .navigation-support{
+//   display: block;
+//   position: fixed;
+//   display: block;
+//   height: 100vh;
+//   width: 100vw;
+//   top: 0px;
+//   right: 0px;
+//   z-index: $z-nav;
+//   background-color: rgba(255, 255, 255, 1);
+//   background-attachment: fixed;
+//   @include respond-to(phone-device){
+//     animation: none;
+//     -webkit-animation: none;
+//     -moz-animation: none;
+//     -ms-animation: none;
+//     -o-animation: none;
+//   }
+//   @include respond-to(phone) {
+//     height: 100%;
+//     width: 100%;
+//   }
+//
+//
+//   .navigation-support-header-wrapper{
+//       position: fixed;
+//       display: block;
+//       top: 50%;
+//       left: 50%;
+//       margin-left: -275px;
+//       margin-top: -75px;
+//       width: 150px;
+//       height: 150px;
+//       z-index: $z-nav;
+//       .navigation-one-header-content{
+//         .navigation-one-header-a{
+//         }
+//       }
+//   }
+//
+//
+//   .navigation-support-table{
+//     width: 100%;
+//     height: 100%;
+//     // display: block;
+//     // animation:all $fade-nav ease-in 0.9;
+//     // -webkit-animation:all $fade-nav ease-in 0.9;
+//     // -moz-animation:all $fade-nav ease-in $fade-in;
+//     // -ms-animation:all $fade-nav ease-in $fade-in;
+//     // -o-animation:all $fade-nav ease-in $fade-in;
+//     .navigation-support-tr{
+//       .navigation-support-td{
+//         .navigation-support-season{
+//           width: 100%;
+//           padding: 0 0;
+//
+//           p{
+//             position: relative;
+//             width: 200px;
+//             left: 50%;
+//             margin-left: -100px;
+//             margin-bottom: 10px;
+//             font-size: $font-size-nav;
+//             color: $light-grey;
+//             letter-spacing: 1px;
+//           }
+//
+//
+//           .navigation-support-ul{
+//             display: block;
+//             left: 50%;
+//             margin-left: -100px;
+//             position: relative;
+//             width: 200px;
+//               .navigation-support-li{
+//                 display: block;
+//                 position: relative;
+//                 padding-bottom: 10px;
+//                 height: $line-height-overall;
+//                 .navigation-support-a{
+//                   display: block;
+//                   width: 100%;
+//                   height: auto;
+//                   line-height: $line-height-overall;
+//                   .navigation-support-text{
+//                     display: block;
+//                     position: absolute;
+//                     width: auto;
+//                     height: $font-size-nav-small;
+//                     display: block;
+//                     font-size: $font-size-nav-small;
+//                     color: $light-grey;
+//                     line-height: $font-size-nav-small;
+//                   }
+//                 }
+//               }
+//             }
+//
+//         }
+//       }
+//     }
+//   }
+// }
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .blink-infinite {
+      animation: blink .2s steps(5, start) infinite;
+      -webkit-animation: blink .2s steps(5, start) infinite;
+    }
+
+
+    .blink {
+      animation: blink .2s steps(5, start) 3;
+      -webkit-animation: blink .2s steps(5, start) 3;
+    }
+
+    .blink-once {
+      animation: blink .2s steps(5, start) 1;
+      -webkit-animation: blink .2s steps(5, start) 1;
+    }
+
+
+    @keyframes blink {
+      to {
+        visibility: hidden;
+      }
+    }
+    @-webkit-keyframes blink {
+      to {
+        visibility: hidden;
+      }
+    }
+
+
+.shift{
+  transform: translateX(-195px);
+    animation: shiftLeft $fade-in ease;
+  -webkit-animation: shiftLeft $fade-in ease;
+  -moz-animation: shiftLeft $fade-in ease;
+  -ms-animation: shiftLeft $fade-in ease;
+  -o-animation: shiftLeft $fade-in ease;
+
+  @include respond-to(phone){
+    transform: translateX(-200px);
+  }
+}
+
+
+.popActive{
+  display: block !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*....................animations...........*/
+
+.navigation.ng-hide {
+  animation: navOut $fade-out ease;
+  -webkit-animation: navOut $fade-out ease;
+  -moz-animation: navOut $fade-out ease;
+  -ms-animation: navOut $fade-out ease;
+  -o-animation: navOut $fade-out ease;
+    // opacity: 0;
+    @include respond-to(phone-device){
+      animation: none;
+      -webkit-animation: none;
+      -moz-animation: none;
+      -ms-animation: none;
+      -o-animation: none;
+    }
+}
+
+
+@keyframes navOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-webkit-keyframes navOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-moz-keyframes navOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-ms-keyframes navOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-o-keyframes navOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+
+
+
+@keyframes navIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-webkit-keyframes navIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-moz-keyframes navIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-ms-keyframes navIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-o-keyframes navIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+
+
+
+
+
+@keyframes pageleave {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-webkit-keyframes pageleave {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-moz-keyframes pageleave {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-ms-keyframes pageleave {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-o-keyframes pageleave {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+
+@keyframes pageenter {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-webkit-keyframes pageenter {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-moz-keyframes pageenter {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-ms-keyframes pageenter {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-o-keyframes pageenter {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+
+
+
+
+
+
+
+
+
+
+//shift left keyframes
+
+
+@keyframes shiftLeft {
+  0% { transform: translateX(0);}
+  100% {
+    transform: translateX(-195px);
+    @include respond-to(phone){
+      transform: translateX(-200px);
+    }
+  }
+}
+
+@-webkit-keyframes shiftLeft {
+  0% { transform: translateX(0);}
+  100% {
+    transform: translateX(-195px);
+    @include respond-to(phone){
+      transform: translateX(-200px);
+    }
+  }
+}
+
+@-moz-keyframes shiftLeft {
+  0% { transform: translateX(0);}
+  100% {
+    transform: translateX(-195px);
+    @include respond-to(phone){
+      transform: translateX(-200px);
+    }
+  }
+}
+
+@-ms-keyframes shiftLeft {
+  0% { transform: translateX(0);}
+  100% {
+    transform: translateX(-195px);
+    @include respond-to(phone){
+      transform: translateX(-200px);
+    }
+  }
+}
+
+@-o-keyframes shiftLeft {
+  0% { transform: translateX(0);}
+  100% {
+    transform: translateX(-195px);
+    @include respond-to(phone){
+      transform: translateX(-200px);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$fade-in: 1s;
+
+
+.page{
+  // animation: pageenter $fade-in both ease 0s;
+  // -webkit-animation: pageenter $fade-in both ease 0s;
+  // -moz-animation: pageenter $fade-in both ease 0s;
+  // -ms-animation: pageenter $fade-in both ease 0s;
+  // -o-animation: pageenter $fade-in both ease 0s;
+
+}
+
+
+.page.ng-enter {
+  // animation: pageenter $fade-in both ease 0s;
+  // -webkit-animation: pageenter $fade-in both ease 0s;
+  // -moz-animation: pageenter $fade-in both ease 0s;
+  // -ms-animation: pageenter $fade-in both ease 0s;
+  // -o-animation: pageenter $fade-in both ease 0s;
+}

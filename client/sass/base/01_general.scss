@@ -1,0 +1,351 @@
+
+/*....................................General settings..................................*/
+
+
+
+
+/*.....................TEXT MARK STYLES......................*/
+
+::-moz-selection {
+/*    background: $color-light-grey;*/
+    text-shadow: none;
+}
+
+
+::selection {
+    background-color:none;
+    text-shadow: none;
+    color: none;
+}
+
+
+/*.........................................................*/
+
+
+/*.....................ACTIVE CLASSES......................*/
+
+// .active{
+// /*  color: $page-color !important;*/
+//   pointer-events: none;
+// }
+
+/*.............................NG-CLOAK............................*/
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+cursor: pointer;
+}
+
+
+/*....................HIDING SCROLLBAR.....................*/
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+
+
+
+
+
+/*.....................GENERAL STYLES......................*/
+
+html{
+ width: 100vw;
+ height: auto;
+ margin: 0 0;
+ padding: 0 0;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  font-family: "akzidenz-grotesk";
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+
+}
+
+body {
+  position: relative;
+   width: 100vw;
+   height: auto;
+   min-height: 100%;
+    margin: 0 0;
+    padding: 0 0;
+    text-transform: uppercase;
+    // line-height: $line-height-overall;
+    font-family: "akzidenz-grotesk";
+    letter-spacing: $letter-spacing;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+
+    @include respond-to(phone){
+      // overflow-x: hidden;
+    }
+}
+
+
+.main {
+  width: 100vw;
+  height: auto;
+  z-index: $z-main;
+  visibility:visible;
+  overflow:hidden;
+
+}
+
+p, a, li {
+  font-size: $font-size-subtitle;
+  list-style-type: none;
+/*  font-weight: $font-weight-light;*/
+  letter-spacing: $letter-spacing;
+  color: $black;
+  outline: 0;
+  line-height: $line-height-paragraph;
+}
+
+
+input, textarea, select, a, li {
+  text-decoration: none;
+  line-height: $line-height-paragraph;
+}
+
+
+span{
+  text-transform: none;
+}
+
+
+
+
+
+
+
+
+
+/*...........................PAGE animation..............................*/
+
+.page{
+  opacity: 1;
+  @include transitionOpacity;
+
+}
+.page.ng-leave{
+  opacity: 0;
+  @include transitionOpacity;
+}
+.page.ng-enter{
+  opacity: 0;
+  @include transitionOpacity;
+}
+
+
+
+
+
+
+/*...........................LOADER..............................*/
+
+
+
+.page-loader-div{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: $z-loader;
+  background-color: #FFFFFF;
+  opacity: 1;
+
+  .page-loader-wrapper{
+      position: fixed;
+      display: block;
+      top: 50%;
+      left: 50%;
+      margin-left: -47.5px;
+      margin-top: -47px;
+      width: 95px;
+      height: auto;
+      z-index: $z-nav;
+      .page-loader-content{
+        .page-loader-a{
+        }
+      }
+  }
+}
+
+
+
+
+
+.page-loader-div.ng-hide{
+  opacity: 0 !important;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+.page-loader-div.ng-hide-add.ng-hide-add-active{
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+.page-loader-div.ng-hide-remove.ng-hide-add-remove{
+  -webkit-transition: all 500ms ease 1s;
+  -moz-transition: all 500ms ease 1s;
+  -ms-transition: all 500ms ease 1s;
+  -o-transition: all 500ms ease 1s;
+  transition: all 500ms ease 1s;
+}
+
+
+
+
+
+
+
+
+
+
+
+/*...........................HEADER..............................*/
+
+
+
+
+.header-wrapper.ng-hide{
+  opacity: 0;
+  @include transitionOpacity;
+}
+
+
+.header-wrapper{
+  position: fixed;
+  width: 165px;
+  height: 70px;
+  left: $margin-sides;
+  top: 20px;
+  display: block;
+  z-index: $z-header;
+  opacity: 1;
+  @include transitionOpacity;
+  .header-A-logo{
+    width: 45px;
+    height: 45px;
+    display: inline-block;
+    z-index: $z-header;
+    .header-logo-svg{
+      width: 100%;
+      height: 100%;
+      svg{
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+  .header-section-status{
+    position: absolute;
+    right: 0;
+    top: 0px;
+    width: 100px;
+    height: 45px;
+    margin-left: 5px;
+    .header-section-status-p{
+      // display: block;
+      font-size: $font-size-nav;
+      font-family: "akzidenz-grotesk-condensed";
+      letter-spacing: $letter-spacing-nav;
+      line-height: 45px;
+      vertical-align: middle;
+    }
+
+  }
+
+}
+
+
+
+
+
+
+
+@keyframes imageTranslate {
+  0% { transform: translateY(5%);}
+  100% {transform: translateY(0%);}
+}
+
+@-webkit-keyframes imageTranslate {
+  0% { transform: translateY(5%);}
+  100% {transform: translateY(0%);}
+}
+
+@-moz-keyframes imageTranslate {
+  0% { transform: translateY(5%);}
+  100% {transform: translateY(0%);}
+}
+
+@-ms-keyframes imageTranslate {
+  0% { transform: translateY(5%);}
+  100% {transform: translateY(0%);}
+}
+
+@-o-keyframes imageTranslate {
+  0% { transform: translateY(5%);}
+  100% {transform: translateY(0%);}
+}
+
+@mixin image-translated($image-faded: 0.8){
+
+// transform: translateY(5%);
+// -webkit-transition: imageTranslate 800ms ease !important;
+// -moz-transition: imageTranslate 500ms ease !important;
+// -ms-transition: imageTranslate 500ms ease !important;
+// -o-transition: imageTranslate 500ms ease !important;
+// transition: imageTranslate 800ms ease !important;
+
+}
+
+
+
+@mixin image-invisible($image-faded: 0.8){
+
+opacity: 0;
+-webkit-transition: opacity 500ms ease;
+-moz-transition: opacity 500ms ease;
+-ms-transition: opacity 500ms ease;
+-o-transition: opacity 500ms ease;
+transition: opacity 500ms ease;
+
+}
+
+
+
+.fadeUp{
+// transform: translateY(0%) !important;
+// -webkit-transition: imageTranslate 800ms ease !important;
+// -moz-transition: imageTranslate 500ms ease !important;
+// -ms-transition: imageTranslate 500ms ease !important;
+// -o-transition: imageTranslate 500ms ease !important;
+// transition: imageTranslate 800ms ease !important;
+
+}
+
+.fadeScroll{
+  opacity: 1 !important;
+
+}
+
+
+.pageInvisible{
+  visibility: hidden !important;
+}

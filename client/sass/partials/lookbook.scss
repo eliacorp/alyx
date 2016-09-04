@@ -1,0 +1,703 @@
+.anchor-lookbook{
+  display: block;
+  height: 470vh;
+  @include respond-to(phone){
+    height:auto !important;
+  }
+}
+
+
+.readStoryScroll{
+  overflow: scroll;
+}
+
+.imgFixedLookbook{
+  position: fixed !important;
+}
+
+
+
+//desktop
+@keyframes shiftRightLookbook {
+  from { @include transform-element(translateX(0px));}
+  to { @include transform-element(translateX(430px));}
+}
+
+@-webkit-keyframes shiftRightLookbook {
+  from { @include transform-element(translateX(0px));}
+  to { @include transform-element(translateX(430px));}
+}
+
+@-moz-keyframes shiftRightLookbook {
+  from { @include transform-element(translateX(0px));}
+  to { @include transform-element(translateX(430px));}
+}
+
+@-ms-keyframes shiftRightLookbook {
+  from { @include transform-element(translateX(0px));}
+  to { @include transform-element(translateX(430px));}
+}
+
+@-o-keyframes shiftRightLookbook {
+  from { @include transform-element(translateX(0px));}
+  to { @include transform-element(translateX(430px));}
+}
+
+
+
+
+@keyframes shiftLeftLookbook {
+  from { @include transform-element(translateX(430px));}
+  to { @include transform-element(translateX(0px));}
+}
+
+@-webkit-keyframes shiftLeftLookbook {
+  from { @include transform-element(translateX(430px));}
+  to { @include transform-element(translateX(0px));}
+}
+
+@-moz-keyframes shiftLeftLookbook {
+  from { @include transform-element(translateX(430px));}
+  to { @include transform-element(translateX(0px));}
+}
+
+@-ms-keyframes shiftLeftLookbook {
+  from { @include transform-element(translateX(430px));}
+  to { @include transform-element(translateX(0px));}
+}
+
+@-o-keyframes shiftLeftLookbook {
+  from { @include transform-element(translateX(430px));}
+  to { @include transform-element(translateX(0px));}
+}
+
+
+
+@mixin lookbook_shiftRight_mediaquery{
+  @include respond-to(laptop-small){
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+  @include respond-to(tablet-landscape){
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+  @include respond-to(tablet-portrait){
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+}
+
+@mixin lookbook_shiftLeft_mediaquery{
+  @include respond-to(laptop-small){
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+  @include respond-to(tablet-landscape){
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+  @include respond-to(tablet-portrait){
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+}
+//tablet-portrait
+@include respond-to(tablet-portrait){
+  @keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+
+  }
+
+  @-webkit-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+
+  }
+
+  @-moz-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-ms-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-o-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+
+
+
+  @keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-webkit-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-moz-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-ms-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-o-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+}
+
+//tablet-landscape
+@include respond-to(tablet-landscape){
+  @keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-webkit-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-moz-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-ms-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-o-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+
+
+
+  @keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-webkit-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-moz-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-ms-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-o-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+}
+
+//laptop-small
+@include respond-to(laptop-small){
+  @keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-webkit-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-moz-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-ms-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+  @-o-keyframes shiftRightLookbook {
+    from { transform: translateX(0px);}
+    to {transform: translateX(400px);}
+  }
+
+
+
+
+  @keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-webkit-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-moz-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-ms-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+
+  @-o-keyframes shiftLeftLookbook {
+    from { transform: translateX(400px);}
+    to {transform: translateX(0px);}
+  }
+}
+
+
+
+
+
+
+
+
+
+
+  @mixin shifted-lookbook-image($image-faded: 0.8){
+    @include respond-to(phone){
+      transform: translateX(0px);
+    }
+  }
+
+
+
+
+
+
+.lookbook-wrapper{
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  position: relative;
+  @include image-invisible;
+  @include respond-to(phone){
+    width: 100vw;
+    height: auto;
+    display: block;
+    position: relative;
+    opacity:1 !important;
+  }
+}
+
+
+
+
+  .lookbook-ul-wrapper{
+    position: relative;
+    display: block;
+    width: 100vw;
+    height: auto;
+    right: 0;
+    z-index: 6;
+    @include respond-to(phone){
+      background-color: #FFFFFF;
+      overflow-x: hidden;
+      display: table;
+    }
+    .lookbook-ul{
+      width: 110px;
+      height: auto;
+      display: block;
+      position: absolute;
+      right: 0;
+      float: left;
+      @include respond-to(phone){
+        width: 90vw;
+        height: auto;
+        display: table-caption;
+        position: relative !important;
+        margin-left: 5vw;
+        padding-bottom: calc(6vw + 60px);
+        padding-top: 5vw;
+        background-color: #FFFFFF;
+        z-index: $z-lookbook-ul;
+      }
+      .lookbook-li{
+        width: 110px;
+        display: block;
+        @include respond-to(phone){
+          width: 20.5vw;
+          display: block;
+          float: left;
+          margin-left:1vw;
+          margin-right: 1vw;
+          margin-top:1vw;
+          margin-bottom: 1vw;
+        }
+
+        .lookbook-hover{
+          position: absolute;
+          display:block;
+          width: 110px;
+          height: 161px;
+        }
+        .lookbook-img{
+          width: 100%;
+          display: block;
+          @include respond-to(phone){
+            width: 100%;
+            height: 30.6vw;
+            display: block;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  .lookbook-text{
+    position: fixed;
+    left: $margin-sides;
+    bottom: $margin-sides;
+    z-index: 7;
+    @include respond-to(phone){
+      position: fixed;
+      right: 5vw;
+      bottom: 19px;
+      z-index: 15;
+    }
+    .lookbook-text-p{
+      line-height: $line-height-overall;
+      font-family: "akzidenz-grotesk-condensed";
+      letter-spacing: $letter-spacing-nav;
+      font-size: $font-size-nav;
+    }
+    .lookbook-text-readstory{
+      @include respond-to(phone){
+        width:30px;
+        height:18px;
+        background-image: url('images/ICONS/read-icon.svg');
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+      a{
+        font-family: "akzidenz-grotesk-condensed";
+        font-size: $font-size-nav;
+        letter-spacing: $letter-spacing-nav;
+        cursor:pointer;
+        @include hover-effect-color();
+      }
+    }
+  }
+
+
+  .lookbook-main{
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 5;
+    @include respond-to(phone){
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: $z-lookbook-main;
+      background-color: #FFFFFF;
+      white-space: nowrap;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .lookbook-close{
+      position: fixed;
+      right: 10px;
+      top: 10px;
+      height: 20px;
+      width: 20px;
+      font-size: 40px;
+      line-height: 40px;
+      display: block;
+      color: #000000;
+      z-index: $z-lookbook-close;
+      background-image: url('/images/close-button.svg');
+      background-position: center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+    }
+    .lookbook-main-img{
+      height: 100vh;
+      width: auto;
+      display: block;
+      margin: auto;
+      z-index: 6;
+      position: relative;
+      @include respond-to(phone){
+        position: relative;
+        display: inline-block;
+        width: 100vw;
+        height: 100vh;
+      }
+      table{
+        width: 100%;
+        height: calc(100vh - 60px);
+        tr{
+          td{
+            img{
+              position: relative;
+              width: 75vw;
+              height: auto;
+              left: 50%;
+               margin-left: -37.5vw;
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+
+
+    .lookbook-description{
+      display: block;
+      width: 276px;
+      height: 80vh;
+      position: absolute;
+      left: 47%;
+      top: 100px;
+      z-index: 5;
+      margin-left: -125px;
+      @include respond-to(phone){
+        display: block;
+        width: 250px;
+        height: 90vh;
+        position: absolute;
+        left: 42%;
+        top: 10vh;
+        z-index: 5;
+        margin-left: -125px;
+        z-index:$z-lookbook-story
+      }
+      .lookbook-mft{
+        display: block;
+        height: 130px;
+        width: 130px;
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        z-index: $z-support;
+        opacity: 1;
+        margin-bottom: 40px;
+      }
+
+        .lookbook-description-h3{
+          margin-bottom: 15px;
+          font-size: $font-size-subtitle;
+          font-weight: 500;
+          font-family: "akzidenz-grotesk-condensed";
+          line-height: $font-size-subtitle;
+          text-transform: uppercase;
+          letter-spacing: $letter-spacing-nav;
+          text-align:left;
+          @include respond-to(phone){
+            font-size: $font-size-subtitle;
+          }
+        }
+
+        .lookbook-description-intro{
+          margin-bottom: 13px;
+          @include respond-to(phone){
+            margin: auto;
+          }
+          .lookbook-description-intro-li{
+            .lookbook-description-intro-p{
+              font-size: $font-size-paragraph;
+              line-height: $line-height-paragraph;
+              text-transform: none;
+              letter-spacing: 0;
+              text-align: justify;
+
+            }
+          }
+        }
+
+
+        .lookbook-description-text{
+            margin-bottom: 13px;
+            @include respond-to(phone){
+              margin: auto;
+            }
+          .lookbook-description-text-li{
+            .lookbook-description-text-p{
+              font-size: $font-size-paragraph;
+              line-height: $line-height-paragraph;
+              text-transform: none;
+              letter-spacing: 0;
+              text-align: justify;
+            }
+          }
+        }
+
+        .lookbook-description-credit{
+          font-size: $font-size-paragraph;
+          line-height: $line-height-paragraph;
+          text-transform: none;
+          letter-spacing: 0;
+          text-align: justify;
+        }
+    }
+  }
+
+
+
+.lookbook-main-img{
+  @include transform-element(translateX(0px));
+}
+.lookbook-ul{
+    @include transform-element(translateX(0px));
+}
+
+.shift-image{
+  @include respond-to(phone){
+    transform: translateX(100vw) !important;
+  }
+}
+
+
+
+.lookbook-main-img.shift-image{
+    @include transform-element(translateX(430px));
+}
+
+.lookbook-ul.shift-image{
+    @include transform-element(translateX(430px));
+}
+
+.lookbook-main-img.ng-enter{
+transform: translateX(100vw) !important;
+-webkit-animation: shiftLeftLookbook 1s ease;
+-moz-animation: shiftLeftLookbook 1s ease;
+-ms-animation: shiftLeftLookbook 1s ease;
+-o-animation: shiftLeftLookbook 1s ease;
+animation: shiftLeftLookbook 1s ease;
+}
+
+.lookbook-main-img.ng-leave.lookbook-main-img.ng-leav-active{
+transform: translateX(-100vw) !important;
+-webkit-animation: shiftRightLookbook 1s ease;
+-moz-animation: shiftRightLookbook 1s ease;
+-ms-animation: shiftRightLookbook 1s ease;
+-o-animation: shiftRightLookbook 1s ease;
+animation: shiftRightLookbook 1s ease;
+}
+
+
+
+
+.shift-image-remove.shift-image-remove-active{
+  -webkit-animation: shiftLeftLookbook 1s ease;
+  -moz-animation: shiftLeftLookbook 1s ease;
+  -ms-animation: shiftLeftLookbook 1s ease;
+  -o-animation: shiftLeftLookbook 1s ease;
+  animation: shiftLeftLookbook 1s ease;
+}
+
+.shift-image-add.shift-image-add-active{
+  -webkit-animation: shiftRightLookbook 1s ease;
+  -moz-animation: shiftRightLookbook 1s ease;
+  -ms-animation: shiftRightLookbook 1s ease;
+  -o-animation: shiftRightLookbook 1s ease;
+  animation: shiftRightLookbook 1s ease;
+}
+
+
+.lookbook-hover{
+  background-color: rgba(255,255,255,1);
+  opacity: 0.4;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+
+.lookbook-hover.ng-hide{
+  opacity: 0;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+
+.lookbook-hover.ng-hide-remove.ng-hide-remove-active{
+  -webkit-animation: all 1s ease;
+  -moz-animation: all 1s ease;
+  -ms-animation: all 1s ease;
+  -o-animation: all 1s ease;
+  animation: all 1s ease;
+
+}
+.lookbook-hover.ng-hide-add.ng-hide-add-active{
+  -webkit-animation: all 1s ease;
+  -moz-animation: all 1s ease;
+  -ms-animation: all 1s ease;
+  -o-animation: all 1s ease;
+  animation: all 1s ease;
+}
+
+
+
+
+
+
+
+//stagger
+
+.lookbook-li.ng-enter-stagger {
+  /* 200ms will be applied between each sucessive enter operation */
+  -webkit-transition-delay:0.2s;
+  transition-delay:0.2s;
+  /* this is here to avoid accidental CSS inheritance */
+  -webkit-transition-duration:0;
+  transition-duration:0;
+}
+
+.lookbook-li.ng-enter {
+  -webkit-transition:0.5s linear all;
+  transition:0.5s linear all;
+
+  opacity:0;
+  line-height:0;
+}
+
+.lookbook-li.ng-enter.ng-enter-active {
+  opacity:1;
+  line-height:161px;
+}

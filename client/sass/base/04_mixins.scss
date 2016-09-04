@@ -1,0 +1,334 @@
+//---------------------------------------------------------------MEDIA QUERIES---------------------------------------------------------------------
+$break-phone: 767px;
+$break-phone-landscape: 767px;
+$break-tablet: 1022px;
+$break-tablet-landscape: 1024px;
+$break-laptop-small: 1279px;
+$break-laptop-large: 1920px;
+$break-desktop: 50000px;
+/*$break-large-desktop: 2500px;*/
+/*$break-infinite: 500000px;*/
+
+@mixin respond-to($media) {
+/*  @if $media == large-desktop {
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/
+  @if $media == desktop {
+    @media only screen and (min-width: $break-laptop-large + 1) and (max-width: $break-desktop) { @content; }
+  }
+  @else if $media == laptop-large {
+    @media only screen and (min-width: $break-laptop-small + 1) and (max-width: $break-laptop-large) { @content; }
+  }
+  @else if $media == laptop-small {
+    @media only screen and (min-width: $break-tablet + 1) and (max-width: $break-laptop-small) { @content; }
+  }
+
+  ////////////|||||||||||..just changed the tablet media query below because it was not reading the landscape view: 1024px is the tablet landscape width..||||||||||||||\\\\\\\\\\
+
+  @else if $media == tablet-landscape {
+    @media only screen and (min-width: $break-phone + 1) and (max-width: $break-tablet-landscape) and (orientation: landscape) { @content; }
+  }
+  @else if $media == tablet-portrait {
+    @media only screen and (min-width: $break-phone + 1) and (max-width: $break-tablet) and (orientation: portrait) { @content; }
+  }
+  @else if $media == phone {
+    @media only screen and (min-width: 0px) and (max-width: $break-phone) { @content; }
+  }
+
+  //These are only for the real device
+  @else if $media == tablet-landscape-device {
+    @media only screen and (min-device-width: $break-phone + 1) and (max-device-width: $break-tablet) and (orientation: landscape) { @content; }
+  }
+  @else if $media == tablet-portrait-device {
+    @media only screen and (min-device-width: $break-phone + 1) and (max-device-width: $break-tablet) and (orientation: portrait) { @content; }
+  }
+  @else if $media == phone-device {
+    @media only screen and (min-width: 0px) and (max-device-width: $break-phone) { @content; }
+  }
+  @else if $media == phone-landscape-device {
+        @media only screen and (min-width: 0px) and (max-width: $break-phone) and (orientation: landscape) { @content; }
+      }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+@mixin anchor-title($width: 300px){
+
+}
+
+
+
+
+
+@mixin image-fade($image-faded: 0.8){
+
+opacity: 1;
+	  -webkit-transition: opacity 500ms ease;
+	  -moz-transition: opacity 500ms ease;
+	  -ms-transition: opacity 500ms ease;
+	  -o-transition: opacity 500ms ease;
+	  transition: opacity 500ms ease;
+	&:hover {
+	  opacity: $image-faded;
+	}
+}
+
+
+
+
+
+@keyframes textOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-webkit-keyframes textOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-moz-keyframes textOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-ms-keyframes textOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+@-o-keyframes textOut {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+
+
+
+@keyframes textIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-webkit-keyframes textIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-moz-keyframes textIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-ms-keyframes textIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+@-o-keyframes textIn {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+
+
+@mixin text-fade-in($fade-text-in: 1s){
+	animation: textIn $fade-text-in both ease;
+	-webkit-animation: textIn $fade-text-in both ease;
+	-moz-animation: textIn $fade-text-in both ease;
+	-ms-animation: textIn $fade-text-in both ease;
+	-o-animation: textIn $fade-text-in both ease;
+}
+
+@mixin text-fade-out($fade-text-out: 1s){
+	animation: textOut $fade-text-out both ease 0s;
+	-webkit-animation: textOut $fade-text-out both ease 0s;
+	-moz-animation: textOut $fade-text-out both ease 0s;
+	-ms-animation: textOut $fade-text-out both ease 0s;
+	-o-animation: textOut $fade-text-out both ease 0s;
+}
+
+
+
+
+@mixin loader-fade-in($fade-loader-in: 2s){
+	animation: textIn $fade-loader-in both ease;
+	-webkit-animation: textIn $fade-loader-in both ease;
+	-moz-animation: textIn $fade-loader-in both ease;
+	-ms-animation: textIn $fade-loader-in both ease;
+	-o-animation: textIn $fade-loader-in both ease;
+}
+
+@mixin loader-fade-out($fade-loader-out: 2s){
+	animation: textOut $fade-loader-out both ease 0s;
+	-webkit-animation: textOut $fade-loader-out both ease 0s;
+	-moz-animation: textOut $fade-loader-out both ease 0s;
+	-ms-animation: textOut $fade-loader-out both ease 0s;
+	-o-animation: textOut $fade-loader-out both ease 0s;
+}
+
+
+
+
+
+
+
+@mixin hover-images-opacity{
+
+  transition:         opacity $transition-medium ease;
+  -webkit-transition: opacity $transition-medium ease;
+  -moz-transition:    opacity $transition-medium ease;
+  -ms-transition:     opacity $transition-medium ease;
+  -o-transition:      opacity $transition-medium ease;
+  opacity: 1;
+
+  &:hover {
+    opacity: 0.8;
+
+  }
+
+}
+
+
+
+
+
+//...........SOCIAL
+
+@mixin hover-effect-opacity-tiles($opacity: 1, $hover: .7){
+  opacity: $opacity;
+  transition:         opacity $transition-medium ease;
+  -webkit-transition: opacity $transition-medium ease;
+  -moz-transition:    opacity $transition-medium ease;
+  -ms-transition:     opacity $transition-medium ease;
+  -o-transition:      opacity $transition-medium ease;
+  opacity: $hover;
+
+  &:hover {
+    opacity: $hover;
+    @include respond-to(phone-device) {
+      opacity: $opacity !important;
+    }
+    @include respond-to(tablet-portrait-device) {
+      opacity: $opacity !important;
+    }
+    @include respond-to(tablet-landscape-device) {
+      opacity: $opacity !important;
+    }
+  }
+
+}
+
+
+@mixin hover-effect-color($color: $black, $hover: $black-transparent){
+  color: $color;
+  transition:         color $transition-medium ease;
+  -webkit-transition: color $transition-medium ease;
+  -moz-transition:    color $transition-medium ease;
+  -ms-transition:     color $transition-medium ease;
+  -o-transition:      color $transition-medium ease;
+  // opacity: $hover;
+
+  &:hover {
+    color: $hover;
+    @include respond-to(phone-device) {
+        color: $black !important;
+    }
+    @include respond-to(tablet-portrait-device) {
+        color: $black !important;
+    }
+    @include respond-to(tablet-landscape-device) {
+        color: $black !important;
+    }
+  }
+
+}
+
+
+
+@mixin hover-effect-color-black($color: $black-transparent, $hover: $black){
+  color: $color;
+  transition:         color $transition-medium ease;
+  -webkit-transition: color $transition-medium ease;
+  -moz-transition:    color $transition-medium ease;
+  -ms-transition:     color $transition-medium ease;
+  -o-transition:      color $transition-medium ease;
+  // opacity: $hover;
+
+  &:hover {
+    color: $hover;
+    @include respond-to(phone-device) {
+        color: $black !important;
+    }
+    @include respond-to(tablet-portrait-device) {
+        color: $black !important;
+    }
+    @include respond-to(tablet-landscape-device) {
+        color: $black !important;
+    }
+  }
+
+}
+
+
+@mixin transitionOpacity(){
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+
+
+@mixin cursor-arrow-right(){
+    cursor: url("images/ICONS/arrow-right.svg"), e-resize;
+}
+
+@mixin cursor-arrow-left(){
+    cursor: url("images/ICONS/arrow-left.svg"), w-resize;
+}
+
+
+
+@mixin transform-element($coordinate){
+  transform: $coordinate;
+  -ms-transform: $coordinate; /* IE 9 */
+ 	-webkit-transform: $coordinate; /* Safari */
+  -moz-transform: $coordinate; /* Mozilla */
+  transform-origin: 0 0;
+}
+
+
+
+
+
+
+@mixin h1(){
+  font-size: $font-size-title;
+  line-height: $line-height-overall;
+  font-family: $font-family-title;
+  @include respond-to(phone){
+    // font-size: $font-size-title-mobile;
+    line-height: $line-height-overall-mobile;
+  }
+}
+@mixin h2(){
+  font-size: $font-size-subtitle;
+  line-height: $line-height-overall;
+  font-family: $font-family-subtitle;
+  @include respond-to(phone){
+    font-size: $font-size-subtitle-mobile;
+    line-height: $line-height-overall-mobile;
+  }
+}
+
+@mixin paragraph(){
+  font-size: $font-size-paragraph;
+  line-height: $line-height-paragraph;
+  font-family: $font-family-paragraph;
+  @include respond-to(phone){
+    font-size: $font-size-paragraph-mobile;
+  }
+}

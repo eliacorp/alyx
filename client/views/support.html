@@ -1,0 +1,19 @@
+<!-- .................................. header ...............................-->
+
+<!-- <div class="header-wrapper" ng-cloak ng-hide="headerHide">
+<div class="header-A-logo"  ng-click="beNavActive()"><logo-pop-directive></logo-pop-directive></div>
+
+<div class="header-section-status">
+<p class="header-section-status-p" style="color: {{burgerColor}}">{{thisSection}}</p>
+</div>
+
+</div> -->
+<nav-directive ng-if="!isMobile"></nav-directive>
+
+  <about-directive></about-directive>
+  <contact-directive></contact-directive>
+  <stockists-directive></stockists-directive>
+
+<nav-one-directive ng-if="!isMobile"></nav-one-directive>
+
+<!-- <nav-support-directive></nav-support-directive> -->

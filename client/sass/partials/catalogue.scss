@@ -1,0 +1,524 @@
+.anchor-catalogue{
+
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width:100vw;
+    height:100vh;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    @include respond-to(phone){
+      overflow: hidden;
+    }
+
+}
+
+
+
+.catalogue-scroll-left{
+  z-index: $z-horizontal-scroll;
+  cursor: auto;
+  width: 50vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+}
+
+.left_arrow{
+  @include cursor-arrow-left;
+}
+
+
+
+.catalogue-scroll-right{
+  z-index: $z-horizontal-scroll;
+  cursor:auto;
+  width: 50vw;
+  height: 100vh;
+  position: absolute;
+  left: 50vw;
+}
+
+.right_arrow{
+@include cursor-arrow-right;
+}
+
+@mixin catalogue-background() {
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.catalogue-unit{
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  @include respond-to(phone){
+    display: inline-block;
+    width: auto;
+    height: 100vh;
+    overflow:visible !important;
+  }
+  .catalogue-ul{
+    z-index: $z-catalogue-ul;
+    width: auto;
+    height: 100%;
+    display: block;
+    @include respond-to(phone){
+      height: calc(100vh - 60px);
+      display: table;
+      overflow: visible !important;
+    }
+    .catalogue-li{
+      width: 500px;
+      height: 100%;
+      display: inline-block;
+      float: left;
+      @include image-invisible;
+      @include respond-to(phone){
+        width: 100vw;
+        height: calc(100vh - 60px);
+        display: inline-block;
+        float:left;
+        opacity:1 !important;
+      }
+      .catalogue-image{
+        width: 100%;
+        height: 100%;
+        @include catalogue-background;
+        @include image-translated;
+      }
+    }
+  }
+}
+
+
+
+//................................................................................different catalogue units
+
+
+//.............................0 scorpion
+#catalogue-unit-0{
+  #catalogue-ul-0{
+    width: 100vw;
+    height: 100%;
+    display: block;
+    #catalogue-li-0{
+      width: 100%;
+      height: 100%;
+      .catalogue-image{
+        background-size: cover;
+        background-position: right;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+}
+
+
+
+//.............................1 smoky
+#catalogue-unit-1{
+    overflow: scroll;
+
+  #catalogue-ul-1{
+    width: 300vw;
+    height: 100%;
+    display: block;
+    overflow: scroll;
+    @include respond-to(phone){
+      width: 500vw;
+    }
+    li{
+      cursor:e-resize;
+    }
+    #catalogue-li-0{
+      // height: 100%;
+      width: 50vw;
+      position: relative;
+      @include respond-to(phone){
+        width: 100vw;
+      }
+      .catalogue-image{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-top: -250px;
+        margin-left: -180px;
+        width: 350px;
+        height: 500px;
+        @include catalogue-background;
+        @include respond-to(phone){
+          margin-top: -25vh;
+          margin-left: -25vw;
+          width: 50vw;
+          height: 50vh;
+        }
+      }
+
+    }
+    #catalogue-li-1{
+      // height: 100%;
+      width: 50vw;
+      @include respond-to(phone){
+        width: 100vw;
+        height: 100%;
+      }
+      .catalogue-image{
+        width:45vw;
+        margin-right: 5vw;
+        @include catalogue-background;
+        @include respond-to(phone){
+          width: 80vw;
+        }
+      }
+    }
+    #catalogue-li-2{
+      width: 100vw;
+      @include respond-to(phone){
+        position: relative;
+      }
+      .catalogue-image{
+        @include catalogue-background;
+        width: 100vw;
+        @include respond-to(phone){
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 80vw;
+          height: 30vh;
+          margin-top: -15vh;
+          margin-left: -40vw;
+        }
+      }
+
+    }
+    #catalogue-li-3{
+      width: 50vw;
+      position: relative;
+      background-color: #000000;
+      @include respond-to(phone){
+        width: 100vw;
+        height: 100%;
+      }
+      .catalogue-image{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-top: -250px;
+        margin-left: -180px;
+        width: 350px;
+        height: 500px;
+        @include catalogue-background;
+        @include respond-to(phone){
+          margin-top: -37.5vh;
+          margin-left: -42.5vw;
+          width: 85vw;
+          height: 75vh;
+        };
+      }
+    }
+    #catalogue-li-4{
+      width: 50vw;
+      @include respond-to(phone){
+        width: 100vw;
+      }
+      .catalogue-image{
+        background-size: 100% auto;
+        background-position: center;
+        background-repeat: no-repeat;
+        @include respond-to(phone){
+          background-size: cover;
+        }
+      }
+
+    }
+  }
+}
+
+
+//.............................2 maria fade
+#catalogue-unit-2{
+  #catalogue-ul-2{
+    width: 100vw;
+    height: 100%;
+    display: block;
+    @include respond-to(phone){
+      width: 200vw;
+    }
+    li{
+      cursor:default;
+    }
+    #catalogue-li-0{
+      height: 100%;
+      width: 100vw;
+      @include respond-to(phone){
+        width: 200vw;
+        position: relative;
+      }
+      .catalogue-image{
+        margin-left: 17%;
+        width: 83%;
+        background-size: 100% auto;
+        background-position: right;
+        background-repeat: no-repeat;
+        @include respond-to(phone){
+          width: 140vw;
+          position: absolute;
+          right: 0;
+          margin-left:auto;
+        }
+
+      }
+    }
+  }
+}
+
+
+//.............................3 rocks
+#catalogue-unit-3{
+  #catalogue-ul-3{
+    width: 100vw;
+    height: 100%;
+    display: block;
+    position: relative;
+    li{
+      cursor:default;
+    }
+    #catalogue-li-0{
+      width: 600px;
+      height: 400px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-top: -200px;
+      margin-left: -300px;
+      background-size: cover;
+
+      @include respond-to(phone){
+        width: 80vw;
+        height: 40vh;
+        margin-top: -20vh;
+        margin-left: -40vw;
+      }
+      .catalogue-image{
+        background-size: cover;
+        background-position: right;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+}
+
+
+
+
+//.............................4 light above
+#catalogue-unit-4{
+  #catalogue-ul-4{
+    width: 100vw;
+    height: 100%;
+    display: block;
+    @include respond-to(phone){
+      width: 200vw;
+    }
+    li{
+      cursor:default;
+    }
+    #catalogue-li-0{
+      height: 100%;
+      width: 50vw;
+      background-color: #000000;
+      @include respond-to(phone){
+        width: 100vw;
+      }
+    }
+    #catalogue-li-1{
+      height: 100%;
+      width: 50vw;
+      @include respond-to(phone){
+        width: 100vw;
+      }
+      .catalogue-image{
+        background-size: cover;
+      }
+    }
+  }
+}
+//.............................5 brighton
+#catalogue-unit-5{
+  display: block;
+  @include respond-to(phone){
+    display: inline-block;
+  }
+  #catalogue-ul-5{
+    width: 100vw;
+    height: 100%;
+    display: block;
+    li{
+      cursor:default;
+    }
+    #catalogue-li-0{
+      height: 100%;
+      width: 100vw;
+      position: relative;
+      .catalogue-image{
+        @include respond-to(phone){
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 80vw;
+          height: 40vh;
+          margin-top: -20vh;
+          margin-left: -40vw;
+          background-size: cover;
+        }
+      }
+    }
+  }
+}
+
+//.............................6 hands on
+#catalogue-unit-6{
+  overflow: scroll;
+  display: block;
+  cursor:e-resize;
+  @include respond-to(phone){
+    display: inline-block;
+  }
+  #catalogue-ul-6{
+    width: 200vw;
+    height: 100%;
+    display: block;
+    @include respond-to(phone){
+      width: 400vw;
+    }
+    li{
+      cursor:e-resize;
+    }
+    #catalogue-li-0{
+      height: 100%;
+      width: 50vw;
+      @include respond-to(phone){
+        width: 100vw;
+      }
+      .catalogue-image{
+        background-size: cover;
+      }
+    }
+    #catalogue-li-1{
+      height: 100%;
+      width: 50vw;
+      position: relative;
+      @include respond-to(phone){
+        width: 100vw;
+      }
+      .catalogue-image{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-top: -250px;
+        margin-left: -180px;
+        width: 350px;
+        height: 500px;
+        @include catalogue-background;
+        @include respond-to(phone){
+          left:0;
+          top:0;
+          margin:auto;
+          height:100vh;
+          width:100vw;
+        }
+      }
+    }
+    #catalogue-li-2{
+      height: 100%;
+      width: 100vw;
+      @include respond-to(phone){
+        width: 200vw;
+      }
+      .catalogue-image{
+        background-size: cover;
+      }
+    }
+  }
+}
+
+
+
+
+//......................MOBILE
+
+.catalogue-mobile-container{
+  width: 100vw;
+  height:auto;
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  height: 100vh;
+  @include respond-to(phone-device){
+    height: calc(100vh - 60px);
+  }
+}
+
+
+.scroll-bar{
+  width: 100%;
+  height: 10px;
+  // border: 1px solid #000000;
+  /* background-color: rgba(0, 0, 0, 0.9); */
+  position: fixed;
+  bottom: 60px;
+  z-index: $z-scroll-bar;
+
+.pin{
+    position: absolute;
+    left: 0%;
+    height: 20px;
+    width: 2px;
+    background-color: #000000;
+  }
+}
+
+.catalogue-swipe{
+  position: absolute;
+  height: calc(100vh);
+  width: 100vw;
+  position: absolute;
+  top: 0px;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  z-index: $z-swipe;
+  background-color: rgba(255, 255, 255, 0.3);
+  p{
+    display:block;
+    position: absolute;
+    height: 20px;
+    width: 100px;
+    color: #FFFFFF;
+    left: 50%;
+    top: calc(50% - 40px);
+    margin-left: -50px;
+    margin-top: -10px;
+    text-align: center;
+    font-size: $font-size-nav;
+    font-weight: bold;
+  }
+}
+
+@mixin catalogue-background() {
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+// .catalogue-container{
+//   width: 100vw;
+//   height: calc(100vh - 60px);
+//   white-space: nowrap;
+//   overflow-y: hidden;
+//   overflow-x: scroll;
+//   -webkit-overflow-scrolling: touch;
+// }

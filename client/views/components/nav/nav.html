@@ -1,0 +1,86 @@
+<div ng-controller="navCtrl" id="nav">
+
+
+	<!-- .................................. header ...............................-->
+
+<div class="header-wrapper" ng-hide="headerHide || navActive" ng-if="!isMobile" ng-cloak>
+  <div class="header-A-logo" ng-click="beNavActive();"><logo-pop-directive></logo-pop-directive></div>
+  <div class="header-section-status">
+    <p class="header-section-status-p" style="color: {{burgerColor}}">{{headerSectionName}}</p>
+  </div>
+</div>
+
+
+
+
+
+<!-- .................................. first nav ...............................-->
+
+	<div class="navigation-placeholder" ng-if="!isMobile"></div>
+	<nav class="navigation"  style="opacity: {{navFade}}" ng-hide="navHide">
+
+
+    <div class="navigation-arrow blink" ng-hide="hideArrow" ng-if="!isMobile">
+      <!-- <arrow-directive></arrow-directive> -->
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="1000px" height="1000px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+      <polyline fill="#FFFFFF" stroke="#000000" stroke-width="74" stroke-miterlimit="10" points="74.347,359.896 500.881,639.179
+        926,360.827 "/>
+      </svg>
+    </div>
+
+	   <div class="navigation-header-wrapper">
+	    <h1 class="navigation-header-content blink">
+	      <a class="navigation-header-a"><logo-directive></logo-directive></a>
+	    <h1>
+	  </div>
+
+	  <table class="navigation-table">
+	    <tr class="navigation-tr">
+	      <td class="navigation-td" style="height:100%; vertical-align: middle;">
+			      <div class="navigation-season" ng-repeat="n in navigationData">
+							<!-- <p ng-class="{active: isActive('fw15')}">{{metaData.season}}</p> -->
+							<p class="navigation-season-p" ng-class="{blackNavActive: isActive(n.season)}" ng-click="openSeason(n.season)">{{n.navigationSeason}}</p>
+
+			          <ul class="navigation-ul" ng-show="isSubNav('{{n.season}}')">
+			            <li class="navigation-li" id="$index" ng-repeat="x in n.sections">
+			              <a class="navigation-a" ng-click="routeForce(n.season, x);" >
+			                <p class="navigation-text navigation-text-{{$index}}" ng-class="{blackNavActive: isActive(n.season)}">
+			                  {{x}}
+			                </p>
+			              </a>
+			            </li>
+
+			          </ul>
+							</div>
+
+
+
+      					<div class="navigation-season">
+      							<p class="navigation-season-p navigation-text-about" ng-class="{blackNavActive: isActive('support')}" ng-click="routeForce('support', 'about')">
+      								about
+      							</p>
+                </div>
+                <div class="navigation-season">
+                		<p class="navigation-season-p navigation-text-contact" ng-class="{blackNavActive: isActive('support')}" ng-click="routeForce('support', 'contact')">
+                			contact
+                		</p>
+                </div>
+                <div class="navigation-season">
+                		<p class="navigation-season-p navigation-text-stockists" ng-class="{blackNavActive: isActive('support')}" ng-click="routeForce('support', 'stockists')">
+                			stockists
+                		</p>
+                </div>
+                <div class="navigation-season">
+                    <p class="navigation-season-p navigation-text-social" ng-class="{blackNavActive: isActive('social')}" ng-click="routeForce('social', 'social')">
+                      social
+                    </p>
+                </div>
+
+
+	      </td>
+	    </tr>
+	  </table>
+
+	</nav>
+</div>

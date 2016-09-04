@@ -1,0 +1,51 @@
+<div class="anchor-heroes anchor" ng-controller="heroesCtrl" id="heroesHash">
+
+  <div class="heroes-swipe" ng-click="removeSwipe_h()" ng-hide="swipeHide_h" ng-if="isMobile">
+     <p>swipe</p>
+  </div>
+
+
+
+
+    <div class="heroes-unit" id="heroes-unit-{{$index}}" ng-repeat="u in heroesUnits">
+
+      <div class="heroes-scroll-left" ng-if="u.scroll && !isMobile" ng-click="heroesSlideLeft($index);" ng-class="{'heroes_left_arrow': heroes_left_arrow_present[$index]}">
+      </div>
+      <div class="heroes-scroll-right" ng-if="u.scroll && !isMobile" ng-click="heroesSlideRight($index);" ng-class="{'heroes_right_arrow': heroes_right_arrow_present[$index]}">
+      </div>
+
+      <ul class="heroes-ul" id="heroes-ul-{{$index}}" ng-click="heroesSlideRight('{{$index}}');">
+          <li ng-class="{'heroes-shift-image': shiftImage_heroes}" ng-click="readInterview()" class="heroes-li" id="heroes-li-{{$index}}" ng-repeat="c in u.images" image-fade-directive>
+            <div class="heroes-image" style="background-image: url('{{c}}')" alt="heroes image {{$index}}" ></div>
+          </li>
+
+          <div class="heroes-read-interview" ng-if="u.text" ng-click="readInterview()" ng-hide="hideReadInterview">
+            <p>{{interviewStatus}} INTERVIEW</p>
+          </div>
+
+          <div class="heroes-text" ng-class="{'text-overflow': enableHeroesScroll}" ng-if="u.text && !isMobile">
+            <p class="heroes-text-title">{{u.title}}</p>
+            <ul class="heroes-text-ul">
+              <li class="heroes-text-li" ng-repeat="t in u.text">
+                <p class="heroes-text-words"><b style="font-weight: 700">{{t.speaker}}:</b> {{t.words}}</p>
+              </li>
+            </ul>
+          </div>
+
+
+          <div class="heroes-video" ng-if="u.video && !isMobile">
+            <video src="{{video_heroes}}" autoplay poster="posterimage.jpg" loop>
+            </video>
+          </div>
+
+          <div class="shop-catalogue" ng-if="u.video && !isMobile">
+              <p>
+                <a href="https://shop.showstudio.com/products/alyx-a-w-15-catalogue" target="_blank" >shop Nick Knight catalogue</a>
+              </p>
+          </div>
+
+
+      </ul>
+    </div>
+  <!-- </div> container -->
+</div>
