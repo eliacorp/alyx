@@ -1,5 +1,5 @@
 'use strict';
-
+// import videojs from 'video.js';
 import 'angular'
 import 'angular-route'
 import 'angular-animate'
@@ -7,7 +7,7 @@ import 'angular-resource'
 import 'angular-touch'
 import Prismic from 'prismic.io'
 import jQuery from "jquery"
-import videojs from 'video.js';
+
 
 var Application  = angular.module('myApp', ['ngRoute', 'ngAnimate', 'ngResource',
   'ngTouch'

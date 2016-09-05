@@ -76,29 +76,29 @@
 @mixin lookbook_shiftRight_mediaquery{
   @include respond-to(laptop-small){
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
   @include respond-to(tablet-landscape){
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
   @include respond-to(tablet-portrait){
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 }
 
 @mixin lookbook_shiftLeft_mediaquery{
   @include respond-to(laptop-small){
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
   @include respond-to(tablet-landscape){
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
   @include respond-to(tablet-portrait){
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 }
@@ -106,56 +106,56 @@
 @include respond-to(tablet-portrait){
   @keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
 
   }
 
   @-webkit-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
 
   }
 
   @-moz-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-ms-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-o-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
 
 
 
   @keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-webkit-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-moz-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-ms-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-o-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 }
@@ -164,54 +164,54 @@
 @include respond-to(tablet-landscape){
   @keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-webkit-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-moz-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-ms-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-o-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
 
 
 
   @keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-webkit-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-moz-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-ms-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-o-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 }
@@ -220,54 +220,54 @@
 @include respond-to(laptop-small){
   @keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-webkit-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-moz-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-ms-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
   @-o-keyframes shiftRightLookbook {
     from { transform: translateX(0px);}
-    to {transform: translateX(400px);}
+    to {transform: translateX(430px);}
   }
 
 
 
 
   @keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-webkit-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-moz-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-ms-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 
   @-o-keyframes shiftLeftLookbook {
-    from { transform: translateX(400px);}
+    from { transform: translateX(430px);}
     to {transform: translateX(0px);}
   }
 }

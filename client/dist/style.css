@@ -4375,50 +4375,50 @@ span {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-webkit-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-moz-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-ms-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-o-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-webkit-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-moz-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-ms-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-o-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } } }
 /*  @if $media == large-desktop {
@@ -4429,50 +4429,50 @@ span {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-webkit-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-moz-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-ms-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-o-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-webkit-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-moz-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-ms-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-o-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } } }
 /*  @if $media == large-desktop {
@@ -4483,50 +4483,50 @@ span {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-webkit-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-moz-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-ms-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @-o-keyframes shiftRightLookbook {
     from {
       transform: translateX(0px); }
     to {
-      transform: translateX(400px); } }
+      transform: translateX(430px); } }
   @keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-webkit-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-moz-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-ms-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } }
   @-o-keyframes shiftLeftLookbook {
     from {
-      transform: translateX(400px); }
+      transform: translateX(430px); }
     to {
       transform: translateX(0px); } } }
 .lookbook-wrapper {
@@ -4965,7 +4965,14 @@ span {
   width: 100%;
   height: auto;
   position: relative;
-  overflow: scroll; }
+  overflow: scroll;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .social-wrapper .social-content {
+      width: 100vw;
+      height: 100vh; } }
   .social-wrapper .social-content .social-filter-wrapper {
     background-color: none;
     padding-bottom: 0px;
@@ -5028,7 +5035,7 @@ span {
     @media only screen and (min-width: 0px) and (max-width: 767px) {
       .social-wrapper .social-content .insta-wrapper {
         width: 100vw;
-        height: 20vh;
+        height: 15vh;
         position: fixed;
         bottom: 70px;
         overflow-x: scroll;
@@ -5049,7 +5056,7 @@ span {
       @media only screen and (min-width: 0px) and (max-width: 767px) {
         .social-wrapper .social-content .insta-wrapper .insta-grid {
           width: auto;
-          height: 20vh;
+          height: 15vh;
           white-space: nowrap;
           float: none;
           overflow: visible;
@@ -5187,7 +5194,14 @@ span {
       position: absolute;
       left: 30px;
       bottom: 30px;
-      z-index: 8; }
+      z-index: 8;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .social-wrapper .social-content .insta-main .view-on-instagram {
+          left: 15px;
+          bottom: 15px; } }
       .social-wrapper .social-content .insta-main .view-on-instagram a {
         width: 100%;
         z-index: 8;
@@ -5239,7 +5253,7 @@ span {
       @media only screen and (min-width: 0px) and (max-width: 767px) {
         .social-wrapper .social-content .insta-main .insta-table-wrapper {
           width: 100vw;
-          height: 60vh; } }
+          height: 45vh; } }
       .social-wrapper .social-content .insta-main .insta-table-wrapper table {
         height: 100%;
         width: 100%; }

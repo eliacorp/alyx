@@ -27,92 +27,87 @@ $scope.video = $sce.trustAsResourceUrl($scope.base);
 
 
 
+
   setTimeout(function(){
-
-    if (!$rootScope.isMobileDevice){
           var player;
+          $rootScope.myVideo = document.getElementById("film-fw15");;
           $rootScope.bootVideo = function(){
-                 player = videoJs("#film-fw15").ready(function(){
-                    $rootScope.myVideo = this;
-                    // myPlayer.tech.removeControlsListeners();
-                    // EXAMPLE: Start playing the video.
-                    $rootScope.myVideo.play();
-                    // $rootScope.myVideo = document.getElementById("videoIntro");
-                    $rootScope.myVideo.volume(0);
-                });
+                //  player = videojs('#film-fw15').ready(function(){
+                    // $rootScope.myVideo = this;
+                //     // myPlayer.tech.removeControlsListeners();
+                //     // EXAMPLE: Start playing the video.
+                //
+                //
+                //     // $rootScope.myVideo = document.getElementById("videoIntro");
+                //
+                // });
+                if(!$rootScope.isMobileDevice){
+                  $rootScope.myVideo.play();
+                  $rootScope.myVideo.volume =0;
+                }
           }
-
-
 
 
           $rootScope.bootVideo();
 
-          $scope.$on('$destroy', function () {
-              player.dispose();
-          });
+
+
+
+
+
 
           $rootScope.volume = function() {
               if ($scope.video_volume == 0){
-
-                    $rootScope.myVideo.volume(1);
+                console.log("on");
+                    $rootScope.myVideo.volume = 1;
                     $scope.video_volume = 1;
                     $scope.soundAction = "STOP";
 
               }else{
+                console.log("off");
 
-                    $rootScope.myVideo.volume(0);
-
-                    $scope.video_volume = 0;
-                  // $rootScope.myVideo.pause();
+                  $rootScope.myVideo.volume =0;
+                  $scope.video_volume = 0;
                   $scope.soundAction = "CLICK FOR";
               }
-
           }
 
 
 
-              $rootScope.playPause = function() {
-                console.log("play");
-                $rootScope.myVideo.play();
-              }
 
+          $rootScope.playPause = function() {
+            console.log("play");
+            console.log($rootScope.myVideo);
 
+            if ($rootScope.myVideo.paused) {
+               $rootScope.myVideo.play();
 
-    }else if($rootScope.isMobileDevice){
+            } else {
+               $rootScope.myVideo.pause();
 
-      var myVideo = document.getElementById('film-fw15-mobile');
-      myVideo.play();
-      $rootScope.playPause = function () {
-
-          if (myVideo.paused) {
-              myVideo.play();
-          } else {
-              myVideo.pause();
+            }
           }
-      };
-
-      // console.log($rootScope.myVideo);
-
-    }
 
 
 
-    $rootScope.makeBig = function() {
-        $rootScope.myVideo.width = 560;
-    }
+        $rootScope.makeBig = function() {
+            $rootScope.myVideo.width = 560;
+        }
 
-    $rootScope.makeSmall = function() {
-        $rootScope.myVideo.width = 320;
-    }
+        $rootScope.makeSmall = function() {
+            $rootScope.myVideo.width = 320;
+        }
 
-    $rootScope.makeNormal = function() {
-        $rootScope.myVideo.width = 420;
-    }
-
-
+        $rootScope.makeNormal = function() {
+            $rootScope.myVideo.width = 420;
+        }
 
 
-  }, 1000);
+        // $scope.$on('$destroy', function () {
+        //     player.dispose();
+        // });
+
+  }, 1200);
 
 
 

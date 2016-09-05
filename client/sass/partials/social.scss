@@ -4,6 +4,10 @@
     height: auto;
     position: relative;
     overflow: scroll;
+    @include respond-to(phone){
+      width:100vw;
+      height:100vh;
+    }
 
 //...filter DESKTOP
     .social-filter-wrapper{
@@ -53,7 +57,7 @@
         z-index: $z-social-main;
         @include respond-to(phone){
           width: 100vw;
-          height: 20vh;
+          height: 15vh;
           position: fixed;
           bottom:70px;
           overflow-x: scroll;
@@ -73,7 +77,7 @@
 
           @include respond-to(phone){
             width: auto;
-            height:20vh;
+            height: 15vh;
             white-space: nowrap;
             float: none;
             overflow: visible;
@@ -196,6 +200,10 @@
           left: $margin-sides;
           bottom: $margin-sides;
           z-index: $z-social-view-on-instagram;
+          @include respond-to(phone){
+            left: $margin-sides-mobile;
+            bottom: $margin-sides-mobile;
+          }
           a{
             width: 100%;
             z-index: $z-social-view-on-instagram;
@@ -223,7 +231,7 @@
           width: 39vw;
           @include respond-to(phone){
             width:100vw;
-            height:60vh;
+            height:45vh;
           }
           table{
             height: 100%;

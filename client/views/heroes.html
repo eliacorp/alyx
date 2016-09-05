@@ -10,7 +10,7 @@
       <div class="heroes-scroll-right" ng-if="u.scroll && !isMobile" ng-click="heroesSlideRight($index);" ng-class="{'heroes_right_arrow': heroes_right_arrow_present[$index]}">
       </div>
 
-      <ul class="heroes-ul" id="heroes-ul-{{$index}}" ng-click="heroesSlideRight('{{$index}}');">
+      <ul class="heroes-ul" id="heroes-ul-{{$index}}" ng-click="heroesSlideRight($index);">
           <li ng-class="{'heroes-shift-image': shiftImage_heroes}" ng-click="readInterview()" class="heroes-li" id="heroes-li-{{$index}}" ng-repeat="c in u.images" image-fade-directive>
             <div class="heroes-image" style="background-image: url('{{c}}')" alt="heroes image {{$index}}" ></div>
           </li>
@@ -54,7 +54,7 @@
 
       <div class="heroes-unit" id="heroes-unit-{{$index}}" ng-repeat="u in heroesUnits">
 
-        <ul class="heroes-ul" id="heroes-ul-{{$index}}" ng-click="heroesSlideRight('{{$index}}');">
+        <ul class="heroes-ul" id="heroes-ul-{{$index}}" ng-click="heroesSlideRight($index);">
             <li ng-class="{'heroes-shift-image': shiftImage_heroes}" ng-click="readInterview()" class="heroes-li" id="heroes-li-{{$index}}" ng-repeat="c in u.images" image-fade-directive>
               <div class="heroes-image" style="background-image: url('{{c}}')" alt="heroes image {{$index}}" ></div>
             </li>
