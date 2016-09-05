@@ -1,13 +1,12 @@
 .anchor-heroes{
   position: relative;
-  overflow-x: scroll;
-  overflow-y: hidden;
   width:100vw;
-  height:100vh;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
+  height:auto;
   @include respond-to(phone){
-    overflow: hidden;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -561,6 +560,20 @@ transform: translateX(0px);
 
 
 //MOBILE
+//......................MOBILE
+
+.heroes-mobile-container{
+  width: 100vw;
+  height:auto;
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  height: 100vh;
+  @include respond-to(phone-device){
+    height: calc(100vh - 60px);
+  }
+}
 
 
 

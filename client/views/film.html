@@ -1,10 +1,8 @@
 <div class="anchor-film anchor" ng-controller="filmCtrl" id="filmHash">
 
-<div class="film-sound" ng-click="volume()" ng-show="showSound" ng-if="!isMobileDevice">
-  <p>
-    {{soundAction}} sound
-  </p>
-</div>
+  <div class="film-sound" ng-click="volume()" ng-show="showSound" ng-if="!isMobileDevice">
+    <p>{{soundAction}} sound</p>
+  </div>
 
   <div class="film-wrapper" ng-click="playPause()" ng-if="!isMobileDevice">
     <video id="film-fw15" class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": true, "preload": "auto", "loop": true}'  width="100%" height="100%">
@@ -17,7 +15,7 @@
 
   <!-- MOBILE -->
 
-  <div class="film-play" ng-if="isMobileDevice">
+  <div class="film-play" ng-if="isMobileDevice" ng-click="playPause()">
     <p>
       play
     </p>
@@ -25,10 +23,13 @@
   <div class="film-cover" style="background-image: url('images/FW15/CATALOGUE/20150107-Alyx-03-166_v1.jpg');" ng-if="isMobileDevice">
   </div>
 
-  <div class="film-wrapper" ng-click="playPause()" ng-if="isMobileDevice">
-    <video id="film-fw15" class="video-js vjs-default-skin" data-setup='{ "controls": false, "autoplay": false, "preload": "auto"}'  width="100%" height="100%" poster='images/blank.jpg' >
-        <source src="{{video}}"/>
+  <div class="film-wrapper" ng-if="isMobileDevice">
+    <video id="film-fw15-mobile" data-setup='{ "controls": false, "autoplay": false, "preload": "auto"}' width="100%" height="100%" poster='images/blank.jpg' >
+      <source src="{{video}}" type="video/mp4">
     </video>
+    <!-- <video id="film-fw15" class="video-js vjs-default-skin" data-setup='{ "controls": false, "autoplay": false, "preload": "auto"}'  width="100%" height="100%" poster='images/blank.jpg' >
+        <source src="{{video}}"/>
+    </video> -->
   </div>
 
 

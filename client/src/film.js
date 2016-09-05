@@ -29,82 +29,94 @@ $scope.video = $sce.trustAsResourceUrl($scope.base);
 
   setTimeout(function(){
 
-
-var player;
-
-    $rootScope.bootVideo = function(){
-
-
-               player =videojs("#film-fw15").ready(function(){
-                $rootScope.myVideo = this;
-
-                          // myPlayer.tech.removeControlsListeners();
-
-                        // EXAMPLE: Start playing the video.
-                        $rootScope.myVideo.play();
-
+    if (!$rootScope.isMobileDevice){
+          var player;
+          $rootScope.bootVideo = function(){
+                 player = videoJs("#film-fw15").ready(function(){
+                    $rootScope.myVideo = this;
+                    // myPlayer.tech.removeControlsListeners();
+                    // EXAMPLE: Start playing the video.
+                    $rootScope.myVideo.play();
                     // $rootScope.myVideo = document.getElementById("videoIntro");
                     $rootScope.myVideo.volume(0);
+                });
+          }
 
-              });
+
+
+
+          $rootScope.bootVideo();
+
+          $scope.$on('$destroy', function () {
+              player.dispose();
+          });
+
+          $rootScope.volume = function() {
+              if ($scope.video_volume == 0){
+
+                    $rootScope.myVideo.volume(1);
+                    $scope.video_volume = 1;
+                    $scope.soundAction = "STOP";
+
+              }else{
+
+                    $rootScope.myVideo.volume(0);
+
+                    $scope.video_volume = 0;
+                  // $rootScope.myVideo.pause();
+                  $scope.soundAction = "CLICK FOR";
+              }
+
+          }
+
+
+
+              $rootScope.playPause = function() {
+                console.log("play");
+                $rootScope.myVideo.play();
+              }
+
+
+
+    }else if($rootScope.isMobileDevice){
+
+      var myVideo = document.getElementById('film-fw15-mobile');
+      myVideo.play();
+      $rootScope.playPause = function () {
+
+          if (myVideo.paused) {
+              myVideo.play();
+          } else {
+              myVideo.pause();
+          }
+      };
+
+      // console.log($rootScope.myVideo);
 
     }
-      $rootScope.bootVideo();
 
-      $scope.$on('$destroy', function () {
-        player.dispose();
-    });
 
-    $rootScope.volume = function() {
-        if ($scope.video_volume == 0){
 
-              $rootScope.myVideo.volume(1);
-              $scope.video_volume = 1;
-              $scope.soundAction = "STOP";
+    $rootScope.makeBig = function() {
+        $rootScope.myVideo.width = 560;
+    }
 
-        }else{
+    $rootScope.makeSmall = function() {
+        $rootScope.myVideo.width = 320;
+    }
 
-              $rootScope.myVideo.volume(0);
-
-              $scope.video_volume = 0;
-            // $rootScope.myVideo.pause();
-            $scope.soundAction = "CLICK FOR";
-        }
-
+    $rootScope.makeNormal = function() {
+        $rootScope.myVideo.width = 420;
     }
 
 
 
 
-    $rootScope.playPause = function() {
-      console.log("play");
-      $rootScope.myVideo.play();
-    }
+  }, 1000);
 
 
 
 
-      $rootScope.makeBig = function() {
-          $rootScope.myVideo.width = 560;
-      }
-
-      $rootScope.makeSmall = function() {
-          $rootScope.myVideo.width = 320;
-      }
-
-      $rootScope.makeNormal = function() {
-          $rootScope.myVideo.width = 420;
-      }
-
-
-
-
-
-
-
-
-
-    }, 1200);
   // });//viewContentLoaded
 });//on data arrived event
 

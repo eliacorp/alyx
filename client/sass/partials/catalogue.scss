@@ -4,11 +4,12 @@
     overflow-x: scroll;
     overflow-y: hidden;
     width:100vw;
-    height:100vh;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
+    height:auto;
     @include respond-to(phone){
-      overflow: hidden;
+      white-space: nowrap;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
 }

@@ -1,13 +1,9 @@
 <div class="anchor-heroes anchor" ng-controller="heroesCtrl" id="heroesHash">
 
-  <div class="heroes-swipe" ng-click="removeSwipe_h()" ng-hide="swipeHide_h" ng-if="isMobile">
-     <p>swipe</p>
-  </div>
 
 
 
-
-    <div class="heroes-unit" id="heroes-unit-{{$index}}" ng-repeat="u in heroesUnits">
+    <div class="heroes-unit" id="heroes-unit-{{$index}}" ng-repeat="u in heroesUnits" ng-if="!isMobile">
 
       <div class="heroes-scroll-left" ng-if="u.scroll && !isMobile" ng-click="heroesSlideLeft($index);" ng-class="{'heroes_left_arrow': heroes_left_arrow_present[$index]}">
       </div>
@@ -47,5 +43,26 @@
 
       </ul>
     </div>
-  <!-- </div> container -->
+
+
+
+    <div class="heroes-swipe" ng-click="removeSwipe_h()" ng-hide="swipeHide_h" ng-if="isMobile">
+       <p>swipe</p>
+    </div>
+
+    <div class="heroes-mobile-container" ng-if="isMobile">
+
+      <div class="heroes-unit" id="heroes-unit-{{$index}}" ng-repeat="u in heroesUnits">
+
+        <ul class="heroes-ul" id="heroes-ul-{{$index}}" ng-click="heroesSlideRight('{{$index}}');">
+            <li ng-class="{'heroes-shift-image': shiftImage_heroes}" ng-click="readInterview()" class="heroes-li" id="heroes-li-{{$index}}" ng-repeat="c in u.images" image-fade-directive>
+              <div class="heroes-image" style="background-image: url('{{c}}')" alt="heroes image {{$index}}" ></div>
+            </li>
+
+        </ul>
+      </div>
+    </div>
+
+
+
 </div>

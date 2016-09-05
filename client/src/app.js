@@ -7,7 +7,7 @@ import 'angular-resource'
 import 'angular-touch'
 import Prismic from 'prismic.io'
 import jQuery from "jquery"
-import "video.js"
+import videojs from 'video.js';
 
 var Application  = angular.module('myApp', ['ngRoute', 'ngAnimate', 'ngResource',
   'ngTouch'
@@ -685,11 +685,9 @@ $scope.headerHideOff = function(){
     // }, 5000);  // end timeout
 
     $scope.$on('$viewContentLoaded', function(){
-setTimeout(function(){
-  $rootScope.fw15_scroller(navActiveCheck);
-},600);
-
-
+      setTimeout(function(){
+        $rootScope.fw15_scroller(navActiveCheck);
+      },600);
     });
 
 
