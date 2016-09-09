@@ -2,6 +2,10 @@
   "name": "ExpressApp",
   "version": "0.1.1",
   "description": "A Node.js App using express",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com//eliafornari/alyx.git"
+  },
   "main": "server/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
