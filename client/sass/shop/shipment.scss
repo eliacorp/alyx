@@ -1,0 +1,152 @@
+.shipment{
+    width:100vw;
+    height:auto;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.shipment-content{
+  width:calc(100vw - 150px);
+  margin-left:75px;
+  height:100vh;
+  position: relative;
+  overflow-x:scroll;
+}
+
+
+
+.shipment-form{
+  width: 300px;
+  margin:auto;
+  height: auto;
+}
+
+.shipment-h1{
+  padding-top: $margin-top;
+}
+
+.customer{
+  width:100%;
+  display:block;
+  position: relative;
+  left:0;
+  margin-top: $margin-top-list;
+}
+
+.address{
+  width:100%;
+  display:block;
+  position: relative;
+  left:0;
+  margin-top: $margin-top-list;
+}
+
+.billing{
+  width:100%;
+  display:block;
+  position: relative;
+  left:0;
+  margin-top: $margin-top-list;
+  padding-bottom: $padding-bottom;
+}
+
+.isBillingDifferent{
+  width:100%;
+  display:block;
+  position: relative;
+  height: auto;
+  width: auto;
+  margin-top: $margin-top-list;
+  margin-bottom: $margin-top-list;
+  label{
+    @include paragraph();
+  }
+  input{
+    @include paragraph();
+
+  }
+}
+
+
+.form-title{
+  @include h3();
+}
+
+
+
+
+
+.form-entry{
+  width:100%;
+  height:20px;
+  position: relative;
+  margin-top: 5px;
+  &:nth-child(1){
+    margin-top: 15px;
+  }
+  input{
+    width: 100%;
+    left: 0px;
+    position: absolute;
+    top: 50%;
+    height: 20px;
+    margin-top: -10px;
+    color: #000000;
+    background-color: #FFFFFF;
+    // border:0;
+    text-align: left;
+    outline:0;
+    @include paragraph();
+    $placeholder-color:#000000;
+    &:hover, &:focus{
+      outline:0;
+    }
+
+    &::-webkit-input-placeholder {
+       color: $placeholder-color;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+       color: red;
+    }
+
+    &::-moz-placeholder {  /* Firefox 19+ */
+       color: red;
+    }
+
+    &:-ms-input-placeholder {
+       color: red;
+    }
+
+  }
+
+}
+
+
+
+
+.form-error{
+  display: block;
+  position: absolute;
+  right: 0;
+  @include paragraph();
+}
+
+select{
+  @include paragraph();
+  width: 100%;
+  height: 100%;
+  color: black;
+  border: 0.1px solid black;
+  border-radius: 0%;
+  background-color: #FFFFFF;
+  outline: 0;
+  -webkit-appearance: none;
+  border-radius: 0px;
+
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+
+
+}

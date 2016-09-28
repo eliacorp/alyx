@@ -1,0 +1,136 @@
+.shop{
+  position: relative;
+  background-color: transparent;
+  width:100vw;
+  height:100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+
+
+.checkout-button{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  color: red;
+  background-color: black;
+  @include h1();
+  border: 0;
+  outline: 0;
+}
+
+
+
+.shop-left{
+  position: fixed;
+  left:0;
+  top:0;
+  width:75px;
+  height:100vh;
+  background-color: rgba(0,0,0,0.87);
+  z-index:$z-shop-buttons;
+}
+
+
+//in products this class makes the right bar transparent
+.whiteBar{
+  background-color: rgba(0,0,0,0) !important;
+}
+.whiteBar a, .whiteBar p{
+  color: #000000 !important;
+}
+
+.whiteText{
+  color: #FFFFFF !important;
+}
+
+
+
+.shop-right{
+  position: fixed;
+  right:0;
+  top:0;
+  width:75px;
+  height:100vh;
+  background-color: rgba(0,0,0,0.87);
+  z-index:$z-shop-buttons;
+  @include transition(all, 0.6s, ease);
+}
+
+.shop-button{
+  height: 100%;
+  width: 100%;
+  .shop-button-entry{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    @include hover-effect-color-child(#000000, #FFFFFF);
+    a, p{
+      @include h2();
+      width:100px;
+      height:75px;
+      position: absolute;
+      top:50%;
+      right:auto;
+      margin-top: -37.5px;
+      text-align: center;
+      line-height: 75px;
+      vertical-align: middle;
+      @include transform-element(rotate(-90deg) translate(-50%, 50%));
+      @include transform-origin(0 50%);
+    }
+    p{
+      top: $margin-sides;
+      margin-top:0;
+    }
+  }
+}
+
+
+
+.error{
+  position: fixed;
+  right:150px;
+  bottom:$margin-sides;
+}
+
+
+
+
+
+  .blink-infinite {
+    animation: blink .2s steps(5, start) infinite;
+    -webkit-animation: blink .2s steps(5, start) infinite;
+  }
+
+
+  .blink {
+    animation: blink .2s steps(5, start) 3;
+    -webkit-animation: blink .2s steps(5, start) 3;
+  }
+
+  .blink-once {
+    animation: blink .2s steps(5, start) 1;
+    -webkit-animation: blink .2s steps(5, start) 1;
+  }
+
+  .dollar-contents.blink{
+    color: #FFFFFF !important;
+  }
+
+
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+  @-webkit-keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }

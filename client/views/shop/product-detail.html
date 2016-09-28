@@ -1,0 +1,47 @@
+<div class="detail" ng-controller="detailCtrl" ng-init="isSelectionOpen=true" id="detail">
+  <div class="detail-content">
+
+
+      <!-- left -->
+      <div class="detail-left">
+        <img class="detail-image" src="{{i.url.http}}" alt="{{Detail.description}}"  class="product-image" ng-repeat="i in Detail.images"/>
+      </div>
+
+
+
+      <!-- right -->
+      <div class="detail-right">
+
+        <div class="detail-text">
+          <h2>{{Detail.title}}</h2>
+          <p>{{Detail.description}}</p>
+        </div>
+        
+        <p class="detail-price">{{Detail.price.data.formatted.without_tax}}</p>
+
+
+        <div class="detail-modifiers">
+          <ul class="detail-modifiers-ul" ng-repeat="m in Detail.modifiers">
+            <p class="detail-modifiers-ul-placeholder" ng-click="showSelection(m.id)">{{m.title}} </p>
+
+            <div class="detail-modifiers-variations">
+              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)" ng-show="selectedVariation[m.id].variation_title==v.title || selectedVariation[m.id].open==true">
+                <a>{{v.title}}</a>
+              </li>
+            </div>
+            <!-- <div class="">{{selectedVariation[m.id].variation_title}}  </div> -->
+          </ul>
+        </div>
+
+        <p class="detail-error" ng-show="variationErrorMessage">{{variationErrorMessage}}</p>
+
+
+        <div class="detail-add" ng-cloak>
+          <p class="hvr-bob" ng-show="!Detail.has_variation" ng-click="addToCart(Detail.id)" ng-cloak>ADD TO CART</p>
+          <p class="detail-add-plus-variation hvr-bob" ng-show="Detail.has_variation" ng-click="addVariation()" ng-class="{'activeAdd': howManyVAriationsSelected>=Detail.total_variations}" ng-cloak>ADD TO CART</p>
+        </div>
+
+      </div>
+
+  </div>
+</div>

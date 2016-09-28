@@ -1,0 +1,49 @@
+.payment{
+  width:100vw;
+  height:auto;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.payment-content{
+  width:calc(100vw - 150px);
+  margin-left:75px;
+  height:100vh;
+  position: relative;
+}
+
+
+.payment-form{
+  width: 300px;
+  margin:auto;
+  height: auto;
+}
+
+.payment-h1{
+  padding-top: $margin-top;
+}
+
+
+
+.payment-total{
+  position: relative;
+  margin-top: $margin-top;
+  padding-bottom: $padding-bottom;
+  height: auto;
+  width: 100%;
+  p{
+    @include paragraph();
+    width:100%;
+    span{
+      float:right;
+    }
+  }
+}
+
+
+
+
+.payment-header{
+  @include h2();
+}
