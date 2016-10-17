@@ -40,37 +40,45 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate"]).run(['$rootScope', '
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
-  $routeProvider.when('/products/:detail', {
+  $routeProvider.when('/shop/product/:detail', {
     templateUrl: 'views/shop.html',
-    controller: 'detailCtrl'
-  }).when('/', {
+    controller: 'detailCtrl',
+    reloadOnSearch: false
+  }).when('/shop/collection/:collection', {
     templateUrl: 'views/shop.html',
-    controller: 'shopCtrl'
-  }).when('/privacy', {
+    reloadOnSearch: false
+  }).when('/shop/cart', {
+    templateUrl: 'views/shop.html',
+    controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/checkout', {
+    templateUrl: 'views/shop.html',
+    controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/shipment', {
+    templateUrl: 'views/shop.html',
+    controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/payment', {
+    templateUrl: 'views/shop.html',
+    controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/privacy', {
     templateUrl: 'privacy/privacy.html',
-    controller: 'privacyCtrl'
+    controller: 'privacyCtrl',
+    reloadOnSearch: true
   })
 
   /*............................. Take-all routing ........................*/
 
-  .when('/', {
-    // redirectTo: 'matthew30matthew30matthew'
+  .when('/shop', {
     templateUrl: 'views/shop.html',
     controller: 'shopCtrl',
-    resolve: {
-      function: function _function($q, $timeout) {
-        var deferred = $q.defer();
-        $timeout(function () {
-          return deferred.resolve();
-        }, 200);
-        return deferred.promise;
-      }
-    }
-
+    reloadOnSearch: false
   })
 
   // put your least specific route at the bottom
-  .otherwise({ redirectTo: '/' });
+  .otherwise({ redirectTo: '/shop' });
 }]) //config
 
 .filter('trustUrl', function ($sce) {
@@ -85,6 +93,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate"]).run(['$rootScope', '
   $rootScope.token;
   $rootScope.pageLoading = true;
   $rootScope.pageLoading = false;
+  $rootScope.Collection;
 
   $rootScope.noRefresh = function (url) {
     var str = url;
@@ -136,7 +145,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate"]).run(['$rootScope', '
       url: '/authenticate'
     }).then(function successCallback(response) {
 
-      if (response.data.access_token) {
+      if (response.data.access_token || response.data.token) {
         console.log("response");
         console.log(response);
         // this callback will be called asynchronously
@@ -146,6 +155,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate"]).run(['$rootScope', '
         var expires_in = response.data.expires_in;
         var access_token = response.data.access_token;
         var type = response.data.token_type;
+
+        $rootScope.getCollections();
 
         $rootScope.createCookie("access_token", response.data.access_token, response.data.expires_in);
         setTimeout(function () {
@@ -160,12 +171,56 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate"]).run(['$rootScope', '
 
   $rootScope.authentication();
 
+  $rootScope.getCollections = function () {
+
+    // Simple GET request example:
+    $http({
+      method: 'GET',
+      url: '/getCollections'
+    }).then(function (response) {
+      console.log("getCollections received");
+      $rootScope.Collection = response.data;
+      console.log(response);
+    }, function (response) {
+
+      console.log(response);
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }; //addToCart
+
+  $rootScope.setPage = function (page) {
+    $rootScope.page = page;
+  };
+
+  $rootScope.countries = [];
+
+  $rootScope.getCountries = function () {
+    $http({
+      method: 'GET',
+      url: 'assets/countries.json'
+    }).then(function (response) {
+
+      $rootScope.countries = response.data;
+      console.log(response.data);
+    }, function (response) {
+
+      $scope.error = { value: true, text: 'countries not available, this page will be reloaded' };
+      setTimeout({
+        // $route.reload();
+      }, 2000);
+    });
+  };
+  $rootScope.getCountries();
+
+  //MOBILE
+
   $rootScope.windowHeight = $window.innerHeight;
   $rootScope.half_windowHeight = $window.innerHeight / 2;
   jQuery($window).resize(function () {
     $rootScope.windowHeight = $window.innerHeight;
     $rootScope.half_windowHeight = $window.innerHeight / 2;
-    $rootScope.offset_FN();
+    // $rootScope.offset_FN();
     $rootScope.Section = $rootScope.shopSections[$rootScope.Section.index];
     setTimeout(function () {
       anchorSmoothScroll.scrollHorizontally($rootScope.Section.offset, $rootScope.Section.name);
@@ -194,10 +249,17 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate"]).run(['$rootScope', '
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
+}).directive('shopDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
 }).directive('productDirective', function ($rootScope, $location, $window, $timeout) {
   return {
     restrict: 'E',
-    templateUrl: 'views/shop/products.html',
+    templateUrl: 'views/shop/product.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
@@ -265,11 +327,11 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
     $rootScope.showCart = false;
   };
 
-  $rootScope.$watch('Cart', function (newValue) {
-    console.log(newValue);
-    $rootScope.Cart = newValue;
-    $rootScope.animateCart();
-  });
+  // $rootScope.$watch('Cart', function(newValue) {
+  //     console.log(newValue);
+  //     $rootScope.Cart = newValue;
+  //     $rootScope.animateCart();
+  // });
 
   $rootScope.updateCart = function () {
     $http({
@@ -427,26 +489,6 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     $rootScope.showCart = true;
     $rootScope.backFromPayment();
   };
-
-  $rootScope.countries = [];
-
-  $rootScope.getCountries = function () {
-    $http({
-      method: 'GET',
-      url: 'assets/countries.json'
-    }).then(function successCallback(response) {
-
-      $rootScope.countries = response.data;
-      console.log(response.data);
-    }, function errorCallback(response) {
-
-      $scope.error = { value: true, text: 'countries not available, this page will be reloaded' };
-      setTimeout({
-        // $route.reload();
-      }, 2000);
-    });
-  };
-  $rootScope.getCountries();
 
   $scope.phoneRegex = '^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$';
   $scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
@@ -715,24 +757,65 @@ Service.service('anchorSmoothScroll', function ($location, $rootScope) {
 'use strict';
 
 var Shop = angular.module('myApp');
+Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
+  return function (data) {
+    var collection = $routeParams.collection;
+    var filtered = [];
+    // console.log('category: '+category);
+    for (var i in $rootScope.Product) {
 
-Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll) {
+      if ($rootScope.Product[i].collection) {
+        if ($rootScope.Product[i].collection.data.slug == collection) {
+          filtered = filtered.concat($rootScope.Product[i]);
+        }
+      }
+    }
+    if (!collection) {
+      return data;
+    } else {
+      return filtered;
+    }
+  };
+});
+
+Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', '$routeParams', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams) {
+
+  $rootScope.page = "product";
 
   $rootScope.shopSections = [];
   $rootScope.Section = {};
   $rootScope.Product = [];
   $rootScope.isGradient = true;
 
-  $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
-    console.log(response);
-    $rootScope.Product = response.data;
-    for (var i in $rootScope.Product) {
-      $rootScope.detailUpdate($rootScope.Product[i].sku);
-      return false;
-    }
-  }).then(function () {
-    console.log("an error occurred");
-  });
+  $rootScope.getProducts = function () {
+    $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
+      console.log(response);
+      $rootScope.Product = response.data;
+      for (var i in $rootScope.Product) {
+        $rootScope.detailUpdate($rootScope.Product[i].sku);
+        return false;
+      }
+    }, function () {
+      console.log("an error occurred");
+    });
+  };
+
+  $rootScope.getProductsFN = function () {
+    console.log("getting products");
+    $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
+      console.log(response);
+      $rootScope.Product = response.data;
+      for (var i in $rootScope.Product) {
+        $rootScope.detailUpdate($rootScope.Product[i].sku);
+        return false;
+      }
+    }, function (error) {
+      console.log(error);
+      console.log("products status 400");
+    });
+  };
+
+  $rootScope.getProductsFN();
 
   $rootScope.addToCart = function (id) {
     // var token = document.cookie;
@@ -799,42 +882,42 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
 
   $rootScope.shopSections = [{
     "name": "products",
-    "url": "/",
+    "url": "/shop",
     "previous": false,
     "next": "cart",
     "index": 0,
     "forwardActive": false
   }, {
     "name": "detail",
-    "url": "/detail",
+    "url": "/shop/detail/",
     "previous": "products",
     "next": "cart",
     "index": 1,
     "forwardActive": false
   }, {
     "name": "cart",
-    "url": "/cart",
+    "url": "/shop/cart",
     "previous": "detail",
     "next": "shipment",
     "index": 2,
     "forwardActive": false
   }, {
     "name": "shipment",
-    "url": "/shipment",
+    "url": "/shop/shipment",
     "previous": "cart",
     "next": "payment",
     "index": 3,
     "forwardActive": false
   }, {
     "name": "payment",
-    "url": "/payment",
+    "url": "/shop/payment",
     "previous": "shipment",
     "next": "processed",
     "index": 4,
     "forwardActive": false
   }, {
     "name": "processed",
-    "url": "/processed",
+    "url": "/shop/processed",
     "previous": "payment",
     "next": false,
     "index": 5,
@@ -848,11 +931,14 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   $rootScope.thisProduct = function (id) {
     $rootScope.detailUpdate(id);
     $rootScope.goHorizontal('detail', 1);
+    $location.path('/shop/product/' + id, false);
   };
 
   $rootScope.goHorizontal = function (id, number) {
+    console.log("where", id);
     $rootScope.Section = $rootScope.shopSections[number];
     anchorSmoothScroll.scrollHorizontally($rootScope.shopSections[number].offset, id);
+    $location.path($rootScope.shopSections[number].url, false);
   };
 }]); //shop controller
 
@@ -861,6 +947,14 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   $rootScope.Detail = {};
   $rootScope.selectedVariation = {};
   $rootScope.howManyVAriationsSelected = 0;
+
+  $rootScope.page = "detail";
+
+  $scope.$on('$routeChangeSuccess', function () {
+    var sku = $routeParams.detail;
+    console.log('sku' + sku);
+    $rootScope.detailUpdate(sku);
+  });
 
   $rootScope.detailUpdate = function (sku) {
     $rootScope.selectedVariation = {};

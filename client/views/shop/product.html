@@ -1,0 +1,31 @@
+<div class="product" id="products" ng-controller="shopCtrl">
+
+
+<div class="product-filter">
+
+  <ul class="product-filter-ul">
+    <li class="product-filter-li" ng-repeat="c in Collection">
+      <a href="shop/collection/{{c.slug}}">{{c.title}}</a>
+    </li>
+  </ul>
+
+</div>
+
+
+
+
+  <ul class="product-ul" >
+    <li class="product-li" ng-repeat="p in Product | shopFilter track by $index" ng-if="(p.stock_level>0)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
+      <a ng-click="thisProduct(p.sku)">
+
+        <img src="{{p.images[0].url.http}}" alt="{{p.title}}" class="product-image"/>
+        <!-- <img src="{{p.images[1].url.http}}" alt="{{p.description}}" class="product-image" ng-if="p.images[1].url.http"/>
+        <img src="{{p.images[2].url.http}}" alt="{{p.description}}" class="product-image" ng-if="p.images[2].url.http"/> -->
+      </a>
+    </li>
+  </ul>
+
+
+
+
+</div>

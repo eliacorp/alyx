@@ -133,6 +133,10 @@ app.get('/authenticate', function(req, res){
       getProduct(req, res);
     });
 
+    app.get('/getCollections', function(req, res){
+      getCollections(req, res);
+    });
+
     app.get('/getCart', function(req, res){
       getCart(req, res);
     });
@@ -147,6 +151,9 @@ app.get('/authenticate', function(req, res){
       var order = req.body;
       orderToPayment(req, res, order);
     });
+
+
+
 
 
 
@@ -166,13 +173,14 @@ app.get('/authenticate', function(req, res){
 
 
 
+    var Product=[];
     function getProduct(req, res){
-        moltin.Product.List(null, function(product) {
-          console.log(product);
-            res.json(product);
-
+        moltin.Product.List(null, function(data) {
+          Product = data;
+          res.status(200).json(data);
         }, function(error) {
             // Something went wrong...
+            res.status(400).json(error);
             console.log("Something went wrong in getting the products..");
         });
     }
@@ -276,6 +284,17 @@ app.get('/authenticate', function(req, res){
 
 
 
+
+
+function getCollections(req, res){
+  moltin.Collection.List(null, function(data) {
+      console.log(data);
+      res.status(200).json(data);
+  }, function(error) {
+    res.status(400).json(error);
+      // Something went wrong...
+  });
+}
 
 
 

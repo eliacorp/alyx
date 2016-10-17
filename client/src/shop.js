@@ -1,16 +1,36 @@
 'use strict'
 
 var Shop = angular.module('myApp');
+Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
+  return function(data) {
+    var collection = $routeParams.collection;
+    var filtered = [];
+    // console.log('category: '+category);
+    for (var i in $rootScope.Product){
 
-Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll){
+      if($rootScope.Product[i].collection){
+        if($rootScope.Product[i].collection.data.slug == collection){
+          filtered = filtered.concat($rootScope.Product[i]);
+        }
+      }
+    }
+    if(!collection){
+      return data;
+    }else{return filtered;}
+
+  };
+});
+
+Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams){
+
+$rootScope.page = "product";
 
   $rootScope.shopSections= [];
   $rootScope.Section= {};
   $rootScope.Product = [];
   $rootScope.isGradient = true;
 
-
-
+$rootScope.getProducts = ()=>{
   $http({method: 'GET', url: '/getProducts'}).then(function(response){
     console.log(response);
     $rootScope.Product = response.data;
@@ -18,10 +38,35 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
       $rootScope.detailUpdate($rootScope.Product[i].sku);
       return false
     }
-  }).then(function(){
+  }, function(){
     console.log("an error occurred");
 
-  })
+  });
+}
+
+
+
+$rootScope.getProductsFN=function(){
+  console.log("getting products");
+  $http({method: 'GET', url: '/getProducts'}).then(function(response){
+    console.log(response);
+    $rootScope.Product = response.data;
+    for (var i in $rootScope.Product){
+      $rootScope.detailUpdate($rootScope.Product[i].sku);
+      return false;
+    }
+  }, function(error){
+    console.log(error);
+    console.log("products status 400");
+  });
+}
+
+
+$rootScope.getProductsFN();
+
+
+
+
 
 
 
@@ -109,7 +154,7 @@ $rootScope.offset_FN = function(){
   $rootScope.shopSections= [
     {
       "name":"products",
-      "url":"/",
+      "url":"/shop",
       "previous": false,
       "next": "cart",
       "index": 0,
@@ -117,7 +162,7 @@ $rootScope.offset_FN = function(){
     },
     {
       "name":"detail",
-      "url":"/detail",
+      "url":"/shop/detail/",
       "previous": "products",
       "next": "cart",
       "index": 1,
@@ -125,7 +170,7 @@ $rootScope.offset_FN = function(){
     },
     {
       "name":"cart",
-      "url":"/cart",
+      "url":"/shop/cart",
       "previous": "detail",
       "next": "shipment",
       "index": 2,
@@ -133,7 +178,7 @@ $rootScope.offset_FN = function(){
     },
     {
       "name":"shipment",
-      "url":"/shipment",
+      "url":"/shop/shipment",
       "previous": "cart",
       "next": "payment",
       "index": 3,
@@ -141,7 +186,7 @@ $rootScope.offset_FN = function(){
     },
     {
       "name":"payment",
-      "url":"/payment",
+      "url":"/shop/payment",
       "previous": "shipment",
       "next": "processed",
       "index": 4,
@@ -149,7 +194,7 @@ $rootScope.offset_FN = function(){
     },
     {
       "name":"processed",
-      "url":"/processed",
+      "url":"/shop/processed",
       "previous": "payment",
       "next": false,
       "index": 5,
@@ -167,13 +212,18 @@ $rootScope.offset_FN = function(){
   $rootScope.thisProduct = function(id){
     $rootScope.detailUpdate(id);
     $rootScope.goHorizontal('detail', 1);
+    $location.path('/shop/product/'+id, false);
   };
 
 
   $rootScope.goHorizontal = function(id, number) {
+    console.log("where",id);
     $rootScope.Section= $rootScope.shopSections[number]
     anchorSmoothScroll.scrollHorizontally($rootScope.shopSections[number].offset, id);
+    $location.path($rootScope.shopSections[number].url, false);
   };
+
+
 
 
 
@@ -194,6 +244,21 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
   $rootScope.Detail={};
   $rootScope.selectedVariation = {};
   $rootScope.howManyVAriationsSelected = 0;
+
+$rootScope.page = "detail";
+
+
+
+  $scope.$on('$routeChangeSuccess', function(){
+    var sku = $routeParams.detail;
+    console.log('sku'+sku);
+    $rootScope.detailUpdate(sku);
+  });
+
+
+
+
+
 
   $rootScope.detailUpdate = (sku) => {
     $rootScope.selectedVariation={};
@@ -268,7 +333,6 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
             $rootScope.howManyVAriationsSelected = $rootScope.howManyVAriationsSelected+1;
           }
       }
-
     }
   }
 

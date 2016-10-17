@@ -59,13 +59,21 @@
     <div class="clickOut" ng-click="closeCart()" ng-show="showCart" ng-cloak>
     </div>
 
-    <div class="logo" ng-click="goHorizontal('products', 0);">
-      <logo-directive></logo-directive>
+    <div class="logo">
+      <a href="/shop" ng-click="goHorizontal('products', 0);">
+        <p>
+          {{page}}
+        </p>
+         <!--  -->
+        <logo-directive></logo-directive>
+      </a>
     </div>
 
+    <!-- <shop-directive></shop-directive> -->
 
 
-    <main ng-view class='main' autoscroll="true" ng-hide="pageLoading">
+
+    <main ng-view class='main page page-{{page}}' autoscroll="true" ng-hide="pageLoading" >
     </main>
 
     <script src="dist/bundle.js"></script>

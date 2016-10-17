@@ -16,11 +16,11 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
     $rootScope.showCart = false;
   }
 
-  $rootScope.$watch('Cart', function(newValue) {
-      console.log(newValue);
-      $rootScope.Cart = newValue;
-      $rootScope.animateCart();
-  });
+  // $rootScope.$watch('Cart', function(newValue) {
+  //     console.log(newValue);
+  //     $rootScope.Cart = newValue;
+  //     $rootScope.animateCart();
+  // });
 
 
 

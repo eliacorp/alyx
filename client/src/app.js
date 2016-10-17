@@ -44,44 +44,61 @@ angular.module('myApp', ["ngRoute", "ngAnimate"])
   $routeProvider
 
 
-    .when('/products/:detail', {
+    .when('/shop/product/:detail', {
       templateUrl: 'views/shop.html',
-      controller: 'detailCtrl'
+      controller: 'detailCtrl',
+      reloadOnSearch: false
     })
 
-    .when('/', {
+    .when('/shop/collection/:collection', {
       templateUrl: 'views/shop.html',
-      controller: 'shopCtrl'
+      reloadOnSearch: false
     })
 
 
-    .when('/privacy', {
+    .when('/shop/cart', {
+      templateUrl: 'views/shop.html',
+      controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/shop/checkout', {
+      templateUrl: 'views/shop.html',
+      controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/shop/shipment', {
+      templateUrl: 'views/shop.html',
+      controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/shop/payment', {
+      templateUrl: 'views/shop.html',
+      controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+
+    .when('/shop/privacy', {
       templateUrl: 'privacy/privacy.html',
-      controller: 'privacyCtrl'
+      controller: 'privacyCtrl',
+      reloadOnSearch: true
     })
 
     /*............................. Take-all routing ........................*/
 
 
-    .when('/', {
-      // redirectTo: 'matthew30matthew30matthew'
+    .when('/shop', {
       templateUrl: 'views/shop.html',
       controller: 'shopCtrl',
-      resolve: {
-             function($q, $timeout) {
-                var deferred = $q.defer();
-                $timeout(function(){
-                    return deferred.resolve();
-                }, 200);
-                return deferred.promise;
-            }
-        }
-
+      reloadOnSearch: false
     })
 
 
     // put your least specific route at the bottom
-    .otherwise({redirectTo: '/'})
+    .otherwise({redirectTo: '/shop'})
 
 
 
@@ -102,6 +119,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate"])
   $rootScope.token;
   $rootScope.pageLoading = true;
   $rootScope.pageLoading = false;
+  $rootScope.Collection;
 
 
   $rootScope.noRefresh = function(url){
@@ -154,7 +172,7 @@ $rootScope.readCookie = function(name) {
           url: '/authenticate'
         }).then(function successCallback(response) {
 
-          if(response.data.access_token){
+          if(response.data.access_token || response.data.token){
               console.log("response");
               console.log(response);
               // this callback will be called asynchronously
@@ -165,7 +183,7 @@ $rootScope.readCookie = function(name) {
               var access_token = response.data.access_token;
               var type = response.data.token_type;
 
-
+              $rootScope.getCollections();
 
 
               $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
@@ -187,12 +205,89 @@ $rootScope.readCookie = function(name) {
 
 
 
+
+  $rootScope.getCollections = function(){
+
+        // Simple GET request example:
+        $http({
+          method: 'GET',
+          url: '/getCollections'
+        }).then(function (response) {
+console.log("getCollections received");
+              $rootScope.Collection=response.data;
+              console.log(response);
+
+          }, function (response) {
+
+            console.log(response);
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
+
+  }//addToCart
+
+
+
+
+
+$rootScope.setPage = (page)=>{
+  $rootScope.page = page;
+}
+
+
+
+
+
+
+
+  $rootScope.countries = [];
+
+  $rootScope.getCountries = function(){
+    $http({
+      method: 'GET',
+      url: 'assets/countries.json'
+    }).then(function(response) {
+
+      $rootScope.countries = response.data;
+      console.log(response.data);
+
+
+    }, function(response) {
+
+      $scope.error = {value: true, text:'countries not available, this page will be reloaded'};
+      setTimeout({
+        // $route.reload();
+      }, 2000);
+    });
+  };
+  $rootScope.getCountries();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//MOBILE
+
+
 $rootScope.windowHeight= $window.innerHeight;
 $rootScope.half_windowHeight = $window.innerHeight/2;
   jQuery($window).resize(function(){
     $rootScope.windowHeight = $window.innerHeight;
     $rootScope.half_windowHeight = $window.innerHeight/2;
-    $rootScope.offset_FN();
+    // $rootScope.offset_FN();
     $rootScope.Section= $rootScope.shopSections[$rootScope.Section.index];
     setTimeout(function(){
       anchorSmoothScroll.scrollHorizontally($rootScope.Section.offset, $rootScope.Section.name);
@@ -239,10 +334,22 @@ $rootScope.showDetail=false;
   };
 })
 
+.directive('shopDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+
 .directive('productDirective', function($rootScope, $location, $window, $timeout) {
   return {
     restrict: 'E',
-    templateUrl: 'views/shop/products.html',
+    templateUrl: 'views/shop/product.html',
     replace: true,
     link: function(scope, elem, attrs) {
 
