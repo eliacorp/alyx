@@ -196,8 +196,10 @@ a:active {
   color: #0000FF; }
 
 .ng-click-active {
-  color: #0000FF;
+  color: #0000FF !important;
   stroke: #0000FF; }
+  .ng-click-active a, .ng-click-active p, .ng-click-active li {
+    color: #0000FF !important; }
 
 /*.....................ACTIVE CLASSES......................*/
 .active {
@@ -231,8 +233,12 @@ body {
   display: table;
   text-transform: uppercase; }
 
-p, a, li {
-  font-size: 9px;
+p, span {
+  font-size: 10px;
+  line-height: 17px;
+  font-family: "akzidenz-grotesk";
+  letter-spacing: 2px;
+  font-size: 10px;
   list-style-type: none;
   letter-spacing: 2px;
   color: #000000; }
@@ -241,7 +247,10 @@ input, textarea, select, a, li {
   text-decoration: none; }
 
 a {
+  font-size: 11px;
+  line-height: 25px;
   font-family: helvetica;
+  letter-spacing: 2px;
   font-weight: 900;
   cursor: pointer; }
 
@@ -278,10 +287,11 @@ h2 {
   letter-spacing: 3px; }
 
 h3 {
-  font-size: 14px;
-  line-height: 18px;
-  font-family: "akzidenz-grotesk";
-  letter-spacing: 2px; }
+  font-size: 11px;
+  line-height: 25px;
+  font-family: helvetica;
+  letter-spacing: 2px;
+  font-weight: 900; }
 
 .dollar {
   position: absolute;
@@ -400,26 +410,26 @@ h3 {
   cursor: pointer; }
 
 .product {
-  width: calc(100vw - 150px);
+  width: calc(100vw - 75px);
   height: 100vh;
-  margin-left: 75px;
+  padding-left: 75px;
   position: relative;
   display: inline-block;
   overflow-y: scroll;
   overflow-x: hidden; }
 
 .product-ul {
-  width: 90%;
+  width: 82%;
   height: auto;
   margin: auto;
   padding-top: 100px; }
   .product-ul .product-li {
     display: block;
-    width: 14%;
+    width: 18%;
     height: auto;
     margin: auto;
     margin-bottom: 20vh;
-    margin-right: 29%;
+    margin-right: 23%;
     float: left; }
     .product-ul .product-li:nth-child(3n+0) {
       margin-right: 0; }
@@ -438,15 +448,52 @@ h3 {
         width: 100%; }
 
 .product-filter {
-  position: fixed;
-  left: 0;
-  top: 300px; }
-  .product-filter .product-filter-ul .product-filter-li {
-    clear: both;
-    font-size: 9px;
-    line-height: 15px;
-    font-family: "akzidenz-grotesk";
-    letter-spacing: 2px; }
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  /* IE 9 */
+  -webkit-transform: translateY(-50%);
+  /* Safari */
+  -moz-transform: translateY(-50%);
+  /* Mozilla */
+  -o-transform: translateY(-50%);
+  /* Opera */
+  transform-origin: 0 0; }
+  .product-filter .product-filter-ul {
+    width: 100%; }
+    .product-filter .product-filter-ul .product-filter-li {
+      width: 100%;
+      display: block;
+      clear: both; }
+      .product-filter .product-filter-ul .product-filter-li a {
+        font-size: 11px;
+        line-height: 25px;
+        font-family: helvetica;
+        letter-spacing: 2px;
+        font-weight: 900; }
+
+.product-li.ng-move,
+.product-li.ng-enter,
+.product-li.ng-leave {
+  transition: all linear 0.4s;
+  -webkit-transition: all linear 0.4s;
+  -moz-transition: all linear 0.4s;
+  -ms-transition: all linear 0.4s; }
+
+.product-li.ng-leave.ng-leave-active,
+.product-li.ng-move,
+.product-li.ng-enter {
+  opacity: 0; }
+
+.product-li.ng-leave,
+.product-li.ng-move.ng-move-active,
+.product-li.ng-enter.ng-enter-active {
+  opacity: 1; }
+
+.filter-selected a {
+  color: #0000FF !important; }
 
 .detail {
   width: 100vw;
@@ -474,7 +521,7 @@ h3 {
   overflow-y: scroll; }
   .detail-left .detail-image {
     margin-left: 5vw;
-    margin-top: 30px;
+    margin-top: 40px;
     width: 30vw;
     height: auto;
     display: block; }
@@ -497,26 +544,28 @@ h3 {
     letter-spacing: 3px; }
   .detail-text p {
     word-break: break-all;
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     display: block;
     width: 90%;
     overflow-wrap: break-word;
-    white-space: normal; }
+    white-space: normal;
+    margin-top: 20px; }
 
 .detail-price {
   position: relative;
   display: block;
   height: auto;
   left: 0;
-  width: 50px;
-  margin-top: 100px;
-  font-size: 14px;
-  line-height: 18px;
-  font-family: "akzidenz-grotesk";
-  letter-spacing: 2px; }
+  width: auto;
+  margin-top: 20px;
+  font-size: 11px;
+  line-height: 25px;
+  font-family: helvetica;
+  letter-spacing: 2px;
+  font-weight: 900; }
 
 .detail-add {
   position: absolute;
@@ -551,22 +600,52 @@ h3 {
       width: auto;
       display: block;
       float: left;
-      font-size: 14px;
-      line-height: 18px;
-      font-family: "akzidenz-grotesk";
-      letter-spacing: 2px; }
+      font-size: 11px;
+      line-height: 25px;
+      font-family: helvetica;
+      letter-spacing: 2px;
+      font-weight: 900; }
     .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations {
       width: auto;
       display: block;
-      float: none; }
+      float: left;
+      margin-left: 10px; }
       .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li {
-        display: block;
-        clear: both; }
+        display: inline-block;
+        margin-left: 10px; }
         .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a {
-          font-size: 9px;
-          line-height: 15px;
-          font-family: "akzidenz-grotesk";
-          letter-spacing: 2px; }
+          font-size: 11px;
+          line-height: 25px;
+          font-family: helvetica;
+          letter-spacing: 2px;
+          font-weight: 900;
+          color: #D3D3D3;
+          color: #D3D3D3;
+          transition: color 0.4s ease;
+          -webkit-transition: color 0.4s ease;
+          -moz-transition: color 0.4s ease;
+          -ms-transition: color 0.4s ease;
+          -o-transition: color 0.4s ease; }
+          .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a:hover {
+            color: #000000;
+            /*  @if $media == large-desktop {
+                @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+              }*/
+            /*  @if $media == large-desktop {
+                @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+              }*/
+            /*  @if $media == large-desktop {
+                @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+              }*/ }
+            @media only screen and (min-width: 0px) and (max-device-width: 767px) {
+              .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a:hover {
+                color: #D3D3D3 !important; } }
+            @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {
+              .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a:hover {
+                color: #D3D3D3 !important; } }
+            @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
+              .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a:hover {
+                color: #D3D3D3 !important; } }
 
 .detail-error {
   position: absolute;
@@ -590,6 +669,19 @@ h3 {
   -moz-animation: color 0.6s ease-in-out;
   -o-animation: color 0.6s ease-in-out;
   -ms-animation: color 0.6s ease-in-out; }
+
+.activeVariant a {
+  color: #000000 !important; }
+
+.detail-left.zoom-detail {
+  width: 100%;
+  margin: 0;
+  z-index: 9999;
+  background-color: #FFFFFF; }
+  .detail-left.zoom-detail .detail-image {
+    width: 100%;
+    display: block;
+    margin-left: 0; }
 
 /* Skew */
 .hvr-skew {
@@ -652,37 +744,49 @@ h3 {
 .cart-ul {
   display: block;
   margin: auto;
-  width: 300px;
+  width: 400px;
   padding-top: 100px; }
   .cart-ul .cart-li {
     display: block;
     width: 100%;
     height: 50px;
-    margin-top: 30px; }
+    margin-top: 40px; }
     .cart-ul .cart-li .cart-li-img {
+      height: auto;
+      width: 50px;
+      display: inline-block;
+      vertical-align: top; }
+    .cart-ul .cart-li .cart-li-info {
+      position: relative;
+      display: inline-block;
+      width: 350px;
       height: 100%;
-      width: auto;
-      display: inline-block;
       vertical-align: top; }
-    .cart-ul .cart-li .cart-li-p {
-      width: auto;
-      display: inline-block;
-      vertical-align: top; }
-    .cart-ul .cart-li .cart-li-span {
-      width: auto;
-      display: inline-block;
-      vertical-align: top; }
+      .cart-ul .cart-li .cart-li-info .cart-li-p {
+        width: auto;
+        display: inline-block;
+        vertical-align: top; }
+      .cart-ul .cart-li .cart-li-info .cart-li-price {
+        display: block;
+        clear: both; }
+      .cart-ul .cart-li .cart-li-info .cart-li-remove {
+        width: auto;
+        display: inline-block;
+        vertical-align: top;
+        float: right; }
 
 .cart-total {
   display: block;
   margin: auto;
-  width: 300px;
+  width: 400px;
   margin-top: 100px; }
   .cart-total p {
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px; }
+  .cart-total .cart-total-value {
+    float: right; }
 
 .cart-error {
   display: block;
@@ -691,8 +795,8 @@ h3 {
   margin-top: 100px; }
   .cart-error p {
     text-align: center;
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px; }
 
@@ -728,7 +832,7 @@ h3 {
   top: 0;
   width: 75px;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.87);
+  border-right: 5px solid #000000;
   z-index: 11; }
 
 .whiteBar {
@@ -746,7 +850,7 @@ h3 {
   top: 0;
   width: 75px;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.87);
+  border-left: 5px solid #000000;
   z-index: 11;
   transition: all 0.6s ease;
   -webkit-transition: all 0.6s ease;
@@ -760,35 +864,7 @@ h3 {
   .shop-button .shop-button-entry {
     height: 100%;
     width: 100%;
-    position: relative;
-    cursor: pointer; }
-    .shop-button .shop-button-entry a, .shop-button .shop-button-entry p {
-      color: #000000;
-      transition: color 0.4s ease;
-      -webkit-transition: color 0.4s ease;
-      -moz-transition: color 0.4s ease;
-      -ms-transition: color 0.4s ease;
-      -o-transition: color 0.4s ease; }
-    .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p {
-      color: #FFFFFF;
-      /*  @if $media == large-desktop {
-          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-        }*/
-      /*  @if $media == large-desktop {
-          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-        }*/
-      /*  @if $media == large-desktop {
-          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-        }*/ }
-      @media only screen and (min-width: 0px) and (max-device-width: 767px) {
-        .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p {
-          color: #000000 !important; } }
-      @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {
-        .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p {
-          color: #000000 !important; } }
-      @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
-        .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p {
-          color: #000000 !important; } }
+    position: relative; }
     .shop-button .shop-button-entry a, .shop-button .shop-button-entry p {
       font-size: 16px;
       line-height: 20px;
@@ -863,33 +939,31 @@ h3 {
   overflow-x: scroll; }
 
 .shipment-form {
-  width: 300px;
+  width: 400px;
   margin: auto;
-  height: auto; }
-
-.shipment-h1 {
-  padding-top: 100px; }
+  height: auto;
+  margin-top: 100px; }
 
 .customer {
   width: 100%;
   display: block;
   position: relative;
   left: 0;
-  margin-top: 30px; }
+  margin-top: 40px; }
 
 .address {
   width: 100%;
   display: block;
   position: relative;
   left: 0;
-  margin-top: 30px; }
+  margin-top: 40px; }
 
 .billing {
   width: 100%;
   display: block;
   position: relative;
   left: 0;
-  margin-top: 30px;
+  margin-top: 40px;
   padding-bottom: 150px; }
 
 .isBillingDifferent {
@@ -898,24 +972,25 @@ h3 {
   position: relative;
   height: auto;
   width: auto;
-  margin-top: 30px;
-  margin-bottom: 30px; }
+  margin-top: 40px;
+  margin-bottom: 40px; }
   .isBillingDifferent label {
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px; }
   .isBillingDifferent input {
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px; }
 
-.form-title {
-  font-size: 14px;
-  line-height: 18px;
-  font-family: "akzidenz-grotesk";
-  letter-spacing: 2px; }
+.form-sub-title {
+  font-size: 11px;
+  line-height: 25px;
+  font-family: helvetica;
+  letter-spacing: 2px;
+  font-weight: 900; }
 
 .form-entry {
   width: 100%;
@@ -935,8 +1010,8 @@ h3 {
     background-color: #FFFFFF;
     text-align: left;
     outline: 0;
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px; }
     .form-entry input:hover, .form-entry input:focus {
@@ -956,14 +1031,14 @@ h3 {
   display: block;
   position: absolute;
   right: 0;
-  font-size: 9px;
-  line-height: 15px;
+  font-size: 10px;
+  line-height: 17px;
   font-family: "akzidenz-grotesk";
   letter-spacing: 2px; }
 
 select {
-  font-size: 9px;
-  line-height: 15px;
+  font-size: 10px;
+  line-height: 17px;
   font-family: "akzidenz-grotesk";
   letter-spacing: 2px;
   width: 100%;
@@ -993,9 +1068,10 @@ select {
   position: relative; }
 
 .payment-form {
-  width: 300px;
+  width: 400px;
   margin: auto;
-  height: auto; }
+  height: auto;
+  margin-top: 100px; }
 
 .payment-h1 {
   padding-top: 100px; }
@@ -1007,8 +1083,8 @@ select {
   height: auto;
   width: 100%; }
   .payment-total p {
-    font-size: 9px;
-    line-height: 15px;
+    font-size: 10px;
+    line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     width: 100%; }

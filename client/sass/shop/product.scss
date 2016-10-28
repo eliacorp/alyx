@@ -1,7 +1,7 @@
 .product{
-  width:calc(100vw - 150px);
+  width:calc(100vw - 75px);
   height:100vh;
-  margin-left: 75px;
+  padding-left: 75px;
   position: relative;
   display: inline-block;
   overflow-y:scroll;
@@ -9,17 +9,17 @@
 }
 
 .product-ul{
-  width: 90%;
+  width: 82%;
   height:auto;
   margin: auto;
   padding-top:100px;
   .product-li{
     display: block;
-    width: 14%;
+    width: 18%;
     height: auto;
     margin:auto;
     margin-bottom: 20vh;
-    margin-right:29%;
+    margin-right:23%;
     float:left;
     &:nth-child(3n+0){
       margin-right:0;
@@ -48,14 +48,54 @@
 }
 
 .product-filter{
-  position: fixed;
-  left:0;
-  top:300px;
+  position: absolute;
+  left:$margin-sides;
+  top:50%;
+  @include transform-element(translateY(-50%));
   .product-filter-ul{
+    width:100%;
 
     .product-filter-li{
+      width:100%;
+      display:block;
       clear: both;
-      @include paragraph();
+      a{
+        @include h3();
+      }
     }
   }
+}
+
+
+
+.product-li.ng-move,
+.product-li.ng-enter,
+.product-li.ng-leave {
+  transition:all linear $transition-medium;
+  -webkit-transition:all linear $transition-medium;
+  -moz-transition:all linear $transition-medium;
+  -ms-transition:all linear $transition-medium;
+}
+
+.product-li.ng-leave.ng-leave-active,
+.product-li.ng-move,
+.product-li.ng-enter {
+  opacity:0;
+}
+
+.product-li.ng-leave,
+.product-li.ng-move.ng-move-active,
+.product-li.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+
+
+
+
+.filter-selected{
+  a{
+    color: $blue !important;
+  }
+
 }

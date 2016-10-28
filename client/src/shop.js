@@ -3,18 +3,19 @@
 var Shop = angular.module('myApp');
 Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
   return function(data) {
-    var collection = $routeParams.collection;
+    // var collection = $routeParams.collection;
+    var filter = $rootScope.filter;
     var filtered = [];
     // console.log('category: '+category);
     for (var i in $rootScope.Product){
 
       if($rootScope.Product[i].collection){
-        if($rootScope.Product[i].collection.data.slug == collection){
+        if($rootScope.Product[i].collection.data.slug == filter.selected){
           filtered = filtered.concat($rootScope.Product[i]);
         }
       }
     }
-    if(!collection){
+    if(!filter.selected){
       return data;
     }else{return filtered;}
 
@@ -29,20 +30,6 @@ $rootScope.page = "product";
   $rootScope.Section= {};
   $rootScope.Product = [];
   $rootScope.isGradient = true;
-
-$rootScope.getProducts = ()=>{
-  $http({method: 'GET', url: '/getProducts'}).then(function(response){
-    console.log(response);
-    $rootScope.Product = response.data;
-    for (var i in $rootScope.Product){
-      $rootScope.detailUpdate($rootScope.Product[i].sku);
-      return false
-    }
-  }, function(){
-    console.log("an error occurred");
-
-  });
-}
 
 
 
@@ -93,6 +80,25 @@ $rootScope.getProductsFN();
   }//addToCart
 
 
+
+
+
+//......FILTER
+
+if($routeParams.collection){
+  $rootScope.filter ={type:'collection', selected: $routeParams.collection};
+}else{
+  $rootScope.filter ={type:"", selected: ""};
+}
+
+
+
+$rootScope.selectFilter=(thistype, id)=>{
+
+  $rootScope.filter = {type:thistype, selected: id};
+  $location.path('/shop/collection/'+id, false);
+
+}
 
 
 
@@ -151,6 +157,7 @@ $rootScope.offset_FN = function(){
 
 
 
+$rootScope.setSections = ()=>{
   $rootScope.shopSections= [
     {
       "name":"products",
@@ -201,6 +208,12 @@ $rootScope.offset_FN = function(){
       "forwardActive": false
     }
   ];
+}
+
+$rootScope.setSections();
+
+
+
 
   $rootScope.Section = $rootScope.shopSections[0];
 
@@ -217,10 +230,17 @@ $rootScope.offset_FN = function(){
 
 
   $rootScope.goHorizontal = function(id, number) {
-    console.log("where",id);
+    console.log("where", id);
     $rootScope.Section= $rootScope.shopSections[number]
     anchorSmoothScroll.scrollHorizontally($rootScope.shopSections[number].offset, id);
-    $location.path($rootScope.shopSections[number].url, false);
+
+    if(id=='detail'){
+      console.log("detail");
+      $location.path('/shop/product/'+$rootScope.Detail.sku, false);
+    }else{
+      $location.path($rootScope.shopSections[number].url, false);
+    }
+
   };
 
 
@@ -245,7 +265,7 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
   $rootScope.selectedVariation = {};
   $rootScope.howManyVAriationsSelected = 0;
 
-$rootScope.page = "detail";
+  $rootScope.page = "detail";
 
 
 

@@ -8,6 +8,7 @@ var Service = angular.module('myApp');
 
 
 
+
 Service.factory("transformRequestAsFormPost", () => {
         // I prepare the request data for the form post.
         function transformRequest( data, getHeaders ) {
@@ -210,4 +211,126 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
 });
 
 
-// };
+Service.service('mailchimp', function($location, $rootScope, $resource){
+
+    this.register = function(checkout) {
+
+
+        var data = {
+          'u':'1e9ad6956936b430ff4152132',
+          'id':'f74ac40f8c',
+          'dc': 'us14',
+          'username': 'eliafornari',
+          'ADDRESS':{
+              'addr1':checkout.shipment.address_1,
+              'city':checkout.shipment.city,
+              'state':checkout.shipment.county,
+              'zip':checkout.shipment.postcode,
+              'country':checkout.shipment.country
+            },
+          'PHONE':checkout.shipment.phone,
+          'EMAIL':checkout.customer.email,
+          'FNAME':checkout.customer.first_name,
+          'LNAME':checkout.customer.last_name
+        };
+
+
+
+
+
+
+          // Handle clicks on the form submission.
+          $rootScope.addSubscription = function (mailchimp) {
+            var actions,
+                MailChimpSubscription,
+                params = {},
+                url;
+
+            // Create a resource for interacting with the MailChimp API
+            url = '//' + mailchimp.username + '.' + mailchimp.dc +
+                  '.list-manage.com/subscribe/post-json';
+
+
+                  console.log(mailchimp);
+
+            var fields = Object.keys(mailchimp);
+
+
+      //COMPILING ADDRESS
+            var newaddress = [];
+            for(i in mailchimp.ADDRESS){
+              console.log(i);
+              if(i=='addr1'){
+                newaddress = newaddress +mailchimp.ADDRESS[i];
+              }else{
+                newaddress = newaddress + '   ' +mailchimp.ADDRESS[i];
+              }
+            }
+            mailchimp.ADDRESS = newaddress;
+            console.log('ADDRESS: '+mailchimp.ADDRESS);
+
+
+
+
+
+            for(var i = 0; i < fields.length; i++) {
+              params[fields[i]] = mailchimp[fields[i]];
+            }
+
+            params.c = 'JSON_CALLBACK';
+
+            actions = {
+              'save': {
+                method: 'jsonp'
+              }
+            };
+            MailChimpSubscription = $resource(url, params, actions);
+
+            // Send subscriber data to MailChimp
+            MailChimpSubscription.save(
+              // Successfully sent data to MailChimp.
+              function (response) {
+                // Define message containers.
+                mailchimp.errorMessage = '';
+                mailchimp.successMessage = '';
+
+                // Store the result from MailChimp
+                mailchimp.result = response.result;
+                console.log(response);
+
+                // Mailchimp returned an error.
+                if (response.result === 'error') {
+                  if (response.msg) {
+                    // Remove error numbers, if any.
+                    var errorMessageParts = response.msg.split(' - ');
+                    if (errorMessageParts.length > 1)
+                      errorMessageParts.shift(); // Remove the error number
+                    mailchimp.errorMessage = errorMessageParts.join(' ');
+                  } else {
+                    mailchimp.errorMessage = 'Sorry! An unknown error occured.';
+                  }
+                }
+                // MailChimp returns a success.
+                else if (response.result === 'success') {
+                  mailchimp.successMessage = response.msg;
+                }
+
+                //Broadcast the result for global msgs
+                $rootScope.$broadcast('mailchimp-response', response.result, response.msg);
+              },
+
+              // Error sending data to MailChimp
+              function (error) {
+                $log.error('MailChimp Error: %o', error);
+              }
+            );
+          };
+
+
+
+            $rootScope.addSubscription(data);
+
+    };
+
+
+}); //mailchimp service module

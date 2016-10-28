@@ -17,14 +17,12 @@
 
 
 .shipment-form{
-  width: 300px;
+  width: 400px;
   margin:auto;
   height: auto;
+  margin-top:$margin-top;
 }
 
-.shipment-h1{
-  padding-top: $margin-top;
-}
 
 .customer{
   width:100%;
@@ -69,7 +67,14 @@
 }
 
 
+
+
 .form-title{
+  // padding-top: $margin-top;
+}
+
+
+.form-sub-title{
   @include h3();
 }
 

@@ -2,7 +2,7 @@
 
 var Checkout = angular.module('myApp');
 
-Checkout.controller('checkoutCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost){
+Checkout.controller('checkoutCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp){
 
 
 $rootScope.Totals;
@@ -45,6 +45,7 @@ $rootScope.checkout={
   $rootScope.checkShipment = () =>{
     if($scope.checkoutForm.$valid){
       $rootScope.toPayment();
+      mailchimp.register($rootScope.checkout);
     }else{
       alert('invalid');
       $rootScope.error = {value: true, text:'data invalid'};

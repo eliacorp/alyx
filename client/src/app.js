@@ -4,10 +4,11 @@
 import angular from 'angular'
 import 'angular-route'
 import 'angular-animate'
+import 'angular-resource'
 
  // /*global $ */
 
-angular.module('myApp', ["ngRoute", "ngAnimate"])
+angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 .run(['$rootScope', '$location','$route',($rootScope, $location, $route)=>{
 
     var original = $location.path;
@@ -213,7 +214,7 @@ $rootScope.readCookie = function(name) {
           method: 'GET',
           url: '/getCollections'
         }).then(function (response) {
-console.log("getCollections received");
+            console.log("getCollections received");
               $rootScope.Collection=response.data;
               console.log(response);
 
@@ -287,7 +288,7 @@ $rootScope.half_windowHeight = $window.innerHeight/2;
   jQuery($window).resize(function(){
     $rootScope.windowHeight = $window.innerHeight;
     $rootScope.half_windowHeight = $window.innerHeight/2;
-    // $rootScope.offset_FN();
+    $rootScope.offset_FN();
     $rootScope.Section= $rootScope.shopSections[$rootScope.Section.index];
     setTimeout(function(){
       anchorSmoothScroll.scrollHorizontally($rootScope.Section.offset, $rootScope.Section.name);

@@ -19,7 +19,7 @@
 .cart-ul{
   display:block;
   margin:auto;
-  width:300px;
+  width:400px;
   padding-top:$margin-top;
   .cart-li{
     display: block;
@@ -27,22 +27,35 @@
     height:50px;
     margin-top:$margin-top-list;
     .cart-li-img{
+      height: auto;
+      width:50px;
+      display:inline-block;
+      vertical-align:top;
+    }
+    .cart-li-info{
+      position: relative;
+      display: inline-block;
+      width:350px;
       height: 100%;
-      width:auto;
-      display:inline-block;
       vertical-align:top;
+      .cart-li-p{
+        width:auto;
+        display:inline-block;
+        vertical-align:top;
+      }
+      .cart-li-price{
+        display: block;
+        clear: both;
+      }
+      .cart-li-remove{
+        width:auto;
+        display:inline-block;
+        vertical-align:top;
+        float:right;
+        
+      }
     }
-    .cart-li-p{
-      width:auto;
-      display:inline-block;
-      vertical-align:top;
 
-    }
-    .cart-li-span{
-      width:auto;
-      display:inline-block;
-      vertical-align:top;
-    }
   }
 }
 
@@ -52,10 +65,13 @@
 .cart-total{
   display:block;
   margin:auto;
-  width:300px;
+  width:400px;
   margin-top:$margin-top;
   p{
     @include paragraph();
+  }
+  .cart-total-value{
+    float:right;
   }
 }
 

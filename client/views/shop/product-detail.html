@@ -1,10 +1,10 @@
-<div class="detail" ng-controller="detailCtrl" ng-init="isSelectionOpen=true" id="detail">
+<div class="detail" ng-controller="detailCtrl" ng-init="isSelectionOpen=true" id="detail"  ng-init="zoomDetail=false">
   <div class="detail-content">
 
 
       <!-- left -->
-      <div class="detail-left">
-        <img class="detail-image" src="{{i.url.http}}" alt="{{Detail.description}}"  class="product-image" ng-repeat="i in Detail.images"/>
+      <div class="detail-left" ng-class="{'zoom-detail':zoomDetail}" ng-click="zoomDetail=!zoomDetail">
+        <img class="detail-image" src="{{i.url.http}}" alt="{{Detail.description}}" class="product-image" ng-repeat="i in Detail.images"/>
       </div>
 
 
@@ -25,7 +25,8 @@
             <p class="detail-modifiers-ul-placeholder" ng-click="showSelection(m.id)">{{m.title}} </p>
 
             <div class="detail-modifiers-variations">
-              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)" ng-show="selectedVariation[m.id].variation_title==v.title || selectedVariation[m.id].open==true">
+              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
+              ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}">
                 <a>{{v.title}}</a>
               </li>
             </div>

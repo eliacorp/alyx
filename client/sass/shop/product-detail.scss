@@ -64,6 +64,7 @@
     width:90%;
     overflow-wrap: break-word;
     white-space: normal;
+    margin-top: $margin-top-p;
   }
 }
 
@@ -72,8 +73,8 @@
   display: block;
   height: auto;
   left: 0;
-  width: 50px;
-  margin-top: $margin-top;
+  width: auto;
+  margin-top: $margin-top-p;
   @include h3();
 }
 .detail-add{
@@ -114,14 +115,15 @@
     .detail-modifiers-variations{
       width:auto;
       display: block;
-      float:none;
-      // margin-left: $margin-left-paragraph;
+      float:left;
+      margin-left: $margin-left-paragraph;
       .detail-modifiers-variations-li{
-        display: block;
-        clear: both;
+        display: inline-block;
+        margin-left: $margin-left-paragraph;
         a{
-          @include paragraph();
-
+          @include h3();
+          color: $light-grey;
+          @include hover-effect-color($light-grey, $black);
         }
       }
     }
@@ -163,12 +165,28 @@ $animation-color: 0.6s;
 
 
 
+.activeVariant{
+  a{
+    color: $black !important;
+  }
+}
 
 
 
 
+.detail-left.zoom-detail{
+  width:100%;
+  margin:0;
+  z-index:9999;
+  background-color: $white;
+  .detail-image{
+    width:100%;
+    display: block;
+    margin-left:0;
+  }
 
 
+}
 
 
 

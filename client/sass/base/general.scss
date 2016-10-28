@@ -30,8 +30,11 @@ a:active{
   color: $blue;
 }
 .ng-click-active{
-  color:$blue;
+  color:$blue !important;
   stroke: $blue;
+  a, p, li{
+    color:$blue !important;
+  }
 }
 
 
@@ -94,7 +97,8 @@ body {
 }
 
 
-p, a, li {
+p, span{
+  @include paragraph();
   font-size: $font-size-p;
   list-style-type: none;
   letter-spacing:$letter-spacing-p;
@@ -107,8 +111,7 @@ input, textarea, select, a, li {
 }
 
 a{
-  font-family: helvetica;
-  font-weight: 900;
+  @include h3();
   cursor:pointer;
 }
 
