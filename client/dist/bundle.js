@@ -66,8 +66,12 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     controller: 'shopCtrl',
     reloadOnSearch: false
   }).when('/shop/privacy', {
-    templateUrl: 'privacy/privacy.html',
+    templateUrl: 'views/shop/privacy.html',
     controller: 'privacyCtrl',
+    reloadOnSearch: true
+  }).when('/collection/:collection', {
+    templateUrl: 'views/collection/collection.html',
+    controller: 'collectionCtrl',
     reloadOnSearch: true
   })
 
@@ -304,285 +308,213 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
 });
 
 var jQuery = require('jquery');
-var shop = require("./shop.js");
-var cart = require("./cart.js");
-var checkout = require("./checkout.js");
-var checkout = require("./payment.js");
+var shop = require("./shop/shop.js");
+var cart = require("./shop/cart.js");
+var checkout = require("./shop/checkout.js");
+var payment = require("./shop/payment.js");
 var service = require('./service.js');
+var collection = require('./collection/collection.js');
+var collection = require('./collection/lookbook.js');
 
-},{"./cart.js":2,"./checkout.js":3,"./payment.js":4,"./service.js":5,"./shop.js":6,"angular":14,"angular-animate":8,"angular-resource":10,"angular-route":12,"jquery":15}],2:[function(require,module,exports){
+},{"./collection/collection.js":2,"./collection/lookbook.js":3,"./service.js":4,"./shop/cart.js":5,"./shop/checkout.js":6,"./shop/payment.js":7,"./shop/shop.js":8,"angular":16,"angular-animate":10,"angular-resource":12,"angular-route":14,"jquery":17}],2:[function(require,module,exports){
 'use strict';
 
-var Cart = angular.module('myApp');
+var Collection = angular.module('myApp');
 
-Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
-  $rootScope.Cart;
-  $rootScope.showCart = false;
-  $rootScope.cartChanged = false;
-
-  $rootScope.openCart = function () {
-    $rootScope.showCart = !$rootScope.showCart;
-    $rootScope.updateCart();
-  };
-
-  $rootScope.closeCart = function () {
-    $rootScope.showCart = false;
-  };
-
-  $rootScope.$watch('Cart', function (newValue) {
-    console.log(newValue);
-    $rootScope.Cart = newValue;
-    $rootScope.animateCart();
-  });
-
-  $rootScope.updateCart = function () {
-    $http({
-      url: '/getCart',
-      method: 'GET',
-      headers: {
-        // 'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      transformRequest: transformRequestAsFormPost
-      // data: {
-      //       }
-    }).then(function (response) {
-      $rootScope.Cart = response.data;
-
-      console.log($rootScope.Cart);
-
-      //attaching item id if cart>0
-      if (!$rootScope.Cart.total_items == 0) {
-        console.log("cart has some stuff");
-        $rootScope.attachItemID($rootScope.Cart.contents);
-      }
-    });
-  }; //updateCart
-
-  $rootScope.updateCart();
-
-  //attaching item function
-  $rootScope.attachItemID = function (obj) {
-    Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
-      $rootScope.Cart.contents[val].item = val;
-      // console.log(val + ' -> ' + obj[val]);
-    });
-  };
-
-  $rootScope.removeItem = function (id) {
-
-    $http({
-      url: '/removeProduct',
-      method: 'POST',
-      headers: {
-        // 'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      transformRequest: transformRequestAsFormPost,
-      data: {
-        id: id
-      }
-    }).then(function (response) {
-      console.log("object removed");
-      $rootScope.Cart = response;
-      $rootScope.updateCart();
-      console.log(response);
-    });
-  };
-
-  $rootScope.cartToShipment = function () {
-    console.log("toShipment");
-    if ($rootScope.Cart.total_items > 0) {
-      $rootScope.goHorizontal('shipment', 3);
-    } else {
-      $rootScope.noProductsError = true;
-      setTimeout(function () {
-        $rootScope.noProductsError = false;
-        $rootScope.$apply();
-      }, 2000);
-    }
-  };
-
-  //function that animates the cart button when you add a product
-  $rootScope.animateCart = function () {
-    $rootScope.cartChanged = true;
-    setTimeout(function () {
-      $rootScope.cartChanged = false;$rootScope.$apply();
-    }, 900);
-  };
+Collection.controller('collectionCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {}).directive('lookbookDirective', function ($rootScope, $location) {
+	return {
+		restrict: 'E',
+		templateUrl: 'views/collection/lookbook.html',
+		replace: true
+	};
 });
 
 },{}],3:[function(require,module,exports){
 'use strict';
 
-var Checkout = angular.module('myApp');
+var Lookbook = angular.module('myApp');
+Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache, preload) {
 
-Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, mailchimp) {
+	$scope.mainImage;
+	$scope.mainLook = 1;
+	$scope.lookbookUnits = [];
+	$scope.lookbook_preload_array = [];
+	if (!$rootScope.isMobile) {
+		$scope.showMain = true;
+	}
 
-  $rootScope.Totals;
+	$scope.$on("myEvent", function (event) {
+		//only after data is pulled
+		$scope.lookbookUnits = $rootScope.lookbook.units;
+		$scope.mainImage = $rootScope.lookbook.units[0].src_large;
 
-  $rootScope.checkout = {
-    customer: {
-      first_name: '',
-      last_name: '',
-      email: ''
-    },
-    shipment: { first_name: 'Elia Fornari',
-      last_name: 'Fornari',
-      address_1: '400 S. Burnside #MH Tower 37-00H',
-      city: 'Los Angeles',
-      county: 'California',
-      country: 'US',
-      postcode: '90036',
-      phone: '3157273461'
-    },
-    billing: {
-      first_name: 'Elia Fornari',
-      last_name: 'Fornari',
-      address_1: '400 S. Burnside #MH Tower 37-00H',
-      city: 'Los Angeles',
-      county: 'California',
-      country: 'US',
-      postcode: '90036',
-      phone: '3157273461'
-    }
-  };
+		if (!$rootScope.isMobile) {
+			for (var i in $rootScope.lookbook.units) {
+				$scope.lookbook_preload_array.push($rootScope.lookbook.units[i].src_large);
+			}
+			preload.images($scope.lookbook_preload_array);
+		}
+	});
 
-  //shipment
+	$scope.thisImage = function (look, src) {
+		$scope.mainImage = src;
+		$scope.mainLook = look;
+	};
 
-  $rootScope.checkShipment = function () {
-    if ($scope.checkoutForm.$valid) {
-      $rootScope.toPayment();
-      mailchimp.register($rootScope.checkout);
-    } else {
-      alert('invalid');
-      $rootScope.error = { value: true, text: 'data invalid' };
-    }
-  };
+	$scope.shiftImage = false;
+	$scope.animating = false;
+	$rootScope.readActive = false;
+	$scope.lookbookStatus = "read";
 
-  $scope.$watch('checkoutForm.$valid', function (newVal, oldVal) {
-    console.log("change");
-    console.log("old", oldVal);
-    console.log("new", newVal);
-    if ($scope.checkoutForm.$valid) {
-      $rootScope.Section.forwardActive = true;
-    } else {
-      $rootScope.Section.forwardActive = false;
-    }
-  }, true);
+	$scope.showDescription = function () {
 
-  $rootScope.toPayment = function () {
+		if (!$rootScope.isMobile) {
+			if ($rootScope.readActive == false) {
+				$rootScope.readActive = true;
+				$scope.lookbookStatus = "close";
+			} else if ($rootScope.readActive == true) {
+				$rootScope.readActive = false;
+				$scope.lookbookStatus = "read";
+			}
+		}
 
-    $rootScope.goHorizontal('payment', 4);
+		$rootScope.readScrollDisable();
 
-    $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
+		if ($scope.animating == true) {
+			return false;
+		} else if ($scope.animating == false) {
 
-      $rootScope.Totals = response.data;
-      $rootScope.payment.id = response.data.id;
-      console.log($rootScope.Totals);
-      console.log("posted successfully");
-    }, function (data) {
-      console.error("error in posting");
-    });
-  }; //cartToOrder
+			$scope.shiftImage = !$scope.shiftImage;
+			$scope.animating = true;
+			setTimeout(function () {
+				$scope.animating = false;
+			}, 1000);
+		}
 
-  $rootScope.backFromCheckout = function () {
-    console.log($rootScope.templates[0]);
-    $rootScope.template = $rootScope.templates[0];
-    $rootScope.showCart = true;
-    $rootScope.backFromPayment();
-  };
+		if ($rootScope.isMobile) {
+			$scope.showMain = false;
+		}
+	};
 
-  $scope.phoneRegex = '^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$';
-  $scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
+	$scope.showMainImage = function () {
+		$scope.showMain = true;
+		$rootScope.disableScroll();
+	};
 
-  // '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
+	$scope.hideMainImage = function () {
+		$scope.showMain = false;
+		$rootScope.enableScroll();
+	};
+
+	$rootScope.readScrollDisable = function () {
+		if ($rootScope.readActive == true) {
+			$rootScope.disableScroll();
+		} else if ($rootScope.readActive == false) {
+			$rootScope.enableScroll();
+		}
+	};
+
+	var newMain;
+
+	//navigating with keys
+	jQuery(document.documentElement).keyup(function (event) {
+
+		event.preventDefault();
+		// handle cursor keys
+		if (event.keyCode == 39 && $rootScope.isLookbook) {
+
+			//left right
+			var index = $scope.mainLook - 1;
+			var arrayLength = $scope.lookbookUnits.length - 1;
+
+			if (index < arrayLength) {
+				var newMain = $scope.mainLook;
+			} else if (index >= arrayLength) {
+				var newMain = 0;
+			}
+
+			var thisUrl = $scope.lookbookUnits[newMain].src_large;
+			var thisLook = $scope.lookbookUnits[newMain].look;
+
+			$scope.thisImage(thisLook, thisUrl);
+
+			$scope.$apply();
+		} else if (event.keyCode == 37 && $rootScope.isLookbook) {
+			//left arrow
+			var index = $scope.mainLook - 1;
+
+			if (index > 0) {
+				var newMain = $scope.mainLook - 2;
+			} else if (index <= 0) {
+				var newMain = $scope.lookbookUnits.length - 1;
+			}
+
+			var thisUrl = $scope.lookbookUnits[newMain].src_large;
+			var thisLook = $scope.lookbookUnits[newMain].look;
+
+			$scope.thisImage(thisLook, thisUrl);
+
+			$scope.$apply();
+		}
+	});
+
+	$scope.journalSwipeRight = function () {
+		var mainLookVar = parseInt($scope.mainLook);
+		if ($scope.mainLook == 1) {
+			$scope.mainLook = $scope.lookbookUnits.length - 1;
+			$scope.fastSwipeFN($scope.mainLook);
+			mainImgVar = $scope.mainLook;
+			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+		} else if ($scope.mainLook >= 1) {
+			$scope.leftScroll();
+			$scope.mainLook = mainLookVar - 1;
+			mainImgVar = mainLookVar - 1;
+			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+		}
+	};
+
+	$scope.fastSwipeFN = function (int) {
+		setTimeout(function () {
+			var scrollBy = -1 * jQuery("#lookbook-main-img-" + int).offset().left;
+			jQuery(".lookbook-main").animate({
+				scrollLeft: '-=' + scrollBy
+			}, 0, 'easeOutQuad');
+			console.log(scrollBy);
+		}, 50);
+	};
+
+	var windowWidth = $window.innerWidth;
+	$scope.leftScroll = function () {
+		jQuery(".lookbook-main").animate({
+			scrollLeft: '-=' + windowWidth
+		}, 600, 'easeOutQuad');
+	};
+
+	$scope.rightScroll = function () {
+		jQuery(".lookbook-main").animate({
+			scrollLeft: '+=' + windowWidth
+		}, 600, 'easeOutQuad');
+	};
+
+	$scope.journalSwipeLeft = function () {
+		var mainLookVar = parseInt($scope.mainLook);
+		var mainImgVar;
+		if ($scope.mainLook == $scope.lookbookUnits.length - 1) {
+			$scope.fastSwipeFN(1);
+			$scope.mainLook = 1;
+			mainImgVar = 1;
+			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+		} else if ($scope.mainLook <= $scope.lookbookUnits.length - 1) {
+			$scope.rightScroll();
+			$scope.mainLook = mainLookVar + 1;
+			mainImgVar = mainLookVar + 1;
+			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+			console.log($scope.mainLook);
+		}
+	};
 });
 
 },{}],4:[function(require,module,exports){
-'use strict';
-
-var Payment = angular.module('myApp');
-
-Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
-  $rootScope.thankYou, $rootScope.payment;
-
-  $rootScope.payment = {
-    id: '',
-    first_name: $rootScope.checkout.billing.first_name,
-    last_name: $rootScope.checkout.billing.last_name,
-    number: '',
-    expiry_month: '',
-    expiry_year: '',
-    cvv: ''
-  };
-
-  $scope.$watch('paymentForm.$valid', function (newVal, oldVal) {
-    console.log("change");
-    console.log("old", oldVal);
-    console.log("new", newVal);
-    if ($scope.paymentForm.$valid) {
-      $rootScope.Section.forwardActive = true;
-    } else {
-      $rootScope.Section.forwardActive = false;
-    }
-  }, true);
-
-  $rootScope.checkPayment = function () {
-    if ($scope.paymentForm.$valid) {
-      $rootScope.paymentToProcess();
-    } else {
-      alert('invalid');
-      $rootScope.error = { value: true, text: 'data invalid' };
-    }
-  };
-
-  $rootScope.paymentToProcess = function () {
-
-    $rootScope.goHorizontal('payment', 4);
-
-    $rootScope.cartLoading = true;
-    $rootScope.thankYou = false;
-    this.error = { value: false, text: '' };
-    console.log("payment started");
-
-    $http({
-      url: '/orderToPayment',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      transformRequest: transformRequestAsFormPost,
-      data: $rootScope.payment
-    }).then(function (response) {
-
-      console.log("payment succeeded");
-
-      if (response.data.paid) {
-        $rootScope.cartLoading = false;
-
-        $rootScope.paymentProcessed = true;
-        $rootScope.thankYou = response;
-        console.log($rootScope.thankYou);
-      }
-    }, function (response) {
-      console.log("payment failed!");
-      console.log(response);
-      $rootScope.paymentProcessed = true;
-      this.error = { value: true, text: response.data };
-      $rootScope.cartLoading = false;
-    });
-  }; //paymentToProcess
-
-  $rootScope.backFromPayment = function () {
-    $rootScope.paymentProcessed = false;
-    $rootScope.errorMessage = false;
-    $rootScope.thankYou = false;
-    $rootScope.cartLoading = false;
-  };
-});
-
-},{}],5:[function(require,module,exports){
 // lib.js
 
 'use strict';
@@ -858,7 +790,279 @@ Service.service('mailchimp', function ($location, $rootScope, $resource) {
   };
 }); //mailchimp service module
 
-},{"jquery":15}],6:[function(require,module,exports){
+},{"jquery":17}],5:[function(require,module,exports){
+'use strict';
+
+var Cart = angular.module('myApp');
+
+Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
+  $rootScope.Cart;
+  $rootScope.showCart = false;
+  $rootScope.cartChanged = false;
+
+  $rootScope.openCart = function () {
+    $rootScope.showCart = !$rootScope.showCart;
+    $rootScope.updateCart();
+  };
+
+  $rootScope.closeCart = function () {
+    $rootScope.showCart = false;
+  };
+
+  $rootScope.$watch('Cart', function (newValue) {
+    console.log(newValue);
+    $rootScope.Cart = newValue;
+    $rootScope.animateCart();
+  });
+
+  $rootScope.updateCart = function () {
+    $http({
+      url: '/getCart',
+      method: 'GET',
+      headers: {
+        // 'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost
+      // data: {
+      //       }
+    }).then(function (response) {
+      $rootScope.Cart = response.data;
+
+      console.log($rootScope.Cart);
+
+      //attaching item id if cart>0
+      if (!$rootScope.Cart.total_items == 0) {
+        console.log("cart has some stuff");
+        $rootScope.attachItemID($rootScope.Cart.contents);
+      }
+    });
+  }; //updateCart
+
+  $rootScope.updateCart();
+
+  //attaching item function
+  $rootScope.attachItemID = function (obj) {
+    Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
+      $rootScope.Cart.contents[val].item = val;
+      // console.log(val + ' -> ' + obj[val]);
+    });
+  };
+
+  $rootScope.removeItem = function (id) {
+
+    $http({
+      url: '/removeProduct',
+      method: 'POST',
+      headers: {
+        // 'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: {
+        id: id
+      }
+    }).then(function (response) {
+      console.log("object removed");
+      $rootScope.Cart = response;
+      $rootScope.updateCart();
+      console.log(response);
+    });
+  };
+
+  $rootScope.cartToShipment = function () {
+    console.log("toShipment");
+    if ($rootScope.Cart.total_items > 0) {
+      $rootScope.goHorizontal('shipment', 3);
+    } else {
+      $rootScope.noProductsError = true;
+      setTimeout(function () {
+        $rootScope.noProductsError = false;
+        $rootScope.$apply();
+      }, 2000);
+    }
+  };
+
+  //function that animates the cart button when you add a product
+  $rootScope.animateCart = function () {
+    $rootScope.cartChanged = true;
+    setTimeout(function () {
+      $rootScope.cartChanged = false;$rootScope.$apply();
+    }, 900);
+  };
+});
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
+var Checkout = angular.module('myApp');
+
+Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, mailchimp) {
+
+  $rootScope.Totals;
+
+  $rootScope.checkout = {
+    customer: {
+      first_name: '',
+      last_name: '',
+      email: ''
+    },
+    shipment: { first_name: 'Elia Fornari',
+      last_name: 'Fornari',
+      address_1: '400 S. Burnside #MH Tower 37-00H',
+      city: 'Los Angeles',
+      county: 'California',
+      country: 'US',
+      postcode: '90036',
+      phone: '3157273461'
+    },
+    billing: {
+      first_name: 'Elia Fornari',
+      last_name: 'Fornari',
+      address_1: '400 S. Burnside #MH Tower 37-00H',
+      city: 'Los Angeles',
+      county: 'California',
+      country: 'US',
+      postcode: '90036',
+      phone: '3157273461'
+    }
+  };
+
+  //shipment
+
+  $rootScope.checkShipment = function () {
+    if ($scope.checkoutForm.$valid) {
+      $rootScope.toPayment();
+      mailchimp.register($rootScope.checkout);
+    } else {
+      alert('invalid');
+      $rootScope.error = { value: true, text: 'data invalid' };
+    }
+  };
+
+  $scope.$watch('checkoutForm.$valid', function (newVal, oldVal) {
+    console.log("change");
+    console.log("old", oldVal);
+    console.log("new", newVal);
+    if ($scope.checkoutForm.$valid) {
+      $rootScope.Section.forwardActive = true;
+    } else {
+      $rootScope.Section.forwardActive = false;
+    }
+  }, true);
+
+  $rootScope.toPayment = function () {
+
+    $rootScope.goHorizontal('payment', 4);
+
+    $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
+
+      $rootScope.Totals = response.data;
+      $rootScope.payment.id = response.data.id;
+      console.log($rootScope.Totals);
+      console.log("posted successfully");
+    }, function (data) {
+      console.error("error in posting");
+    });
+  }; //cartToOrder
+
+  $rootScope.backFromCheckout = function () {
+    console.log($rootScope.templates[0]);
+    $rootScope.template = $rootScope.templates[0];
+    $rootScope.showCart = true;
+    $rootScope.backFromPayment();
+  };
+
+  $scope.phoneRegex = '^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$';
+  $scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
+
+  // '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
+});
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+var Payment = angular.module('myApp');
+
+Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
+  $rootScope.thankYou, $rootScope.payment;
+
+  $rootScope.payment = {
+    id: '',
+    first_name: $rootScope.checkout.billing.first_name,
+    last_name: $rootScope.checkout.billing.last_name,
+    number: '',
+    expiry_month: '',
+    expiry_year: '',
+    cvv: ''
+  };
+
+  $scope.$watch('paymentForm.$valid', function (newVal, oldVal) {
+    console.log("change");
+    console.log("old", oldVal);
+    console.log("new", newVal);
+    if ($scope.paymentForm.$valid) {
+      $rootScope.Section.forwardActive = true;
+    } else {
+      $rootScope.Section.forwardActive = false;
+    }
+  }, true);
+
+  $rootScope.checkPayment = function () {
+    if ($scope.paymentForm.$valid) {
+      $rootScope.paymentToProcess();
+    } else {
+      alert('invalid');
+      $rootScope.error = { value: true, text: 'data invalid' };
+    }
+  };
+
+  $rootScope.paymentToProcess = function () {
+
+    $rootScope.goHorizontal('payment', 4);
+
+    $rootScope.cartLoading = true;
+    $rootScope.thankYou = false;
+    this.error = { value: false, text: '' };
+    console.log("payment started");
+
+    $http({
+      url: '/orderToPayment',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: $rootScope.payment
+    }).then(function (response) {
+
+      console.log("payment succeeded");
+
+      if (response.data.paid) {
+        $rootScope.cartLoading = false;
+
+        $rootScope.paymentProcessed = true;
+        $rootScope.thankYou = response;
+        console.log($rootScope.thankYou);
+      }
+    }, function (response) {
+      console.log("payment failed!");
+      console.log(response);
+      $rootScope.paymentProcessed = true;
+      this.error = { value: true, text: response.data };
+      $rootScope.cartLoading = false;
+    });
+  }; //paymentToProcess
+
+  $rootScope.backFromPayment = function () {
+    $rootScope.paymentProcessed = false;
+    $rootScope.errorMessage = false;
+    $rootScope.thankYou = false;
+    $rootScope.cartLoading = false;
+  };
+});
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var Shop = angular.module('myApp');
@@ -1139,7 +1343,7 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   };
 });
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.7
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -5287,11 +5491,11 @@ angular.module('ngAnimate', [])
 
 })(window, window.angular);
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 require('./angular-animate');
 module.exports = 'ngAnimate';
 
-},{"./angular-animate":7}],9:[function(require,module,exports){
+},{"./angular-animate":9}],11:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.6
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -6061,11 +6265,11 @@ angular.module('ngResource', ['ng']).
 
 })(window, window.angular);
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('./angular-resource');
 module.exports = 'ngResource';
 
-},{"./angular-resource":9}],11:[function(require,module,exports){
+},{"./angular-resource":11}],13:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.7
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -7132,11 +7336,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":11}],13:[function(require,module,exports){
+},{"./angular-route":13}],15:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.6
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -38160,11 +38364,11 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":13}],15:[function(require,module,exports){
+},{"./angular":15}],17:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.0.0
  * https://jquery.com/
