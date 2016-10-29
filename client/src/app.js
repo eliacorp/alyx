@@ -83,8 +83,14 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
     .when('/shop/privacy', {
-      templateUrl: 'privacy/privacy.html',
+      templateUrl: 'views/shop/privacy.html',
       controller: 'privacyCtrl',
+      reloadOnSearch: true
+    })
+
+    .when('/collection/:collection', {
+      templateUrl: 'views/collection/collection.html',
+      controller: 'collectionCtrl',
       reloadOnSearch: true
     })
 
@@ -418,8 +424,10 @@ $rootScope.showDetail=false;
 });
 
 var jQuery = require('jquery');
-var shop = require("./shop.js");
-var cart = require("./cart.js");
-var checkout = require("./checkout.js");
-var checkout = require("./payment.js");
+var shop = require("./shop/shop.js");
+var cart = require("./shop/cart.js");
+var checkout = require("./shop/checkout.js");
+var payment = require("./shop/payment.js");
 var service = require('./service.js');
+var collection = require('./collection/collection.js');
+var collection = require('./collection/lookbook.js');
