@@ -1,0 +1,20 @@
+<div class="anchor-contact anchor" id="contactHash">
+
+
+  <div class="contact-wrapper">
+    <ul class="contact-ul">
+      <li class="contact-li" ng-repeat="c in contactData.contact">
+        <h3 class="contact-h3">{{c.contactTitle}}</h3>
+        <p class="contact-p">{{c.contactName}} </p>
+        <p class="contact-p">{{c.contactStreet}} </p>
+        <p class="contact-p">{{c.contactCity}} </p>
+        <p class="contact-p">{{c.contactStreet_2}} </p>
+        <p class="contact-p">{{c.contactCity_2}} </p>
+        <p class="contact-p">{{c.contactPhone}} </p>
+        <p class="contact-p"><a href="mailto:{{c.contactEmail}}">{{c.contactEmail}}</a> </p>
+      </li>
+    </ul>
+  </div>
+
+
+</div>

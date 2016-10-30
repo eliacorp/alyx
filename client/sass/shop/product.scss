@@ -59,9 +59,23 @@
       width:100%;
       display:block;
       clear: both;
+      margin-top: $margin-bottom-h2;
+      &:nth-child(1){
+        margin-top: 0;
+      }
       a{
         @include h3();
+        color: $black;
+        display:block;
+        &:hover{
+          color: $white;
+          background-color: $black;
+        }
       }
+    }
+    .product-filter-li-clear{
+      margin-top: $margin-bottom-h2;
+      @include h3();
     }
   }
 }
@@ -95,7 +109,8 @@
 
 .filter-selected{
   a{
-    color: $blue !important;
+    color: $white !important;
+    background-color: $black;
   }
 
 }

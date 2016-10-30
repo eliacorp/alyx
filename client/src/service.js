@@ -2,6 +2,7 @@
 
 'use strict'
 var jQuery = require('jquery');
+var jqueryUI = require('./vendor/jquery-ui.min.js');
 
 /* Services */
 var Service = angular.module('myApp');
@@ -61,7 +62,7 @@ Service.factory("transformRequestAsFormPost", () => {
 
 Service.service('anchorSmoothScroll', function($location, $rootScope){
 
-    this.scrollTo = function(eID) {
+    this.scrollToJavascript = function(eID) {
 
         // This scrolling function
         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
@@ -112,7 +113,37 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
     };
 
 
+    this.scrollTo = function(id) {
 
+
+
+        setTimeout(function(){
+          var number, element, scroll, scrollPosition, windowheight;
+                  number =  jQuery('#'+id).offset().top;
+                  console.log("number: "+number);
+
+
+                 element = jQuery('.main');
+                 scrollPosition =  jQuery('.main').scrollTop();
+                 console.log("number: "+number);
+                 console.log("scrollPosition: "+scrollPosition);
+                //  scrollLength = document.getElementById("html body").scrollHeight;
+                 windowheight = $rootScope.windowHeight;
+
+                 scroll = scrollPosition + number;
+
+                  element.stop().animate({
+                    scrollTop: scroll
+                  },600,
+                    'swing'
+                    // function() {
+                    //   // $location.path(section, false);
+                    //   // console.log($location.path());
+                    // }
+                  );
+                }, 600);
+
+      };
 
 
   this.scrollHorizontally = function(number, section) {

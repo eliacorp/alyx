@@ -38,12 +38,6 @@ a:active{
 }
 
 
-/*.....................ACTIVE CLASSES......................*/
-
-.active{
-  color: #FF0000 !important;
-  pointer-events: none;
-}
 
 
 
@@ -84,6 +78,8 @@ html{
   margin: 0, 0;
   padding: 0, 0;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -98,11 +94,11 @@ body {
 
 
 p, span{
-  @include paragraph();
+  @include p();
   font-size: $font-size-p;
   list-style-type: none;
   letter-spacing:$letter-spacing-p;
-  color: #000000;
+  color: $black;
 }
 
 
@@ -113,6 +109,7 @@ input, textarea, select, a, li {
 a{
   @include h3();
   cursor:pointer;
+  @include hover-effect-color($light-grey, $black);
 }
 
 
@@ -124,10 +121,12 @@ a{
 main {
   height: auto;
   width:100vw;
+  height:100vh;
   position: relative;
   display: block;
   list-style-type: none;
-  display: table;
+  display: block;
+  overflow: scroll;
 }
 
 
@@ -152,9 +151,6 @@ table{
 }
 
 
-li {
-   display:inline;
-}
 
 h1{
   @include h1();
@@ -205,22 +201,6 @@ h3{
 
 
 
-/*.............................Logo............................*/
-
-.logo{
-  width:50px;
-  position: fixed;
-  margin-left: -25px;
-  left: 50%;
-  bottom:$margin-sides;
-  z-index:$z-logo;
-  h1{
-    width:100%;
-    text-align: center;
-    @include h1();
-    line-height: 7px;
-  }
-}
 
 
 

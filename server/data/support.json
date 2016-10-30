@@ -1,0 +1,572 @@
+[
+        {
+            "matthewImg":"assets/support/matthew-portrait.jpg",
+            "mftLogo":"assets/logos/ALYX_MFTWTF_LOGO_FINAL.svg",
+            "title":"matthew williams",
+            "intro": [
+              "Raised in California, Chicago-born creative director Matthew M. Williams has",
+              "worked with top talents from the worlds of art, music, and fashion throughout his",
+              "decade-long career, shaping a refined aesthetic universe grounded in street",
+              "culture. His discerning eye and dynamic work ethic has shaped visual projects",
+              "through print, digital and live experiences with British photographer Nick Knight."
+            ],
+            "text": [
+              "A keen interest in the creative process of fashion has led Williams towards",
+              "extensive research and development into garment construction and greater",
+
+              "fashion philosophy to present his women’s wear collection ALYX. The",
+              "comprehensive ready-to-wear and accessories collection harnesses inspiration",
+              "from his California youth and global urban subcultures, fused with Williams’",
+              "experience within the entertainment industry to inform a unique insider",
+              "perspective. Today Williams lives and works in New York City."
+            ]
+        },
+
+
+        {
+          "contact":
+          [
+            { "contactTitle":"Sales",
+              "contactName":"Alyx Studio",
+              "contactStreet":"9 St. Marks Place",
+              "contactCity": "New York City, NY 10003",
+              "contactStreet_2":  "Via Francesco Luigi Ferarri 37/A",
+              "contactCity_2":"Ferrara, Italy 44122",
+              "contactPhone":"+39 0532 251211",
+              "contactEmail":"jaw@alyxstudio.com"
+            },
+
+            { "contactTitle":"Press",
+              "contactName":"PR Consulting",
+              "contactStreet": "304 Hudson Street, 8th Floor",
+              "contactCity": "New York NY 10013",
+              "contactPhone":"+1 212 228 8181",
+              "contactEmail":"alyxstudio@prconsulting.net"
+            }
+          ]
+        },
+        {
+          "stores": [
+                      {
+                      "name":"10 Corso Como",
+                      "street":"416 Apgujeong-ro, Gangnam-gu",
+                      "city":"Seoul",
+                      "state":"",
+                      "country": "South Korea",
+                      "zip":""
+                      },
+                      {
+                      "name":"11th Moon",
+                      "street":"574 S Coast Highway",
+                      "city":"Laguna Beach",
+                      "state":"CA",
+                      "country": "USA",
+                      "zip":"92651"
+                      },
+                      {
+                      "name":"ADDITION ADELAIDE",
+                      "street":"3 Chome-6-7 Minamiaoyama",
+                      "city":"Tokyo",
+                      "state":"Minato-ku",
+                      "country": "Japan",
+                      "zip":"107-0062"
+                      },
+                      {
+                      "name":"All Too Human",
+                      "street":"236 Claredon Street",
+                      "city":"Boston",
+                      "state":"MA",
+                      "country": "USA",
+                      "zip":"2116"
+                      },
+                      {
+                      "name":"Ansh46",
+                      "street":"van Oldenbarneveldstraat 99",
+                      "city":"Rotterdam",
+                      "state":"",
+                      "country": "The Netherlands",
+                      "zip":"3012GS"
+                      },
+                      {
+                      "name":"Antonia",
+                      "street":"Via Cusani 1",
+                      "city":"Milan",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "20121"
+                      },
+                      {
+                      "name":"Antonioli",
+                      "street":"Via Pasquale Paoli, 1",
+                      "city":"Milan",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "20143"
+                      },
+                      {
+                      "name":"Antonioli Torino",
+                      "street":"Piazza Carlo Emanuele II 19",
+                      "city":"Torino",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "10123"
+                      },
+                      {
+                      "name":"Beaker",
+                      "street":"78-6 Cheongdam-dong, Gangnam-gu",
+                      "city":"Seoul",
+                      "state": "",
+                      "country": "South Korea",
+                      "zip": ""
+                      },
+                      {
+                      "name":"Cabana South Hampton",
+                      "street":"53 Jobs Lane",
+                      "city":"Southhampton",
+                      "state": "NY",
+                      "country": "USA",
+                      "zip": "11968"
+                      },
+
+                      {
+                      "name":"Cherry",
+                      "street":"1 Chome-1-9 Daimyo, Chuo Ward",
+                      "city":"Fukuoka",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": "810-0041"
+                      },
+
+                      {
+                      "name": "Colette",
+                      "street": "213 Rue Saint Honore",
+                      "city": "Paris",
+                      "state": "",
+                      "country": "France",
+                      "zip": "75001"
+                      },
+                      {
+                      "name": "Degli Effetti",
+                      "street": "Piazza Capranica, 93",
+                      "city": "Rome",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "00186"
+                      },
+                      {
+                      "name": "Dope Factory",
+                      "street": "Via Alghero, 25",
+                      "city": "Cagliari",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "09127"
+                      },
+                      {
+                      "name": "Doshaburi",
+                      "street": "Carrer dels Lledo, 4",
+                      "city": "Barcelona",
+                      "state": "",
+                      "country": "Spain",
+                      "zip": "08002"
+                      },
+                      {
+                      "name": "Dover Street Market New York",
+                      "street": "160 Lexington Avenue",
+                      "city": "New York",
+                      "state": "NY",
+                      "country": "USA",
+                      "zip": "10016"
+                      },
+                      {
+                      "name": "Elu Aspen",
+                      "street": "614 E Cooper Ave",
+                      "city": "Aspen",
+                      "state": "CO",
+                      "country": "USA",
+                      "zip": "81611"
+                      },
+                      {
+                      "name": "Elu LA",
+                      "street": "8575 Melrose Ave",
+                      "city": "Los Angeles",
+                      "state": "CA",
+                      "country": "USA",
+                      "zip": "90069"
+                      },
+                      {
+                      "name": "Elu San Fransisco",
+                      "street": "3091 Sacramento St",
+                      "city": "San Fransisco",
+                      "state": "CA",
+                      "country": "USA",
+                      "zip": "94115"
+                      },
+                      {
+                      "name": "Eraldo",
+                      "street": "Via Roma, 173",
+                      "city": "Ceggia",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "30022"
+                      },
+
+                      {
+                      "name": "Excelsior",
+                      "street": "Galleria del Corso 4",
+                      "city": "Milan",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "20100"
+                      },
+                      {
+                      "name": "GR8",
+                      "street": "9F Honmachi Heisei Bldg",
+                      "city": "Itachibori",
+                      "state": "Nishi-ku",
+                      "country": "Japan",
+                      "zip": "550-0012"
+                      },
+                      {
+                      "name": "Hankyu Department Store",
+                      "street": "8-7 Kakuda-cho",
+                      "city": "Osaka",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": "530-8350"
+                      },
+                      {
+                      "name": "Hirshleiffers",
+                      "street": "2080 Northern Blvd",
+                      "city": "Manhasset",
+                      "state": "NY",
+                      "country": "USA",
+                      "zip": "11030"
+                      },
+                      {
+                      "name": "Hype Beast",
+                      "street": "hbx.com",
+                      "city": "",
+                      "state": "",
+                      "country": "",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Isetan",
+                      "street": "3-14-1 Shinjuku, Shinjuku-ku",
+                      "city": "Tokyo",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": "160-0022"
+                      },
+                      {
+                      "name": "Jonathan And Olivia",
+                      "street": "49 Ossington Avenue",
+                      "city": "Toronto",
+                      "state": "",
+                      "country": "Canada",
+                      "zip": "M6J2Y9"
+                      },
+                      {
+                      "name": "Joyce",
+                      "street": "G/F New World Tower",
+                      "city": "Central",
+                      "state": "",
+                      "country": "Hong Kong",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Juice Beijing",
+                      "street": "Unit S8-15, No. 19 Sanlitun Road",
+                      "city": "Beijing",
+                      "state": "",
+                      "country": "China",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Juice Hong Kong",
+                      "street": "9-11 Cleveland St, Fashion Walk",
+                      "city": "Hong Kong",
+                      "state": "",
+                      "country": "Hong Kong",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Juice Shanghai",
+                      "street": "No. 832 Ju Lu Road",
+                      "city": "Shanghai",
+                      "state": "",
+                      "country": "China",
+                      "zip": "200040"
+                      },
+                      {
+                      "name": "Julian Fashion",
+                      "street": "Viale Giacomo Matteotti, 31",
+                      "city": "Milano Marittima",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "48015"
+                      },
+                      {
+                      "name": "LeForm",
+                      "street": "28, Povarskaya St, 35",
+                      "city": "Moscow",
+                      "state": "",
+                      "country": "Russia",
+                      "zip": "107031"
+                      },
+                      {
+                      "name": "Luisa Via Roma",
+                      "street": "Via Roma, 19/21r",
+                      "city": "Florence",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "50123"
+                      },
+                      {
+                      "name": "Lulu's Bend",
+                      "street": "150 NW Minnesota Ave",
+                      "city": "Bend",
+                      "state": "OR",
+                      "country": "USA",
+                      "zip": "97701"
+                      },
+                      {
+                      "name": "Lust Covet Desire",
+                      "street": "1919 S. Lincoln Blvd",
+                      "city": "Venice",
+                      "state": "CA",
+                      "country": "USA",
+                      "zip": "90291"
+                      },
+                      {
+                      "name": "Machine-A",
+                      "street": "13 Brewer St",
+                      "city": "London",
+                      "state": "",
+                      "country": "UK",
+                      "zip": "W1F 0RH"
+                      },
+                      {
+                      "name": "Maryam Nassir Zadeh",
+                      "street": "123 Norfolk St",
+                      "city": "New York",
+                      "state": "NY",
+                      "country": "USA",
+                      "zip": "10002"
+                      },
+                      {
+                      "name": "Michele Franzese Luxury of Love",
+                      "street": "Via Morelli 6 B",
+                      "city": "Naples",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "80121"
+                      },
+                      {
+                      "name": "MRKT Deux",
+                      "street": "3824 NE 2nd Ave",
+                      "city": "Miami",
+                      "state": "FL",
+                      "country": "USA",
+                      "zip": "USA"
+                      },
+                      {
+                      "name": "OPENING CEREMONY LA",
+                      "street": "451 North La Cienega Boulevard",
+                      "city": "Los Angeles",
+                      "state": "CA",
+                      "country": "USA",
+                      "zip": "90048"
+                      },
+                      {
+                      "name": "OPENING CEREMONY NYC",
+                      "street": "35 Howard Street",
+                      "city": "New York",
+                      "state": "NY",
+                      "country": "USA",
+                      "zip": "10013"
+                      },
+                      {
+                      "name": "Parliament",
+                      "street": "8364 West 3rd Street",
+                      "city": "Los Angeles",
+                      "state": "CA",
+                      "country": "USA",
+                      "zip": "90048"
+                      },
+                      {
+                      "name": "Rail",
+                      "street": "Via San Martino della Battaglie 5/A",
+                      "city": "Brescia",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "25100"
+                      },
+                      {
+                      "name": "Renaissance",
+                      "street": "Nationalestraat 32",
+                      "city": "Antwerp",
+                      "state": "",
+                      "country": "Belgium",
+                      "zip": "02000"
+                      },
+                      {
+                      "name": "Revolution",
+                      "street": "2-8-28 Miyagi Prefecture",
+                      "city": "Sendai",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": "980-0021"
+                      },
+                      {
+                      "name": "Selfridges",
+                      "street": "400 Oxford Street",
+                      "city": "Lodon",
+                      "state": "",
+                      "country": "UK",
+                      "zip": "W1A 1AB"
+                      },
+                      {
+                      "name": "SHOWstudio",
+                      "street": "showstudio.com",
+                      "city": "",
+                      "state": "",
+                      "country": "",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Slam Jam",
+                      "street": "Via Canonica 12",
+                      "city": "Ferrara",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "44122"
+                      },
+                      {
+                      "name": "Smets",
+                      "street": "Via Franscesco Luigi Ferrari",
+                      "city": "Strassen",
+                      "state": "",
+                      "country": "Luxembourg",
+                      "zip": "L-8010"
+                      },
+                      {
+                      "name": "SPRMRKT AMSTERDAM",
+                      "street": "Rozengracht 191-193",
+                      "city": "Amsterdam",
+                      "state": "",
+                      "country": "The Netherlands",
+                      "zip": "1016LZ"
+                      },
+                      {
+                      "name": "SPRMRKT IBIZA",
+                      "street": "Carreterra Sant Josep, Km 1.1, No. 27",
+                      "city": "Sant Jordi",
+                      "state": "Islas Baleares",
+                      "country": "Spain",
+                      "zip": "07817"
+                      },
+                      {
+                      "name": "SSENSE",
+                      "street": "ssense.com",
+                      "city": "",
+                      "state": "",
+                      "country": "",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Stefaniamode",
+                      "street": "Stefaniamode",
+                      "city": "Trapani",
+                      "state": "",
+                      "country": "Italy",
+                      "zip": "91100"
+                      },
+                      {
+                      "name": "STORM",
+                      "street": "Store Regnegade 1",
+                      "city": "Copenhagen",
+                      "state": "",
+                      "country": "Denmark",
+                      "zip": "1110"
+                      },
+                      {
+                      "name": "The Broken Arm",
+                      "street": "12, Rue Perree",
+                      "city": "Paris",
+                      "state": "",
+                      "country": "France",
+                      "zip": "75003"
+                      },
+                      {
+                      "name": "Totokaelo",
+                      "street": "54 Crosby St",
+                      "city": "New York",
+                      "state": "NY",
+                      "country": "USA",
+                      "zip": "10013"
+                      },
+                      {
+                      "name": "LHP",
+                      "street": "4-32-12, Jingumae, Shibuya-ku",
+                      "city": "Tokyo",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": "110-0005"
+                      },
+                      {
+                      "name": "LHP",
+                      "street": "3-24-10, Sakae, Naka-ku, Nagoya",
+                      "city": "Nagoya",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": ""
+                      },
+                      {
+                      "name": "LHP",
+                      "street": "1-9-1, Minamihorie, Nishi-ku",
+                      "city": "Osaka",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": ""
+                      },
+                      {
+                      "name": "Visitfor",
+                      "street": "1-21-4 Minamihorie, Nishiko",
+                      "city": "Osaka",
+                      "state": "",
+                      "country": "Japan",
+                      "zip": "550-0015"
+                      },
+                      {
+                      "name": "Voga",
+                      "street": "3/5 Via de'Redi",
+                      "city": "Arezzo",
+                      "state": "",
+                      "country": "Italy",
+                        "zip": "52100"
+                      },
+                      {
+                      "name": "Wildstyle LA",
+                      "street": "7703 Melrose Ave",
+                      "city": "Los Angeles",
+                      "state": "California",
+                      "country": "USA",
+                        "zip": "90046"
+                      },
+                      {
+                      "name": "Wer-Haus",
+                      "street": "C/Arago 287",
+                      "city": "Barcelona",
+                      "state": "",
+                      "country": "Spain",
+                        "zip": "08009"
+                      }
+
+
+
+          ]
+        }
+
+
+]

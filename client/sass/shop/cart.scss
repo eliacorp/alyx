@@ -52,7 +52,7 @@
         display:inline-block;
         vertical-align:top;
         float:right;
-        
+
       }
     }
 
@@ -68,7 +68,7 @@
   width:400px;
   margin-top:$margin-top;
   p{
-    @include paragraph();
+    @include p();
   }
   .cart-total-value{
     float:right;
@@ -82,6 +82,6 @@
   margin-top:$margin-top;
   p{
     text-align: center;
-    @include paragraph();
+    @include p();
   }
 }

@@ -59,7 +59,7 @@
   }
   p{
     word-break: break-all;
-    @include paragraph();
+    @include p();
     display:block;
     width:90%;
     overflow-wrap: break-word;

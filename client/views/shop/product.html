@@ -4,10 +4,10 @@
 <div class="product-filter">
 
   <ul class="product-filter-ul">
-    <li class="product-filter-li" ng-repeat="c in Collection" ng-class="{'filter-selected': c.slug == filter.selected}">
+    <li class="product-filter-li" ng-repeat="c in Collection_shop" ng-class="{'filter-selected': c.slug == filter.selected}">
       <a ng-click="selectFilter('collection', c.slug)">{{c.title}}</a>
     </li>
-    <li class="product-filter-li">
+    <li class="product-filter-li product-filter-li-clear">
       <a ng-click="selectFilter('collection', '')">clear</a>
     </li>
   </ul>

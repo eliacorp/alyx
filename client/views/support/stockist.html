@@ -1,0 +1,13 @@
+<div class="anchor-stockists" id="stockistsHash">
+
+  <div class="stockist-wrapper">
+    <ul class="stockist-ul">
+      <li class="stockist-li" ng-repeat="s in stockist.stores">
+        <h3 class="stockist-name">{{s.name}}</h3>
+        <p class="stockist-street">{{s.street}}</p>
+        <p class="stockist-country-address">{{s.city}}<span ng-if="s.state">, {{s.state}}</span><span ng-if="z.zip">, {{s.zip}}</span><span ng-if="z.country">, {{s.country}}</span></p>
+      </li>
+    </ul>
+  </div>
+
+</div>

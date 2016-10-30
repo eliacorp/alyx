@@ -294,15 +294,29 @@ app.get('/authenticate', function(req, res){
 
 
 
-function getCollections(req, res){
-  moltin.Collection.List(null, function(data) {
-      console.log(data);
-      res.status(200).json(data);
-  }, function(error) {
-    res.status(400).json(error);
-      // Something went wrong...
-  });
-}
+    function getCollections(req, res){
+      moltin.Collection.List(null, function(data) {
+          console.log(data);
+          res.status(200).json(data);
+      }, function(error) {
+        res.status(400).json(error);
+          // Something went wrong...
+      });
+    }
+
+
+
+
+
+    app.get('/data/support', function(req, res){
+      // Get content from file
+     var support = fs.readFileSync("./server/data/support.json");
+
+     var support = JSON.parse(support);
+
+
+     res.json(support);
+    });
 
 
 

@@ -10,10 +10,12 @@ import 'angular-resource'
 
 angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 .run(['$rootScope', '$location','$route',($rootScope, $location, $route)=>{
+  $rootScope.pageLoading = true;
 
     var original = $location.path;
     $location.path = function (path, reload) {
         if (reload === false) {
+          $rootScope.pageLoading = false;
             var lastRoute = $route.current;
             var un = $rootScope.$on('$locationChangeSuccess', function () {
                 $route.current = lastRoute;
@@ -51,7 +53,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/collection/:collection', {
+    .when('/shop/collection/:shopcollection', {
       templateUrl: 'views/shop.html',
       reloadOnSearch: false
     })
@@ -94,6 +96,25 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: true
     })
 
+
+    .when('/about', {
+      templateUrl: 'views/support/support.html',
+      controller: 'supportCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/contact', {
+      templateUrl: 'views/support/support.html',
+      controller: 'supportCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/stockists', {
+      templateUrl: 'views/support/support.html',
+      controller: 'supportCtrl',
+      reloadOnSearch: false
+    })
+
     /*............................. Take-all routing ........................*/
 
 
@@ -124,9 +145,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 .controller('appCtrl', ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll)=>{
 
   $rootScope.token;
-  $rootScope.pageLoading = true;
-  $rootScope.pageLoading = false;
-  $rootScope.Collection;
+  $rootScope.Collection_shop;
 
 
   $rootScope.noRefresh = function(url){
@@ -221,7 +240,7 @@ $rootScope.readCookie = function(name) {
           url: '/getCollections'
         }).then(function (response) {
             console.log("getCollections received");
-              $rootScope.Collection=response.data;
+              $rootScope.Collection_shop=response.data;
               console.log(response);
 
           }, function (response) {
@@ -423,11 +442,19 @@ $rootScope.showDetail=false;
   };
 });
 
+var jqueryUI = require('./vendor/jquery-ui.min.js');
 var jQuery = require('jquery');
+var nav = require("./nav.js");
 var shop = require("./shop/shop.js");
 var cart = require("./shop/cart.js");
 var checkout = require("./shop/checkout.js");
 var payment = require("./shop/payment.js");
 var service = require('./service.js');
 var collection = require('./collection/collection.js');
-var collection = require('./collection/lookbook.js');
+var lookbook = require('./collection/lookbook.js');
+var support = require('./support/support.js');
+var social = require('./social/social.js');
+
+
+
+//

@@ -3,7 +3,8 @@
 var Shop = angular.module('myApp');
 Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
   return function(data) {
-    // var collection = $routeParams.collection;
+
+
     var filter = $rootScope.filter;
     var filtered = [];
     // console.log('category: '+category);
@@ -42,6 +43,10 @@ $rootScope.getProductsFN=function(){
       $rootScope.detailUpdate($rootScope.Product[i].sku);
       return false;
     }
+    setTimeout(function(){
+      $rootScope.pageLoading = false;
+      $rootScope.$apply();
+    }, 800);
   }, function(error){
     console.log(error);
     console.log("products status 400");
@@ -85,8 +90,8 @@ $rootScope.getProductsFN();
 
 //......FILTER
 
-if($routeParams.collection){
-  $rootScope.filter ={type:'collection', selected: $routeParams.collection};
+if($routeParams.shopcollection){
+  $rootScope.filter ={type:'collection', selected: $routeParams.shopcollection};
 }else{
   $rootScope.filter ={type:"", selected: ""};
 }
@@ -94,7 +99,7 @@ if($routeParams.collection){
 
 
 $rootScope.selectFilter=(thistype, id)=>{
-
+  $rootScope.pageLoading = false;
   $rootScope.filter = {type:thistype, selected: id};
   $location.path('/shop/collection/'+id, false);
 

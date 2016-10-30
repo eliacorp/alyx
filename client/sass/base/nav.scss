@@ -1,0 +1,101 @@
+.nav{
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100vw;
+  height:100vh;
+  background-color: rgba(255,255,255,0.96);
+  z-index: $z-nav;
+}
+
+
+.nav-ul{
+  height:auto;
+  width:200px;
+  margin: auto;
+  .nav-li{
+    display: block;
+    margin-bottom: $margin-bottom-h2;
+    a{
+      @include h2();
+      display: block;
+      color: $light-grey;
+    }
+    h2{
+      color: $light-grey;
+      @include hover-effect-color($light-grey, $black);
+    }
+    .nav-li-sub{
+      display: block;
+      margin-top: $margin-bottom-h2;
+      margin-bottom: $margin-bottom-h2;
+      a{
+        @include h3();
+        display: block;
+        @include hover-effect-color($light-grey, $black);
+      }
+    }
+  }
+}
+
+
+/*.....................ACTIVE CLASSES......................*/
+
+.active{
+  color: $black !important;
+}
+
+
+
+
+.nav{
+  opacity: 1;
+}
+.nav.ng-hide{
+  opacity: 0;
+}
+
+.nav.ng-hide-remove.ng-hide-remove-active{
+  transition: opacity $transition-medium ease;
+  -webkit-transition: opacity $transition-medium ease;
+  -moz-transition: opacity $transition-medium ease;
+  -ms-transition: opacity $transition-medium ease;
+  -o-transition: opacity $transition-medium ease;
+}
+
+.nav.ng-hide-add.ng-hide-add-active{
+  transition: opacity $transition-medium ease;
+  -webkit-transition: opacity $transition-medium ease;
+  -moz-transition: opacity $transition-medium ease;
+  -ms-transition: opacity $transition-medium ease;
+  -o-transition: opacity $transition-medium ease;
+}
+
+
+
+
+
+
+
+/*.............................Logo............................*/
+
+.logo{
+  width:50px;
+  position: fixed;
+  margin-left: -25px;
+  left: 50%;
+  bottom:$margin-sides;
+  z-index:$z-logo;
+  h1{
+    width:100%;
+    text-align: center;
+    @include h1();
+    line-height: 7px;
+  }
+}
+
+
+.logo.logo-left{
+  left:$margin-sides;
+  margin-left: 0;
+}

@@ -34,7 +34,7 @@
   height: auto;
   width: 100%;
   p{
-    @include paragraph();
+    @include p();
     width:100%;
     span{
       float:right;
