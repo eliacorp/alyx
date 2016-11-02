@@ -204,7 +204,7 @@ app.get('/authenticate', function(req, res){
       var bill_to = data.billing;
 
         moltin.Cart.Complete({
-          gateway: 'stripe',
+          gateway: 'paypal-express',
           customer: {
             first_name: customer.first_name,
             last_name:  customer.last_name,
@@ -261,6 +261,7 @@ app.get('/authenticate', function(req, res){
       var cvv = order.cvv;
       var obj={};
       obj = {
+                returnUrl: 'https://localhost:8081/shop/processed',
                 data: {
                   first_name: order.first_name,
                   last_name: order.last_name,

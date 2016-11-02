@@ -1181,6 +1181,14 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
 
   $rootScope.Totals;
 
+  $rootScope.payment = {
+    id: '',
+    number: '5555555555554444',
+    expiry_month: '02',
+    expiry_year: '2018',
+    cvv: '756'
+  };
+
   $rootScope.checkout = {
     customer: {
       first_name: '',

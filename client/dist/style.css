@@ -236,6 +236,7 @@ p, span {
   font-family: "akzidenz-grotesk";
   letter-spacing: 2px;
   font-weight: normal;
+  text-transform: none;
   font-size: 10px;
   list-style-type: none;
   letter-spacing: 2px;
@@ -697,6 +698,7 @@ h3 {
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     font-weight: normal;
+    text-transform: none;
     display: block;
     width: 90%;
     overflow-wrap: break-word;
@@ -931,7 +933,8 @@ h3 {
     line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
-    font-weight: normal; }
+    font-weight: normal;
+    text-transform: none; }
   .cart-total .cart-total-value {
     float: right; }
 
@@ -946,7 +949,8 @@ h3 {
     line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
-    font-weight: normal; }
+    font-weight: normal;
+    text-transform: none; }
 
 .shop {
   position: relative;
@@ -1125,13 +1129,15 @@ h3 {
     line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
-    font-weight: normal; }
+    font-weight: normal;
+    text-transform: none; }
   .isBillingDifferent input {
     font-size: 10px;
     line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
-    font-weight: normal; }
+    font-weight: normal;
+    text-transform: none; }
 
 .form-sub-title {
   font-size: 13px;
@@ -1161,7 +1167,8 @@ h3 {
     line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
-    font-weight: normal; }
+    font-weight: normal;
+    text-transform: none; }
     .form-entry input:hover, .form-entry input:focus {
       outline: 0; }
     .form-entry input::-webkit-input-placeholder {
@@ -1183,7 +1190,8 @@ h3 {
   line-height: 17px;
   font-family: "akzidenz-grotesk";
   letter-spacing: 2px;
-  font-weight: normal; }
+  font-weight: normal;
+  text-transform: none; }
 
 select {
   font-size: 10px;
@@ -1191,6 +1199,7 @@ select {
   font-family: "akzidenz-grotesk";
   letter-spacing: 2px;
   font-weight: normal;
+  text-transform: none;
   width: 100%;
   height: 100%;
   color: black;
@@ -1238,6 +1247,7 @@ select {
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     font-weight: normal;
+    text-transform: none;
     width: 100%; }
     .payment-total p span {
       float: right; }
@@ -2003,6 +2013,7 @@ select {
       font-family: "akzidenz-grotesk";
       letter-spacing: 2px;
       font-weight: normal;
+      text-transform: none;
       /*  @if $media == large-desktop {
           @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
         }*/ }
@@ -2023,6 +2034,7 @@ select {
       font-family: "akzidenz-grotesk";
       letter-spacing: 2px;
       font-weight: normal;
+      text-transform: none;
       text-transform: none; }
   .about-wrapper .about-credit {
     font-size: 10px;
@@ -2030,6 +2042,7 @@ select {
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     font-weight: normal;
+    text-transform: none;
     letter-spacing: normal;
     text-transform: none; }
 
@@ -2095,6 +2108,7 @@ select {
       font-family: "akzidenz-grotesk";
       letter-spacing: 2px;
       font-weight: normal;
+      text-transform: none;
       text-transform: none; }
       .contact-wrapper .contact-ul .contact-li .contact-p a {
         font-size: 10px;
@@ -2102,6 +2116,7 @@ select {
         font-family: "akzidenz-grotesk";
         letter-spacing: 2px;
         font-weight: normal;
+        text-transform: none;
         text-transform: none; }
 
 .anchor-stockists {
@@ -2173,10 +2188,12 @@ select {
       line-height: 17px;
       font-family: "akzidenz-grotesk";
       letter-spacing: 2px;
-      font-weight: normal; }
+      font-weight: normal;
+      text-transform: none; }
     .stockist-wrapper .stockist-ul .stockist-li .stockist-country-address {
       font-size: 10px;
       line-height: 17px;
       font-family: "akzidenz-grotesk";
       letter-spacing: 2px;
-      font-weight: normal; }
+      font-weight: normal;
+      text-transform: none; }
