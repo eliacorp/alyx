@@ -8,17 +8,19 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
                 var filter = $rootScope.filter;
                 var filtered = [];
 
+
                 if(!filter.selected){
                   return data;
                 }else{
 
+
                   // console.log('category: '+category);
                   for (var i in $rootScope.Product){
 
-                    if($rootScope.Product[i].collection==null){
+                    if(!$rootScope.Product[i].collection){
 
-                    }else{
-                      console.log($rootScope.Product[i].collection);
+                    }else if($rootScope.Product[i].collection.value){
+                      console.log("collection",$rootScope.Product[i].collection);
                       if($rootScope.Product[i].collection.data.slug == filter.selected){
                         filtered = filtered.concat($rootScope.Product[i]);
                       }
@@ -48,10 +50,11 @@ $rootScope.getProductsFN=function(){
   $http({method: 'GET', url: '/getProducts'}).then(function(response){
     $rootScope.Product = response.data;
     console.log($rootScope.Product);
-    for (var i in $rootScope.Product){
-      $rootScope.detailUpdate($rootScope.Product[i].sku);
-      return false;
-    }
+    // for (var i in $rootScope.Product){
+    //   $rootScope.detailUpdate($rootScope.Product[i].sku);
+    //   return false;
+    // }
+    $rootScope.$broadcast("productArrived");
     setTimeout(function(){
       $rootScope.pageLoading = false;
       $rootScope.$apply();
@@ -146,20 +149,39 @@ $rootScope.selectFilter=(thistype, id)=>{
 
 
 
+  $rootScope.updateCart = function(){
+        $http({
+          url: '/getCart',
+          method: 'GET',
+          headers: {
+            // 'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          transformRequest: transformRequestAsFormPost
+          // data: {
+          //       }
+        }).then(function(response){
+          $rootScope.Cart = response.data;
+
+          console.log($rootScope.Cart);
+          //attaching item id if cart>0
+          if(!$rootScope.Cart.total_items==0){
+            console.log("cart has some stuff");
+            $rootScope.attachItemID($rootScope.Cart.contents);
+          }
+        });
+  }//updateCart
 
 
 
-$rootScope.offset_FN = function(){
+//attaching item function cart
+  $rootScope.attachItemID=function(obj){
+      Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
+        $rootScope.Cart.contents[val].item=val;
+        // console.log(val + ' -> ' + obj[val]);
+      });
+  }
 
-    setTimeout(function(){
-      for (var i in $rootScope.shopSections){
-        var elem = angular.element(document.querySelectorAll("#"+$rootScope.shopSections[i].name)[0]);
-        $scope.thisSectionOffset = elem[0].offsetLeft
-        $rootScope.shopSections[i].offset = $scope.thisSectionOffset;
-        console.log($rootScope.shopSections[i].offset);
-      }
-    }, 1700);
-}
 
 
 
@@ -231,26 +253,24 @@ $rootScope.setSections();
 
   $rootScope.Section = $rootScope.shopSections[0];
 
-  $rootScope.offset_FN();
+
 
 
 
 
   $rootScope.thisProduct = function(id){
     $rootScope.detailUpdate(id);
-    $rootScope.goHorizontal('detail', 1);
-    $location.path('/shop/product/'+id, false);
+    $location.path('/shop/product/'+id, true);
   };
 
 
   $rootScope.goHorizontal = function(id, number) {
     $rootScope.Section= $rootScope.shopSections[number];
-    anchorSmoothScroll.scrollHorizontally($rootScope.shopSections[number].offset, id);
 
     if(id=='detail'){
-      $location.path('/shop/product/'+$rootScope.Detail.sku, false);
+      $location.path('/shop/product/'+$rootScope.Detail.sku, true);
     }else{
-      $location.path($rootScope.shopSections[number].url, false);
+      $location.path($rootScope.shopSections[number].url, true);
     }
 
   };
@@ -272,20 +292,34 @@ $rootScope.setSections();
 
 
 
-Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routeParams, $route){
+Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routeParams, $route, $http){
 
 
   $rootScope.Detail={};
   $rootScope.selectedVariation = {};
   $rootScope.howManyVAriationsSelected = 0;
-
   $rootScope.page = "detail";
 
 
-
   $scope.$on('$routeChangeSuccess', function(){
-    var sku = $routeParams.detail;
+
+    var sku =$routeParams.detail;
     $rootScope.detailUpdate(sku);
+
+    setTimeout(function(){
+      if(!$rootScope.Detail.id){
+        $rootScope.detailUpdate($routeParams.detail);
+        $scope.$apply();
+        console.log("I loaded it again");
+        console.log($rootScope.Detail);
+      }else{
+        console.log("detail loaded correctly");
+        console.log($rootScope.Detail);
+        return false
+      }
+    },3000);
+
+
   });
 
 
@@ -297,6 +331,7 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
     $rootScope.selectedVariation={};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations=0;
+    $scope.getVariationsLevel($rootScope.Detail.id);
 
     for (var i in $rootScope.Product){
       if ($rootScope.Product[i].sku == sku){
@@ -330,7 +365,7 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
 
-
+  // $rootScope.detailUpdate($routeParams.detail);
 
 
 
@@ -367,6 +402,24 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
     }
   }
 
+
+
+
+
+
+
+$scope.getVariationsLevel = (productId)=>{
+
+  $http({
+    url: '/product/'+productId+'/variations/get',
+    method: 'GET',
+  }).then(function(response){
+    console.log(response);
+  },function(error){
+    console.log(error);
+
+  });
+}
 
 
 

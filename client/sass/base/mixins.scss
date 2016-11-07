@@ -249,11 +249,11 @@ $transition-slow: 1s;
 
 @mixin hover-effect-background-color($color, $hover){
   background-color: $color;
-  transition:         background-color $transition-slow ease;
-  -webkit-transition: background-color $transition-slow ease;
-  -moz-transition:    background-color $transition-slow ease;
-  -ms-transition:     background-color $transition-slow ease;
-  -o-transition:      background-color $transition-slow ease;
+  transition:         background-color $transition-medium ease;
+  -webkit-transition: background-color $transition-medium ease;
+  -moz-transition:    background-color $transition-medium ease;
+  -ms-transition:     background-color $transition-medium ease;
+  -o-transition:      background-color $transition-medium ease;
 
   &:hover {
     background-color: $hover;
@@ -296,7 +296,7 @@ $transition-slow: 1s;
 
 @mixin hover-effect-color-child($color, $hover){
   cursor:pointer;
-  a, p{
+  a, p, span{
     color: $color;
     transition:         color $transition-medium ease;
     -webkit-transition: color $transition-medium ease;
@@ -306,7 +306,7 @@ $transition-slow: 1s;
   }
 
   &:hover {
-    a, p{
+    a, p, span{
       color: $hover;
       @include respond-to(phone-device) {
           color: $color !important;

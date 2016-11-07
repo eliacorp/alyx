@@ -1,26 +1,28 @@
-<div class="shop" summary="shop alyx products" id="shop" ng-controller="shopCtrl">
+<div class="shop" summary="shop alyx products" id="shop" ng-controller="shopCtrl" ng-show="firstBase=='shop'">
 <!-- ng-controller="shopCtrl" -->
-<div class="shop-left" ng-show="Section.name != 'products'" ng-class="{'shop-left-processed': Section.name == 'processed'}">
+<div class="shop-left" ng-hide="Location == '/shop' || shopLocation =='collection'" ng-class="{'shop-left-processed': shopLocation == 'processed'}">
   <div class="shop-button">
 
-    <div class="shop-button-entry shop-right-button-cart" ng-show="Section.name == 'detail'" ng-click="goHorizontal('products', 0)">
-      <a>PRODUCTS</a>
+    <div class="shop-button-entry shop-right-button-cart" ng-show="shopLocation =='product'">
+      <a href="/shop" class="shop-button-entry-a"><span>PRODUCTS</span></a>
     </div>
 
-    <div class="shop-button-entry shop-right-button-cart" ng-show="Section.name == 'cart'" ng-click="goHorizontal('detail', 1)">
-      <a>DETAIL</a>
+    <div class="shop-button-entry shop-right-button-cart" ng-show="shopLocation =='cart'">
+      <a href="/shop/product/{{Detail.sku}}" class="shop-button-entry-a"><span>DETAIL</span></a>
     </div>
 
-    <div class="shop-button-entry shop-right-button-shipment" ng-show="Section.name == 'shipment'" ng-click="goHorizontal('cart', 2)">
-      <a>CART</a>
+    <div class="shop-button-entry shop-right-button-shipment" ng-show="shopLocation =='shipment'">
+      <a href="/shop/cart" class="shop-button-entry-a"><span>CART</span></a>
     </div>
 
-    <div class="shop-button-entry shop-right-button-payment" ng-show="Section.name == 'payment' || Section.name == 'choice'" ng-click="goHorizontal('shipment', 3)">
-      <a>SHIPMENT</a>
+    <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation == 'payment' || shopLocation == 'choice'">
+      <a href="/shop/shipment" class="shop-button-entry-a"><span>SHIPMENT</span></a>
     </div>
 
-    <div class="shop-button-entry shop-button-entry-processed" ng-show="Section.name == 'processed'" ng-click="goHorizontal('products', 0)">
-      <a>BACK</a>
+    <div class="shop-button-entry shop-button-entry-processed" ng-show="shopLocation == 'processed'">
+      <a href="/shop" class="shop-button-entry-a">
+        <span>BACK</span>
+      </a>
     </div>
 
 
@@ -28,35 +30,30 @@
 </div>
 
 
-  <product-directive></product-directive>
-  <detail-directive></detail-directive>
-  <cart-directive></cart-directive>
-  <shipment-directive></shipment-directive>
-  <choice-directive></choice-directive>
-  <payment-directive></payment-directive>
-  <processed-directive></processed-directive>
 
-  <div class="shop-right" ng-show="Section.name != 'processed'" ng-class="{'whiteBar': Section.name == 'products'}">
+
+  <div class="shop-right" ng-show="shopLocation != 'processed'" ng-class="{'whiteBar': Section.name == 'products'}">
     <div class="shop-button">
-      <div class="shop-button-entry shop-right-button-cart" ng-show="Section.name == 'detail' || Section.name == 'products'" ng-click="goHorizontal('cart', 2);">
-        <a>CART</a>
+      <div class="shop-button-entry shop-right-button-cart" ng-show="Location =='/shop' || shopLocation == 'product'" ng-show="Section.name == 'detail' || Section.name == 'products'" ng-click="goHorizontal('cart', 2);">
+        <a  href="/shop/cart" class="shop-button-entry-a"><span>CART</span></a>
         <p class="dollar-contents" ng-class="{'blink': cartChanged}" ng-cloak>{{Cart.totals.post_discount.rounded.without_tax}} $</p>
       </div>
 
-      <div class="shop-button-entry shop-right-button-shipment" ng-show="Section.name == 'cart'" ng-click="cartToShipment()">
-        <a ng-class="{'whiteText': Section.forwardActive}">SHIPMENT</a>
+      <div class="shop-button-entry shop-right-button-shipment" ng-show="shopLocation =='cart'" ng-click="cartToShipment()" ng-class="{'shop-button-entry-inactive': Cart.total_items==0}">
+        <a href="/shop/shipment" ng-class="{'whiteText': Cart.total_items!=0}" class="shop-button-entry-a" ng-hide="Cart.total_items==0"></a>
+          <span>SHIPMENT</span>
       </div>
 
-      <div class="shop-button-entry shop-right-button-payment" ng-show="Section.name == 'shipment'" ng-click="checkShipment()">
-        <a ng-class="{'blink-infinite': Section.forwardActive}">CHOOSE PAYMENT</a>
+      <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation =='shipment'" ng-click="checkShipment()">
+        <a ng-class="{'blink-infinite': Section.forwardActive}" class="shop-button-entry-a"><span>CHOOSE PAYMENT</span></a>
       </div>
 
-      <div class="shop-button-entry shop-right-button-payment" ng-show="Section.name == 'choice'" ng-click="choiceToPayment()">
-        <a ng-class="{'blink': Section.forwardActive}">PAYMENT</a>
+      <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation =='choice'" ng-click="choiceToPayment()">
+        <a href="/shop/payment" ng-class="{'blink': Section.forwardActive}" class="shop-button-entry-a"><span>PAYMENT</span></a>
       </div>
 
-      <div class="shop-button-entry shop-right-button-processed" ng-show="Section.name == 'payment'" ng-click="checkPayment()" ng-class="{'whiteText': Section.forwardActive}">
-        <a> PAY</a>
+      <div class="shop-button-entry shop-right-button-processed" ng-show="shopLocation =='payment'" ng-click="checkPayment()" ng-class="{'whiteText': Section.forwardActive}">
+        <a href="/shop/processed/{{Totals.id}}/{{checkout.gateway}}" class="shop-button-entry-a"> <span>PAY</span></a>
       </div>
 
     </div>
@@ -65,8 +62,6 @@
 
 
 
-  <div class="error">
-    {{error}}
-  </div>
+
 
 </div>

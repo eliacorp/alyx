@@ -3,8 +3,8 @@
 var Payment = angular.module('myApp');
 
 Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll){
-  $rootScope.thankYou, $rootScope.payment;
-;
+ $rootScope.payment;
+  $rootScope.Processed={value: false, error:false, data:''};
 
     $rootScope.payment = {
                             id: '',
@@ -19,9 +19,6 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
 
   $scope.$watch('paymentForm.$valid', function(newVal, oldVal){
-    console.log("change");
-    console.log("old", oldVal);
-    console.log("new", newVal);
     if ($scope.paymentForm.$valid){
       $rootScope.Section.forwardActive = true;
     }else{
@@ -46,10 +43,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
     $rootScope.paymentToProcess = function(){
 
       $rootScope.payment.gateway = $rootScope.checkout.gateway;
-      $rootScope.cartLoading = true;
-      $rootScope.thankYou = false;
-      this.error = {value: false, text:''};
-      console.log("payment started");
+      $rootScope.pageLoading = true;
 
           $http({
             url: '/orderToPayment',
@@ -61,22 +55,21 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
             data: $rootScope.payment
           }).then( function(response){
 
-              console.log("payment succeeded");
-              console.log(response);
-
               if(response.data.data.paid){
+
                 $rootScope.cartLoading = false;
-                $rootScope.paymentProcessed = true;
-                $rootScope.thankYou = response.data;
-                $rootScope.goHorizontal('processed', 6);
+                $rootScope.Processed={value: true, error:false, data:response.data.order};
+                $rootScope.pageLoading = false;
+                $rootScope.loadVideo();
+
               }
 
 
           }, function(response){
             console.log("payment failed!");
             console.log(response);
-            $rootScope.paymentProcessed = true;
-            this.error = {value: true, text:response.data};
+            $rootScope.Processed={value: true, error:true, data:response.data};
+            $rootScope.pageLoading = false;
             $rootScope.cartLoading = false;
           })
     }//paymentToProcess
@@ -84,10 +77,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
     $rootScope.paymentToProcess_paypal = function(){
 
       $rootScope.payment.gateway = $rootScope.checkout.gateway;
-      $rootScope.cartLoading = true;
-      $rootScope.thankYou = false;
-      this.error = {value: false, text:''};
-      console.log("payment started");
+      $rootScope.pageLoading = true;
 
           $http({
             url: '/orderToPayment',
@@ -104,16 +94,19 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
               console.log(response.data.url);
               window.open(
                 response.data.url,
-                "_blank",
-                "width=350,height=650",
+                "_self",
+                "",
                 false
               )
+
+              // top.window.opener.location('http://localhost:8081');
+              // http://localhost:8081/shop/processed?token=EC-7RJ70752S4425240G&PayerID=A7AF4APMN32NW
 
               if(response.data.data.paid){
                 $rootScope.cartLoading = false;
                 $rootScope.paymentProcessed = true;
                 $rootScope.thankYou = response.data;
-                $rootScope.goHorizontal('processed', 6);
+
               }
 
 
@@ -121,8 +114,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
             console.log("payment failed!");
             console.log(response);
             $rootScope.paymentProcessed = true;
-            this.error = {value: true, text:response.data};
-            $rootScope.cartLoading = false;
+            $rootScope.pageLoading = false;
           })
     }//paymentToProcess
 
@@ -134,6 +126,10 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
       $rootScope.thankYou = false;
       $rootScope.cartLoading = false;
     }
+
+
+
+
 
 
 });

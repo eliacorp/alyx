@@ -48,7 +48,7 @@
 }
 
 .product-filter{
-  position: absolute;
+  position: fixed;
   left:$margin-sides;
   top:50%;
   @include transform-element(translateY(-50%));

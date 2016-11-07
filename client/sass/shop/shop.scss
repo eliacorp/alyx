@@ -1,8 +1,8 @@
 .shop{
   position: relative;
   background-color: transparent;
-  width:100vw;
-  height:100vh;
+  // width:100vw;
+  // height:100vh;
   overflow-x: hidden;
   overflow-y: hidden;
   white-space: nowrap;
@@ -77,8 +77,16 @@
     width: 100%;
     position: relative;
     background-color: $white;
-    // @include hover-effect-color-child(#000000, #FFFFFF);
-    a, p{
+    @include hover-effect-color-child(#000000, #FFFFFF);
+    @include hover-effect-background-color(#FFFFFF, #000000);
+    .shop-button-entry-a{
+      width:100%;
+      height:100%;
+      display: block;
+      position: relative;
+
+    }
+    p,span{
       @include h2();
       width:100px;
       height:75px;
@@ -92,6 +100,7 @@
       @include transform-element(rotate(-90deg) translate(-50%, 50%));
       @include transform-origin(0 50%);
     }
+
     p{
       top: $margin-sides;
       margin-top:0;
@@ -101,6 +110,13 @@
 
 .shop-button-entry.shop-button-entry-processed{
   background-color: transparent;
+}
+
+.shop-button-entry-inactive{
+  background-color: $white !important;
+  span{
+    color: $black !important;
+  }
 }
 
 .error{

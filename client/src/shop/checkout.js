@@ -45,7 +45,8 @@ $rootScope.checkout={
 
   $rootScope.checkShipment = () =>{
     if($scope.checkoutForm.$valid){
-      $rootScope.toPaymentChoice();
+      // $rootScope.toPaymentChoice();
+      $location.path('/shop/choice');
       mailchimp.register($rootScope.checkout);
     }else{
       alert('invalid');
@@ -68,9 +69,9 @@ $rootScope.checkout={
 
 
 
-  $rootScope.toPaymentChoice = function(){
-    $rootScope.goHorizontal('choice', 4);
-  }//cartToOrder
+  // $rootScope.toPaymentChoice = function(){
+  //   $rootScope.goHorizontal('choice', 4);
+  // }//cartToOrder
 
 
 
@@ -86,7 +87,6 @@ $rootScope.checkout={
       $rootScope.payment.id = response.data.id;
         console.log($rootScope.Totals);
         console.log("posted successfully");
-        $rootScope.goHorizontal('payment', 5);
 
         if($rootScope.checkout.gateway=='paypal'){
           $rootScope.paymentToProcess_paypal();

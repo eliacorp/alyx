@@ -9,7 +9,7 @@ import 'angular-resource'
  // /*global $ */
 
 angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
-.run(['$rootScope', '$location','$route',($rootScope, $location, $route)=>{
+.run(['$rootScope', '$location','$route','$templateCache',($rootScope, $location, $route,$templateCache)=>{
   $rootScope.pageLoading = true;
 
     var original = $location.path;
@@ -48,49 +48,49 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
     .when('/shop/product/:detail', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/product-detail.html',
       controller: 'detailCtrl',
       reloadOnSearch: false
     })
 
     .when('/shop/collection/:shopcollection', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/product.html',
       reloadOnSearch: false
     })
 
 
     .when('/shop/cart', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/cart.html',
       controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
-    // .when('/shop/checkout', {
-    //   templateUrl: 'views/shop.html',
-    //   controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // })
-
     .when('/shop/shipment', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/shipment.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
     .when('/shop/choice', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/choice.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
     .when('/shop/payment', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/payment.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
-    .when('/shop/processed', {
-      templateUrl: 'views/shop.html',
+    .when('/shop/processed/:order/:method', {
+      templateUrl: 'views/shop/processed.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/shop/processed/:order/:method/canceled', {
+      templateUrl: 'views/shop/canceled.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
@@ -131,7 +131,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
     .when('/shop', {
-      templateUrl: 'views/shop.html',
+      templateUrl: 'views/shop/product.html',
       controller: 'shopCtrl',
       reloadOnSearch: false
     })
@@ -325,11 +325,6 @@ $rootScope.half_windowHeight = $window.innerHeight/2;
   jQuery($window).resize(function(){
     $rootScope.windowHeight = $window.innerHeight;
     $rootScope.half_windowHeight = $window.innerHeight/2;
-    $rootScope.offset_FN();
-    $rootScope.Section= $rootScope.shopSections[$rootScope.Section.index];
-    setTimeout(function(){
-      anchorSmoothScroll.scrollHorizontally($rootScope.Section.offset, $rootScope.Section.name);
-    }, 1600);
 
 
     // $rootScope.checkSize();
@@ -473,6 +468,7 @@ var shop = require("./shop/shop.js");
 var cart = require("./shop/cart.js");
 var checkout = require("./shop/checkout.js");
 var payment = require("./shop/payment.js");
+var processed = require("./shop/processed.js")
 var service = require('./service.js');
 var collection = require('./collection/collection.js');
 var lookbook = require('./collection/lookbook.js');

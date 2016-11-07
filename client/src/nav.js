@@ -4,6 +4,7 @@ var Nav = angular.module('myApp');
 
 Nav.controller('navCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams){
 
+$rootScope.firstBase;
 $rootScope.Location;
 $rootScope.logoLeft=false;
 
@@ -32,7 +33,17 @@ $scope.closeNav = function(){
   $rootScope.isNavOpen = false;
 }
 
-$rootScope.isLocation= (location)=>{
+$rootScope.isBasePath=()=>{
+  console.log($scope.getFirstPath());
+  if($scope.getFirstPath() == location){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+
+$rootScope.isLocation=(location)=>{
 
   if ($location.path()==location){
     return true;
@@ -47,7 +58,7 @@ $rootScope.isLocation= (location)=>{
   }
 }
 
-$scope.getFirstPath = ()=>{
+$scope.getFirstPath=()=>{
   var first = $location.path();
   first.indexOf(1);
   first.toLowerCase();
@@ -55,34 +66,37 @@ $scope.getFirstPath = ()=>{
   return first;
 }
 
+$scope.getSecondPath=()=>{
+  var first = $location.path();
+  first.indexOf(1);
+  first.toLowerCase();
+
+  first = first.split("/")[2];
+  console.log(first);
+  return first;
+}
+
 
 
 if(($scope.getFirstPath() =='shop')){
-  console.log("isShop");
   $rootScope.logoLeft=false;
 }else{
-  console.log("not shop");
   $rootScope.logoLeft=true;
 }
 
 
 
 $scope.$on('$routeChangeStart', function(){
-  // $rootScope.pageLoading = true;
-  // console.log("routeChangeStart");
-  // if(($location.path()=='/shop') || ($location.path()=='/shop/'+$routeParams.detail)){
-  //   console.log("isShop");
-  //   $rootScope.logoLeft=false;
-  //   $rootScope.pageLoading = false;
-  // }else{
-  //   $rootScope.logoLeft=true;
-  //   $rootScope.pageLoading = true;
-  // }
 
 })
 
 $scope.$on('$routeChangeSuccess', function(){
-  $rootScope.Location=$scope.getFirstPath();
+  $rootScope.Location=$location.path();
+  console.log("$rootScope.Location: ",$rootScope.Location);
+  $rootScope.shopLocation=$scope.getSecondPath();
+  console.log($rootScope.shopLocation);
+
+  $rootScope.firstBase=$scope.getFirstPath();
   $rootScope.pageLoading = true;
   console.log("getFirstPath: "+$scope.getFirstPath());
   if(($scope.getFirstPath() =='shop')){

@@ -583,7 +583,7 @@ h3 {
         width: 100%; }
 
 .product-filter {
-  position: absolute;
+  position: fixed;
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
@@ -955,8 +955,6 @@ h3 {
 .shop {
   position: relative;
   background-color: transparent;
-  width: 100vw;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: hidden;
   white-space: nowrap; }
@@ -1022,8 +1020,67 @@ h3 {
     height: 100%;
     width: 100%;
     position: relative;
-    background-color: #FFFFFF; }
-    .shop-button .shop-button-entry a, .shop-button .shop-button-entry p {
+    background-color: #FFFFFF;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    transition: background-color 0.4s ease;
+    -webkit-transition: background-color 0.4s ease;
+    -moz-transition: background-color 0.4s ease;
+    -ms-transition: background-color 0.4s ease;
+    -o-transition: background-color 0.4s ease; }
+    .shop-button .shop-button-entry a, .shop-button .shop-button-entry p, .shop-button .shop-button-entry span {
+      color: #000000;
+      transition: color 0.4s ease;
+      -webkit-transition: color 0.4s ease;
+      -moz-transition: color 0.4s ease;
+      -ms-transition: color 0.4s ease;
+      -o-transition: color 0.4s ease; }
+    .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p, .shop-button .shop-button-entry:hover span {
+      color: #FFFFFF;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-device-width: 767px) {
+        .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p, .shop-button .shop-button-entry:hover span {
+          color: #000000 !important; } }
+      @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {
+        .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p, .shop-button .shop-button-entry:hover span {
+          color: #000000 !important; } }
+      @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
+        .shop-button .shop-button-entry:hover a, .shop-button .shop-button-entry:hover p, .shop-button .shop-button-entry:hover span {
+          color: #000000 !important; } }
+    .shop-button .shop-button-entry:hover {
+      background-color: #000000;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-device-width: 767px) {
+        .shop-button .shop-button-entry:hover {
+          background-color: #FFFFFF !important; } }
+      @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {
+        .shop-button .shop-button-entry:hover {
+          background-color: #FFFFFF !important; } }
+      @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
+        .shop-button .shop-button-entry:hover {
+          background-color: #FFFFFF !important; } }
+    .shop-button .shop-button-entry .shop-button-entry-a {
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: relative; }
+    .shop-button .shop-button-entry p, .shop-button .shop-button-entry span {
       font-size: 16px;
       line-height: 22px;
       font-family: "akzidenz-grotesk-condensed";
@@ -1058,6 +1115,11 @@ h3 {
 
 .shop-button-entry.shop-button-entry-processed {
   background-color: transparent; }
+
+.shop-button-entry-inactive {
+  background-color: #FFFFFF !important; }
+  .shop-button-entry-inactive span {
+    color: #000000 !important; }
 
 .error {
   position: fixed;
@@ -1382,17 +1444,37 @@ select {
 
 .processed {
   width: 100vw;
-  height: auto;
+  height: 100vh;
   position: relative;
   display: inline-block;
   vertical-align: top; }
 
+.processed-content {
+  width: auto;
+  height: auto;
+  margin: auto;
+  position: absolute;
+  display: table;
+  top: 70px;
+  right: 0; }
+  .processed-content .processed-content-text {
+    width: 40vw;
+    display: block;
+    position: relative;
+    margin-top: 20px; }
+    .processed-content .processed-content-text p {
+      width: 100%;
+      text-align: left; }
+
 .processed-video {
-  width: 100vw;
-  height: 100vh;
-  position: relative; }
+  width: auto;
+  /* height: 100vh; */
+  position: relative;
+  display: table;
+  right: 0;
+  top: 0; }
   .processed-video video {
-    width: 130vw;
+    width: 60vw;
     display: block; }
 
 .lookbook {

@@ -4,27 +4,27 @@
       <td>
         <ul class="nav-ul">
           <li class="nav-li">
-            <a href="/shop" ng-click="closeNav()"><h2 ng-class="{'active': isLocation('/shop')}">shop</h2></a>
+            <a href="/shop" ng-click="closeNav()"><h2 ng-class="{'active': firstBase == 'shop'}">shop</h2></a>
           </li>
           <li class="nav-li">
-            <h2 ng-click="navCollectionOpen=!navCollectionOpen" ng-class="{'active': isLocation('/collection')}">collections</h2>
+            <h2 ng-click="navCollectionOpen=!navCollectionOpen" ng-class="{'active': firstBase =='collection' }">collections</h2>
             <div class="nav-li-sub" ng-if="navCollectionOpen">
-              <a href="/collection/{{c.slug}}" ng-repeat="c in navCollections" ng-click="closeNav()" ng-class="{'active': isLocation('/collection/{{c.slug}}')}">
+              <a href="/collection/{{c.slug}}" ng-repeat="c in navCollections" ng-click="closeNav()" ng-class="{'active': Location =='/collection/{{c.slug}}'}">
                 {{c.name}}
               </a>
             </div>
           </li>
           <li class="nav-li">
-            <a href="/about" ng-click="closeNav()"><h2 ng-class="{'active': isLocation('/about')}">about</h2></a>
+            <a href="/about" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/about'}">about</h2></a>
           </li>
           <li class="nav-li">
-            <a href="/contact" ng-click="closeNav()" ><h2 ng-class="{'active': isLocation('/contact')}">contact</h2></a>
+            <a href="/contact" ng-click="closeNav()" ><h2 ng-class="{'active': Location == '/contact'}">contact</h2></a>
           </li>
           <li class="nav-li">
-            <a href="/stockists" ng-click="closeNav()"><h2 ng-class="{'active': isLocation('/stockists')}">stockists</h2></a>
+            <a href="/stockists" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/stockists'}">stockists</h2></a>
           </li>
           <li class="nav-li">
-            <a href="/social" ng-click="closeNav()"><h2 ng-class="{'active': isLocation('/social')}">social</h2></a>
+            <a href="/social" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/social'}">social</h2></a>
           </li>
 
         </ul>

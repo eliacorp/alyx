@@ -11,6 +11,7 @@ var util = require('util');
 let ejs = require('ejs');
 let sessions = require('client-sessions');
 let app = express();
+let request = require('request');
 
 let moltin = require('moltin')({
   publicId: 'aRfWbMWHHHluwvHks6WJdcvqAnpSUqoejRoepXPaL9',
@@ -192,8 +193,20 @@ app.get('/authenticate', function(req, res){
     });
 
 
+    app.get('/order/:order/get', function(req, res){
+      getOrderByID(req, res);
+    });
+
+    app.post('/order/:order/put', function(req, res){
+      putOrder(req, res);
+    });
+
+    app.get('getVariationsLevel')
 
 
+    app.get('/product/:id/variations/get', function(req, res){
+      getVariationsLevel(req, res);
+    });
 
 
 
@@ -296,8 +309,8 @@ app.get('/authenticate', function(req, res){
         console.log(order.gateway);
         var obj={};
         obj = {
-                  return_url: 'http://localhost:8081/shop/payment',
-                  cancel_url: 'http://localhost:8081/shop/cancelled'
+                  return_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal',
+                  cancel_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal/canceled'
               }
 
 
@@ -340,26 +353,7 @@ app.get('/authenticate', function(req, res){
 
               // https://api.molt.in/v1/carts/checkout/payment/{method}/{orderID}
 
-              // request({
-              //     url: 'https://api.molt.in/v1/carts/checkout/payment/'+order.gateway+'/'+order.id, //URL to hit
-              //     method: 'POST',
-              //     headers: {
-              //       'Authorization': 'Bearer '+req.mySession.access_token
-              //     },
-              //     json: obj,
-              //
-              //     function(error, response, body){
-              //         if(error) {
-              //             console.log("PUT entry error");
-              //             console.log(error);
-              //             res.status(response.statusCode).json(body);
-              //         } else {
-              //             console.log("ok");
-              //             console.log(body);
-              //             res.status(response.statusCode).json(body);
-              //         }
-              //       }
-              // });
+
 
             moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
 
@@ -388,6 +382,31 @@ app.get('/authenticate', function(req, res){
     }
 
 
+    // curl -X GET https://api.molt.in/v1/products/1019656230785778497/variations /
+function getVariationsLevel(req, res){
+  var id = req.params.id.toString();
+  console.log(id);
+  request({
+      url: 'https://api.molt.in/v1/products/'+id+'/variations', //URL to hit
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer '+req.mySession.access_token
+      },
+      function(error, response, body){
+        console.log(body);
+          if(error) {
+              console.log("PUT entry error");
+              console.log(error);
+              res.status(response.statusCode).json(body);
+          } else {
+              console.log("ok");
+              console.log(body);
+              res.status(response.statusCode).json(body);
+          }
+        }
+  });
+}
+
 
 
 
@@ -397,6 +416,43 @@ app.get('/authenticate', function(req, res){
           res.status(200).json(data);
       }, function(error) {
         res.status(400).json(error);
+          // Something went wrong...
+      });
+    };
+
+
+
+
+    function getOrderByID(req, res){
+      var orderID = req.params.order;
+      console.log(req.params.order);
+      moltin.Order.Get(orderID, function(order) {
+          console.log(order);
+          res.status(200).json(order);
+      }, function(error) {
+        res.status(400).json(error);
+          // Something went wrong...
+      });
+    };
+
+
+
+
+    function putOrder (req,res){
+      var orderID = req.params.order;
+      var body = req.body;
+      console.log(body.status.value);
+      var status = body.status.value.toString();
+
+      moltin.Order.Update(orderID, {
+        status: status
+      }, function(order) {
+        console.log(order);
+          res.status(200).json(order);
+          console.log(order);
+      }, function(error, response, c) {
+          res.status(400).json(error);
+          console.log(response);
           // Something went wrong...
       });
     }

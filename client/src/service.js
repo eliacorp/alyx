@@ -143,7 +143,6 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
                   );
                 }, 600);
 
-                $rootScope.$apply();
 
       };
 

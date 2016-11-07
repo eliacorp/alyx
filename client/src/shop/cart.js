@@ -17,7 +17,6 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
   }
 
   $rootScope.$watch('Cart', function(newValue) {
-      console.log(newValue);
       $rootScope.Cart = newValue;
       $rootScope.animateCart();
   });
@@ -53,14 +52,6 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
 
 
 
-
-//attaching item function
-  $rootScope.attachItemID=function(obj){
-      Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
-        $rootScope.Cart.contents[val].item=val;
-        // console.log(val + ' -> ' + obj[val]);
-      });
-  }
 
 
 

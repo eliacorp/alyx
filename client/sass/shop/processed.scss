@@ -1,18 +1,42 @@
 .processed{
   width:100vw;
-  height:auto;
+  height:100vh;
   position: relative;
   display: inline-block;
   vertical-align: top;
 }
 
+.processed-content{
+  width:auto;
+  height:auto;
+  margin: auto;
+  position: absolute;
+  display: table;
+  top: 70px;
+  right:0;
+  .processed-content-text{
+    width:40vw;
+    display: block;
+    position: relative;
+    margin-top:$margin-top-p;
+    p{
+      width:100%;
+      text-align: left;
+    }
+  }
+
+}
+
 
 .processed-video{
-  width:100vw;
-  height:100vh;
+  width: auto;
+  /* height: 100vh; */
   position: relative;
+  display: table;
+  right: 0;
+  top: 0;
   video{
-    width:130vw;
+    width: 60vw;
     display: block;
   }
 }
