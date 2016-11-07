@@ -5,3 +5,14 @@
   display: inline-block;
   vertical-align: top;
 }
+
+
+.processed-video{
+  width:100vw;
+  height:100vh;
+  position: relative;
+  video{
+    width:130vw;
+    display: block;
+  }
+}

@@ -4,21 +4,30 @@ var Shop = angular.module('myApp');
 Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
   return function(data) {
 
+    if($rootScope.Product){
+                var filter = $rootScope.filter;
+                var filtered = [];
 
-    var filter = $rootScope.filter;
-    var filtered = [];
-    // console.log('category: '+category);
-    for (var i in $rootScope.Product){
+                if(!filter.selected){
+                  return data;
+                }else{
 
-      if($rootScope.Product[i].collection){
-        if($rootScope.Product[i].collection.data.slug == filter.selected){
-          filtered = filtered.concat($rootScope.Product[i]);
-        }
-      }
+                  // console.log('category: '+category);
+                  for (var i in $rootScope.Product){
+
+                    if($rootScope.Product[i].collection==null){
+
+                    }else{
+                      console.log($rootScope.Product[i].collection);
+                      if($rootScope.Product[i].collection.data.slug == filter.selected){
+                        filtered = filtered.concat($rootScope.Product[i]);
+                      }
+                    }
+                  }
+                  return filtered;
+                }
+
     }
-    if(!filter.selected){
-      return data;
-    }else{return filtered;}
 
   };
 });
@@ -37,8 +46,8 @@ $rootScope.page = "product";
 $rootScope.getProductsFN=function(){
   console.log("getting products");
   $http({method: 'GET', url: '/getProducts'}).then(function(response){
-    console.log(response);
     $rootScope.Product = response.data;
+    console.log($rootScope.Product);
     for (var i in $rootScope.Product){
       $rootScope.detailUpdate($rootScope.Product[i].sku);
       return false;
@@ -80,7 +89,6 @@ $rootScope.getProductsFN();
         }).then(function(response){
           $rootScope.Cart = response;
           $rootScope.updateCart();
-          console.log(response);
         });
   }//addToCart
 
@@ -119,17 +127,10 @@ $rootScope.selectFilter=(thistype, id)=>{
       $http({
         url: '/addVariation',
         method: 'POST',
-        headers: {
-          // 'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-          // 'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        // transformRequest: transformRequestAsFormPost,
         data: $rootScope.selectedVariation
       }).then(function(response){
         // $rootScope.Cart = response;
         $rootScope.updateCart();
-        console.log(response);
       });
     }else{
       $scope.variationErrorMessage = "select a size first"
@@ -157,7 +158,7 @@ $rootScope.offset_FN = function(){
         $rootScope.shopSections[i].offset = $scope.thisSectionOffset;
         console.log($rootScope.shopSections[i].offset);
       }
-    }, 1200);
+    }, 1700);
 }
 
 
@@ -197,19 +198,27 @@ $rootScope.setSections = ()=>{
       "forwardActive": false
     },
     {
+      "name":"choice",
+      "url":"/shop/choice",
+      "previous": "shipment",
+      "next": "payment",
+      "index": 4,
+      "forwardActive": false
+    },
+    {
       "name":"payment",
       "url":"/shop/payment",
-      "previous": "shipment",
+      "previous": "choice",
       "next": "processed",
-      "index": 4,
+      "index": 5,
       "forwardActive": false
     },
     {
       "name":"processed",
       "url":"/shop/processed",
       "previous": "payment",
-      "next": false,
-      "index": 5,
+      "next": 'none',
+      "index": 6,
       "forwardActive": false
     }
   ];
@@ -235,18 +244,18 @@ $rootScope.setSections();
 
 
   $rootScope.goHorizontal = function(id, number) {
-    console.log("where", id);
-    $rootScope.Section= $rootScope.shopSections[number]
+    $rootScope.Section= $rootScope.shopSections[number];
     anchorSmoothScroll.scrollHorizontally($rootScope.shopSections[number].offset, id);
 
     if(id=='detail'){
-      console.log("detail");
       $location.path('/shop/product/'+$rootScope.Detail.sku, false);
     }else{
       $location.path($rootScope.shopSections[number].url, false);
     }
 
   };
+
+
 
 
 
@@ -276,7 +285,6 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
   $scope.$on('$routeChangeSuccess', function(){
     var sku = $routeParams.detail;
-    console.log('sku'+sku);
     $rootScope.detailUpdate(sku);
   });
 
@@ -295,14 +303,12 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
         $rootScope.Product[i].sku
         $rootScope.Detail=$rootScope.Product[i];
         $rootScope.Detail.total_variations=0;
-        console.log("detail:", $rootScope.Detail);
         $rootScope.Detail.has_variation = $rootScope.has_variation;
 
         var go = true;
         //has variation
         for (i in $rootScope.Detail.modifiers){
           $rootScope.Detail.total_variations =$rootScope.Detail.total_variations+1;
-          console.log($rootScope.Detail.total_variations);
           // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
           $rootScope.Detail.has_variation = true;
           $rootScope.selectedVariation[i] =

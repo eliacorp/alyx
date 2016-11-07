@@ -65,21 +65,33 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/checkout', {
-      templateUrl: 'views/shop.html',
-      controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    // .when('/shop/checkout', {
+    //   templateUrl: 'views/shop.html',
+    //   controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // })
 
     .when('/shop/shipment', {
       templateUrl: 'views/shop.html',
-      controller: 'shopCtrl',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/shop/choice', {
+      templateUrl: 'views/shop.html',
+      // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
     .when('/shop/payment', {
       templateUrl: 'views/shop.html',
-      controller: 'shopCtrl',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/shop/processed', {
+      templateUrl: 'views/shop.html',
+      // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
@@ -199,10 +211,10 @@ $rootScope.readCookie = function(name) {
         }).then(function successCallback(response) {
 
           if(response.data.access_token || response.data.token){
-              console.log("response");
-              console.log(response);
               // this callback will be called asynchronously
               // when the response is available
+              console.log("auth");
+              console.log(response.data);
               var expires = response.data.expires;
               var identifier = response.data.identifier;
               var expires_in = response.data.expires_in;
@@ -214,7 +226,7 @@ $rootScope.readCookie = function(name) {
 
               $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
               setTimeout(function(){
-                console.log(document.cookie);
+                // console.log(document.cookie);
               },900);
           }
 
@@ -413,6 +425,18 @@ $rootScope.showDetail=false;
   return {
     restrict: 'E',
     templateUrl: 'views/shop/shipment.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+
+.directive('choiceDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/choice.html',
     replace: true,
     link: function(scope, elem, attrs) {
 

@@ -297,7 +297,7 @@ table {
     height: 100%; }
 
 h1 {
-  font-size: 25px;
+  font-size: 23px;
   line-height: 50px;
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px; }
@@ -335,7 +335,7 @@ h3 {
     /* Opera */
     transform-origin: 0 0;
     display: block;
-    font-size: 25px;
+    font-size: 23px;
     line-height: 50px;
     font-family: "akzidenz-grotesk-condensed";
     letter-spacing: 4px;
@@ -534,7 +534,7 @@ h3 {
   .logo h1 {
     width: 100%;
     text-align: center;
-    font-size: 25px;
+    font-size: 23px;
     line-height: 50px;
     font-family: "akzidenz-grotesk-condensed";
     letter-spacing: 4px;
@@ -970,7 +970,7 @@ h3 {
   line-height: 100px;
   color: red;
   background-color: black;
-  font-size: 25px;
+  font-size: 23px;
   line-height: 50px;
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px;
@@ -983,9 +983,14 @@ h3 {
   top: 0;
   width: 75px;
   height: 100vh;
-  background-color: #FFFFFF;
   border-right: 5px solid #000000;
   z-index: 11; }
+
+.shop-left.shop-left-processed {
+  border-right: none; }
+  .shop-left.shop-left-processed:hover {
+    border-right: 5px solid #000000;
+    background-color: #FFFFFF; }
 
 .whiteBar {
   background-color: transparent !important; }
@@ -1002,7 +1007,6 @@ h3 {
   top: 0;
   width: 75px;
   height: 100vh;
-  background-color: #FFFFFF;
   border-left: 5px solid #000000;
   z-index: 11;
   transition: all 0.6s ease;
@@ -1017,7 +1021,8 @@ h3 {
   .shop-button .shop-button-entry {
     height: 100%;
     width: 100%;
-    position: relative; }
+    position: relative;
+    background-color: #FFFFFF; }
     .shop-button .shop-button-entry a, .shop-button .shop-button-entry p {
       font-size: 16px;
       line-height: 22px;
@@ -1051,29 +1056,101 @@ h3 {
       top: 20px;
       margin-top: 0; }
 
+.shop-button-entry.shop-button-entry-processed {
+  background-color: transparent; }
+
 .error {
   position: fixed;
   right: 150px;
   bottom: 20px; }
 
 .blink-infinite {
-  animation: blink 0.2s steps(5, start) infinite;
-  -webkit-animation: blink 0.2s steps(5, start) infinite; }
+  animation: blink 1s steps(5, start) infinite;
+  -webkit-animation: blink 1s steps(5, start) infinite;
+  -moz-animation: blink 1s steps(5, start) infinite;
+  -ms-animation: blink 1s steps(5, start) infinite;
+  -o-animation: blink 1s steps(5, start) infinite;
+  color: #000000; }
 
 .blink {
   animation: blink 0.2s steps(5, start) 3;
-  -webkit-animation: blink 0.2s steps(5, start) 3; }
+  -webkit-animation: blink 0.2s steps(5, start) 3;
+  -moz-animation: blink 0.2s steps(5, start) 3;
+  -ms-animation: blink 0.2s steps(5, start) 3;
+  -o-animation: blink 0.2s steps(5, start) 3; }
 
 .blink-once {
   animation: blink 0.2s steps(5, start) 1;
-  -webkit-animation: blink 0.2s steps(5, start) 1; }
+  -webkit-animation: blink 0.2s steps(5, start) 1;
+  -moz-animation: blink 0.2s steps(5, start) 1;
+  -ms-animation: blink 0.2s steps(5, start) 1;
+  -o-animation: blink 0.2s steps(5, start) 1; }
 
 @keyframes blink {
-  to {
-    visibility: hidden; } }
+  0% {
+    visibility: visible; }
+  10% {
+    visibility: hidden; }
+  20% {
+    visibility: visible; }
+  40% {
+    visibility: hidden; }
+  50% {
+    visibility: hidden; }
+  100% {
+    visibility: visible; } }
 @-webkit-keyframes blink {
-  to {
-    visibility: hidden; } }
+  0% {
+    visibility: visible; }
+  10% {
+    visibility: hidden; }
+  20% {
+    visibility: visible; }
+  40% {
+    visibility: hidden; }
+  50% {
+    visibility: hidden; }
+  100% {
+    visibility: visible; } }
+@-moz-keyframes blink {
+  0% {
+    visibility: visible; }
+  10% {
+    visibility: hidden; }
+  20% {
+    visibility: visible; }
+  40% {
+    visibility: hidden; }
+  50% {
+    visibility: hidden; }
+  100% {
+    visibility: visible; } }
+@-ms-keyframes blink {
+  0% {
+    visibility: visible; }
+  10% {
+    visibility: hidden; }
+  20% {
+    visibility: visible; }
+  40% {
+    visibility: hidden; }
+  50% {
+    visibility: hidden; }
+  100% {
+    visibility: visible; } }
+@-o-keyframes blink {
+  0% {
+    visibility: visible; }
+  10% {
+    visibility: hidden; }
+  20% {
+    visibility: visible; }
+  40% {
+    visibility: hidden; }
+  50% {
+    visibility: hidden; }
+  100% {
+    visibility: visible; } }
 .shipment {
   width: 100vw;
   height: auto;
@@ -1139,6 +1216,9 @@ h3 {
     font-weight: normal;
     text-transform: none; }
 
+.form-title {
+  text-align: center; }
+
 .form-sub-title {
   font-size: 13px;
   line-height: 20px;
@@ -1182,6 +1262,11 @@ h3 {
     .form-entry input:-ms-input-placeholder {
       color: red; }
 
+input, select, textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
 .form-error {
   display: block;
   position: absolute;
@@ -1203,7 +1288,7 @@ select {
   width: 100%;
   height: 100%;
   color: black;
-  border: 0.1px solid black;
+  padding: 1px;
   border-radius: 0%;
   background-color: #FFFFFF;
   outline: 0;
@@ -1212,6 +1297,39 @@ select {
   appearance: none;
   box-shadow: none;
   border-radius: none; }
+
+.choice {
+  width: 100vw;
+  height: auto;
+  position: relative;
+  display: inline-block;
+  vertical-align: top; }
+
+.choice-content {
+  width: calc(100vw - 150px);
+  margin-left: 75px;
+  height: 100vh;
+  position: relative; }
+
+.choice-form-ul {
+  width: 400px;
+  margin: auto;
+  height: auto;
+  margin-top: 100px; }
+  .choice-form-ul .choice-form-li a {
+    font-size: 16px;
+    line-height: 22px;
+    font-family: "akzidenz-grotesk-condensed";
+    letter-spacing: 4px; }
+  .choice-form-ul .choice-form-li:hover {
+    background-color: #000000; }
+    .choice-form-ul .choice-form-li:hover a {
+      color: #FFFFFF; }
+
+.choice-form-li.active {
+  background-color: #000000; }
+  .choice-form-li.active a {
+    color: #FFFFFF; }
 
 .payment {
   width: 100vw;
@@ -1226,21 +1344,25 @@ select {
   height: 100vh;
   position: relative; }
 
-.payment-form {
+.payment-content-container {
   width: 400px;
   margin: auto;
   height: auto;
   margin-top: 100px; }
 
-.payment-h1 {
-  padding-top: 100px; }
+.payment-form {
+  width: 100%;
+  margin: auto;
+  height: auto;
+  margin-top: 40px; }
 
 .payment-total {
+  width: 100%;
   position: relative;
+  margin: auto;
   margin-top: 100px;
   padding-bottom: 150px;
-  height: auto;
-  width: 100%; }
+  height: auto; }
   .payment-total p {
     font-size: 10px;
     line-height: 17px;
@@ -1264,6 +1386,14 @@ select {
   position: relative;
   display: inline-block;
   vertical-align: top; }
+
+.processed-video {
+  width: 100vw;
+  height: 100vh;
+  position: relative; }
+  .processed-video video {
+    width: 130vw;
+    display: block; }
 
 .lookbook {
   position: relative; }

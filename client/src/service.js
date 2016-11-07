@@ -129,8 +129,8 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
                  console.log("scrollPosition: "+scrollPosition);
                 //  scrollLength = document.getElementById("html body").scrollHeight;
                  windowheight = $rootScope.windowHeight;
-
                  scroll = scrollPosition + number;
+                 console.log();
 
                   element.stop().animate({
                     scrollTop: scroll
@@ -143,6 +143,8 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
                   );
                 }, 600);
 
+                $rootScope.$apply();
+
       };
 
 
@@ -150,20 +152,23 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
 
        var element = $rootScope.retrieveElement("shop");
       // var element = jQuery("#shop");
-       console.log(element);
 
-      // event.preventDefault();
+    console.log(number);
+    console.log(section);
+
+      event.preventDefault();
 
         //
         element.stop().animate({
           scrollLeft: number
-        },500,
-          'linear'
+        }, 600,
+          'swing'
           // function() {
           //   // $location.path(section, false);
           //   // console.log($location.path());
           // }
         );
+
 
 
     };

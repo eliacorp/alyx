@@ -55,17 +55,29 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     templateUrl: 'views/shop.html',
     controller: 'shopCtrl',
     reloadOnSearch: false
-  }).when('/shop/checkout', {
+  })
+
+  // .when('/shop/checkout', {
+  //   templateUrl: 'views/shop.html',
+  //   controller: 'shopCtrl',
+  //   reloadOnSearch: false
+  // })
+
+  .when('/shop/shipment', {
     templateUrl: 'views/shop.html',
-    controller: 'shopCtrl',
+    // controller: 'shopCtrl',
     reloadOnSearch: false
-  }).when('/shop/shipment', {
+  }).when('/shop/choice', {
     templateUrl: 'views/shop.html',
-    controller: 'shopCtrl',
+    // controller: 'shopCtrl',
     reloadOnSearch: false
   }).when('/shop/payment', {
     templateUrl: 'views/shop.html',
-    controller: 'shopCtrl',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/processed', {
+    templateUrl: 'views/shop.html',
+    // controller: 'shopCtrl',
     reloadOnSearch: false
   }).when('/shop/privacy', {
     templateUrl: 'views/shop/privacy.html',
@@ -164,10 +176,10 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }).then(function successCallback(response) {
 
       if (response.data.access_token || response.data.token) {
-        console.log("response");
-        console.log(response);
         // this callback will be called asynchronously
         // when the response is available
+        console.log("auth");
+        console.log(response.data);
         var expires = response.data.expires;
         var identifier = response.data.identifier;
         var expires_in = response.data.expires_in;
@@ -178,7 +190,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
 
         $rootScope.createCookie("access_token", response.data.access_token, response.data.expires_in);
         setTimeout(function () {
-          console.log(document.cookie);
+          // console.log(document.cookie);
         }, 900);
       }
     }, function errorCallback(response) {
@@ -300,6 +312,13 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   return {
     restrict: 'E',
     templateUrl: 'views/shop/shipment.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('choiceDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/choice.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
@@ -879,8 +898,8 @@ Service.service('anchorSmoothScroll', function ($location, $rootScope) {
       console.log("scrollPosition: " + scrollPosition);
       //  scrollLength = document.getElementById("html body").scrollHeight;
       windowheight = $rootScope.windowHeight;
-
       scroll = scrollPosition + number;
+      console.log();
 
       element.stop().animate({
         scrollTop: scroll
@@ -891,20 +910,24 @@ Service.service('anchorSmoothScroll', function ($location, $rootScope) {
       // }
       );
     }, 600);
+
+    $rootScope.$apply();
   };
 
   this.scrollHorizontally = function (number, section) {
 
     var element = $rootScope.retrieveElement("shop");
     // var element = jQuery("#shop");
-    console.log(element);
 
-    // event.preventDefault();
+    console.log(number);
+    console.log(section);
+
+    event.preventDefault();
 
     //
     element.stop().animate({
       scrollLeft: number
-    }, 500, 'linear'
+    }, 600, 'swing'
     // function() {
     //   // $location.path(section, false);
     //   // console.log($location.path());
@@ -1181,20 +1204,14 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
 
   $rootScope.Totals;
 
-  $rootScope.payment = {
-    id: '',
-    number: '5555555555554444',
-    expiry_month: '02',
-    expiry_year: '2018',
-    cvv: '756'
-  };
-
   $rootScope.checkout = {
     customer: {
       first_name: '',
       last_name: '',
       email: ''
     },
+    gateway: '',
+    shipment_method: '1336838094099317449',
     shipment: { first_name: 'Elia Fornari',
       last_name: 'Fornari',
       address_1: '400 S. Burnside #MH Tower 37-00H',
@@ -1220,7 +1237,7 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
 
   $rootScope.checkShipment = function () {
     if ($scope.checkoutForm.$valid) {
-      $rootScope.toPayment();
+      $rootScope.toPaymentChoice();
       mailchimp.register($rootScope.checkout);
     } else {
       alert('invalid');
@@ -1239,20 +1256,26 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     }
   }, true);
 
-  $rootScope.toPayment = function () {
+  $rootScope.toPaymentChoice = function () {
+    $rootScope.goHorizontal('choice', 4);
+  }; //cartToOrder
 
-    $rootScope.goHorizontal('payment', 4);
+  $rootScope.choiceToPayment = function () {
 
     $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
-
       $rootScope.Totals = response.data;
       $rootScope.payment.id = response.data.id;
       console.log($rootScope.Totals);
       console.log("posted successfully");
+      $rootScope.goHorizontal('payment', 5);
+
+      if ($rootScope.checkout.gateway == 'paypal') {
+        $rootScope.paymentToProcess_paypal();
+      }
     }, function (data) {
       console.error("error in posting");
     });
-  }; //cartToOrder
+  };
 
   $rootScope.backFromCheckout = function () {
     console.log($rootScope.templates[0]);
@@ -1265,6 +1288,58 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
   $scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
 
   // '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
+
+  $scope.$watch('isBillingDifferent', function (value) {
+    console.log($scope.isBillingDifferent);
+    if (!$scope.isBillingDifferent) {
+      console.log($rootScope.checkout);
+      $rootScope.checkout.billing.first_name = $rootScope.checkout.shipment.first_name;
+      $rootScope.checkout.billing.last_name = $rootScope.checkout.shipment.last_name;
+      $rootScope.checkout.billing.address_1 = $rootScope.checkout.shipment.address_1;
+      $rootScope.checkout.billing.city = $rootScope.checkout.shipment.city;
+      $rootScope.checkout.billing.county = $rootScope.checkout.shipment.county;
+      $rootScope.checkout.billing.country = $rootScope.checkout.shipment.country;
+      $rootScope.checkout.billing.postcode = $rootScope.checkout.shipment.postcode;
+      $rootScope.checkout.billing.phone = $rootScope.checkout.shipment.phone;
+    }
+  });
+
+  var Europe = ['AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'DE', 'GR', 'HU', 'IS', 'IE', 'KZ', 'XK', 'LV', 'LI', 'LT', 'LU', 'MK', 'MT', 'MD', 'MC', 'ME', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB'];
+  var NorthAmerica = ['US', 'CA', 'MX'];
+  $scope.$watch('checkout', function (value) {
+    console.log(value);
+    // $rootScope.checkout.customer.first_name = $rootScope.checkout.shipment.first_name;
+    // $rootScope.checkout.customer.last_name = $rootScope.checkout.shipment.last_name;
+    if (!$scope.isBillingDifferent) {
+      console.log($rootScope.checkout);
+      $rootScope.checkout.billing.first_name = $rootScope.checkout.shipment.first_name;
+      $rootScope.checkout.billing.last_name = $rootScope.checkout.shipment.last_name;
+      $rootScope.checkout.billing.address_1 = $rootScope.checkout.shipment.address_1;
+      $rootScope.checkout.billing.city = $rootScope.checkout.shipment.city;
+      $rootScope.checkout.billing.county = $rootScope.checkout.shipment.county;
+      $rootScope.checkout.billing.country = $rootScope.checkout.shipment.country;
+      $rootScope.checkout.billing.postcode = $rootScope.checkout.shipment.postcode;
+      $rootScope.checkout.billing.phone = $rootScope.checkout.shipment.phone;
+    }
+
+    console.log('country: ' + $rootScope.checkout.shipment.country);
+    if (NorthAmerica.indexOf($rootScope.checkout.shipment.country) != -1) {
+      $rootScope.checkout.shipment_method = '1374911520424591424';
+      console.log('north america');
+    } else if ($rootScope.checkout.shipment.country == 'IT') {
+      $rootScope.checkout.shipment_method = '1374912184424857665';
+      console.log('Italy');
+    } else if (Europe.indexOf($rootScope.checkout.shipment.country) != -1) {
+      $rootScope.checkout.shipment_method = '1305371023712977230';
+      console.log('EU');
+    } else if ($rootScope.checkout.shipment.country == 'RU') {
+      $rootScope.checkout.shipment_method = '1374912619718115394';
+      console.log('Russia');
+    } else {
+      $rootScope.checkout.shipment_method = '1374913497787269187';
+      console.log('INT');
+    }
+  }, true);
 });
 
 },{}],8:[function(require,module,exports){
@@ -1272,17 +1347,19 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
 
 var Payment = angular.module('myApp');
 
-Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
+Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll) {
   $rootScope.thankYou, $rootScope.payment;
+  ;
 
   $rootScope.payment = {
     id: '',
+    gateway: '',
     first_name: $rootScope.checkout.billing.first_name,
     last_name: $rootScope.checkout.billing.last_name,
-    number: '',
-    expiry_month: '',
-    expiry_year: '',
-    cvv: ''
+    number: '5555555555554444',
+    expiry_month: '02',
+    expiry_year: '2018',
+    cvv: '756'
   };
 
   $scope.$watch('paymentForm.$valid', function (newVal, oldVal) {
@@ -1294,7 +1371,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     } else {
       $rootScope.Section.forwardActive = false;
     }
-  }, true);
+  }, false);
 
   $rootScope.checkPayment = function () {
     if ($scope.paymentForm.$valid) {
@@ -1307,8 +1384,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
   $rootScope.paymentToProcess = function () {
 
-    $rootScope.goHorizontal('payment', 4);
-
+    $rootScope.payment.gateway = $rootScope.checkout.gateway;
     $rootScope.cartLoading = true;
     $rootScope.thankYou = false;
     this.error = { value: false, text: '' };
@@ -1325,13 +1401,51 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     }).then(function (response) {
 
       console.log("payment succeeded");
+      console.log(response);
 
-      if (response.data.paid) {
+      if (response.data.data.paid) {
         $rootScope.cartLoading = false;
-
         $rootScope.paymentProcessed = true;
-        $rootScope.thankYou = response;
-        console.log($rootScope.thankYou);
+        $rootScope.thankYou = response.data;
+        $rootScope.goHorizontal('processed', 6);
+      }
+    }, function (response) {
+      console.log("payment failed!");
+      console.log(response);
+      $rootScope.paymentProcessed = true;
+      this.error = { value: true, text: response.data };
+      $rootScope.cartLoading = false;
+    });
+  }; //paymentToProcess
+
+  $rootScope.paymentToProcess_paypal = function () {
+
+    $rootScope.payment.gateway = $rootScope.checkout.gateway;
+    $rootScope.cartLoading = true;
+    $rootScope.thankYou = false;
+    this.error = { value: false, text: '' };
+    console.log("payment started");
+
+    $http({
+      url: '/orderToPayment',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: $rootScope.payment
+    }).then(function (response) {
+
+      console.log("paypal succeeded");
+      console.log(response);
+      console.log(response.data.url);
+      window.open(response.data.url, "_blank", "width=350,height=650", false);
+
+      if (response.data.data.paid) {
+        $rootScope.cartLoading = false;
+        $rootScope.paymentProcessed = true;
+        $rootScope.thankYou = response.data;
+        $rootScope.goHorizontal('processed', 6);
       }
     }, function (response) {
       console.log("payment failed!");
@@ -1357,21 +1471,26 @@ var Shop = angular.module('myApp');
 Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
   return function (data) {
 
-    var filter = $rootScope.filter;
-    var filtered = [];
-    // console.log('category: '+category);
-    for (var i in $rootScope.Product) {
+    if ($rootScope.Product) {
+      var filter = $rootScope.filter;
+      var filtered = [];
 
-      if ($rootScope.Product[i].collection) {
-        if ($rootScope.Product[i].collection.data.slug == filter.selected) {
-          filtered = filtered.concat($rootScope.Product[i]);
+      if (!filter.selected) {
+        return data;
+      } else {
+
+        // console.log('category: '+category);
+        for (var i in $rootScope.Product) {
+
+          if ($rootScope.Product[i].collection == null) {} else {
+            console.log($rootScope.Product[i].collection);
+            if ($rootScope.Product[i].collection.data.slug == filter.selected) {
+              filtered = filtered.concat($rootScope.Product[i]);
+            }
+          }
         }
+        return filtered;
       }
-    }
-    if (!filter.selected) {
-      return data;
-    } else {
-      return filtered;
     }
   };
 });
@@ -1388,8 +1507,8 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   $rootScope.getProductsFN = function () {
     console.log("getting products");
     $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
-      console.log(response);
       $rootScope.Product = response.data;
+      console.log($rootScope.Product);
       for (var i in $rootScope.Product) {
         $rootScope.detailUpdate($rootScope.Product[i].sku);
         return false;
@@ -1424,7 +1543,6 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
     }).then(function (response) {
       $rootScope.Cart = response;
       $rootScope.updateCart();
-      console.log(response);
     });
   }; //addToCart
 
@@ -1450,17 +1568,10 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
       $http({
         url: '/addVariation',
         method: 'POST',
-        headers: {
-          // 'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-          // 'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        // transformRequest: transformRequestAsFormPost,
         data: $rootScope.selectedVariation
       }).then(function (response) {
         // $rootScope.Cart = response;
         $rootScope.updateCart();
-        console.log(response);
       });
     } else {
       $scope.variationErrorMessage = "select a size first";
@@ -1480,7 +1591,7 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
         $rootScope.shopSections[i].offset = $scope.thisSectionOffset;
         console.log($rootScope.shopSections[i].offset);
       }
-    }, 1200);
+    }, 1700);
   };
 
   $rootScope.setSections = function () {
@@ -1513,18 +1624,25 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
       "index": 3,
       "forwardActive": false
     }, {
+      "name": "choice",
+      "url": "/shop/choice",
+      "previous": "shipment",
+      "next": "payment",
+      "index": 4,
+      "forwardActive": false
+    }, {
       "name": "payment",
       "url": "/shop/payment",
-      "previous": "shipment",
+      "previous": "choice",
       "next": "processed",
-      "index": 4,
+      "index": 5,
       "forwardActive": false
     }, {
       "name": "processed",
       "url": "/shop/processed",
       "previous": "payment",
-      "next": false,
-      "index": 5,
+      "next": 'none',
+      "index": 6,
       "forwardActive": false
     }];
   };
@@ -1542,12 +1660,10 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   };
 
   $rootScope.goHorizontal = function (id, number) {
-    console.log("where", id);
     $rootScope.Section = $rootScope.shopSections[number];
     anchorSmoothScroll.scrollHorizontally($rootScope.shopSections[number].offset, id);
 
     if (id == 'detail') {
-      console.log("detail");
       $location.path('/shop/product/' + $rootScope.Detail.sku, false);
     } else {
       $location.path($rootScope.shopSections[number].url, false);
@@ -1565,7 +1681,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
 
   $scope.$on('$routeChangeSuccess', function () {
     var sku = $routeParams.detail;
-    console.log('sku' + sku);
     $rootScope.detailUpdate(sku);
   });
 
@@ -1579,14 +1694,12 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
         $rootScope.Product[i].sku;
         $rootScope.Detail = $rootScope.Product[i];
         $rootScope.Detail.total_variations = 0;
-        console.log("detail:", $rootScope.Detail);
         $rootScope.Detail.has_variation = $rootScope.has_variation;
 
         var go = true;
         //has variation
         for (i in $rootScope.Detail.modifiers) {
           $rootScope.Detail.total_variations = $rootScope.Detail.total_variations + 1;
-          console.log($rootScope.Detail.total_variations);
           // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
           $rootScope.Detail.has_variation = true;
           $rootScope.selectedVariation[i] = {

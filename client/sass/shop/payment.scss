@@ -13,26 +13,35 @@
   position: relative;
 }
 
-
-.payment-form{
+.payment-content-container{
   width: 400px;
   margin:auto;
   height: auto;
   margin-top:$margin-top;
 }
 
+
+.payment-form{
+  width: 100%;
+  margin:auto;
+  height: auto;
+  margin-top:$margin-top-list;
+}
+
+
 .payment-h1{
-  padding-top: $margin-top;
+  // padding-top: $margin-top;
 }
 
 
 
 .payment-total{
+  width: 100%;
   position: relative;
+  margin:auto;
   margin-top: $margin-top;
   padding-bottom: $padding-bottom;
   height: auto;
-  width: 100%;
   p{
     @include p();
     width:100%;

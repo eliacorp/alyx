@@ -2,19 +2,21 @@
 
 var Payment = angular.module('myApp');
 
-Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost){
+Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll){
   $rootScope.thankYou, $rootScope.payment;
-
+;
 
     $rootScope.payment = {
                             id: '',
+                            gateway:'',
                             first_name: $rootScope.checkout.billing.first_name,
                             last_name: $rootScope.checkout.billing.last_name,
-                            number: '',
-                            expiry_month: '',
-                            expiry_year:  '',
-                            cvv:  ''
+                            number: '5555555555554444',
+                            expiry_month: '02',
+                            expiry_year:  '2018',
+                            cvv:  '756'
                           };
+
 
   $scope.$watch('paymentForm.$valid', function(newVal, oldVal){
     console.log("change");
@@ -25,8 +27,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
     }else{
       $rootScope.Section.forwardActive = false;
     }
-  }, true);
-
+  }, false);
 
 
 
@@ -42,11 +43,9 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
 
 
-
     $rootScope.paymentToProcess = function(){
 
-      $rootScope.goHorizontal('payment', 4);
-
+      $rootScope.payment.gateway = $rootScope.checkout.gateway;
       $rootScope.cartLoading = true;
       $rootScope.thankYou = false;
       this.error = {value: false, text:''};
@@ -63,14 +62,58 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
           }).then( function(response){
 
               console.log("payment succeeded");
+              console.log(response);
 
-              if(response.data.paid){
+              if(response.data.data.paid){
                 $rootScope.cartLoading = false;
-
                 $rootScope.paymentProcessed = true;
-                $rootScope.thankYou = response;
-                console.log($rootScope.thankYou);
+                $rootScope.thankYou = response.data;
+                $rootScope.goHorizontal('processed', 6);
+              }
 
+
+          }, function(response){
+            console.log("payment failed!");
+            console.log(response);
+            $rootScope.paymentProcessed = true;
+            this.error = {value: true, text:response.data};
+            $rootScope.cartLoading = false;
+          })
+    }//paymentToProcess
+
+    $rootScope.paymentToProcess_paypal = function(){
+
+      $rootScope.payment.gateway = $rootScope.checkout.gateway;
+      $rootScope.cartLoading = true;
+      $rootScope.thankYou = false;
+      this.error = {value: false, text:''};
+      console.log("payment started");
+
+          $http({
+            url: '/orderToPayment',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            transformRequest: transformRequestAsFormPost,
+            data: $rootScope.payment
+          }).then( function(response){
+
+              console.log("paypal succeeded");
+              console.log(response);
+              console.log(response.data.url);
+              window.open(
+                response.data.url,
+                "_blank",
+                "width=350,height=650",
+                false
+              )
+
+              if(response.data.data.paid){
+                $rootScope.cartLoading = false;
+                $rootScope.paymentProcessed = true;
+                $rootScope.thankYou = response.data;
+                $rootScope.goHorizontal('processed', 6);
               }
 
 

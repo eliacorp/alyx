@@ -9,6 +9,7 @@ let routes  = require('./routes');
 let path = require('path');
 var util = require('util');
 let ejs = require('ejs');
+let sessions = require('client-sessions');
 let app = express();
 
 let moltin = require('moltin')({
@@ -34,8 +35,26 @@ app.use( express.static(__dirname + "/../client") );
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+app.use(sessions({
+  cookieName: 'mySession', // cookie name dictates the key name added to the request object
+  secret: 'blargadeeblargblarg', // should be a large unguessable string
+  duration: 3600 * 1000, // how long the session will stay valid in ms
+  activeDuration: 3600 * 1000 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+}));
+app.use(function(req, res, next) {
 
+  if (req.mySession.access_token) {
+    console.log(req.mySession);
+    res.setHeader('X-Seen-You', 'true');
+  } else {
+    console.log(req.mySession);
+    // setting a property will automatically cause a Set-Cookie response
+    // to be sent
+    res.setHeader('X-Seen-You', 'false');
+  }
 
+   next();
+});
 
 
 
@@ -46,8 +65,20 @@ app.get('/authenticate', function(req, res){
     console.log(data);
 
     if(data){
-      res.status(200);
-      res.json(data);
+      if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
+        console.log("1 runs");
+        res.status(200).json(data);
+
+      }else if(data.token){
+        console.log("2 runs");
+        console.log(data);
+        res.status(200).json(data);
+
+      }else{
+        console.log("3 runs");
+        req.mySession.access_token = data.access_token;
+        res.status(200).json(data);
+      }
     }else{
       res.status(500);
     }
@@ -200,11 +231,17 @@ app.get('/authenticate', function(req, res){
       console.log("wait for the order");
       console.log(data);
       var customer = data.customer;
+      var gateway = data.gateway;
       var ship_to = data.shipment;
       var bill_to = data.billing;
+      var shipment_method = data.shipment_method;
+
+      if (gateway =='paypal'){
+        gateway='paypal-express';
+      }
 
         moltin.Cart.Complete({
-          gateway: 'paypal-express',
+          gateway: gateway,
           customer: {
             first_name: customer.first_name,
             last_name:  customer.last_name,
@@ -232,7 +269,7 @@ app.get('/authenticate', function(req, res){
             postcode:   ship_to.postcode,
             phone:      ship_to.phone,
           },
-          shipping: 'USPS'
+          shipping: shipment_method
         }, function(order) {
 
           console.log("wait for the order");
@@ -255,40 +292,99 @@ app.get('/authenticate', function(req, res){
 
     function orderToPayment(req, res, order){
 
-      var card_number = order.number.toString();
-      var expiry_month = order.expiry_month;
-      var expiry_year = order.expiry_year;
-      var cvv = order.cvv;
-      var obj={};
-      obj = {
-                returnUrl: 'https://localhost:8081/shop/processed',
-                data: {
-                  first_name: order.first_name,
-                  last_name: order.last_name,
-                  number: card_number,
-                  expiry_month: expiry_month,
-                  expiry_year: expiry_year,
-                  cvv: cvv
+      if(order.gateway == 'paypal'){
+        console.log(order.gateway);
+        var obj={};
+        obj = {
+                  return_url: 'http://localhost:8081/shop/payment',
+                  cancel_url: 'http://localhost:8081/shop/cancelled'
               }
-            }
 
-      console.log(obj);
 
-      moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
+        moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
 
-          console.log("payment successful");
-          console.log(payment);
-          res.status(200).json(payment);
+            console.log("payment successful");
+            console.log(payment);
+            res.status(200).json(payment);
 
-      }, function(error, response, c) {
-        console.log("payment failed!");
-        console.log("response: "+response);
-        console.log("c: "+c);
-        console.log("error: "+error);
+        }, function(error, response, c) {
+          console.log("payment failed!");
+          console.log("response: "+response);
+          console.log("c: "+c);
+          console.log("error: "+error);
 
-        res.status(c).json(response);
-        // Something went wrong...
-      });
+          res.status(c).json(response);
+          // Something went wrong...
+        });
+
+
+
+      }else if(order.gateway == 'stripe'){
+        console.log(order.gateway);
+        var card_number = order.number.toString();
+        var expiry_month = order.expiry_month;
+        var expiry_year = order.expiry_year;
+        var cvv = order.cvv;
+        var obj={};
+        obj = {
+                  data: {
+                    first_name: order.first_name,
+                    last_name: order.last_name,
+                    number: card_number,
+                    expiry_month: expiry_month,
+                    expiry_year: expiry_year,
+                    cvv: cvv
+                }
+              }
+              console.log(obj);
+
+              // https://api.molt.in/v1/carts/checkout/payment/{method}/{orderID}
+
+              // request({
+              //     url: 'https://api.molt.in/v1/carts/checkout/payment/'+order.gateway+'/'+order.id, //URL to hit
+              //     method: 'POST',
+              //     headers: {
+              //       'Authorization': 'Bearer '+req.mySession.access_token
+              //     },
+              //     json: obj,
+              //
+              //     function(error, response, body){
+              //         if(error) {
+              //             console.log("PUT entry error");
+              //             console.log(error);
+              //             res.status(response.statusCode).json(body);
+              //         } else {
+              //             console.log("ok");
+              //             console.log(body);
+              //             res.status(response.statusCode).json(body);
+              //         }
+              //       }
+              // });
+
+            moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
+
+                console.log("payment successful");
+                console.log(payment);
+                console.log(error);
+                console.log(status);
+                res.status(200).json(payment);
+
+            }, function(error, response, c) {
+              console.log("payment failed!");
+              console.log("response: "+response);
+              console.log("c: "+c);
+              console.log("error: "+error);
+
+              res.status(c).json(response);
+              // Something went wrong...
+            });
+
+      }//if stripe
+
+
+
+
+
     }
 
 
@@ -312,10 +408,7 @@ app.get('/authenticate', function(req, res){
     app.get('/data/support', function(req, res){
       // Get content from file
      var support = fs.readFileSync("./server/data/support.json");
-
      var support = JSON.parse(support);
-
-
      res.json(support);
     });
 

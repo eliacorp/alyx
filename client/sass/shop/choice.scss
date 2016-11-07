@@ -1,0 +1,43 @@
+.choice{
+  width:100vw;
+  height:auto;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+.choice-content{
+  width:calc(100vw - 150px);
+  margin-left:75px;
+  height:100vh;
+  position: relative;
+}
+
+.choice-form-ul{
+  width: 400px;
+  margin:auto;
+  height: auto;
+  margin-top:$margin-top;
+  .choice-form-li{
+    a{
+      @include h2();
+    }
+    &:hover{
+      background-color: $black;
+      a{
+        color: $white;
+      }
+    }
+  }
+}
+
+
+
+
+.choice-form-li.active{
+  background-color: $black;
+  a{
+    color: $white;
+  }
+}

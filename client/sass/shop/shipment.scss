@@ -70,6 +70,7 @@
 
 
 .form-title{
+    text-align: center;
   // padding-top: $margin-top;
 }
 
@@ -99,7 +100,7 @@
     margin-top: -10px;
     color: #000000;
     background-color: #FFFFFF;
-    // border:0;
+    // border: 0.1px solid $black;
     text-align: left;
     outline:0;
     @include p();
@@ -126,7 +127,11 @@
   }
 
 }
-
+input, select, textarea {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
 
 
 
@@ -142,7 +147,11 @@ select{
   width: 100%;
   height: 100%;
   color: black;
-  border: 0.1px solid black;
+  padding: 1px;
+  // border-width: 2px;
+  // border-style: inset;
+  // border-color: initial;
+  // border-image: initial;
   border-radius: 0%;
   background-color: #FFFFFF;
   outline: 0;
