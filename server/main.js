@@ -117,14 +117,9 @@ app.get('/authenticate', function(req, res){
 
       for (var i in variationArray){
 
-
         var id = variationArray[i].id;
         var modifier = variationArray[i].modifier_id
         var variation = variationArray[i].variation_id
-        // console.log('variationArray[i]: '+variationArray[i]);
-        // console.log('id: '+id);
-        // console.log('modifier: '+variationArray[i].modifier_id);
-        // console.log('variation: '+variationArray[i].variation_id);
         var obj={};
         var objArray = [];
         obj[modifier] = variation
@@ -244,17 +239,13 @@ app.get('/authenticate', function(req, res){
       console.log("wait for the order");
       console.log(data);
       var customer = data.customer;
-      var gateway = data.gateway;
       var ship_to = data.shipment;
       var bill_to = data.billing;
       var shipment_method = data.shipment_method;
 
-      if (gateway =='paypal'){
-        gateway='paypal-express';
-      }
 
         moltin.Cart.Complete({
-          gateway: gateway,
+          gateway: 'stripe',
           customer: {
             first_name: customer.first_name,
             last_name:  customer.last_name,
@@ -441,12 +432,11 @@ function getVariationsLevel(req, res){
     function putOrder (req,res){
       var orderID = req.params.order;
       var body = req.body;
-      console.log(body.status.value);
-      var status = body.status.value.toString();
+      // console.log(body.status.value);
+      // var status = body.status.value.toString();
+      // var gateway = body.gateway.value.toString();
 
-      moltin.Order.Update(orderID, {
-        status: status
-      }, function(order) {
+      moltin.Order.Update(orderID, body, function(order) {
         console.log(order);
           res.status(200).json(order);
           console.log(order);

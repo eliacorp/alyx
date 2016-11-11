@@ -70,11 +70,8 @@ $scope.urlFound = [];
 $scope.mainSocialImage = "";
 $scope.mainSocialDescription = "";
 $scope.mainLink = "";
-
 $scope.thisNumber=0;
-
 $scope.burgerColor="#000000";
-
 $scope.isVideo;
 $scope.mainSocialVideo="";
 

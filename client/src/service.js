@@ -120,18 +120,12 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
         setTimeout(function(){
           var number, element, scroll, scrollPosition, windowheight;
                   number =  jQuery('#'+id).offset().top;
-                  console.log("number: "+number);
-
 
                  element = jQuery('.main');
                  scrollPosition =  jQuery('.main').scrollTop();
-                 console.log("number: "+number);
-                 console.log("scrollPosition: "+scrollPosition);
                 //  scrollLength = document.getElementById("html body").scrollHeight;
                  windowheight = $rootScope.windowHeight;
                  scroll = scrollPosition + number;
-                 console.log();
-
                   element.stop().animate({
                     scrollTop: scroll
                   },600,
@@ -151,9 +145,6 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
 
        var element = $rootScope.retrieveElement("shop");
       // var element = jQuery("#shop");
-
-    console.log(number);
-    console.log(section);
 
       event.preventDefault();
 
@@ -284,10 +275,6 @@ Service.service('mailchimp', function($location, $rootScope, $resource){
             // Create a resource for interacting with the MailChimp API
             url = '//' + mailchimp.username + '.' + mailchimp.dc +
                   '.list-manage.com/subscribe/post-json';
-
-
-                  console.log(mailchimp);
-
             var fields = Object.keys(mailchimp);
 
 
@@ -302,11 +289,6 @@ Service.service('mailchimp', function($location, $rootScope, $resource){
               }
             }
             mailchimp.ADDRESS = newaddress;
-            console.log('ADDRESS: '+mailchimp.ADDRESS);
-
-
-
-
 
             for(var i = 0; i < fields.length; i++) {
               params[fields[i]] = mailchimp[fields[i]];
@@ -331,7 +313,6 @@ Service.service('mailchimp', function($location, $rootScope, $resource){
 
                 // Store the result from MailChimp
                 mailchimp.result = response.result;
-                console.log(response);
 
                 // Mailchimp returned an error.
                 if (response.result === 'error') {

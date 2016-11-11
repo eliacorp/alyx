@@ -133,15 +133,40 @@ main {
 
 
 
+/*
+ * This class will be applied to the <html> element as soon as fonts have started loading.
+ */
+.wf-loading {
+}
 
+.wf-loading h1, .wf-loading h2, .wf-loading h3, .wf-loading p, .wf-loading a, .wf-loading span, .wf-loading input, .wf-loading select{
+  visibility: hidden;
+}
+
+/*
+ * This class is applied to the <html> element when fonts have loaded and are rendered.
+ */
+ .wf-active h1, .wf-active h2, .wf-active h3, .wf-active p, .wf-active a, .wf-active span, .wf-active input, .wf-active select{
+   visibility: visible;
+ }
+
+/*
+ * This class is applied to the <html> element if Typekit does not support the current browser.
+ */
+.wf-inactive {
+}
+
+.wf-inactive h1, .wf-inactive h2, .wf-inactive h3, .wf-inactive p, .wf-inactive a, .wf-inactive span, .wf-inactive input, .wf-inactive select{
+  visibility: hidden;
+}
 
 
 
 
 
 table{
-  height: 100vh;
-  width:100vw;
+  height: 100%;
+  width:100%;
   tr{
     td{
       vertical-align: middle;

@@ -5,6 +5,7 @@ import angular from 'angular'
 import 'angular-route'
 import 'angular-animate'
 import 'angular-resource'
+import Prismic from 'prismic.io'
 
  // /*global $ */
 
@@ -127,6 +128,12 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
+    .when('/social', {
+      templateUrl: 'views/social/social.html',
+      controller: 'socialCtrl',
+      reloadOnSearch: false
+    })
+
     /*............................. Take-all routing ........................*/
 
 
@@ -213,7 +220,6 @@ $rootScope.readCookie = function(name) {
           if(response.data.access_token || response.data.token){
               // this callback will be called asynchronously
               // when the response is available
-              console.log("auth");
               console.log(response.data);
               var expires = response.data.expires;
               var identifier = response.data.identifier;
@@ -251,13 +257,10 @@ $rootScope.readCookie = function(name) {
           method: 'GET',
           url: '/getCollections'
         }).then(function (response) {
-            console.log("getCollections received");
               $rootScope.Collection_shop=response.data;
-              console.log(response);
 
           }, function (response) {
 
-            console.log(response);
             // called asynchronously if an error occurs
             // or server returns response with an error status.
           });
@@ -307,7 +310,69 @@ $rootScope.setPage = (page)=>{
 
 
 
+var stockistRan = false;
+var collectionRan = false;
 
+
+
+
+  $rootScope.getContentType = function(type, orderField){
+
+        Prismic.Api('https://alyx.cdn.prismic.io/api', function (err, Api) {
+            Api.form('everything')
+                .ref(Api.master())
+                .query(Prismic.Predicates.at("document.type", type))
+                .orderings('['+orderField+']')
+                .pageSize(100)
+                .submit(function (err, response) {
+
+
+
+                    var Data = response;
+
+                    if (type =='collection'){
+                      $rootScope.collections = response.results;
+                      $rootScope.chooseCollection();
+                      if(collectionRan == false){
+                        collectionRan = true;
+                        // setTimeout(function(){
+                          $rootScope.$broadcast('collectionReady');
+                        // }, 900);
+                        }
+                      }else if(type =='stockist'){
+                        console.log(type+ " type");
+                        stockistRan = true;
+                        $rootScope.Stockist = response.results;
+                        console.log(response.results);
+                        if(stockistRan == false){
+                          stockistRan = true;
+                          // setTimeout(function(){
+                            $rootScope.$broadcast('stockistReady');
+                          // }, 900);
+                        }
+
+                      }else{ return false; }
+                      $rootScope.$apply();
+
+
+
+                    // The documents object contains a Response object with all documents of type "product".
+                    var page = response.page; // The current page number, the first one being 1
+                    var results = response.results; // An array containing the results of the current page;
+                    // you may need to retrieve more pages to get all results
+                    var prev_page = response.prev_page; // the URL of the previous page (may be null)
+                    var next_page = response.next_page; // the URL of the next page (may be null)
+                    var results_per_page = response.results_per_page; // max number of results per page
+                    var results_size = response.results_size; // the size of the current page
+                    var total_pages = response.total_pages; // the number of pages
+                    var total_results_size = response.total_results_size; // the total size of results across all pages
+                    return results;
+                  
+                });
+          });
+
+
+  };//get content type
 
 
 

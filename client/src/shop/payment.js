@@ -31,12 +31,36 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
   $rootScope.checkPayment = ()=>{
     if($scope.paymentForm.$valid){
-      $rootScope.paymentToProcess();
+      $rootScope.changeOrderGateway();
     }else{
       alert('invalid');
       $rootScope.error = {value: true, text:'data invalid'};
     }
   }
+
+
+
+
+  $rootScope.changeOrderGateway =()=>{
+    var orderID = $rootScope.Order.id;
+    console.log('orderID:'+ orderID);
+
+
+    $http.post('/order/'+orderID+'/put', $rootScope.Order.data)
+    .then( function(response){
+      console.log(response);
+      $rootScope.paymentToProcess();
+
+    }, function(error){
+      console.log(error);
+      $rootScope.pageLoading = false;
+    })
+
+  }
+
+
+
+
 
 
 

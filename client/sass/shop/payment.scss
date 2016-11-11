@@ -17,7 +17,7 @@
   width: 400px;
   margin:auto;
   height: auto;
-  margin-top:$margin-top;
+  padding-top:$margin-top;
 }
 
 
@@ -31,6 +31,7 @@
 
 .payment-h1{
   // padding-top: $margin-top;
+  text-align: center;
 }
 
 
@@ -51,9 +52,64 @@
   }
 }
 
+.form-creditcards-accepted{
+  // margin-top: $margin-top-list;
+  margin-top: 5px;
+  span{
+    @include p2();
+    margin-left: 10px;
 
+    &:nth-child(1){
+      margin-left:0;
+    }
+  }
+}
 
 
 .payment-header{
   @include h2();
+}
+
+
+.payment-choice{
+  width: 400px;
+  margin:auto;
+  height: auto;
+  margin-top:$margin-top-list;
+  .payment-choice-ul{
+    width: 100%;
+    height: $line-height-h2;
+    display: block;
+    .payment-choice-li{
+      display: inline-block;
+      width: 50%;
+      float: left;
+      height: $line-height-h2;
+      a{
+        display: block;
+        @include h2();
+        width: 100%;
+        text-align: center;
+      }
+      &:hover{
+        background-color: $black;
+        a{
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+.payment-choice-li.active{
+  background-color: $black;
+  a{
+    color: $white;
+  }
 }

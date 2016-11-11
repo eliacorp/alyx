@@ -5,9 +5,9 @@ var Checkout = angular.module('myApp');
 Checkout.controller('checkoutCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp){
 
 
-$rootScope.Totals;
+$rootScope.Order;
 
-$rootScope.checkout={
+$rootScope.checkout = {
           customer:{
               first_name: '',
               last_name: '',
@@ -43,11 +43,29 @@ $rootScope.checkout={
 
 //shipment
 
-  $rootScope.checkShipment = () =>{
+  $rootScope.shipmentToPayment = () =>{
     if($scope.checkoutForm.$valid){
-      // $rootScope.toPaymentChoice();
-      $location.path('/shop/choice');
+
+      $location.path('/shop/payment');
       mailchimp.register($rootScope.checkout);
+
+
+      $http.post('/cartToOrder', $rootScope.checkout)
+      .then(function(response) {
+        $rootScope.Order=response.data;
+        $rootScope.payment.id = response.data.id;
+          console.log($rootScope.Order);
+          console.log("posted successfully");
+
+          // if($rootScope.checkout.gateway=='paypal'){
+          //   $rootScope.paymentToProcess_paypal();
+          // }
+
+        }, function(data) {
+            console.error("error in posting");
+      });
+
+
     }else{
       alert('invalid');
       $rootScope.error = {value: true, text:'data invalid'};
@@ -72,30 +90,6 @@ $rootScope.checkout={
   // $rootScope.toPaymentChoice = function(){
   //   $rootScope.goHorizontal('choice', 4);
   // }//cartToOrder
-
-
-
-
-
-
-  $rootScope.choiceToPayment =()=>{
-
-
-    $http.post('/cartToOrder', $rootScope.checkout)
-    .then(function(response) {
-      $rootScope.Totals=response.data;
-      $rootScope.payment.id = response.data.id;
-        console.log($rootScope.Totals);
-        console.log("posted successfully");
-
-        if($rootScope.checkout.gateway=='paypal'){
-          $rootScope.paymentToProcess_paypal();
-        }
-
-      }, function(data) {
-          console.error("error in posting");
-    })
-  }
 
 
 

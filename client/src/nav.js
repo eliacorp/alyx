@@ -10,12 +10,16 @@ $rootScope.logoLeft=false;
 
 $scope.navCollections = [
   {
-    "slug":"aw-16",
-    "name":"aw 16"
+    "slug":"pre-printemps-17",
+    "name":"pre/printemps 2017"
   },
   {
-    "slug":"ss-16",
-    "name":"ss 16"
+    "slug":"printemps-17",
+    "name":"printemps 2017"
+  },
+  {
+    "slug":"automne-hiver-16",
+    "name":"automne/hiver 2016"
   }
 ];
 
@@ -34,7 +38,6 @@ $scope.closeNav = function(){
 }
 
 $rootScope.isBasePath=()=>{
-  console.log($scope.getFirstPath());
   if($scope.getFirstPath() == location){
     return true;
   }else{
@@ -72,7 +75,6 @@ $scope.getSecondPath=()=>{
   first.toLowerCase();
 
   first = first.split("/")[2];
-  console.log(first);
   return first;
 }
 
@@ -92,25 +94,18 @@ $scope.$on('$routeChangeStart', function(){
 
 $scope.$on('$routeChangeSuccess', function(){
   $rootScope.Location=$location.path();
-  console.log("$rootScope.Location: ",$rootScope.Location);
   $rootScope.shopLocation=$scope.getSecondPath();
-  console.log($rootScope.shopLocation);
-
   $rootScope.firstBase=$scope.getFirstPath();
   $rootScope.pageLoading = true;
-  console.log("getFirstPath: "+$scope.getFirstPath());
   if(($scope.getFirstPath() =='shop')){
-    console.log("isShop");
     $rootScope.logoLeft=false;
   }else{
-    console.log("not shop");
     $rootScope.logoLeft=true;
   }
 
   setTimeout(function(){
     $rootScope.pageLoading = false;
     $rootScope.$apply();
-    console.log("routeChangeSuccess");
   }, 800);
 })
 

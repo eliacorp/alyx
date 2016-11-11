@@ -1,5 +1,5 @@
 
-<div class="payment" ng-controller="paymentCtrl" id="payment" ng-init="payment.gateway='stripe'">
+<div class="payment" ng-controller="paymentCtrl" id="payment" ng-init="checkout.gateway='stripe'">
 <!-- 3 -->
 
 <div class="payment-content">
@@ -8,9 +8,26 @@
 
     <h1 class="payment-h1">PAYMENT</h1>
 
-    <div class="" ng-if="checkout.gateway=='paypal'">
+
+
+
+    <div class="payment-choice">
+      <ul class="payment-choice-ul">
+        <li class="payment-choice-li" ng-click="checkout.gateway='stripe'" ng-class="{'active': checkout.gateway == 'stripe'}"> <a>CARD</a></li>
+        <li class="payment-choice-li" ng-click="checkout.gateway='paypal-express'" ng-class="{'active': checkout.gateway == 'paypal-express'}"> <a>PAYPAL</a></li>
+      </ul>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="payment-form" ng-show="checkout.gateway=='paypal-express'">
       <p>
-        waiting for paypal payment. Please
+        click the pay button to be redirected to the paypal payment form
       </p>
     </div>
 
@@ -48,6 +65,10 @@
         </div>
       </div>
 
+      <p class="form-creditcards-accepted">
+        <span>visa</span><span>mastercard</span><span>american express</span>
+      </p>
+
 
       <!-- <button type="submit" class="checkout-button hvr-sweep-to-right" ng-disabled="paymentForm.$invalid">PAY</button> -->
       <!-- hvr-sweep-to-right -->
@@ -55,9 +76,9 @@
     </form>
 
     <div class="payment-total" >
-      <p>SHIPPING <span>{{Totals.totals.shipping_price.formatted}}</span></p>
+      <p>SHIPPING <span>{{Order.totals.shipping_price.formatted}}</span></p>
       <p>TAX <span>10%</span></p>
-      <p>SUM <span>{{Totals.totals.total.formatted}}</span></p>
+      <p>SUM <span>{{Order.totals.total.formatted}}</span></p>
     </div>
 
   </div>

@@ -7,9 +7,17 @@
         <li ng-repeat="c in Cart.contents track by $index" class="cart-li">
           <img class="cart-li-img" src="{{c.images[0].url.http}}" alt="{{c.slug}}" />
           <div class="cart-li-info">
-            <p class="cart-li-p">{{c.quantity}} {{c.name}}</p>
-            <p class="cart-li-price">{{c.pricing.formatted.without_tax}}</p>
-             <span class="cart-li-remove" ng-click="removeItem(c.item)">x</span>
+            <table>
+              <tr>
+                <td>
+                  <p class="cart-li-p">{{c.quantity}} {{c.name}}</p>
+                  <p ng-mouseover="showSku = true" ng-mouseout="showSku = false"><span  ng-show="!showSku">sku</span><span ng-show="showSku">{{c.sku}}</span></p>
+                  <p class="cart-li-price">{{c.pricing.formatted.without_tax}}</p>
+                  <span class="cart-li-remove" ng-click="removeItem(c.item)">x</span>
+                </td>
+              </tr>
+            </table>
+
           </div>
         </li>
       </ul>
