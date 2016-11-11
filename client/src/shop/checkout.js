@@ -6,6 +6,7 @@ Checkout.controller('checkoutCtrl', function($scope, $location, $rootScope, $tim
 
 
 $rootScope.Order;
+$rootScope.shipment_forwardActive=false;
 
 $rootScope.checkout = {
           customer:{
@@ -43,7 +44,7 @@ $rootScope.checkout = {
 
 //shipment
 
-  $rootScope.shipmentToPayment = () =>{
+  $rootScope.shipmentToPayment = (event) =>{
     if($scope.checkoutForm.$valid){
 
       $location.path('/shop/payment');
@@ -69,6 +70,7 @@ $rootScope.checkout = {
     }else{
       alert('invalid');
       $rootScope.error = {value: true, text:'data invalid'};
+      event.preventDefault();
     }
   }
 
@@ -78,9 +80,9 @@ $rootScope.checkout = {
     console.log("old", oldVal);
     console.log("new", newVal);
     if ($scope.checkoutForm.$valid){
-      $rootScope.Section.forwardActive = true;
+      $rootScope.shipment_forwardActive = true;
     }else{
-      $rootScope.Section.forwardActive = false;
+      $rootScope.shipment_forwardActive = false;
     }
   }, true);
 

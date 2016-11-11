@@ -298,9 +298,6 @@ main {
 /*
  * This class is applied to the <html> element when fonts have loaded and are rendered.
  */
-.wf-active h1, .wf-active h2, .wf-active h3, .wf-active p, .wf-active a, .wf-active span, .wf-active input, .wf-active select {
-  visibility: visible; }
-
 /*
  * This class is applied to the <html> element if Typekit does not support the current browser.
  */
@@ -438,10 +435,19 @@ h3 {
   background-color: rgba(255, 255, 255, 0.96);
   z-index: 12; }
 
+.nav-close {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: transparent;
+  z-index: 12; }
+
 .nav-ul {
   height: auto;
   width: 200px;
-  margin: auto; }
+  margin: auto;
+  z-index: 13; }
   .nav-ul .nav-li {
     display: block;
     margin-bottom: 10px; }
@@ -547,7 +553,7 @@ h3 {
   margin-left: -25px;
   left: 50%;
   bottom: 20px;
-  z-index: 13; }
+  z-index: 15; }
   .logo h1 {
     width: 100%;
     text-align: center;
@@ -588,7 +594,8 @@ h3 {
     .product-ul .product-li a {
       display: block;
       width: 100%;
-      height: auto; }
+      height: auto;
+      position: relative; }
       .product-ul .product-li a .product-image {
         position: relative;
         width: 100%;
@@ -599,10 +606,30 @@ h3 {
       .product-ul .product-li a .product-price {
         width: 100%; }
 
+.product-image {
+  opacity: 1;
+  transition: opacity linear 0.4s;
+  -webkit-transition: opacity linear 0.4s;
+  -moz-transition: opacity linear 0.4s;
+  -ms-transition: opacity linear 0.4s; }
+
+.product-image-one {
+  position: relative; }
+
+.product-image-two {
+  display: block;
+  position: absolute !important;
+  top: 0;
+  left: 0; }
+
+.product-image.fadeOut {
+  opacity: 0; }
+
 .product-filter {
   position: fixed;
   left: 20px;
   top: 50%;
+  z-index: 11;
   transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   /* IE 9 */
@@ -708,6 +735,8 @@ h3 {
     line-height: 28px;
     font-family: "akzidenz-grotesk-condensed";
     letter-spacing: 4px; }
+  .detail-text .detail-text-sku {
+    margin-top: 10px; }
   .detail-text p {
     word-break: break-all;
     font-size: 10px;
@@ -720,7 +749,9 @@ h3 {
     width: 90%;
     overflow-wrap: break-word;
     white-space: normal;
-    margin-top: 20px; }
+    margin-top: 10px; }
+    .detail-text p:nth-child(1) {
+      margin-top: 0; }
 
 .detail-price {
   position: relative;
@@ -759,7 +790,7 @@ h3 {
   position: relative;
   left: 0px;
   margin-left: 0px;
-  margin-top: 100px; }
+  margin-top: 40px; }
   .detail-modifiers .detail-modifiers-ul {
     display: block;
     width: 200px; }
@@ -770,7 +801,8 @@ h3 {
       font-size: 13px;
       line-height: 24px;
       font-family: "akzidenz-grotesk-condensed";
-      letter-spacing: 4px; }
+      letter-spacing: 4px;
+      text-transform: uppercase; }
     .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations {
       width: auto;
       display: block;
@@ -785,6 +817,7 @@ h3 {
           font-family: "akzidenz-grotesk-condensed";
           letter-spacing: 4px;
           color: #D3D3D3;
+          text-transform: uppercase;
           color: #D3D3D3;
           transition: color 0.4s ease;
           -webkit-transition: color 0.4s ease;
@@ -914,44 +947,70 @@ h3 {
   .cart-ul .cart-li {
     display: block;
     width: 100%;
-    height: 75px;
+    height: 105px;
     margin-top: 40px; }
     .cart-ul .cart-li .cart-li-img {
       height: auto;
-      width: 50px;
+      width: 70px;
       display: inline-block;
       vertical-align: top;
       float: left; }
     .cart-ul .cart-li .cart-li-info {
       position: relative;
       display: inline-block;
-      width: 330px;
+      width: 310px;
       margin-left: 20px;
-      height: 75px;
+      height: 105px;
       vertical-align: top;
       float: left; }
       .cart-ul .cart-li .cart-li-info .cart-li-p {
         width: auto;
         display: inline-block;
-        vertical-align: top; }
+        vertical-align: top;
+        clear: both;
+        display: block;
+        text-transform: uppercase; }
       .cart-ul .cart-li .cart-li-info .cart-li-price {
         display: block;
         clear: both; }
       .cart-ul .cart-li .cart-li-info .cart-li-remove {
         width: auto;
-        font-size: 20px;
-        height: 75px;
+        font-size: 15px;
+        height: 105px;
         display: inline-block;
         vertical-align: middle;
-        line-height: 75px;
+        line-height: 105px;
         float: right;
         position: absolute;
         top: 0;
         right: 0;
-        color: #000000; }
+        color: #000000;
+        color: #000000;
+        transition: color 0.4s ease;
+        -webkit-transition: color 0.4s ease;
+        -moz-transition: color 0.4s ease;
+        -ms-transition: color 0.4s ease;
+        -o-transition: color 0.4s ease; }
         .cart-ul .cart-li .cart-li-info .cart-li-remove:hover {
-          background-color: #000000;
-          color: #FFFFFF; }
+          color: #D3D3D3;
+          /*  @if $media == large-desktop {
+              @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+            }*/
+          /*  @if $media == large-desktop {
+              @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+            }*/
+          /*  @if $media == large-desktop {
+              @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+            }*/ }
+          @media only screen and (min-width: 0px) and (max-device-width: 767px) {
+            .cart-ul .cart-li .cart-li-info .cart-li-remove:hover {
+              color: #000000 !important; } }
+          @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {
+            .cart-ul .cart-li .cart-li-info .cart-li-remove:hover {
+              color: #000000 !important; } }
+          @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
+            .cart-ul .cart-li .cart-li-info .cart-li-remove:hover {
+              color: #000000 !important; } }
 
 .cart-total {
   display: block;
@@ -1390,6 +1449,61 @@ select {
   box-shadow: none;
   border-radius: none; }
 
+.termsAndServices {
+  width: 100%;
+  display: block;
+  position: relative;
+  height: auto;
+  width: auto;
+  margin-top: 40px;
+  margin-bottom: 40px; }
+  .termsAndServices label {
+    font-size: 10px;
+    line-height: 17px;
+    font-family: "akzidenz-grotesk";
+    letter-spacing: 2px;
+    font-weight: normal;
+    text-transform: none; }
+    .termsAndServices label a {
+      font-size: 10px;
+      line-height: 17px;
+      font-family: "akzidenz-grotesk";
+      letter-spacing: 2px;
+      font-weight: normal;
+      text-transform: none; }
+  .termsAndServices input {
+    font-size: 10px;
+    line-height: 17px;
+    font-family: "akzidenz-grotesk";
+    letter-spacing: 2px;
+    font-weight: normal;
+    text-transform: none; }
+
+.terms {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.96);
+  height: 100vh;
+  width: 100vw;
+  overflow: scroll;
+  z-index: 12; }
+  .terms .terms-close {
+    z-index: 12;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0; }
+  .terms .terms-content {
+    width: 400px;
+    margin: auto;
+    display: block;
+    text-align: justify;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    z-index: 13; }
+
 .payment {
   width: 100vw;
   height: auto;
@@ -1685,7 +1799,8 @@ select {
       font-size: 16px;
       line-height: 28px;
       font-family: "akzidenz-grotesk-condensed";
-      letter-spacing: 4px; }
+      letter-spacing: 4px;
+      text-transform: uppercase; }
 
 @keyframes shiftRightLookbook {
   from {

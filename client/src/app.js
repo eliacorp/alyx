@@ -72,6 +72,12 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
+    .when('/shop/shipment/terms', {
+      templateUrl: 'views/shop/shipment.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
     .when('/shop/choice', {
       templateUrl: 'views/shop/choice.html',
       // controller: 'shopCtrl',
@@ -367,7 +373,7 @@ var collectionRan = false;
                     var total_pages = response.total_pages; // the number of pages
                     var total_results_size = response.total_results_size; // the total size of results across all pages
                     return results;
-                  
+
                 });
           });
 
@@ -508,6 +514,17 @@ $rootScope.showDetail=false;
   return {
     restrict: 'E',
     templateUrl: 'views/shop/payment.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+.directive('termsDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/terms.html',
     replace: true,
     link: function(scope, elem, attrs) {
 

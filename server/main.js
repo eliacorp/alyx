@@ -296,7 +296,7 @@ app.get('/authenticate', function(req, res){
 
     function orderToPayment(req, res, order){
 
-      if(order.gateway == 'paypal'){
+      if(order.gateway == 'paypal-express'){
         console.log(order.gateway);
         var obj={};
         obj = {
@@ -432,14 +432,23 @@ function getVariationsLevel(req, res){
     function putOrder (req,res){
       var orderID = req.params.order;
       var body = req.body;
+      var obj;
+      console.log("body");
+      console.log(body);
       // console.log(body.status.value);
-      // var status = body.status.value.toString();
-      // var gateway = body.gateway.value.toString();
+      if(body.status){
+        var status = body.status.value.toString();
+        obj = {status: status};
 
-      moltin.Order.Update(orderID, body, function(order) {
+      }else if(body.gateway){
+        var gateway = body.gateway.toString();
+        console.log(gateway);
+        obj = {gateway: gateway};
+      }
+
+      moltin.Order.Update(orderID, obj, function(order) {
         console.log(order);
           res.status(200).json(order);
-          console.log(order);
       }, function(error, response, c) {
           res.status(400).json(error);
           console.log(response);

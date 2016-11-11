@@ -146,9 +146,9 @@ main {
 /*
  * This class is applied to the <html> element when fonts have loaded and are rendered.
  */
- .wf-active h1, .wf-active h2, .wf-active h3, .wf-active p, .wf-active a, .wf-active span, .wf-active input, .wf-active select{
-   visibility: visible;
- }
+ // .wf-active h1, .wf-active h2, .wf-active h3, .wf-active p, .wf-active a, .wf-active span, .wf-active input, .wf-active select{
+ //   visibility: visible;
+ // }
 
 /*
  * This class is applied to the <html> element if Typekit does not support the current browser.

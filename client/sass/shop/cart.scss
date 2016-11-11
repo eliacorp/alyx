@@ -24,11 +24,11 @@
   .cart-li{
     display: block;
     width:100%;
-    height:75px;
+    height:105px;
     margin-top:$margin-top-list;
     .cart-li-img{
       height: auto;
-      width:50px;
+      width:70px;
       display:inline-block;
       vertical-align:top;
       float: left;
@@ -36,15 +36,18 @@
     .cart-li-info{
       position: relative;
       display: inline-block;
-      width:330px;
+      width:310px;
       margin-left: 20px;
-      height: 75px;
+      height: 105px;
       vertical-align:top;
       float: left;
       .cart-li-p{
         width:auto;
         display:inline-block;
         vertical-align:top;
+        clear: both;
+        display: block;
+        text-transform:uppercase;
       }
       .cart-li-price{
         display: block;
@@ -52,21 +55,17 @@
       }
       .cart-li-remove{
         width:auto;
-        font-size:20px;
-        height: 75px;
+        font-size:15px;
+        height: 105px;
         display:inline-block;
         vertical-align:middle;
-        line-height: 75px;
+        line-height: 105px;
         float:right;
         position: absolute;
         top:0;
         right:0;
-
         color: $black;
-        &:hover{
-          background-color: $black;
-          color: $white;
-        }
+        @include hover-effect-color($black, $light-grey);
       }
     }
 

@@ -156,6 +156,7 @@
     }
     a{
       @include h2();
+      text-transform:uppercase;
       // @include hover-effect-color();
     }
   }

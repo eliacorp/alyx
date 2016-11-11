@@ -50,12 +50,18 @@
 }
 
 
+
+
+
 .detail-text{
   position: relative;
   width:100%;
   margin-top:$margin-top;
   h2{
     @include h2();
+  }
+  .detail-text-sku{
+    margin-top: $margin-top-p2;
   }
   p{
     word-break: break-all;
@@ -64,7 +70,10 @@
     width:90%;
     overflow-wrap: break-word;
     white-space: normal;
-    margin-top: $margin-top-p;
+    margin-top: $margin-top-p2;
+    &:nth-child(1){
+      margin-top: 0;
+    }
   }
 }
 
@@ -102,7 +111,7 @@
   position: relative;
   left:0px;
   margin-left:0px;
-  margin-top:$margin-top;
+  margin-top:$margin-top-list;
   .detail-modifiers-ul{
     display: block;
     width:200px;
@@ -111,6 +120,7 @@
       display: block;
       float:left;
       @include h3();
+      text-transform: uppercase;
     }
     .detail-modifiers-variations{
       width:auto;
@@ -123,6 +133,7 @@
         a{
           @include h3();
           color: $light-grey;
+          text-transform: uppercase;
           @include hover-effect-color($light-grey, $black);
         }
       }

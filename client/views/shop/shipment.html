@@ -28,6 +28,10 @@
         <span class="form-error" ng-show="checkoutForm.email_customer.$error.email && checkoutForm.email_customer.$touched">invalid email</span>
       </input>
     </div>
+    <div class="termsAndServices">
+      <label for="termsAndServices">by clicking this field you agree to our <a href="/shop/shipment/terms">terms and services</a></label>
+      <input class="termsAndServices-input" type="checkbox" name="termsAndServices" value="false" ng-model="termsAndServices" required>
+    </div>
   </div>
 
   <div class="address">
@@ -170,8 +174,16 @@
 
 
 
+
+
+
+
   </form>
 
+
+
 </div> <!-- shipment-content -->
+
+  <terms-directive></terms-directive>
 
 </div>

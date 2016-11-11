@@ -57,6 +57,7 @@ $margin-bottom-p:10px;
 $margin-top: 100px;
 $margin-top-list:40px;
 $margin-top-p:20px;
+$margin-top-p2:10px;
 $margin-sides-mobile:10px;
 $margin-left-paragraph:10px;
 $padding-bottom:150px;
@@ -70,12 +71,22 @@ $transition-fast: .2s;
 
 
 // ........................................................Z-INDEXES
-$z-loader:15;
-$z-logo:13;
+$z-loader:16;
+$z-logo:15;
+$z-terms-content:13;
+$z-terms-close:12;
+$z-terms:12;
+
+$z-nav-ul:13;
+$z-nav-close:12;
 $z-nav:12;
+
+
 $z-shop-buttons:11;
 $z-cart: 10;
 $z-clickOut: 12;
+
+$z-products:10;
 
 $z-dollar:10;
 $z-lookbook-side:10;

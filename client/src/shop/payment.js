@@ -20,9 +20,9 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
   $scope.$watch('paymentForm.$valid', function(newVal, oldVal){
     if ($scope.paymentForm.$valid){
-      $rootScope.Section.forwardActive = true;
+      $rootScope.payment_forwardActive = true;
     }else{
-      $rootScope.Section.forwardActive = false;
+      $rootScope.payment_forwardActive = false;
     }
   }, false);
 
@@ -45,16 +45,20 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
     var orderID = $rootScope.Order.id;
     console.log('orderID:'+ orderID);
 
-
-    $http.post('/order/'+orderID+'/put', $rootScope.Order.data)
-    .then( function(response){
-      console.log(response);
+    if($rootScope.checkout.gateway == 'stripe'){
       $rootScope.paymentToProcess();
+    }else if($rootScope.checkout.gateway == 'paypal-express'){
+      var obj = {gateway: $rootScope.checkout.gateway};
+      $http.post('/order/'+orderID+'/put', obj)
+      .then( function(response){
+        console.log(response);
 
-    }, function(error){
-      console.log(error);
-      $rootScope.pageLoading = false;
-    })
+        $rootScope.paymentToProcess_paypal();
+      }, function(error){
+        console.log(error);
+        $rootScope.pageLoading = false;
+      })
+    }
 
   }
 
@@ -81,10 +85,13 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
               if(response.data.data.paid){
 
+                console.log(response.data);
+
                 $rootScope.cartLoading = false;
                 $rootScope.Processed={value: true, error:false, data:response.data.order};
                 $rootScope.pageLoading = false;
                 $rootScope.loadVideo();
+                $location.path('/shop/processed/'+response.data.order.id+'/'+$rootScope.checkout.gateway, true);
 
               }
 
@@ -116,6 +123,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
               console.log("paypal succeeded");
               console.log(response);
               console.log(response.data.url);
+
               window.open(
                 response.data.url,
                 "_self",
@@ -130,6 +138,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
                 $rootScope.cartLoading = false;
                 $rootScope.paymentProcessed = true;
                 $rootScope.thankYou = response.data;
+                  // $location.path('/shop/processed/'+orderID+'/'+$rootScope.checkout.gateway, true);
 
               }
 

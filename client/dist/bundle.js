@@ -63,6 +63,10 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     templateUrl: 'views/shop/shipment.html',
     // controller: 'shopCtrl',
     reloadOnSearch: false
+  }).when('/shop/shipment/terms', {
+    templateUrl: 'views/shop/shipment.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
   }).when('/shop/choice', {
     templateUrl: 'views/shop/choice.html',
     // controller: 'shopCtrl',
@@ -371,6 +375,13 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   return {
     restrict: 'E',
     templateUrl: 'views/shop/payment.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('termsDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/terms.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
@@ -1186,6 +1197,7 @@ var Checkout = angular.module('myApp');
 Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, mailchimp) {
 
   $rootScope.Order;
+  $rootScope.shipment_forwardActive = false;
 
   $rootScope.checkout = {
     customer: {
@@ -1218,7 +1230,7 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
 
   //shipment
 
-  $rootScope.shipmentToPayment = function () {
+  $rootScope.shipmentToPayment = function (event) {
     if ($scope.checkoutForm.$valid) {
 
       $location.path('/shop/payment');
@@ -1239,6 +1251,7 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     } else {
       alert('invalid');
       $rootScope.error = { value: true, text: 'data invalid' };
+      event.preventDefault();
     }
   };
 
@@ -1247,9 +1260,9 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     console.log("old", oldVal);
     console.log("new", newVal);
     if ($scope.checkoutForm.$valid) {
-      $rootScope.Section.forwardActive = true;
+      $rootScope.shipment_forwardActive = true;
     } else {
-      $rootScope.Section.forwardActive = false;
+      $rootScope.shipment_forwardActive = false;
     }
   }, true);
 
@@ -1344,9 +1357,9 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
   $scope.$watch('paymentForm.$valid', function (newVal, oldVal) {
     if ($scope.paymentForm.$valid) {
-      $rootScope.Section.forwardActive = true;
+      $rootScope.payment_forwardActive = true;
     } else {
-      $rootScope.Section.forwardActive = false;
+      $rootScope.payment_forwardActive = false;
     }
   }, false);
 
@@ -1363,13 +1376,19 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     var orderID = $rootScope.Order.id;
     console.log('orderID:' + orderID);
 
-    $http.post('/order/' + orderID + '/put', $rootScope.Order.data).then(function (response) {
-      console.log(response);
+    if ($rootScope.checkout.gateway == 'stripe') {
       $rootScope.paymentToProcess();
-    }, function (error) {
-      console.log(error);
-      $rootScope.pageLoading = false;
-    });
+    } else if ($rootScope.checkout.gateway == 'paypal-express') {
+      var obj = { gateway: $rootScope.checkout.gateway };
+      $http.post('/order/' + orderID + '/put', obj).then(function (response) {
+        console.log(response);
+
+        $rootScope.paymentToProcess_paypal();
+      }, function (error) {
+        console.log(error);
+        $rootScope.pageLoading = false;
+      });
+    }
   };
 
   $rootScope.paymentToProcess = function () {
@@ -1389,10 +1408,13 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
       if (response.data.data.paid) {
 
+        console.log(response.data);
+
         $rootScope.cartLoading = false;
         $rootScope.Processed = { value: true, error: false, data: response.data.order };
         $rootScope.pageLoading = false;
         $rootScope.loadVideo();
+        $location.path('/shop/processed/' + response.data.order.id + '/' + $rootScope.checkout.gateway, true);
       }
     }, function (response) {
       console.log("payment failed!");
@@ -1421,6 +1443,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       console.log("paypal succeeded");
       console.log(response);
       console.log(response.data.url);
+
       window.open(response.data.url, "_self", "", false);
 
       // top.window.opener.location('http://localhost:8081');
@@ -1430,6 +1453,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
         $rootScope.cartLoading = false;
         $rootScope.paymentProcessed = true;
         $rootScope.thankYou = response.data;
+        // $location.path('/shop/processed/'+orderID+'/'+$rootScope.checkout.gateway, true);
       }
     }, function (response) {
       console.log("payment failed!");
