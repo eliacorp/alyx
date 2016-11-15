@@ -13,12 +13,22 @@
 
     <div class="processed-content-text" ng-show="Processed.value">
 
-      <p>
-        your order will be shipped to
-        {{Processed.data.ship_to.data.address_1}}
-        {{Processed.data.ship_to.data.city}}
-        {{Processed.data.ship_to.data.country.value}}
-        {{Processed.data.ship_to.data.country.value}}
+      <p class="processed-content-text-p">
+        <span class="processed-content-text-span">
+          your order will be shipped to
+          {{Processed.data.ship_to.data.address_1}}
+          {{Processed.data.ship_to.data.city}}
+          {{Processed.data.ship_to.data.county}}
+          {{Processed.data.ship_to.data.country.value}}
+        </span>
+        <span>
+          Your order number is {{Processed.data.id}} if you have any questions regarding your order please contact <a href="mailto:service@alyxstudio.com">service@alyxstudio.com</a>
+        </span>
+        <span>
+          thank you
+        </span>
+
+
       </p>
 
     </div>

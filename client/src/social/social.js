@@ -9,12 +9,7 @@ Social.controller('socialCtrl', ['$scope','$timeout', '$rootScope', '$routeParam
 
 $rootScope.currentPosition = "social";
 $rootScope.headerSectionName = "social";
-
-
-  setTimeout(function(){
-    $rootScope.endLoader();
-  }, 600);
-
+$rootScope.pageLoading=true;
 
 
   $rootScope.$on('$routeChangeSuccess', function(){
@@ -295,6 +290,8 @@ $scope.filterAllLoadMore = function(){
 							$scope.instaTotal = response.data;
               setTimeout(function(){
                 $scope.thisSocialImage(1);
+                $rootScope.pageLoading=false;
+                $rootScope.$apply();
               }, 900);
 
 

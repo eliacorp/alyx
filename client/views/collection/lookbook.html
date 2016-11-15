@@ -1,10 +1,13 @@
 <div class="lookbook" ng-controller="lookbookCtrl">
 
+<div class="lookbook-title">
+  <h1 class="lookbook-title-h1">{{Collection.data['collection.title'].value}}</h1>
 
+</div>
 
 <!-- story -->
 
-  <div class="lookbook-description" ng-class="{readStoryScroll: readActive}" ng-click="showDescription()" ng-if="!isMobile">
+  <!-- <div class="lookbook-description" ng-class="{readStoryScroll: readActive}" ng-click="showDescription()" ng-if="!isMobile">
     <div class="lookbook-mft" style="background-image: url('{{lookbook.logo}}');" ng-if="lookbook.logo"></div>
     <span class="lookbook-description-span">
       <h3 class="lookbook-description-h3" ng-if="Collection.data['collection.title']">"{{Collection.data['collection.title']}}"</h3>
@@ -24,7 +27,7 @@
       </p>
     </span>
   </div>
-
+ -->
 
 
 
@@ -36,19 +39,19 @@
 
 <!-- main image -->
   <div class="lookbook-main">
+    <!-- ng-show="mainLookShow" -->
+    <!-- <p class="lookbook-text-p">look {{mainLook}}</p> -->
 
-    <!-- read story / close story -->
-    <div class="lookbook-text"  ng-if="!isMobile">
-      <!-- ng-show="mainLookShow" -->
-      <!-- <p class="lookbook-text-p">look {{mainLook}}</p> -->
+    <!-- <div class="lookbook-text"  ng-if="!isMobile">
+
       <p class="lookbook-text-readstory">
         <a ng-click="showDescription()">{{lookbookStatus}} story</a>
       </p>
-    </div>
+    </div> -->
 
 
-
-    <img src="{{mainLook.image.value.main.url}}" alt="{{Collection.slug}}" class="lookbook-main-img" ng-class="{'shift-image': shiftImage}" ng-click="showDescription()"/>
+<!-- ng-click="showDescription()" -->
+    <img src="{{mainLook.image.value.main.url}}" alt="{{Collection.slug}}" class="lookbook-main-img" ng-class="{'shift-image': shiftImage}" />
   </div>
 
 

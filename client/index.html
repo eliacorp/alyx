@@ -56,11 +56,10 @@
   <body>
 
 
-
     <div class="clickOut" ng-click="closeCart()" ng-show="showCart" ng-cloak>
     </div>
 
-    <div class="logo" ng-class="{'logo-left': logoLeft, 'blink': pageLoading}" ng-controller="navCtrl">
+    <div class="logo" ng-class="{'logo-left': logoLeft, 'blink-infinite': pageLoading}" ng-controller="navCtrl">
       <a ng-click="openNav()">
          <!-- ng-click="goHorizontal('products', 0);" -->
         <logo-directive></logo-directive>
@@ -73,7 +72,7 @@
 
 
 
-    <main ng-view class='main page page-{{page}}' autoscroll="">
+    <main ng-view class='main page page-{{page}}' >
     </main>
 
      <!-- ng-hide="pageLoading" -->

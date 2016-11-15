@@ -36,6 +36,18 @@
   }
 }
 
+.detail-left.zoom-detail{
+  width:100%;
+  margin:0;
+  z-index:9999;
+  background-color: $white;
+  .detail-image{
+    width:90%;
+    display: block;
+    margin:auto;
+    margin-top: $margin-top-list;
+  }
+}
 
 
 
@@ -64,7 +76,6 @@
     margin-top: $margin-top-p2;
   }
   p{
-    word-break: break-all;
     @include p();
     display:block;
     width:90%;
@@ -93,7 +104,7 @@
   right:0;
   width:100%;
   .detail-add-plus-variation{
-    color: rgba(0,0,0,0.1);
+    // color: rgba(0,0,0,0.1);
   }
   p{
     position: absolute;
@@ -185,19 +196,6 @@ $animation-color: 0.6s;
 
 
 
-.detail-left.zoom-detail{
-  width:100%;
-  margin:0;
-  z-index:9999;
-  background-color: $white;
-  .detail-image{
-    width:100%;
-    display: block;
-    margin-left:0;
-  }
-
-
-}
 
 
 

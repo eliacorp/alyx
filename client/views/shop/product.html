@@ -4,11 +4,20 @@
 <div class="product-filter">
 
   <ul class="product-filter-ul">
-    <li class="product-filter-li" ng-repeat="c in Collection_shop" ng-class="{'filter-selected': c.slug == filter.selected}">
+    <li class="product-filter-li" ng-class="{'filter-selected': 'women' == filter.gender.selected}">
+      <a ng-click="selectFilter('gender', 'women')" >women</a>
+    </li>
+    <li class="product-filter-li" ng-class="{'filter-selected': 'men' == filter.gender.selected}">
+      <a ng-click="selectFilter('gender', 'men')" >men</a>
+    </li>
+  </ul>
+
+  <ul class="product-filter-ul">
+    <li class="product-filter-li" ng-repeat="c in Collection_shop" ng-class="{'filter-selected': c.slug == filter.collection.selected}">
       <a ng-click="selectFilter('collection', c.slug)">{{c.title}}</a>
     </li>
-    <li class="product-filter-li product-filter-li-clear">
-      <a ng-click="selectFilter('collection', '')">clear</a>
+    <li class="product-filter-li product-filter-li-clear" ng-show="filter.collection.selected || filter.gender.selected">
+      <a ng-click="selectFilter('', '')">clear</a>
     </li>
   </ul>
 
@@ -22,10 +31,8 @@
       <a href="shop/product/{{p.sku}}" >
         <!-- ng-click="thisProduct(p.sku)" -->
 
-        <img src="{{p.images[0].url.http}}" alt="{{p.title}}" class="product-image product-image-one" ng-class="{'fadeOut': flip==true}"/>
-        <img src="{{p.images[1].url.http}}" alt="{{p.title}}" class="product-image product-image-two" ng-class="{'fadeOut': flip==false}"/>
-        <!-- <img src="{{p.images[1].url.http}}" alt="{{p.description}}" class="product-image" ng-if="p.images[1].url.http"/>
-        <img src="{{p.images[2].url.http}}" alt="{{p.description}}" class="product-image" ng-if="p.images[2].url.http"/> -->
+        <img src="{{p.images[0].url.https}}" alt="{{p.title}}" class="product-image product-image-one" ng-class="{'fadeOut': flip==true}"/>
+        <img src="{{p.images[1].url.https}}" alt="{{p.title}}" class="product-image product-image-two" ng-class="{'fadeOut': flip==false}"/>
       </a>
     </li>
   </ul>

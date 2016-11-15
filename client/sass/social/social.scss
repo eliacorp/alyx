@@ -1,0 +1,386 @@
+.social-wrapper{
+  .social-content{
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: scroll;
+    @include respond-to(phone){
+      width:100vw;
+      height:100vh;
+    }
+
+//...filter DESKTOP
+    .social-filter-wrapper{
+      background-color: none;
+      padding-bottom: 0px;
+      position: fixed;
+      width: 10vw;
+      height: 148px;
+      bottom: 0px;
+      left: 0px;
+      background-color: white;
+      z-index: $z-social-load;
+      width: 9vw;
+      margin-left: $margin-sides;
+      margin-bottom: $margin-sides;
+      .social-table{
+      width: 100%;
+      height: 100%;
+        .social-tr{
+          td{
+            .social-filter-content{
+              #social-filter-entry{
+                line-height: 24px;
+                a{
+                  color: $black-transparent;
+                  @include hover-effect-color($black, $light-grey);
+                  cursor:pointer;
+                  @include h2();
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+
+    //...IMAGES
+      .insta-wrapper{
+        width: 61vw;
+        position: relative;
+        overflow: scroll;
+        height: auto;
+        z-index: $z-social-main;
+        @include respond-to(phone){
+          width: 100vw;
+          height: 15vh;
+          position: fixed;
+          bottom:70px;
+          overflow-x: scroll;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .insta-grid{ //ul
+          width: 49vw;
+          height: 100vh;
+          float: right;
+          min-height: 1px;
+          margin-left: calc(10vw - 1px);
+          border-right: 1px solid #e6e6e6;
+          overflow-x: hidden;
+          overflow-y: scroll;
+
+          @include respond-to(phone){
+            width: auto;
+            height: 15vh;
+            white-space: nowrap;
+            float: none;
+            overflow: visible;
+            margin-left: 0;
+            border-right:0;
+          }
+
+          .insta-li{
+            width: 16vw;
+            height: 16vw;
+            display: block;
+            float: left;
+            @include respond-to(phone){
+              display: inline-block;
+              float: none;
+            }
+            .social-images-loader-div{
+              .social-loader{
+
+              }
+            }
+
+            .instagram-image-a{
+              width: 100%;
+              height: 100%;
+              display: block;
+              .instagram-image{
+                width: 13vw;
+                height: 13vw;
+                display: block;
+                margin: 1.5vw 1.5vw 1.5vw 1.5vw;
+              }
+            }
+          }
+
+          .load-more-li{
+            width: 16vw;
+            height: 16vw;
+            float: left;
+            position: relative;
+            display: inline-block;
+            z-index: $z-social-load;
+            @include respond-to(phone) {
+              display: inline-block;
+              float:none;
+              width: 16vw;
+              height: 16vw;
+            }
+
+            .load-more-button{
+              @include h2();
+              vertical-align: middle;
+                height:100%;
+                width: 100%;
+                color: $black-transparent;
+                background-color: rgba(0, 0, 0, 0);
+                margin:0 0;
+                padding:0 0;
+                text-transform:uppercase;
+                padding-bottom: 2px;
+                font-size: 20px;
+                border-style:none;
+                outline:0;
+                -webkit-transition: color .4s ease;
+                -moz-transition: color .4s ease;
+                -o-transition: color .4s ease;
+                -ms-transition: color .4s ease;
+                transition: color .4s ease;
+                cursor:pointer;
+                @include hover-effect-color($black, $light-grey);
+                font-size: 20px;
+                font-family: "akzidenz-grotesk";
+
+                @include respond-to(phone){
+                  position: absolute;
+                  top:0;
+                }
+
+            }
+          }
+        }
+      }
+
+
+      .insta-main{
+        position: fixed;
+        right: 0;
+        top: 0;
+        height: 100vh;
+        width: 39vw;
+        @include respond-to(phone){
+          height: 60vh;
+          width: 100vw;
+        }
+
+
+          .insta-main-description{
+            @include p();
+            position: absolute;
+            bottom: 55px;
+            text-align: left;
+            width: 37vw;
+            margin-left: $margin-sides;
+            float: left;
+            text-transform: none;
+            max-height: 140px;
+            overflow-y: scroll;
+            @include respond-to(phone){
+              left: 50%;
+              width: 90vw;
+              margin-left: -45vw;
+            }
+          }
+
+        .view-on-instagram{
+          width: auto;
+          display: block;
+          margin-top: 10px;
+          position: absolute;
+          left: $margin-sides;
+          bottom: $margin-sides;
+          z-index: $z-social-view-on-instagram;
+          @include respond-to(phone){
+            left: $margin-sides-mobile;
+            bottom: $margin-sides-mobile;
+          }
+          a{
+            width: 100%;
+            z-index: $z-social-view-on-instagram;
+            cursor:pointer;
+
+            p{
+              width: 100%;
+              @include h2();
+              text-align: left;
+              cursor:pointer;
+              line-height: 24px;
+              text-transform: uppercase;
+              @include hover-effect-color($black, $light-grey);
+            }
+          }
+        }
+
+        .insta-table-wrapper{
+          position: fixed;
+          right: 0;
+          top: 0;
+          height: calc(100vh - 100px);
+          width: 39vw;
+          @include respond-to(phone){
+            width:100vw;
+            height:45vh;
+          }
+          table{
+            height: 100%;
+            width: 100%;
+            tr{
+              td{
+                height:100%;
+                vertical-align: middle;
+                .insta-main-image-wrapper{
+                  .insta-main-image{
+                    height: 39vw;
+                    width: 39vw;
+                    opacity: 1;
+                    @include respond-to(phone){
+                      width:auto;
+                      margin: auto;
+                      display: block;
+                    }
+                    &.ng-hide-fade{
+                      opacity: 0;
+                      transition: 0s all linear;
+                      -webkit-transition: 0s all linear;
+                    }
+
+                    &.ng-show{
+                      opacity: 1;
+                      transition: 1s all linear;
+                      -webkit-transition: 1s all linear;
+                    }
+                  }
+                  .insta-main-video{
+                    height: 39vw;
+                    width: 39vw;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+
+
+.social-account{
+  position: fixed;
+  top: $margin-sides;
+  left: $margin-sides;
+  line-height: 24px;
+  z-index: $z-social-main;
+  a{
+    color: $black-transparent;
+    @include h3();
+    @include hover-effect-color($black, $light-grey);
+    cursor:pointer;
+  }
+}
+
+
+
+  }
+}
+
+.no-hover-transition {
+  opacity: 1 !important;
+}
+
+.filterActive{
+  color: $black !important;
+}
+
+
+
+
+.insta-main-image.ng-hide{
+  opacity: 0;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+.insta-main-image.ng-hide-add.ng-hide-add-active{
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+.insta-main-image.ng-hide-remove.ng-hide-add-remove{
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.insta-main-image.ng-leave-active{
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+
+
+//load more enter animation
+.load-more-li.ng-hide{
+  opacity: 0;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+
+
+.load-more-li.ng-hide-add.ng-hide-add-active{
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.load-more-li.ng-hide-remove.ng-hide-remove-active{
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+
+
+
+//stagger
+.insta-li.ng-enter-stagger {
+  /* 200ms will be applied between each sucessive enter operation */
+  -webkit-transition-delay:0.1s;
+  transition-delay:0.1s;
+
+  /* this is here to avoid accidental CSS inheritance */
+  -webkit-transition-duration:0;
+  transition-duration:0;
+}
+
+.insta-li.ng-enter {
+  -webkit-transition:0.1s linear all;
+  transition:0.1s linear all;
+
+  opacity:0;
+  line-height:0;
+}
+
+.insta-li.ng-enter.ng-enter-active {
+  opacity:1;
+  line-height:20px;
+}

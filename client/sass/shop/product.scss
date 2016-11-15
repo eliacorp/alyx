@@ -1,12 +1,15 @@
 .product{
   width:calc(100vw - 75px);
-  height:100vh;
+  height:auto;
   padding-left: 75px;
   position: relative;
   display: inline-block;
   overflow-y:scroll;
   overflow-x: hidden;
 }
+
+
+
 
 .product-ul{
   width: 82%;
@@ -82,12 +85,13 @@
   @include transform-element(translateY(-50%));
   .product-filter-ul{
     width:100%;
+    margin-top: $margin-bottom-h1;
 
     .product-filter-li{
       width:100%;
       display:block;
       clear: both;
-      margin-top: $margin-bottom-h2;
+
       &:nth-child(1){
         margin-top: 0;
       }
@@ -102,7 +106,8 @@
       }
     }
     .product-filter-li-clear{
-      margin-top: $margin-bottom-h2;
+      position: absolute;
+      margin-top: $margin-bottom-h1;
       @include h3();
     }
   }
@@ -113,10 +118,10 @@
 .product-li.ng-move,
 .product-li.ng-enter,
 .product-li.ng-leave {
-  transition:all linear $transition-medium;
-  -webkit-transition:all linear $transition-medium;
-  -moz-transition:all linear $transition-medium;
-  -ms-transition:all linear $transition-medium;
+  transition:opacity linear $transition-medium;
+  -webkit-transition:opacity linear $transition-medium;
+  -moz-transition:opacity linear $transition-medium;
+  -ms-transition:opacity linear $transition-medium;
 }
 
 .product-li.ng-leave.ng-leave-active,

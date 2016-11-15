@@ -16,7 +16,8 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     var original = $location.path;
     $location.path = function (path, reload) {
         if (reload === false) {
-          $rootScope.pageLoading = false;
+          // $rootScope.pageLoading = false;
+          console.log("$rootScope.pageLoading", $rootScope.pageLoading);
             var lastRoute = $route.current;
             var un = $rootScope.$on('$locationChangeSuccess', function () {
                 $route.current = lastRoute;
@@ -41,7 +42,9 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
+.config(['$routeProvider', '$locationProvider','$anchorScrollProvider', ($routeProvider, $locationProvider, $anchorScrollProvider) => {
+
+  $anchorScrollProvider.disableAutoScrolling();
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
@@ -54,7 +57,8 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/collection/:shopcollection', {
+
+    .when('/shop/collection', {
       templateUrl: 'views/shop/product.html',
       reloadOnSearch: false
     })
@@ -168,9 +172,10 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 })
 
 .controller('appCtrl', ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll)=>{
-
+  $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
+
 
 
   $rootScope.noRefresh = function(url){
@@ -185,34 +190,34 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   }
 
 
-  function eraseCookie(name) {
-    $rootScope.createCookie(name,"",-1);
-  }
-
-  function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-    for (var i = 0; i < cookies.length; i++)
-      eraseCookie(cookies[i].split("=")[0]);
-}
-
-// deleteAllCookies();
-$rootScope.createCookie = function(name,value,time) {
-	var expires = "; expires="+time;
-	document.cookie = name+"="+value+expires+";";
-}
-
-$rootScope.readCookie = function(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0){
-        return c.substring(nameEQ.length,c.length);
-      }
-	}
-	// return null;
-}
+// function eraseCookie(name) {
+//   $rootScope.createCookie(name,"",-1);
+// }
+//
+// function deleteAllCookies() {
+//   var cookies = document.cookie.split(";");
+//   for (var i = 0; i < cookies.length; i++)
+//     eraseCookie(cookies[i].split("=")[0]);
+// }
+//
+// // deleteAllCookies();
+// $rootScope.createCookie = function(name,value,time) {
+// 	var expires = "; expires="+time;
+// 	document.cookie = name+"="+value+expires+";";
+// }
+//
+// $rootScope.readCookie = function(name) {
+// 	var nameEQ = name + "=";
+// 	var ca = document.cookie.split(';');
+// 	for(var i=0;i < ca.length;i++) {
+// 		var c = ca[i];
+// 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+//       if (c.indexOf(nameEQ) == 0){
+//         return c.substring(nameEQ.length,c.length);
+//       }
+// 	}
+// 	// return null;
+// }
 
 
   $rootScope.authentication = function(){
@@ -232,14 +237,9 @@ $rootScope.readCookie = function(name) {
               var expires_in = response.data.expires_in;
               var access_token = response.data.access_token;
               var type = response.data.token_type;
-
               $rootScope.getCollections();
+              // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
 
-
-              $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-              setTimeout(function(){
-                // console.log(document.cookie);
-              },900);
           }
 
           }, function errorCallback(response) {
@@ -256,6 +256,40 @@ $rootScope.readCookie = function(name) {
 
 
 
+//get products
+$rootScope.Product;
+
+$rootScope.getProductsFN=function(){
+  console.log("getting products");
+  $http({method: 'GET', url: '/getProducts'}).then(function(response){
+    $rootScope.Product = response.data;
+    console.log(response);
+    console.log($rootScope.Product);
+    // for (var i in $rootScope.Product){
+    //   $rootScope.detailUpdate($rootScope.Product[i].sku);
+    //   return false;
+    // }
+    $rootScope.$broadcast("productArrived");
+    $rootScope.pageLoading = false;
+
+  }, function(error){
+    console.log(error);
+    console.log("products status 400");
+  });
+}
+
+
+$rootScope.getProductsFN();
+
+
+
+
+
+
+
+
+
+//get shop collections
   $rootScope.getCollections = function(){
 
         // Simple GET request example:
@@ -302,9 +336,7 @@ $rootScope.setPage = (page)=>{
     }, function(response) {
 
       $scope.error = {value: true, text:'countries not available, this page will be reloaded'};
-      setTimeout({
-        // $route.reload();
-      }, 2000);
+
     });
   };
   $rootScope.getCountries();
@@ -380,7 +412,7 @@ var collectionRan = false;
 
   };//get content type
 
-
+	$rootScope.getContentType('stockist', 'my.stockist.date desc');
 
 
 

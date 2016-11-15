@@ -4,6 +4,7 @@ var Payment = angular.module('myApp');
 
 Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll){
  $rootScope.payment;
+ $rootScope.Transaction;
   $rootScope.Processed={value: false, error:false, data:''};
 
     $rootScope.payment = {
@@ -89,8 +90,8 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
                 $rootScope.cartLoading = false;
                 $rootScope.Processed={value: true, error:false, data:response.data.order};
+                $rootScope.Transaction = response.data.data;
                 $rootScope.pageLoading = false;
-                $rootScope.loadVideo();
                 $location.path('/shop/processed/'+response.data.order.id+'/'+$rootScope.checkout.gateway, true);
 
               }

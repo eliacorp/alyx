@@ -109,7 +109,7 @@ input, textarea, select, a, li {
 a{
   @include h3();
   cursor:pointer;
-  @include hover-effect-color($light-grey, $black);
+  @include hover-effect-color($black, $light-grey);
 }
 
 
@@ -121,12 +121,12 @@ a{
 main {
   height: auto;
   width:100vw;
-  height:100vh;
+  height:auto;
   position: relative;
   display: block;
   list-style-type: none;
   display: block;
-  overflow: scroll;
+  // overflow: scroll;
 }
 
 

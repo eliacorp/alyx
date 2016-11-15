@@ -10,8 +10,9 @@ let path = require('path');
 var util = require('util');
 let ejs = require('ejs');
 let sessions = require('client-sessions');
-let app = express();
 let request = require('request');
+let app = express();
+
 
 let moltin = require('moltin')({
   publicId: 'aRfWbMWHHHluwvHks6WJdcvqAnpSUqoejRoepXPaL9',
@@ -45,10 +46,8 @@ app.use(sessions({
 app.use(function(req, res, next) {
 
   if (req.mySession.access_token) {
-    console.log(req.mySession);
     res.setHeader('X-Seen-You', 'true');
   } else {
-    console.log(req.mySession);
     // setting a property will automatically cause a Set-Cookie response
     // to be sent
     res.setHeader('X-Seen-You', 'false');
@@ -62,6 +61,7 @@ app.use(function(req, res, next) {
 app.get('/authenticate', function(req, res){
 
   moltin.Authenticate(function(data) {
+    console.log("auth");
 
     console.log(data);
 
@@ -78,6 +78,7 @@ app.get('/authenticate', function(req, res){
       }else{
         console.log("3 runs");
         req.mySession.access_token = data.access_token;
+        console.log(req.mySession.access_token);
         res.status(200).json(data);
       }
     }else{
@@ -137,7 +138,6 @@ app.get('/authenticate', function(req, res){
 
       }, function(error, response, c) {
         console.log(error);
-        console.log(response);
         console.log(c);
         res.json(error);
           // Something went wrong...
@@ -222,14 +222,24 @@ app.get('/authenticate', function(req, res){
 
     var Product=[];
     function getProduct(req, res){
-        moltin.Product.List(null, function(data) {
-          Product = data;
-          res.status(200).json(data);
-        }, function(error) {
-            // Something went wrong...
-            res.status(400).json(error);
-            console.log("Something went wrong in getting the products..");
-        });
+
+      moltin.Product.Search({status: 1}, function(products) {
+
+          res.status(200).json(products);
+      }, function(error) {
+          // Something went wrong...
+          res.status(400).json(error);
+
+          // console.log("Something went wrong in getting the products..");
+      });
+        // moltin.Product.List(null, function(data) {
+        //   Product = data;
+        //   res.status(200).json(data);
+        // }, function(error) {
+        //     // Something went wrong...
+        //     res.status(400).json(error);
+        //     console.log("Something went wrong in getting the products..");
+        // });
     }
 
 
@@ -283,7 +293,7 @@ app.get('/authenticate', function(req, res){
             // Handle the order
 
         }, function(error, response, c) {
-          console.log(response);
+          console.log(error);
           res.json(error);
           // Something went wrong...
         });
@@ -300,8 +310,8 @@ app.get('/authenticate', function(req, res){
         console.log(order.gateway);
         var obj={};
         obj = {
-                  return_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal',
-                  cancel_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal/canceled'
+                  return_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express',
+                  cancel_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express/canceled'
               }
 
 
@@ -373,29 +383,38 @@ app.get('/authenticate', function(req, res){
     }
 
 
+
+
+    // curl -X GET https://api.molt.in/v1/products/1379862576992617248/variations -H "Authorization: Bearer ea9f070f4f093161bf344bd8fc120a2f6574a042"
+
     // curl -X GET https://api.molt.in/v1/products/1019656230785778497/variations /
 function getVariationsLevel(req, res){
   var id = req.params.id.toString();
-  console.log(id);
-  request({
-      url: 'https://api.molt.in/v1/products/'+id+'/variations', //URL to hit
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer '+req.mySession.access_token
-      },
-      function(error, response, body){
-        console.log(body);
-          if(error) {
-              console.log("PUT entry error");
-              console.log(error);
-              res.status(response.statusCode).json(body);
-          } else {
-              console.log("ok");
-              console.log(body);
-              res.status(response.statusCode).json(body);
-          }
-        }
-  });
+  console.log('id:',id);
+  var url = 'https://api.molt.in/v1/products/'+id+'/variations';
+  var access_token = req.mySession.access_token;
+  console.log("access_token:", req.mySession.access_token);
+  var options = {
+    url: url,
+    headers: {
+      'Authorization': 'Bearer '+access_token
+    }
+  };
+
+  function callback(error, response, body) {
+    console.log(error, response, body);
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      res.status(response.statusCode).json(info);
+    }else{
+      var info = JSON.parse(body);
+      res.status(response.statusCode).json(info);
+    }
+  }
+
+  request(options, callback);
+
+
 }
 
 
@@ -431,20 +450,11 @@ function getVariationsLevel(req, res){
 
     function putOrder (req,res){
       var orderID = req.params.order;
-      var body = req.body;
-      var obj;
+      var obj = req.body;
       console.log("body");
-      console.log(body);
-      // console.log(body.status.value);
-      if(body.status){
-        var status = body.status.value.toString();
-        obj = {status: status};
+      console.log(obj);
 
-      }else if(body.gateway){
-        var gateway = body.gateway.toString();
-        console.log(gateway);
-        obj = {gateway: gateway};
-      }
+
 
       moltin.Order.Update(orderID, obj, function(order) {
         console.log(order);

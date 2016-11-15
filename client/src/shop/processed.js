@@ -6,6 +6,7 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
 
 
 
+
   $rootScope.retrieveOrder = ()=>{
     var orderID = $routeParams.order;
     $http({
@@ -15,7 +16,7 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
 
       console.log(response);
       $rootScope.Processed = {value: false, error:false, data:response.data};
-      $rootScope.changeOrderStatus('paid');
+      $rootScope.changeOrderStatus('paid', response.data);
     }, function(error){
       console.log(error);
       $rootScope.Processed = {value: false, error:true, data:error.data};
@@ -25,16 +26,32 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
 
 
 setTimeout(function(){
-  if($routeParams.method == 'paypal'){
+  if($routeParams.method == 'paypal-express'){
     $rootScope.retrieveOrder();
+  }else if($routeParams.method == 'stripe'){
+    console.log('stripe stripe stripe stripe');
+    console.log($rootScope.Transaction);
+    $rootScope.changeOrderStatus('paid', $rootScope.Transaction);
   }
-},1000);
+},600);
 
-$rootScope.changeOrderStatus =(status)=>{
+
+
+
+
+$rootScope.changeOrderStatus =(status, data)=>{
   var orderID = $routeParams.order;
-  $rootScope.Processed.data.status.value = status;
+  var obj = {};
 
-  $http.post('/order/'+orderID+'/put', $rootScope.Processed.data)
+  if($routeParams.method == 'paypal-express'){
+    // data.status.value = status;
+    obj = {status: status, payment_number: $routeParams.token};
+  }else if($routeParams.method == 'stripe'){
+    obj = {status: status, payment_number:data.id};
+  }
+
+
+  $http.post('/order/'+orderID+'/put', obj)
   .then( function(response){
     console.log(response);
     $rootScope.Processed = {value: true, error:false, data:response.data};
@@ -51,7 +68,6 @@ $rootScope.changeOrderStatus =(status)=>{
 
 
 $rootScope.loadVideo = ()=>{
-
   setTimeout(function(){
     var vid = document.getElementById("processed-video");
     vid.volume = 0.2;
@@ -64,13 +80,13 @@ $rootScope.loadVideo = ()=>{
       }
     }
     $rootScope.$apply();
-  },900);
-
-
+  }, 2500);
 }
 
 
 
+
+  $rootScope.loadVideo();
 
 
 

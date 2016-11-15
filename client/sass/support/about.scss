@@ -43,7 +43,7 @@
   background-position: 0 0;
   background-repeat: no-repeat;
   background-size: auto 100%;
-  z-index: $z-support;
+  z-index: -1;
   opacity: 1;
   @include respond-to(phone){
     height: 100vh;

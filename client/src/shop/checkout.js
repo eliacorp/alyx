@@ -68,9 +68,12 @@ $rootScope.checkout = {
 
 
     }else{
-      alert('invalid');
-      $rootScope.error = {value: true, text:'data invalid'};
-      event.preventDefault();
+      $rootScope.error = {value: true, text:'fill in the form correctly'};
+      // event.preventDefault();
+      setTimeout(function(){
+        $rootScope.error = {value: false, text:'fill in the form correctly'};
+        $rootScope.$apply();
+      }, 2000);
     }
   }
 

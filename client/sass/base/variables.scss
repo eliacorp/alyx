@@ -40,6 +40,7 @@ $letter-spacing-p2: 2px;
 
 // ........................................................COLORS
 $black: #000000;
+$black-transparent: rgba(0,0,0,0.3);
 $white: #FFFFFF;
 $yellow: #FFFF00;
 $green: #00FF00;
@@ -77,10 +78,18 @@ $z-terms-content:13;
 $z-terms-close:12;
 $z-terms:12;
 
+
+$z-error:15;
+
+
+
 $z-nav-ul:13;
 $z-nav-close:12;
 $z-nav:12;
 
+$z-social-load:8;
+$z-social-view-on-instagram:8;
+$z-social-main:7;
 
 $z-shop-buttons:11;
 $z-cart: 10;
@@ -90,7 +99,7 @@ $z-products:10;
 
 $z-dollar:10;
 $z-lookbook-side:10;
-$z-lookbook-main-img:9;
+$z-lookbook-main-img:-1;
 $z-lookbook-desc:6;
 $z-support:6;
 

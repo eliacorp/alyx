@@ -25,7 +25,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   var original = $location.path;
   $location.path = function (path, reload) {
     if (reload === false) {
-      $rootScope.pageLoading = false;
+      // $rootScope.pageLoading = false;
+      console.log("$rootScope.pageLoading", $rootScope.pageLoading);
       var lastRoute = $route.current;
       var un = $rootScope.$on('$locationChangeSuccess', function () {
         $route.current = lastRoute;
@@ -44,7 +45,9 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }
     return original.apply($location, [path]);
   };
-}]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+}]).config(['$routeProvider', '$locationProvider', '$anchorScrollProvider', function ($routeProvider, $locationProvider, $anchorScrollProvider) {
+
+  $anchorScrollProvider.disableAutoScrolling();
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
@@ -52,7 +55,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     templateUrl: 'views/shop/product-detail.html',
     controller: 'detailCtrl',
     reloadOnSearch: false
-  }).when('/shop/collection/:shopcollection', {
+  }).when('/shop/collection', {
     templateUrl: 'views/shop/product.html',
     reloadOnSearch: false
   }).when('/shop/cart', {
@@ -129,7 +132,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     // }
   };
 }).controller('appCtrl', function ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll) {
-
+  $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
 
@@ -144,36 +147,34 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }
   };
 
-  function eraseCookie(name) {
-    $rootScope.createCookie(name, "", -1);
-  }
-
-  function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-    for (var i = 0; i < cookies.length; i++) {
-      eraseCookie(cookies[i].split("=")[0]);
-    }
-  }
-
-  // deleteAllCookies();
-  $rootScope.createCookie = function (name, value, time) {
-    var expires = "; expires=" + time;
-    document.cookie = name + "=" + value + expires + ";";
-  };
-
-  $rootScope.readCookie = function (name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1, c.length);
-      }if (c.indexOf(nameEQ) == 0) {
-        return c.substring(nameEQ.length, c.length);
-      }
-    }
-    // return null;
-  };
+  // function eraseCookie(name) {
+  //   $rootScope.createCookie(name,"",-1);
+  // }
+  //
+  // function deleteAllCookies() {
+  //   var cookies = document.cookie.split(";");
+  //   for (var i = 0; i < cookies.length; i++)
+  //     eraseCookie(cookies[i].split("=")[0]);
+  // }
+  //
+  // // deleteAllCookies();
+  // $rootScope.createCookie = function(name,value,time) {
+  // 	var expires = "; expires="+time;
+  // 	document.cookie = name+"="+value+expires+";";
+  // }
+  //
+  // $rootScope.readCookie = function(name) {
+  // 	var nameEQ = name + "=";
+  // 	var ca = document.cookie.split(';');
+  // 	for(var i=0;i < ca.length;i++) {
+  // 		var c = ca[i];
+  // 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+  //       if (c.indexOf(nameEQ) == 0){
+  //         return c.substring(nameEQ.length,c.length);
+  //       }
+  // 	}
+  // 	// return null;
+  // }
 
   $rootScope.authentication = function () {
 
@@ -192,13 +193,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
         var expires_in = response.data.expires_in;
         var access_token = response.data.access_token;
         var type = response.data.token_type;
-
         $rootScope.getCollections();
-
-        $rootScope.createCookie("access_token", response.data.access_token, response.data.expires_in);
-        setTimeout(function () {
-          // console.log(document.cookie);
-        }, 900);
+        // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -208,6 +204,30 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
 
   $rootScope.authentication();
 
+  //get products
+  $rootScope.Product;
+
+  $rootScope.getProductsFN = function () {
+    console.log("getting products");
+    $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
+      $rootScope.Product = response.data;
+      console.log(response);
+      console.log($rootScope.Product);
+      // for (var i in $rootScope.Product){
+      //   $rootScope.detailUpdate($rootScope.Product[i].sku);
+      //   return false;
+      // }
+      $rootScope.$broadcast("productArrived");
+      $rootScope.pageLoading = false;
+    }, function (error) {
+      console.log(error);
+      console.log("products status 400");
+    });
+  };
+
+  $rootScope.getProductsFN();
+
+  //get shop collections
   $rootScope.getCollections = function () {
 
     // Simple GET request example:
@@ -240,9 +260,6 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }, function (response) {
 
       $scope.error = { value: true, text: 'countries not available, this page will be reloaded' };
-      setTimeout({
-        // $route.reload();
-      }, 2000);
     });
   };
   $rootScope.getCountries();
@@ -296,6 +313,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
       });
     });
   }; //get content type
+
+  $rootScope.getContentType('stockist', 'my.stockist.date desc');
 
   //MOBILE
 
@@ -429,6 +448,7 @@ Collection.controller('collectionCtrl', function ($scope, $location, $rootScope,
 				console.log($rootScope.collections[i].slug);
 				console.log($rootScope.Collection);
 				$rootScope.Collection = $rootScope.collections[i];
+				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 			}
 		}
 	};
@@ -789,10 +809,12 @@ Nav.controller('navCtrl', function ($scope, $location, $rootScope, $timeout, $ht
       $rootScope.logoLeft = true;
     }
 
-    setTimeout(function () {
-      $rootScope.pageLoading = false;
-      $rootScope.$apply();
-    }, 800);
+    if ($scope.getSecondPath) {
+      setTimeout(function () {
+        $rootScope.pageLoading = false;
+        $rootScope.$apply();
+      }, 800);
+    }
   });
 }).directive('navDirective', function ($rootScope, $location, $window, $timeout) {
   return {
@@ -1116,7 +1138,8 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   };
 
   $rootScope.$watch('Cart', function (newValue) {
-    $rootScope.Cart = newValue;
+    console.log("animate");
+    // $rootScope.Cart = newValue;
     $rootScope.animateCart();
   });
 
@@ -1135,6 +1158,7 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
       $rootScope.Cart = response.data;
 
       console.log($rootScope.Cart);
+      $rootScope.animateCart();
 
       //attaching item id if cart>0
       if (!$rootScope.Cart.total_items == 0) {
@@ -1162,6 +1186,7 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
     }).then(function (response) {
       console.log("object removed");
       $rootScope.Cart = response;
+
       $rootScope.updateCart();
       console.log(response);
     });
@@ -1170,7 +1195,7 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   $rootScope.cartToShipment = function () {
     console.log("toShipment");
     if ($rootScope.Cart.total_items > 0) {
-      $rootScope.goHorizontal('shipment', 3);
+      $location.path('/shop/shipment', true);
     } else {
       $rootScope.noProductsError = true;
       setTimeout(function () {
@@ -1183,6 +1208,7 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   //function that animates the cart button when you add a product
   $rootScope.animateCart = function () {
     $rootScope.cartChanged = true;
+    console.log("animate");
     setTimeout(function () {
       $rootScope.cartChanged = false;$rootScope.$apply();
     }, 900);
@@ -1249,9 +1275,12 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
         console.error("error in posting");
       });
     } else {
-      alert('invalid');
-      $rootScope.error = { value: true, text: 'data invalid' };
-      event.preventDefault();
+      $rootScope.error = { value: true, text: 'fill in the form correctly' };
+      // event.preventDefault();
+      setTimeout(function () {
+        $rootScope.error = { value: false, text: 'fill in the form correctly' };
+        $rootScope.$apply();
+      }, 2000);
     }
   };
 
@@ -1342,6 +1371,7 @@ var Payment = angular.module('myApp');
 
 Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll) {
   $rootScope.payment;
+  $rootScope.Transaction;
   $rootScope.Processed = { value: false, error: false, data: '' };
 
   $rootScope.payment = {
@@ -1412,8 +1442,8 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
         $rootScope.cartLoading = false;
         $rootScope.Processed = { value: true, error: false, data: response.data.order };
+        $rootScope.Transaction = response.data.data;
         $rootScope.pageLoading = false;
-        $rootScope.loadVideo();
         $location.path('/shop/processed/' + response.data.order.id + '/' + $rootScope.checkout.gateway, true);
       }
     }, function (response) {
@@ -1487,7 +1517,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
 
       console.log(response);
       $rootScope.Processed = { value: false, error: false, data: response.data };
-      $rootScope.changeOrderStatus('paid');
+      $rootScope.changeOrderStatus('paid', response.data);
     }, function (error) {
       console.log(error);
       $rootScope.Processed = { value: false, error: true, data: error.data };
@@ -1496,16 +1526,27 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
   };
 
   setTimeout(function () {
-    if ($routeParams.method == 'paypal') {
+    if ($routeParams.method == 'paypal-express') {
       $rootScope.retrieveOrder();
+    } else if ($routeParams.method == 'stripe') {
+      console.log('stripe stripe stripe stripe');
+      console.log($rootScope.Transaction);
+      $rootScope.changeOrderStatus('paid', $rootScope.Transaction);
     }
-  }, 1000);
+  }, 600);
 
-  $rootScope.changeOrderStatus = function (status) {
+  $rootScope.changeOrderStatus = function (status, data) {
     var orderID = $routeParams.order;
-    $rootScope.Processed.data.status.value = status;
+    var obj = {};
 
-    $http.post('/order/' + orderID + '/put', $rootScope.Processed.data).then(function (response) {
+    if ($routeParams.method == 'paypal-express') {
+      // data.status.value = status;
+      obj = { status: status, payment_number: $routeParams.token };
+    } else if ($routeParams.method == 'stripe') {
+      obj = { status: status, payment_number: data.id };
+    }
+
+    $http.post('/order/' + orderID + '/put', obj).then(function (response) {
       console.log(response);
       $rootScope.Processed = { value: true, error: false, data: response.data };
       $rootScope.pageLoading = false;
@@ -1518,7 +1559,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
   };
 
   $rootScope.loadVideo = function () {
-
     setTimeout(function () {
       var vid = document.getElementById("processed-video");
       vid.volume = 0.2;
@@ -1531,8 +1571,10 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
         }
       };
       $rootScope.$apply();
-    }, 900);
+    }, 2500);
   };
+
+  $rootScope.loadVideo();
 });
 
 },{}],10:[function(require,module,exports){
@@ -1546,7 +1588,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
       var filter = $rootScope.filter;
       var filtered = [];
 
-      if (!filter.selected) {
+      if (!filter.collection.selected && !filter.gender.selected) {
         return data;
       } else {
 
@@ -1554,9 +1596,27 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
         for (var i in $rootScope.Product) {
 
           if (!$rootScope.Product[i].collection) {} else if ($rootScope.Product[i].collection.value) {
-            console.log("collection", $rootScope.Product[i].collection);
-            if ($rootScope.Product[i].collection.data.slug == filter.selected) {
-              filtered = filtered.concat($rootScope.Product[i]);
+
+            if ($rootScope.filter.collection.selected && $rootScope.filter.gender.selected) {
+
+              for (var c in $rootScope.Product[i].category.data) {
+                if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected && $rootScope.Product[i].collection.data.slug == filter.collection.selected) {
+                  filtered = filtered.concat($rootScope.Product[i]);
+                }
+              }
+            } else if ($rootScope.filter.collection.selected) {
+
+              console.log("collection", $rootScope.Product[i].collection);
+              if ($rootScope.Product[i].collection.data.slug == filter.collection.selected) {
+                filtered = filtered.concat($rootScope.Product[i]);
+              }
+            } else if ($rootScope.filter.gender.selected) {
+
+              for (var c in $rootScope.Product[i].category.data) {
+                if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) {
+                  filtered = filtered.concat($rootScope.Product[i]);
+                }
+              }
             }
           }
         }
@@ -1569,37 +1629,43 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', '$routeParams', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams) {
 
   $rootScope.page = "product";
-
   $rootScope.shopSections = [];
   $rootScope.Section = {};
-  $rootScope.Product = [];
   $rootScope.isGradient = true;
-
-  $rootScope.getProductsFN = function () {
-    console.log("getting products");
-    $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
-      $rootScope.Product = response.data;
-      console.log($rootScope.Product);
-      // for (var i in $rootScope.Product){
-      //   $rootScope.detailUpdate($rootScope.Product[i].sku);
-      //   return false;
-      // }
-      $rootScope.$broadcast("productArrived");
-      setTimeout(function () {
-        $rootScope.pageLoading = false;
-        $rootScope.$apply();
-      }, 800);
-    }, function (error) {
-      console.log(error);
-      console.log("products status 400");
-    });
+  $rootScope.filter = {
+    gender: {
+      selected: ''
+    },
+    collection: {
+      selected: ''
+    }
   };
 
-  $rootScope.getProductsFN();
+  //......FILTER
+
+  // if($routeParams.shopcollection){
+  //   $rootScope.filter ={type:'collection', selected: $routeParams.shopcollection};
+  // }else{
+  //   $rootScope.filter ={type:"", selected: ""};
+  // }
+
+  $rootScope.selectFilter = function (thistype, id) {
+    $rootScope.pageLoading = false;
+
+    if (!id) {
+      $rootScope.filter['collection'].selected = id;
+      $rootScope.filter['gender'].selected = id;
+    } else {
+      $location.search(thistype, id);
+      $rootScope.filter[thistype].selected = id;
+      console.log($rootScope.filter);
+    }
+  };
+
+  //..add product
 
   $rootScope.addToCart = function (id) {
-    // var token = document.cookie;
-    var token = $rootScope.readCookie("access_token");
+
     $http({
       url: '/addProduct',
       method: 'POST',
@@ -1617,20 +1683,6 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
       $rootScope.updateCart();
     });
   }; //addToCart
-
-  //......FILTER
-
-  if ($routeParams.shopcollection) {
-    $rootScope.filter = { type: 'collection', selected: $routeParams.shopcollection };
-  } else {
-    $rootScope.filter = { type: "", selected: "" };
-  }
-
-  $rootScope.selectFilter = function (thistype, id) {
-    $rootScope.pageLoading = false;
-    $rootScope.filter = { type: thistype, selected: id };
-    $location.path('/shop/collection/' + id, false);
-  };
 
   //......VARIATIONS
 
@@ -1654,28 +1706,25 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
     }
   }; //addToCart
 
-  $rootScope.updateCart = function () {
-    $http({
-      url: '/getCart',
-      method: 'GET',
-      headers: {
-        // 'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      transformRequest: transformRequestAsFormPost
-      // data: {
-      //       }
-    }).then(function (response) {
-      $rootScope.Cart = response.data;
-
-      console.log($rootScope.Cart);
-      //attaching item id if cart>0
-      if (!$rootScope.Cart.total_items == 0) {
-        console.log("cart has some stuff");
-        $rootScope.attachItemID($rootScope.Cart.contents);
-      }
-    });
-  }; //updateCart
+  // $rootScope.updateCart = function(){
+  //       $http({
+  //         url: '/getCart',
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/x-www-form-urlencoded'
+  //         },
+  //         transformRequest: transformRequestAsFormPost
+  //       }).then(function(response){
+  //         $rootScope.Cart = response.data;
+  //
+  //         console.log($rootScope.Cart);
+  //         //attaching item id if cart>0
+  //         if(!$rootScope.Cart.total_items==0){
+  //           console.log("cart has some stuff");
+  //           $rootScope.attachItemID($rootScope.Cart.contents);
+  //         }
+  //       });
+  // }//updateCart
 
   //attaching item function cart
   $rootScope.attachItemID = function (obj) {
@@ -1685,76 +1734,9 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
     });
   };
 
-  $rootScope.setSections = function () {
-    $rootScope.shopSections = [{
-      "name": "products",
-      "url": "/shop",
-      "previous": false,
-      "next": "cart",
-      "index": 0,
-      "forwardActive": false
-    }, {
-      "name": "detail",
-      "url": "/shop/detail/",
-      "previous": "products",
-      "next": "cart",
-      "index": 1,
-      "forwardActive": false
-    }, {
-      "name": "cart",
-      "url": "/shop/cart",
-      "previous": "detail",
-      "next": "shipment",
-      "index": 2,
-      "forwardActive": false
-    }, {
-      "name": "shipment",
-      "url": "/shop/shipment",
-      "previous": "cart",
-      "next": "payment",
-      "index": 3,
-      "forwardActive": false
-    }, {
-      "name": "choice",
-      "url": "/shop/choice",
-      "previous": "shipment",
-      "next": "payment",
-      "index": 4,
-      "forwardActive": false
-    }, {
-      "name": "payment",
-      "url": "/shop/payment",
-      "previous": "choice",
-      "next": "processed",
-      "index": 5,
-      "forwardActive": false
-    }, {
-      "name": "processed",
-      "url": "/shop/processed",
-      "previous": "payment",
-      "next": 'none',
-      "index": 6,
-      "forwardActive": false
-    }];
-  };
-
-  $rootScope.setSections();
-
-  $rootScope.Section = $rootScope.shopSections[0];
-
   $rootScope.thisProduct = function (id) {
     $rootScope.detailUpdate(id);
     $location.path('/shop/product/' + id, true);
-  };
-
-  $rootScope.goHorizontal = function (id, number) {
-    $rootScope.Section = $rootScope.shopSections[number];
-
-    if (id == 'detail') {
-      $location.path('/shop/product/' + $rootScope.Detail.sku, true);
-    } else {
-      $location.path($rootScope.shopSections[number].url, true);
-    }
   };
 }]); //shop controller
 
@@ -1764,31 +1746,71 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   $rootScope.selectedVariation = {};
   $rootScope.howManyVAriationsSelected = 0;
   $rootScope.page = "detail";
+  $rootScope.Variations;
+
+  // var sku =$routeParams.detail;
+  // $rootScope.detailUpdate(sku);
+
+  $scope.$watch(function () {
+    return $rootScope.Product;
+  }, function (value) {
+    if (value) {
+      $rootScope.detailUpdate($routeParams.detail);
+    }
+    // if(!$rootScope.Detail.id){
+    //   $rootScope.detailUpdate($routeParams.detail);
+    //   $scope.$apply();
+    //   console.log("I loaded it again");
+    //   console.log($rootScope.Detail);
+    // }else{
+    //   console.log("detail loaded correctly");
+    //   console.log($rootScope.Detail);
+    //   return false
+    // }
+  }, true);
 
   $scope.$on('$routeChangeSuccess', function () {
 
-    var sku = $routeParams.detail;
-    $rootScope.detailUpdate(sku);
+    // setTimeout(function(){
+    //
+    // },3000);
 
-    setTimeout(function () {
-      if (!$rootScope.Detail.id) {
-        $rootScope.detailUpdate($routeParams.detail);
-        $scope.$apply();
-        console.log("I loaded it again");
-        console.log($rootScope.Detail);
-      } else {
-        console.log("detail loaded correctly");
-        console.log($rootScope.Detail);
-        return false;
-      }
-    }, 3000);
   });
+
+  $scope.getVariationsLevel = function (productId) {
+    console.log('productId', productId);
+
+    $http({
+      url: '/product/' + productId + '/variations/get',
+      method: 'GET'
+    }).then(function (response) {
+      console.log(response);
+      $rootScope.Variations = response.data.result;
+      var n = 0;
+      for (var m in $rootScope.Detail.modifiers) {
+        for (var v in $rootScope.Detail.modifiers[m].variations) {
+
+          $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[n].stock_level;
+
+          console.log($rootScope.Detail.modifiers[m].variations[v].stock_level);
+          n = n + 1;
+
+          // for (var n in $rootScope.Variations){
+          //   if ($rootScope.Detail.modifiers[m].variations[v].id==$rootScope.Variations[n].id){
+          //     // $rootScope.Detail.modifiers[m].variations[v].stock_level=$rootScope.Variations[n].stock_level;
+          //   }
+          // }
+        }
+      }
+    }, function (error) {
+      console.log(error);
+    });
+  };
 
   $rootScope.detailUpdate = function (sku) {
     $rootScope.selectedVariation = {};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations = 0;
-    $scope.getVariationsLevel($rootScope.Detail.id);
 
     for (var i in $rootScope.Product) {
       if ($rootScope.Product[i].sku == sku) {
@@ -1796,18 +1818,28 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
         $rootScope.Detail = $rootScope.Product[i];
         $rootScope.Detail.total_variations = 0;
         $rootScope.Detail.has_variation = $rootScope.has_variation;
+        $rootScope.pageLoading = false;
+        $scope.getVariationsLevel($rootScope.Detail.id);
 
         var go = true;
         //has variation
-        for (i in $rootScope.Detail.modifiers) {
+        for (var m in $rootScope.Detail.modifiers) {
           $rootScope.Detail.total_variations = $rootScope.Detail.total_variations + 1;
           // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
           $rootScope.Detail.has_variation = true;
-          $rootScope.selectedVariation[i] = {
+          $rootScope.selectedVariation[m] = {
             open: true
           };
 
           go = false;
+
+          console.log($rootScope.Variations);
+
+          // $rootScope.Detail.modifiers[m].variations=
+
+          // for (var v in $rootScope.Detail.modifiers[i].variations){
+          //
+          // }
         }
 
         if (go == true) {
@@ -1849,18 +1881,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
       }
     }
   };
-
-  $scope.getVariationsLevel = function (productId) {
-
-    $http({
-      url: '/product/' + productId + '/variations/get',
-      method: 'GET'
-    }).then(function (response) {
-      console.log(response);
-    }, function (error) {
-      console.log(error);
-    });
-  };
 });
 
 },{}],11:[function(require,module,exports){
@@ -1872,10 +1892,7 @@ Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routePara
 
   $rootScope.currentPosition = "social";
   $rootScope.headerSectionName = "social";
-
-  setTimeout(function () {
-    $rootScope.endLoader();
-  }, 600);
+  $rootScope.pageLoading = true;
 
   $rootScope.$on('$routeChangeSuccess', function () {
     $rootScope.headerHide = false;
@@ -2091,6 +2108,8 @@ Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routePara
     $scope.instaTotal = response.data;
     setTimeout(function () {
       $scope.thisSocialImage(1);
+      $rootScope.pageLoading = false;
+      $rootScope.$apply();
     }, 900);
   }); //0
 
@@ -2375,8 +2394,6 @@ Social.directive("imageChange", function ($timeout) {
 
 var Support = angular.module('myApp');
 Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
-
-	$rootScope.getContentType('stockist', 'my.stockist.date desc');
 
 	$scope.stockist = {};
 	$scope.contact = [];

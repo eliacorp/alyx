@@ -97,16 +97,20 @@ $scope.$on('$routeChangeSuccess', function(){
   $rootScope.shopLocation=$scope.getSecondPath();
   $rootScope.firstBase=$scope.getFirstPath();
   $rootScope.pageLoading = true;
-  if(($scope.getFirstPath() =='shop')){
+  if( $scope.getFirstPath() =='shop'){
     $rootScope.logoLeft=false;
   }else{
     $rootScope.logoLeft=true;
   }
 
-  setTimeout(function(){
-    $rootScope.pageLoading = false;
-    $rootScope.$apply();
-  }, 800);
+
+  if($scope.getSecondPath){
+    setTimeout(function(){
+      $rootScope.pageLoading = false;
+      $rootScope.$apply();
+    }, 800);
+  }
+
 })
 
 

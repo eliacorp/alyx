@@ -19,9 +19,16 @@
     display: block;
     position: relative;
     margin-top:$margin-top-p;
-    p{
+    .processed-content-text-p{
       width:100%;
       text-align: left;
+      .processed-content-text-span{
+        @include p();
+        margin-top: $margin-top-p;
+      }
+    }
+    a{
+      @include p();
     }
   }
 

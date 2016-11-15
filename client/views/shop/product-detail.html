@@ -4,7 +4,7 @@
 
       <!-- left -->
       <div class="detail-left" ng-class="{'zoom-detail':zoomDetail}" ng-click="zoomDetail=!zoomDetail">
-        <img class="detail-image" src="{{i.url.http}}" alt="{{Detail.description}}" class="product-image" ng-repeat="i in Detail.images"/>
+        <img class="detail-image" ng-class="{'zoom-detail':zoomDetail}" src="{{i.url.https}}" alt="{{Detail.description}}" ng-repeat="i in Detail.images"/>
       </div>
 
 
@@ -27,7 +27,7 @@
 
             <div class="detail-modifiers-variations">
               <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
-              ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}">
+              ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}" ng-if="v.stock_level>0" >
                 <a>{{v.title}}</a>
               </li>
             </div>

@@ -5,7 +5,7 @@ Support.controller('supportCtrl', function($scope, $anchorScroll, $http, $rootSc
 
 
 
-	$rootScope.getContentType('stockist', 'my.stockist.date desc');
+
 
 
 	$scope.stockist = {};

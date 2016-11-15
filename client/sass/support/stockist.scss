@@ -22,9 +22,10 @@
     display: block;
   }
   .stockist-ul{
+    padding-bottom:$margin-top;
     .stockist-li{
       display: block;
-      margin-top: 20px;
+      margin-top: $margin-top-list;
       text-transform: none;
       @include respond-to(phone){
         width: 100%;

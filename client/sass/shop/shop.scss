@@ -69,6 +69,32 @@
   @include transition(all, 0.6s, ease);
 }
 
+
+.error{
+  position: fixed;
+  right:0;
+  top:0;
+  width:75px;
+  height:100vh;
+  border-left: 5px solid $black;
+  z-index:$z-error;
+  background: $white;
+  .error-text{
+    @include h2();
+    width:auto;
+    height:75px;
+    position: absolute;
+    top:50%;
+    right:auto;
+    margin-top: -37.5px;
+    text-align: center;
+    line-height: 75px;
+    vertical-align: middle;
+    @include transform-element(rotate(-90deg) translate(-50%, 50%));
+    @include transform-origin(0 50%);
+  }
+}
+
 .shop-button{
   height: 100%;
   width: 100%;
@@ -119,11 +145,6 @@
   }
 }
 
-.error{
-  position: fixed;
-  right:150px;
-  bottom:$margin-sides;
-}
 
 
 
