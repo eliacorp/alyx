@@ -580,6 +580,8 @@ h3 {
   height: auto;
   margin: auto;
   padding-top: 100px; }
+  .product-ul:nth-child(1) {
+    padding-top: 0; }
   .product-ul .product-li {
     display: block;
     width: 22%;

@@ -9,7 +9,7 @@ Collection.controller('collectionCtrl', function($scope, $location, $rootScope, 
 	$rootScope.Collection = [];
 	var collectionRan = false;
 
-	$rootScope.getContentType('collection', 'my.collection.date desc');
+	// $rootScope.getContentType('collection', 'my.collection.date desc');
 
 
 	$rootScope.chooseCollection=()=>{
@@ -22,6 +22,11 @@ Collection.controller('collectionCtrl', function($scope, $location, $rootScope, 
 			}
 		}
 	};
+
+
+
+
+  	$rootScope.getContentType('collection', 'my.collection.date desc');
 
 
 })

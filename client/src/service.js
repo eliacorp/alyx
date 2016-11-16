@@ -121,8 +121,8 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
           var number, element, scroll, scrollPosition, windowheight;
                   number =  jQuery('#'+id).offset().top;
 
-                 element = jQuery('.main');
-                 scrollPosition =  jQuery('.main').scrollTop();
+                 element = jQuery('html body');
+                 scrollPosition =  jQuery('html body').scrollTop();
                 //  scrollLength = document.getElementById("html body").scrollHeight;
                  windowheight = $rootScope.windowHeight;
                  scroll = scrollPosition + number;

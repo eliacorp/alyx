@@ -14,7 +14,6 @@ $scope.lookbookStatus ="read";
 $scope.selectMainLook=(index)=>{
 
 	console.log(index);
-
 	$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
 	console.log($scope.mainLook);
 
@@ -172,54 +171,49 @@ $scope.showDescription = function(){
 // 				$rootScope.enableScroll();
 // 	}
 // }
-//
-//
-// var newMain;
-//
-// //navigating with keys
-//  jQuery(document.documentElement).keyup(function (event) {
-//
-// 				event.preventDefault();
-// 			 // handle cursor keys
-// 			 if ((event.keyCode == 39)&&($rootScope.isLookbook)) {
-//
-// 				//left right
-// 				var index=$scope.mainLook-1;
-// 				var arrayLength = ($scope.lookbookUnits.length-1);
-//
-// 				if(index < arrayLength){
-// 					var newMain = $scope.mainLook;
-// 				}else if (index >= arrayLength) {
-// 					var newMain = 0;
-// 				}
-//
-// 				 var thisUrl = $scope.lookbookUnits[newMain].src_large;
-// 				 var thisLook = $scope.lookbookUnits[newMain].look;
-//
-// 				 $scope.thisImage(thisLook, thisUrl);
-//
-// 				 $scope.$apply();
-//
-// 			 } else if ((event.keyCode == 37)&&($rootScope.isLookbook)) {
-// //left arrow
-// 				 var index=$scope.mainLook-1;
-//
-// 				 if(index>0){
-// 					 var newMain = $scope.mainLook -2;
-// 				 }else if (index<=0) {
-// 					 var newMain = ($scope.lookbookUnits.length-1);
-// 				 }
-//
-// 				 var thisUrl = $scope.lookbookUnits[newMain].src_large;
-// 				 var thisLook = $scope.lookbookUnits[newMain].look;
-//
-// 				 $scope.thisImage(thisLook, thisUrl);
-//
-// 				 $scope.$apply();
-//
-// 			 }
-//
-// 	 });
+
+
+var newMain;
+
+//navigating with keys
+ jQuery(document.documentElement).keyup(function (event) {
+
+				event.preventDefault();
+				//globals
+				var arrayLength = $rootScope.Collection.data['collection.look'].value.length-1;
+				var index = $rootScope.Collection.data['collection.look'].value.indexOf($scope.mainLook);
+
+
+			 // handle cursor keys
+			 if (event.keyCode == 39) {
+
+
+
+				if(index <arrayLength){
+					index = index+1;
+					console.log(index);
+					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+				}else{
+					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
+				}
+
+
+			 } else if (event.keyCode == 37) {
+
+ 				if(index > 0){
+ 					index = index-1;
+ 					console.log(index);
+ 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+ 				}else{
+ 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[arrayLength];
+ 				}
+
+
+			 }
+
+			 $scope.$apply();
+
+	 });
 //
 //
 //

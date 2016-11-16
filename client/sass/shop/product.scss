@@ -16,6 +16,9 @@
   height:auto;
   margin: auto;
   padding-top:100px;
+  &:nth-child(1){
+    padding-top:0;
+  }
   .product-li{
     display: block;
     width: 22%;

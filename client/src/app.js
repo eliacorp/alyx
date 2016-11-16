@@ -42,9 +42,9 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-.config(['$routeProvider', '$locationProvider','$anchorScrollProvider', ($routeProvider, $locationProvider, $anchorScrollProvider) => {
+.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
 
-  $anchorScrollProvider.disableAutoScrolling();
+  // $anchorScrollProvider.disableAutoScrolling();
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
@@ -370,6 +370,7 @@ var collectionRan = false;
 
                     if (type =='collection'){
                       $rootScope.collections = response.results;
+                      console.log($rootScope.collections);
                       $rootScope.chooseCollection();
                       if(collectionRan == false){
                         collectionRan = true;
@@ -411,6 +412,8 @@ var collectionRan = false;
 
 
   };//get content type
+
+
 
 	$rootScope.getContentType('stockist', 'my.stockist.date desc');
 
