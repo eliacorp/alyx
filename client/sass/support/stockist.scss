@@ -3,6 +3,7 @@
   width: 100vw;
   display: block;
   position: relative;
+
   @include respond-to(phone){
     width: 100vw;
     height:auto;
@@ -43,6 +44,26 @@
       }
       .stockist-country-address{
         @include p();
+      }
+    }
+  }
+}
+
+
+
+
+.stockist-filter{
+  position: fixed;
+  right:$margin-sides;
+  top:200px;
+  z-index: $z-stockist-filter;
+  ul{
+    li{
+      h3{
+        &:hover{
+          color: $white;
+          background-color: $black;
+        }
       }
     }
   }

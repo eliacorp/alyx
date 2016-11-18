@@ -1,11 +1,25 @@
 <div class="anchor-stockists" id="stockistsHash">
 
+  <div class="stockist-filter" ng-show="stockistFilterShow">
+    <ul>
+      <li ng-click="stockistFilter = 'north-america'"><h3>north america</h3></li>
+      <!-- <li ng-click="stockistFilter = 'south-america'"><h3>south america</h3></li> -->
+      <li ng-click="stockistFilter = 'europe'"><h3>europe</h3></li>
+      <li ng-click="stockistFilter = 'asia'"><h3>asia</h3></li>
+      <!-- <li ng-click="stockistFilter = 'africa'"><h3>africa</h3></li> -->
+      <li ng-click="stockistFilter = 'australia'"><h3>australia</h3></li>
+      <li ng-click="stockistFilter = 'online'"><h3>online</h3></li>
+
+    </ul>
+
+  </div>
+
   <div class="stockist-wrapper">
     <ul class="stockist-ul">
-      <li class="stockist-li" ng-repeat="s in Stockist">
+      <li class="stockist-li" ng-repeat="s in Stockist | filter: stockistFilter track by $index">
         <h3 class="stockist-name">{{s.data['stockist.name'].value[0].text}}</h3>
         <p class="stockist-street">{{s.data['stockist.street'].value}}</p>
-        <p class="stockist-country-address">{{s.data['stockist.city'].value}}<span ng-if="s.data['stockist.state'].value">, {{s.data['stockist.state'].value}}</span><span ng-if="s.data['stockist.zip'].value">, {{s.data['stockist.zip'].value}}</span><span ng-if="s.data['stockist.country'].value">, {{s.data['stockist.country'].value}}</span></p>
+        <p class="stockist-country-address"><span ng-if="s.data['stockist.city'].value">{{s.data['stockist.city'].value}}, </span><span ng-if="s.data['stockist.state'].value">{{s.data['stockist.state'].value}}, </span><span ng-if="s.data['stockist.zip'].value">{{s.data['stockist.zip'].value}}, </span><span ng-if="s.data['stockist.country'].value">{{s.data['stockist.country'].value}}</span></p>
       </li>
     </ul>
   </div>

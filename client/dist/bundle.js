@@ -222,6 +222,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }, function (error) {
       console.log(error);
       console.log("products status 400");
+      $rootScope.authentication();
+      $rootScope.getProductsFN();
     });
   };
 
@@ -237,7 +239,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }).then(function (response) {
       $rootScope.Collection_shop = response.data;
     }, function (response) {
-
+      $rootScope.authentication();
       // called asynchronously if an error occurs
       // or server returns response with an error status.
     });
@@ -260,12 +262,15 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }, function (response) {
 
       $scope.error = { value: true, text: 'countries not available, this page will be reloaded' };
+      $route.reload();
     });
   };
   $rootScope.getCountries();
 
   var stockistRan = false;
   var collectionRan = false;
+
+  $rootScope.Stockist;
 
   $rootScope.getContentType = function (type, orderField) {
 
@@ -286,6 +291,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
           }
         } else if (type == 'stockist') {
             console.log(type + " type");
+            console.log("stockist");
             stockistRan = true;
             $rootScope.Stockist = response.results;
             console.log(response.results);
@@ -1153,6 +1159,8 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
         console.log("cart has some stuff");
         $rootScope.attachItemID($rootScope.Cart.contents);
       }
+    }, function (error) {
+      $rootScope.authentication();
     });
   }; //updateCart
 
@@ -1261,6 +1269,7 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
         // }
       }, function (data) {
         console.error("error in posting");
+        $rootScope.authentication();
       });
     } else {
       $rootScope.error = { value: true, text: 'fill in the form correctly' };
@@ -1404,6 +1413,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
         $rootScope.paymentToProcess_paypal();
       }, function (error) {
         console.log(error);
+        $rootScope.authentication();
         $rootScope.pageLoading = false;
       });
     }
@@ -1574,7 +1584,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
     if ($rootScope.Product) {
       var filter = $rootScope.filter;
-      var filtered = [];
+      $rootScope.filtered = [];
 
       if (!filter.collection.selected && !filter.gender.selected) {
         return data;
@@ -1589,26 +1599,26 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
               for (var c in $rootScope.Product[i].category.data) {
                 if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected && $rootScope.Product[i].collection.data.slug == filter.collection.selected) {
-                  filtered = filtered.concat($rootScope.Product[i]);
+                  $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                 }
               }
             } else if ($rootScope.filter.collection.selected) {
 
               console.log("collection", $rootScope.Product[i].collection);
               if ($rootScope.Product[i].collection.data.slug == filter.collection.selected) {
-                filtered = filtered.concat($rootScope.Product[i]);
+                $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
               }
             } else if ($rootScope.filter.gender.selected) {
 
               for (var c in $rootScope.Product[i].category.data) {
                 if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) {
-                  filtered = filtered.concat($rootScope.Product[i]);
+                  $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                 }
               }
             }
           }
         }
-        return filtered;
+        return $rootScope.filtered;
       }
     }
   };
@@ -1616,6 +1626,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
 Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', '$routeParams', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams) {
 
+  // $scope.filtered = [];
   $rootScope.page = "product";
   $rootScope.shopSections = [];
   $rootScope.Section = {};
@@ -1638,7 +1649,7 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   // }
 
   $rootScope.selectFilter = function (thistype, id) {
-    $rootScope.pageLoading = false;
+    // $rootScope.pageLoading = false;
 
     if (!id) {
       $rootScope.filter['collection'].selected = id;
@@ -1757,13 +1768,7 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
     // }
   }, true);
 
-  $scope.$on('$routeChangeSuccess', function () {
-
-    // setTimeout(function(){
-    //
-    // },3000);
-
-  });
+  $scope.$on('$routeChangeSuccess', function () {});
 
   $scope.getVariationsLevel = function (productId) {
     console.log('productId', productId);
@@ -1792,6 +1797,8 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
       }
     }, function (error) {
       console.log(error);
+      $rootScope.authentication();
+      $route.reload();
     });
   };
 
@@ -1806,7 +1813,7 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
         $rootScope.Detail = $rootScope.Product[i];
         $rootScope.Detail.total_variations = 0;
         $rootScope.Detail.has_variation = $rootScope.has_variation;
-        $rootScope.pageLoading = false;
+        // $rootScope.pageLoading = false;
         $scope.getVariationsLevel($rootScope.Detail.id);
 
         var go = true;
@@ -1818,16 +1825,8 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
           $rootScope.selectedVariation[m] = {
             open: true
           };
-
           go = false;
-
           console.log($rootScope.Variations);
-
-          // $rootScope.Detail.modifiers[m].variations=
-
-          // for (var v in $rootScope.Detail.modifiers[i].variations){
-          //
-          // }
         }
 
         if (go == true) {
@@ -2383,13 +2382,13 @@ Social.directive("imageChange", function ($timeout) {
 var Support = angular.module('myApp');
 Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
 
-	$scope.stockist = {};
 	$scope.contact = [];
 	$scope.about;
 	$rootScope.support = [];
 	$rootScope.aboutData = {};
 	$rootScope.contactData = {};
 	$rootScope.stockistData = {};
+	$rootScope.stockistFilterShow = false;
 	// This service's function returns a promise, but we'll deal with that shortly
 
 	$http.get('/data/support')
@@ -2433,12 +2432,38 @@ Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootS
 				// set the $location.hash to `newHash` and
 				// $anchorScroll will automatically scroll to it
 				$location.path(x, false);
-				anchorSmoothScroll.scrollTo(newHash);
+				// anchorSmoothScroll.scrollTo(newHash);
 			}
 		} else {
-			$anchorScroll();
-		}
+				$anchorScroll();
+			}
 	};
+
+	setTimeout(function () {
+		var stockistsOffset = jQuery('#stockistsHash').offset().top;
+		var aboutOffset = jQuery('#aboutHash').offset().top;
+		var contactOffset = jQuery('#contactHash').offset().top;
+		console.log(stockistsOffset, aboutOffset, contactOffset);
+
+		jQuery($window).bind("scroll.support", function (event) {
+
+			scroll = jQuery($window).scrollTop();
+
+			if (scroll >= aboutOffset && scroll < contactOffset) {
+				console.log("about");
+				$rootScope.stockistFilterShow = false;
+			} else if (scroll >= contactOffset && scroll < stockistsOffset) {
+				console.log("contact");
+				$rootScope.stockistFilterShow = false;
+			} else if (scroll >= stockistsOffset) {
+				console.log("stockist");
+				$rootScope.stockistFilterShow = true;
+			}
+			//
+
+			$rootScope.$apply();
+		});
+	}, 600);
 });
 
 Support.directive('aboutDirective', function ($rootScope, $location) {

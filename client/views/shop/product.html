@@ -26,7 +26,7 @@
 </div>
 
 
-
+<!--  -->
 
   <ul class="product-ul" >
     <li class="product-li" ng-repeat="p in Product | shopFilter | orderBy: 'date' track by $index" ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
@@ -37,8 +37,13 @@
         <img src="{{p.images[1].url.https}}" alt="{{p.title}}" class="product-image product-image-two" ng-class="{'fadeOut': flip==false}"/>
       </a>
     </li>
-  </ul>
 
+    <div class="product-li-none" ng-show="(filtered.length == 0 && (filter.collection.selected || filter.gender.selected))">
+      <p>
+        no products match the selected filters
+      </p>
+    </div>
+  </ul>
 
 
 

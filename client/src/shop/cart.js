@@ -47,6 +47,8 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
             console.log("cart has some stuff");
             $rootScope.attachItemID($rootScope.Cart.contents);
           }
+        }, function(error){
+            $rootScope.authentication();
         });
   }//updateCart
 

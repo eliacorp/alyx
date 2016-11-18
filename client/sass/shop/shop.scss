@@ -72,26 +72,30 @@
 
 .error{
   position: fixed;
-  right:0;
+  right:120px;
   top:0;
-  width:75px;
+  width:150px;
   height:100vh;
-  border-left: 5px solid $black;
   z-index:$z-error;
   background: $white;
   .error-text{
     @include h2();
-    width:auto;
-    height:75px;
-    position: absolute;
-    top:50%;
-    right:auto;
-    margin-top: -37.5px;
+    width:100%;
+    color:$red;
+    word-break: initial;
+    white-space: normal;
     text-align: center;
-    line-height: 75px;
-    vertical-align: middle;
-    @include transform-element(rotate(-90deg) translate(-50%, 50%));
-    @include transform-origin(0 50%);
+    display: block;
+    // height:75px;
+    // position: absolute;
+    // top:50%;
+    // right:auto;
+    // margin-top: -37.5px;
+    // text-align: center;
+    // line-height: 75px;
+    // vertical-align: middle;
+    // @include transform-element(rotate(-90deg) translate(-50%, 50%));
+    // @include transform-origin(0 50%);
   }
 }
 

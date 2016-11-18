@@ -247,7 +247,7 @@ input, textarea, select, a, li {
 
 a {
   font-size: 13px;
-  line-height: 24px;
+  line-height: 27px;
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px;
   cursor: pointer;
@@ -324,7 +324,7 @@ h2 {
 
 h3 {
   font-size: 13px;
-  line-height: 24px;
+  line-height: 27px;
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px; }
 
@@ -395,26 +395,6 @@ h3 {
   100% {
     right: 20px;
     top: 20px; } }
-.logo.corner {
-  position: fixed;
-  margin-right: auto;
-  right: 20px;
-  top: 20px;
-  transform: rotateY(0deg) !important;
-  -webkit-transform: rotateY(0deg) !important;
-  -webkit-animation: none;
-  -moz-animation: none;
-  -ms-animation: none;
-  -o-animation: none;
-  animation: none; }
-
-.logo.corner-add.corner-add-active {
-  -webkit-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
-  -moz-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
-  -ms-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
-  -o-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
-  animation: goCorner 1s ease-in-out, rotating 1s linear infinite; }
-
 /*.............................Loader............................*/
 /*.............................NG-CLOAK............................*/
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -490,7 +470,7 @@ h3 {
       margin-bottom: 20px; }
       .nav-ul .nav-li .nav-li-sub a {
         font-size: 13px;
-        line-height: 24px;
+        line-height: 27px;
         font-family: "akzidenz-grotesk-condensed";
         letter-spacing: 4px;
         display: block;
@@ -553,18 +533,36 @@ h3 {
   left: 50%;
   bottom: 20px;
   z-index: 15; }
-  .logo h1 {
-    width: 100%;
-    text-align: center;
-    font-size: 23px;
-    line-height: 50px;
-    font-family: "akzidenz-grotesk-condensed";
-    letter-spacing: 4px;
-    line-height: 7px; }
+  .logo img {
+    left: 33px;
+    bottom: 19px;
+    width: 33px;
+    height: 33px;
+    position: absolute; }
 
 .logo.logo-left {
   left: 20px;
   margin-left: 0; }
+
+.logo.corner {
+  position: fixed;
+  margin-right: auto;
+  right: 20px;
+  top: 20px;
+  transform: rotateY(0deg) !important;
+  -webkit-transform: rotateY(0deg) !important;
+  -webkit-animation: none;
+  -moz-animation: none;
+  -ms-animation: none;
+  -o-animation: none;
+  animation: none; }
+
+.logo.corner-add.corner-add-active {
+  -webkit-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
+  -moz-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
+  -ms-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
+  -o-animation: goCorner 1s ease-in-out, rotating 1s linear infinite;
+  animation: goCorner 1s ease-in-out, rotating 1s linear infinite; }
 
 .product {
   width: calc(100vw - 75px);
@@ -606,6 +604,9 @@ h3 {
           margin-left: 0; }
       .product-ul .product-li a .product-price {
         width: 100%; }
+
+.product-li-none p {
+  text-align: center; }
 
 .product-image {
   opacity: 1;
@@ -652,7 +653,7 @@ h3 {
         margin-top: 0; }
       .product-filter .product-filter-ul .product-filter-li a {
         font-size: 13px;
-        line-height: 24px;
+        line-height: 27px;
         font-family: "akzidenz-grotesk-condensed";
         letter-spacing: 4px;
         color: #000000;
@@ -664,7 +665,7 @@ h3 {
       position: absolute;
       margin-top: 20px;
       font-size: 13px;
-      line-height: 24px;
+      line-height: 27px;
       font-family: "akzidenz-grotesk-condensed";
       letter-spacing: 4px; }
 
@@ -773,7 +774,7 @@ h3 {
   width: auto;
   margin-top: 20px;
   font-size: 13px;
-  line-height: 24px;
+  line-height: 27px;
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px; }
 
@@ -809,7 +810,7 @@ h3 {
       display: block;
       float: left;
       font-size: 13px;
-      line-height: 24px;
+      line-height: 27px;
       font-family: "akzidenz-grotesk-condensed";
       letter-spacing: 4px;
       text-transform: uppercase; }
@@ -823,7 +824,7 @@ h3 {
         margin-left: 10px; }
         .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a {
           font-size: 13px;
-          line-height: 24px;
+          line-height: 27px;
           font-family: "akzidenz-grotesk-condensed";
           letter-spacing: 4px;
           color: #D3D3D3;
@@ -1104,11 +1105,10 @@ h3 {
 
 .error {
   position: fixed;
-  right: 0;
+  right: 120px;
   top: 0;
-  width: 75px;
+  width: 150px;
   height: 100vh;
-  border-left: 5px solid #000000;
   z-index: 15;
   background: #FFFFFF; }
   .error .error-text {
@@ -1116,30 +1116,12 @@ h3 {
     line-height: 28px;
     font-family: "akzidenz-grotesk-condensed";
     letter-spacing: 4px;
-    width: auto;
-    height: 75px;
-    position: absolute;
-    top: 50%;
-    right: auto;
-    margin-top: -37.5px;
+    width: 100%;
+    color: #FF0000;
+    word-break: initial;
+    white-space: normal;
     text-align: center;
-    line-height: 75px;
-    vertical-align: middle;
-    transform: rotate(-90deg) translate(-50%, 50%);
-    -ms-transform: rotate(-90deg) translate(-50%, 50%);
-    /* IE 9 */
-    -webkit-transform: rotate(-90deg) translate(-50%, 50%);
-    /* Safari */
-    -moz-transform: rotate(-90deg) translate(-50%, 50%);
-    /* Mozilla */
-    -o-transform: rotate(-90deg) translate(-50%, 50%);
-    /* Opera */
-    transform-origin: 0 0;
-    transform-origin: 0 50%;
-    -webkit-transform-origin: 0 50%;
-    -moz-transform-origin: 0 50%;
-    -ms-transform-origin: 0 50%;
-    -o-transform-origin: 0 50%; }
+    display: block; }
 
 .shop-button {
   height: 100%;
@@ -1406,7 +1388,7 @@ h3 {
 
 .form-sub-title {
   font-size: 13px;
-  line-height: 24px;
+  line-height: 27px;
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px; }
 
@@ -2656,6 +2638,15 @@ select {
         font-weight: normal;
         text-transform: none; }
 
+.stockist-filter {
+  position: fixed;
+  right: 20px;
+  top: 200px;
+  z-index: 8; }
+  .stockist-filter ul li h3:hover {
+    color: #FFFFFF;
+    background-color: #000000; }
+
 .social-wrapper .social-content {
   width: 100%;
   height: auto;
@@ -2996,7 +2987,7 @@ select {
     .social-wrapper .social-content .social-account a {
       color: rgba(0, 0, 0, 0.3);
       font-size: 13px;
-      line-height: 24px;
+      line-height: 27px;
       font-family: "akzidenz-grotesk-condensed";
       letter-spacing: 4px;
       color: #000000;

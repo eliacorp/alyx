@@ -6,7 +6,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
     if($rootScope.Product){
                 var filter = $rootScope.filter;
-                var filtered = [];
+                $rootScope.filtered = [];
 
 
                 if(!filter.collection.selected && !filter.gender.selected){
@@ -24,7 +24,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
                         for (var c in $rootScope.Product[i].category.data){
                           if(($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product[i].collection.data.slug == filter.collection.selected)){
-                            filtered = filtered.concat($rootScope.Product[i]);
+                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                           }
                         }
 
@@ -32,14 +32,14 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
                         console.log("collection",$rootScope.Product[i].collection);
                         if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
-                          filtered = filtered.concat($rootScope.Product[i]);
+                          $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                         }
 
                       }else if($rootScope.filter.gender.selected){
 
                         for (var c in $rootScope.Product[i].category.data){
                           if($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected){
-                            filtered = filtered.concat($rootScope.Product[i]);
+                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                           }
                         }
                       }
@@ -49,7 +49,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
 
                   }
-                  return filtered;
+                  return $rootScope.filtered;
                 }
 
     }
@@ -59,6 +59,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
 Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams){
 
+  // $scope.filtered = [];
   $rootScope.page = "product";
   $rootScope.shopSections= [];
   $rootScope.Section= {};
@@ -90,7 +91,7 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
 
 
 $rootScope.selectFilter=(thistype, id)=>{
-  $rootScope.pageLoading = false;
+  // $rootScope.pageLoading = false;
 
   if(!id){
     $rootScope.filter['collection'].selected = id;
@@ -258,12 +259,6 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
 
-
-    // setTimeout(function(){
-    //
-    // },3000);
-
-
   });
 
 
@@ -298,6 +293,8 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
     },function(error){
       console.log(error);
+        $rootScope.authentication();
+        $route.reload();
 
     });
   }
@@ -309,18 +306,14 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations=0;
 
-
     for (var i in $rootScope.Product){
       if ($rootScope.Product[i].sku == sku){
         $rootScope.Product[i].sku
         $rootScope.Detail=$rootScope.Product[i];
         $rootScope.Detail.total_variations=0;
         $rootScope.Detail.has_variation = $rootScope.has_variation;
-        $rootScope.pageLoading = false;
+        // $rootScope.pageLoading = false;
         $scope.getVariationsLevel($rootScope.Detail.id);
-
-
-
 
         var go = true;
         //has variation
@@ -332,17 +325,8 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
             {
               open: true
             }
-
             go = false;
-
             console.log($rootScope.Variations);
-
-// $rootScope.Detail.modifiers[m].variations=
-
-            // for (var v in $rootScope.Detail.modifiers[i].variations){
-            //
-            // }
-
 
 
         }

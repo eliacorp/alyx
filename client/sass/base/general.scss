@@ -265,46 +265,6 @@ h3{
 $animation-bezier: ease-in-out;
 $animation-speed: 1s;
 
-// .logo{
-//   position: fixed;
-//   left: 50%;
-//   top: auto;
-// }
-
-
-.logo.corner{
-  position: fixed;
-  margin-right:auto;
-  right:$margin-sides;
-  top: $margin-sides;
-  transform: rotateY(0deg) !important;
-  -webkit-transform: rotateY(0deg) !important;
-
-  -webkit-animation: none;
-  -moz-animation: none;
-  -ms-animation: none;
-  -o-animation: none;
-  animation: none;
-}
-
-
-.logo.corner-remove.corner-remove-active{
-  // -webkit-animation: goCorner $animation-speed $animation-bezier;
-  // -moz-animation: goCorner $animation-speed $animation-bezier;
-  // -ms-animation: goCorner $animation-speed $animation-bezier;
-  // -o-animation: goCorner $animation-speed $animation-bezier;
-  // animation: goCorner $animation-speed $animation-bezier;
-}
-
-.logo.corner-add.corner-add-active{
-  -webkit-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
-  -moz-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
-  -ms-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
-  -o-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
-  animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
-}
-
-
 
 /*.............................Loader............................*/
 

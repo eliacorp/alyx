@@ -275,6 +275,8 @@ $rootScope.getProductsFN=function(){
   }, function(error){
     console.log(error);
     console.log("products status 400");
+      $rootScope.authentication();
+      $rootScope.getProductsFN();
   });
 }
 
@@ -298,9 +300,8 @@ $rootScope.getProductsFN();
           url: '/getCollections'
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
-
           }, function (response) {
-
+              $rootScope.authentication();
             // called asynchronously if an error occurs
             // or server returns response with an error status.
           });
@@ -336,6 +337,7 @@ $rootScope.setPage = (page)=>{
     }, function(response) {
 
       $scope.error = {value: true, text:'countries not available, this page will be reloaded'};
+      $route.reload();
 
     });
   };
@@ -353,6 +355,7 @@ var collectionRan = false;
 
 
 
+$rootScope.Stockist;
 
   $rootScope.getContentType = function(type, orderField){
 
@@ -380,6 +383,7 @@ var collectionRan = false;
                         }
                       }else if(type =='stockist'){
                         console.log(type+ " type");
+                        console.log("stockist");
                         stockistRan = true;
                         $rootScope.Stockist = response.results;
                         console.log(response.results);

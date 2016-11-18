@@ -96,16 +96,59 @@
   left: 50%;
   bottom:$margin-sides;
   z-index:$z-logo;
-  h1{
-    width:100%;
-    text-align: center;
-    @include h1();
-    line-height: 7px;
+  img{
+    left: 33px;
+    bottom: 19px;
+    width: 33px;
+    height: 33px;
+    position: absolute;
   }
+
 }
 
 
 .logo.logo-left{
   left:$margin-sides;
   margin-left: 0;
+}
+
+
+
+// .logo{
+//   position: fixed;
+//   left: 50%;
+//   top: auto;
+// }
+
+
+.logo.corner{
+  position: fixed;
+  margin-right:auto;
+  right:$margin-sides;
+  top: $margin-sides;
+  transform: rotateY(0deg) !important;
+  -webkit-transform: rotateY(0deg) !important;
+
+  -webkit-animation: none;
+  -moz-animation: none;
+  -ms-animation: none;
+  -o-animation: none;
+  animation: none;
+}
+
+
+.logo.corner-remove.corner-remove-active{
+  // -webkit-animation: goCorner $animation-speed $animation-bezier;
+  // -moz-animation: goCorner $animation-speed $animation-bezier;
+  // -ms-animation: goCorner $animation-speed $animation-bezier;
+  // -o-animation: goCorner $animation-speed $animation-bezier;
+  // animation: goCorner $animation-speed $animation-bezier;
+}
+
+.logo.corner-add.corner-add-active{
+  -webkit-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  -moz-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  -ms-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  -o-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
 }

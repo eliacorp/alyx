@@ -4,17 +4,13 @@ var Support = angular.module('myApp');
 Support.controller('supportCtrl', function($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache){
 
 
-
-
-
-
-	$scope.stockist = {};
   $scope.contact = [];
   $scope.about;
 	$rootScope.support = [];
 	$rootScope.aboutData ={};
 	$rootScope.contactData ={};
 	$rootScope.stockistData ={};
+	$rootScope.stockistFilterShow = false;
 	// This service's function returns a promise, but we'll deal with that shortly
 
 	$http.get('/data/support')
@@ -68,7 +64,7 @@ $rootScope.supportScrollTo();
 							// set the $location.hash to `newHash` and
 							// $anchorScroll will automatically scroll to it
 								$location.path(x, false);
-								anchorSmoothScroll.scrollTo(newHash);
+								// anchorSmoothScroll.scrollTo(newHash);
 							}
 						}else {
 							$anchorScroll();
@@ -77,6 +73,38 @@ $rootScope.supportScrollTo();
 
 
 
+setTimeout(function(){
+	var stockistsOffset = jQuery('#stockistsHash').offset().top;
+	var aboutOffset = jQuery('#aboutHash').offset().top;
+	var contactOffset = jQuery('#contactHash').offset().top;
+	console.log(stockistsOffset, aboutOffset, contactOffset);
+
+
+	jQuery($window).bind("scroll.support", function(event) {
+
+					scroll =  jQuery($window).scrollTop();
+
+
+					if((scroll>=aboutOffset)&&(scroll<contactOffset)){
+						console.log("about");
+						$rootScope.stockistFilterShow = false;
+
+					}else if((scroll>=contactOffset)&&(scroll<stockistsOffset)){
+						console.log("contact");
+						$rootScope.stockistFilterShow = false;
+
+					}else if(scroll>=stockistsOffset){
+						console.log("stockist");
+						$rootScope.stockistFilterShow = true;
+
+					}
+					//
+
+					$rootScope.$apply();
+
+		});
+
+}, 600);
 
 
 

@@ -59,10 +59,13 @@ app.use(function(req, res, next) {
 
 
 app.get('/authenticate', function(req, res){
+  authMoltin(req, res);
+});
 
+
+function authMoltin(req, res){
   moltin.Authenticate(function(data) {
     console.log("auth");
-
     console.log(data);
 
     if(data){
@@ -86,7 +89,7 @@ app.get('/authenticate', function(req, res){
     }
 
   });
-});
+}
 
 
 
@@ -289,7 +292,43 @@ app.get('/authenticate', function(req, res){
           console.log("wait for the order");
           console.log(order);
 
-          res.json(order);
+
+          if (order.ship_to.data.country.data.code == 'IT'){
+
+            var tax_value = (order.totals.subtotal.raw * 0.22);
+            var total_value = (order.totals.shipping_price.raw  + tax_value + order.totals.subtotal.raw);
+
+
+            console.log(tax_value);
+
+            var tax  = {
+              // formatted:
+              raw: tax_value,
+              rounded: tax_value
+            }
+            var total = {
+              raw: total_value,
+              rounded: total_value
+            }
+
+            order.totals.tax = tax;
+            order.totals.total = total;
+
+            req.body = req.order.totals;
+            req.params.order = order.id;
+
+            putOrder(req, res);
+
+            // order.totals.tax =
+
+          } else {
+
+            res.json(order);
+
+          }
+
+
+
             // Handle the order
 
         }, function(error, response, c) {
@@ -310,8 +349,8 @@ app.get('/authenticate', function(req, res){
         console.log(order.gateway);
         var obj={};
         obj = {
-                  return_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express',
-                  cancel_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express/canceled'
+                return_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express',
+                cancel_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express/canceled'
               }
 
 
@@ -448,7 +487,7 @@ function getVariationsLevel(req, res){
 
 
 
-    function putOrder (req,res){
+    function putOrder (req, res){
       var orderID = req.params.order;
       var obj = req.body;
       console.log("body");
@@ -458,13 +497,16 @@ function getVariationsLevel(req, res){
 
       moltin.Order.Update(orderID, obj, function(order) {
         console.log(order);
-          res.status(200).json(order);
+        res.status(200).json(order);
       }, function(error, response, c) {
           res.status(400).json(error);
           console.log(response);
           // Something went wrong...
       });
     }
+
+
+
 
 
 

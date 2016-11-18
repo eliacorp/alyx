@@ -21,30 +21,6 @@
               "perspective. Today Williams lives and works in New York City."
             ]
         },
-
-
-        {
-          "contact":
-          [
-            { "contactTitle":"Sales",
-              "contactName":"Alyx Studio",
-              "contactStreet":"9 St. Marks Place",
-              "contactCity": "New York City, NY 10003",
-              "contactStreet_2":  "Via Francesco Luigi Ferarri 37/A",
-              "contactCity_2":"Ferrara, Italy 44122",
-              "contactPhone":"+39 0532 251211",
-              "contactEmail":"jaw@alyxstudio.com"
-            },
-
-            { "contactTitle":"Press",
-              "contactName":"PR Consulting",
-              "contactStreet": "304 Hudson Street, 8th Floor",
-              "contactCity": "New York NY 10013",
-              "contactPhone":"+1 212 228 8181",
-              "contactEmail":"alyxstudio@prconsulting.net"
-            }
-          ]
-        },
         {
           "stores": [
                       {

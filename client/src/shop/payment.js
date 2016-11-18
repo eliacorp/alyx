@@ -57,6 +57,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
         $rootScope.paymentToProcess_paypal();
       }, function(error){
         console.log(error);
+          $rootScope.authentication();
         $rootScope.pageLoading = false;
       })
     }

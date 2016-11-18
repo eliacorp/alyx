@@ -50,8 +50,8 @@ $rootScope.checkout = {
       $location.path('/shop/payment');
       mailchimp.register($rootScope.checkout);
 
-
       $http.post('/cartToOrder', $rootScope.checkout)
+
       .then(function(response) {
         $rootScope.Order=response.data;
         $rootScope.payment.id = response.data.id;
@@ -64,6 +64,7 @@ $rootScope.checkout = {
 
         }, function(data) {
             console.error("error in posting");
+            $rootScope.authentication();
       });
 
 
