@@ -55,16 +55,11 @@ $rootScope.checkout = {
       .then(function(response) {
         $rootScope.Order=response.data;
         $rootScope.payment.id = response.data.id;
-          console.log($rootScope.Order);
-          console.log("posted successfully");
+        console.log($rootScope.Order);
+        console.log("posted successfully");
 
-          // if($rootScope.checkout.gateway=='paypal'){
-          //   $rootScope.paymentToProcess_paypal();
-          // }
-
-        }, function(data) {
-            console.error("error in posting");
-            $rootScope.authentication();
+      }, function(data) {
+          console.error("error in posting");
       });
 
 

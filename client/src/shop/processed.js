@@ -83,10 +83,75 @@ $rootScope.loadVideo = ()=>{
   }, 2500);
 }
 
-
-
-
   $rootScope.loadVideo();
+
+
+
+
+
+$rootScope.getOrderItems = ()=>{
+  var orderID = $routeParams.order;
+  console.log("$routeParams.order:",$routeParams.order);
+  $http({
+    url: '/order/'+orderID+'/items',
+    method: 'GET'
+  }).then( function(response){
+    console.log(response.data);
+
+    $rootScope.Processed.data.items= response.data;
+    $scope.searchProduct(response.data.result);
+
+
+  }, function(error){
+    console.log(error);
+    $rootScope.Processed = {value: false, error:true, data:error.data};
+
+  })
+}
+
+$rootScope.getOrderItems();
+
+ $scope.searchProduct = (data) =>{
+  var contents = data;
+  console.log("updateOverallStockFN");
+  console.log(contents);
+
+    for (var i in contents){
+
+      var key = Object.keys(contents[i].product.data.modifiers)[0];
+
+      var thisProduct = contents[i].product.data.modifiers[key].data.product
+      console.log(contents[i].product.data.modifiers[key].data.product);
+
+        for (var p in $rootScope.Product){
+          if($rootScope.Product[p].id==thisProduct){
+            // var thisProduct = $rootScope.Product[p].id;
+            var quantity = contents[i].quantity;
+            var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
+            console.log('thisProduct: '+thisProduct);
+            console.log('stock: '+stock);
+            $scope.updateStockLevel(thisProduct, stock);
+          }
+        }
+    }//for loop
+}
+
+
+
+
+$scope.updateStockLevel =(thisProduct, stock)=>{
+  $http.post('/product/'+thisProduct+'/stock_level/'+stock)
+  .then( function(response){
+    console.log(response);
+
+  }, function(error){
+    console.log(error);
+
+  })
+}
+
+
+
 
 
 

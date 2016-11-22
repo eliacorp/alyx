@@ -270,22 +270,19 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
       url: '/product/'+productId+'/variations/get',
       method: 'GET',
     }).then(function(response){
-      console.log(response);
       $rootScope.Variations=response.data.result;
       var n = 0;
       for (var m in $rootScope.Detail.modifiers){
         for (var v in $rootScope.Detail.modifiers[m].variations){
 
-          $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[n].stock_level;
+          for (var t in $rootScope.Variations){
+            var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+            var title = $rootScope.Variations[t].modifiers[key].var_title;
 
-          console.log($rootScope.Detail.modifiers[m].variations[v].stock_level);
-          n=n+1;
-
-          // for (var n in $rootScope.Variations){
-          //   if ($rootScope.Detail.modifiers[m].variations[v].id==$rootScope.Variations[n].id){
-          //     // $rootScope.Detail.modifiers[m].variations[v].stock_level=$rootScope.Variations[n].stock_level;
-          //   }
-          // }
+            if(title==$rootScope.Detail.modifiers[m].variations[v].title){
+              $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+            }
+          }
 
         }
 
@@ -293,7 +290,6 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
     },function(error){
       console.log(error);
-        $rootScope.authentication();
         $route.reload();
 
     });

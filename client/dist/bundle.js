@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // /*global $ */
 
-_angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['$rootScope', '$location', '$route', '$templateCache', function ($rootScope, $location, $route, $templateCache) {
+_angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['$rootScope', '$location', '$route', '$templateCache', '$http', function ($rootScope, $location, $route, $templateCache, $http) {
   $rootScope.pageLoading = true;
 
   var original = $location.path;
@@ -45,6 +45,37 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }
     return original.apply($location, [path]);
   };
+
+  // $rootScope.authentication = function(){
+  //
+  //       // Simple GET request example:
+  //       $http({
+  //         method: 'GET',
+  //         url: '/authenticate'
+  //       }).then(function successCallback(response) {
+  //
+  //         if(response.data.access_token || response.data.token){
+  //             // this callback will be called asynchronously
+  //             // when the response is available
+  //             console.log(response.data);
+  //             var expires = response.data.expires;
+  //             var identifier = response.data.identifier;
+  //             var expires_in = response.data.expires_in;
+  //             var access_token = response.data.access_token;
+  //             var type = response.data.token_type;
+  //
+  //             // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
+  //
+  //         }
+  //
+  //         }, function errorCallback(response) {
+  //           // called asynchronously if an error occurs
+  //           // or server returns response with an error status.
+  //         });
+  //
+  // }//addToCart
+  //
+  // $rootScope.authentication();
 }]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
   // $anchorScrollProvider.disableAutoScrolling();
@@ -176,34 +207,6 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   // 	// return null;
   // }
 
-  $rootScope.authentication = function () {
-
-    // Simple GET request example:
-    $http({
-      method: 'GET',
-      url: '/authenticate'
-    }).then(function successCallback(response) {
-
-      if (response.data.access_token || response.data.token) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log(response.data);
-        var expires = response.data.expires;
-        var identifier = response.data.identifier;
-        var expires_in = response.data.expires_in;
-        var access_token = response.data.access_token;
-        var type = response.data.token_type;
-        $rootScope.getCollections();
-        // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-      }
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-    });
-  }; //addToCart
-
-  $rootScope.authentication();
-
   //get products
   $rootScope.Product;
 
@@ -222,8 +225,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }, function (error) {
       console.log(error);
       console.log("products status 400");
-      $rootScope.authentication();
-      $rootScope.getProductsFN();
+      // $rootScope.getProductsFN();
     });
   };
 
@@ -239,11 +241,13 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }).then(function (response) {
       $rootScope.Collection_shop = response.data;
     }, function (response) {
-      $rootScope.authentication();
+
       // called asynchronously if an error occurs
       // or server returns response with an error status.
     });
-  }; //addToCart
+  }; //getCollections
+
+  $rootScope.getCollections();
 
   $rootScope.setPage = function (page) {
     $rootScope.page = page;
@@ -1138,17 +1142,12 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   });
 
   $rootScope.updateCart = function () {
+    console.log("updatecart");
     $http({
-      url: '/getCart',
-      method: 'GET',
-      headers: {
-        // 'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      transformRequest: transformRequestAsFormPost
-      // data: {
-      //       }
+      url: '/cart/get',
+      method: 'GET'
     }).then(function (response) {
+      console.log(response);
       $rootScope.Cart = response.data;
 
       console.log($rootScope.Cart);
@@ -1159,12 +1158,12 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
         console.log("cart has some stuff");
         $rootScope.attachItemID($rootScope.Cart.contents);
       }
-    }, function (error) {
-      $rootScope.authentication();
-    });
+    }, function (error) {});
   }; //updateCart
 
-  $rootScope.updateCart();
+  setTimeout(function () {
+    $rootScope.updateCart();
+  }, 2000);
 
   $rootScope.removeItem = function (id) {
 
@@ -1263,13 +1262,8 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
         $rootScope.payment.id = response.data.id;
         console.log($rootScope.Order);
         console.log("posted successfully");
-
-        // if($rootScope.checkout.gateway=='paypal'){
-        //   $rootScope.paymentToProcess_paypal();
-        // }
       }, function (data) {
         console.error("error in posting");
-        $rootScope.authentication();
       });
     } else {
       $rootScope.error = { value: true, text: 'fill in the form correctly' };
@@ -1413,7 +1407,6 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
         $rootScope.paymentToProcess_paypal();
       }, function (error) {
         console.log(error);
-        $rootScope.authentication();
         $rootScope.pageLoading = false;
       });
     }
@@ -1573,6 +1566,58 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
   };
 
   $rootScope.loadVideo();
+
+  $rootScope.getOrderItems = function () {
+    var orderID = $routeParams.order;
+    console.log("$routeParams.order:", $routeParams.order);
+    $http({
+      url: '/order/' + orderID + '/items',
+      method: 'GET'
+    }).then(function (response) {
+      console.log(response.data);
+
+      $rootScope.Processed.data.items = response.data;
+      $scope.searchProduct(response.data.result);
+    }, function (error) {
+      console.log(error);
+      $rootScope.Processed = { value: false, error: true, data: error.data };
+    });
+  };
+
+  $rootScope.getOrderItems();
+
+  $scope.searchProduct = function (data) {
+    var contents = data;
+    console.log("updateOverallStockFN");
+    console.log(contents);
+
+    for (var i in contents) {
+
+      var key = Object.keys(contents[i].product.data.modifiers)[0];
+
+      var thisProduct = contents[i].product.data.modifiers[key].data.product;
+      console.log(contents[i].product.data.modifiers[key].data.product);
+
+      for (var p in $rootScope.Product) {
+        if ($rootScope.Product[p].id == thisProduct) {
+          // var thisProduct = $rootScope.Product[p].id;
+          var quantity = contents[i].quantity;
+          var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
+          console.log('thisProduct: ' + thisProduct);
+          console.log('stock: ' + stock);
+          $scope.updateStockLevel(thisProduct, stock);
+        }
+      }
+    } //for loop
+  };
+
+  $scope.updateStockLevel = function (thisProduct, stock) {
+    $http.post('/product/' + thisProduct + '/stock_level/' + stock).then(function (response) {
+      console.log(response);
+    }, function (error) {
+      console.log(error);
+    });
+  };
 });
 
 },{}],10:[function(require,module,exports){
@@ -1777,27 +1822,23 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
       url: '/product/' + productId + '/variations/get',
       method: 'GET'
     }).then(function (response) {
-      console.log(response);
       $rootScope.Variations = response.data.result;
       var n = 0;
       for (var m in $rootScope.Detail.modifiers) {
         for (var v in $rootScope.Detail.modifiers[m].variations) {
 
-          $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[n].stock_level;
+          for (var t in $rootScope.Variations) {
+            var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+            var title = $rootScope.Variations[t].modifiers[key].var_title;
 
-          console.log($rootScope.Detail.modifiers[m].variations[v].stock_level);
-          n = n + 1;
-
-          // for (var n in $rootScope.Variations){
-          //   if ($rootScope.Detail.modifiers[m].variations[v].id==$rootScope.Variations[n].id){
-          //     // $rootScope.Detail.modifiers[m].variations[v].stock_level=$rootScope.Variations[n].stock_level;
-          //   }
-          // }
+            if (title == $rootScope.Detail.modifiers[m].variations[v].title) {
+              $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+            }
+          }
         }
       }
     }, function (error) {
       console.log(error);
-      $rootScope.authentication();
       $route.reload();
     });
   };

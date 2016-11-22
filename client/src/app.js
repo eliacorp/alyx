@@ -10,7 +10,7 @@ import Prismic from 'prismic.io'
  // /*global $ */
 
 angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
-.run(['$rootScope', '$location','$route','$templateCache',($rootScope, $location, $route,$templateCache)=>{
+.run(['$rootScope', '$location','$route','$templateCache','$http', ($rootScope, $location, $route,$templateCache, $http)=>{
   $rootScope.pageLoading = true;
 
     var original = $location.path;
@@ -37,6 +37,43 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
         }
         return original.apply($location, [path]);
     };
+
+
+
+
+
+
+    // $rootScope.authentication = function(){
+    //
+    //       // Simple GET request example:
+    //       $http({
+    //         method: 'GET',
+    //         url: '/authenticate'
+    //       }).then(function successCallback(response) {
+    //
+    //         if(response.data.access_token || response.data.token){
+    //             // this callback will be called asynchronously
+    //             // when the response is available
+    //             console.log(response.data);
+    //             var expires = response.data.expires;
+    //             var identifier = response.data.identifier;
+    //             var expires_in = response.data.expires_in;
+    //             var access_token = response.data.access_token;
+    //             var type = response.data.token_type;
+    //
+    //             // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
+    //
+    //         }
+    //
+    //         }, function errorCallback(response) {
+    //           // called asynchronously if an error occurs
+    //           // or server returns response with an error status.
+    //         });
+    //
+    // }//addToCart
+    //
+    // $rootScope.authentication();
+
 
 }])
 
@@ -220,36 +257,6 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 // }
 
 
-  $rootScope.authentication = function(){
-
-        // Simple GET request example:
-        $http({
-          method: 'GET',
-          url: '/authenticate'
-        }).then(function successCallback(response) {
-
-          if(response.data.access_token || response.data.token){
-              // this callback will be called asynchronously
-              // when the response is available
-              console.log(response.data);
-              var expires = response.data.expires;
-              var identifier = response.data.identifier;
-              var expires_in = response.data.expires_in;
-              var access_token = response.data.access_token;
-              var type = response.data.token_type;
-              $rootScope.getCollections();
-              // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-
-          }
-
-          }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-          });
-
-  }//addToCart
-
-  $rootScope.authentication();
 
 
 
@@ -275,13 +282,13 @@ $rootScope.getProductsFN=function(){
   }, function(error){
     console.log(error);
     console.log("products status 400");
-      $rootScope.authentication();
-      $rootScope.getProductsFN();
+      // $rootScope.getProductsFN();
   });
 }
 
 
 $rootScope.getProductsFN();
+
 
 
 
@@ -301,14 +308,14 @@ $rootScope.getProductsFN();
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
           }, function (response) {
-              $rootScope.authentication();
+
             // called asynchronously if an error occurs
             // or server returns response with an error status.
           });
 
-  }//addToCart
+  }//getCollections
 
-
+$rootScope.getCollections();
 
 
 

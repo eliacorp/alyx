@@ -26,17 +26,12 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
 
 
   $rootScope.updateCart = function(){
+    console.log("updatecart");
         $http({
-          url: '/getCart',
-          method: 'GET',
-          headers: {
-            // 'Content-Type': 'application/json'
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          transformRequest: transformRequestAsFormPost
-          // data: {
-          //       }
+          url: '/cart/get',
+          method: 'GET'
         }).then(function(response){
+          console.log(response);
           $rootScope.Cart = response.data;
 
           console.log($rootScope.Cart);
@@ -48,12 +43,14 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
             $rootScope.attachItemID($rootScope.Cart.contents);
           }
         }, function(error){
-            $rootScope.authentication();
+
         });
   }//updateCart
 
-
+setTimeout(function(){
   $rootScope.updateCart();
+},2000);
+
 
 
 

@@ -70,7 +70,7 @@
         </div>
 
         <div class="form-entry">
-          <select name="country_shipment" ng-model="checkout.shipment.country" required>
+          <select class="select" name="country_shipment" ng-model="checkout.shipment.country" required>
             <option ng-repeat="country in countries" value="{{country.code}}">{{country.name}}</option>
             <span class="form-error" ng-show="checkoutForm.country_shipment.$error.required && checkoutForm.country_shipment.$touched">required</span>
           </select>
@@ -142,7 +142,7 @@
         <div class="form-entry">
 
           <div class="form-entry">
-            <select name="country_billing" ng-model="checkout.billing.country" required>
+            <select class="select" name="country_billing" ng-model="checkout.billing.country" required>
               <option ng-repeat="country in countries" value="{{country.code}}">{{country.name}}</option>
               <span class="form-error" ng-show="checkoutForm.country_billing.$error.required && checkoutForm.country_billing.$touched">required</span>
             </select>
