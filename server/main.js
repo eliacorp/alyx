@@ -238,6 +238,10 @@ function setToHappen(d){
       updateProductStock(req, res);
     })
 
+    app.post('/cart/erase', function(req, res){
+      eraseCart(req, res);
+    })
+
 
 
     function getCart(req, res){
@@ -431,7 +435,6 @@ function setToHappen(d){
 
         }, function(error, response, c) {
           console.log("payment failed!");
-          console.log("response: "+response);
           console.log("c: "+c);
           console.log("error: "+error);
           res.status(c).json(response);
@@ -470,7 +473,6 @@ function setToHappen(d){
 
             }, function(error, response, c) {
               console.log("payment failed!");
-              console.log("response: "+response);
               console.log("c: "+c);
               console.log("error: "+error);
 
@@ -575,7 +577,7 @@ function getVariationsLevel(req, res){
         res.status(200).json(order);
       }, function(error, response, c) {
           res.status(400).json(error);
-          console.log(response);
+          console.log(error);
           // Something went wrong...
       });
     }
@@ -641,7 +643,6 @@ function updateProductStock(req, res){
 
     }, function(error, response, c) {
       console.log("stock level update failed!");
-      console.log("response: "+response);
       console.log("c: "+c);
       console.log("error: "+error);
       res.status(c).json(response);
@@ -653,7 +654,19 @@ function updateProductStock(req, res){
 
 
 
+function eraseCart(req, res){
 
+  moltin.Cart.Delete(function() {
+      res.status(c).json(response);
+
+  }, function(error) {
+    console.log("stock level update failed!");
+    console.log("c: "+c);
+    console.log("error: "+error);
+    res.status(c).json(response);
+  });
+
+}
 
 
 
@@ -671,7 +684,19 @@ function updateProductStock(req, res){
 
 
 
-    //
+
+
+
+
+
+
+
+
+
+
+
+
+
     // const options = {
     //   key: fs.readFileSync('.//keys/key.pem', 'utf8'),
     //   cert: fs.readFileSync('.//keys/cert.pem', 'utf8')

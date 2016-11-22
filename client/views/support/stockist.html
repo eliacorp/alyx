@@ -2,13 +2,13 @@
 
   <div class="stockist-filter" ng-show="stockistFilterShow">
     <ul>
-      <li ng-click="stockistFilter = 'north-america'"><h3>north america</h3></li>
+      <li ng-click="stockistFilter = 'north-america'"><h3 class="stockist-filter-name" ng-class="{'active': stockistFilter == 'north-america'}">north america</h3></li>
       <!-- <li ng-click="stockistFilter = 'south-america'"><h3>south america</h3></li> -->
-      <li ng-click="stockistFilter = 'europe'"><h3>europe</h3></li>
-      <li ng-click="stockistFilter = 'asia'"><h3>asia</h3></li>
+      <li ng-click="stockistFilter = 'europe'"><h3 class="stockist-filter-name" ng-class="{'active': stockistFilter == 'europe'}">europe</h3></li>
+      <li ng-click="stockistFilter = 'asia'" ><h3 class="stockist-filter-name" ng-class="{'active': stockistFilter == 'asia'}">asia</h3></li>
       <!-- <li ng-click="stockistFilter = 'africa'"><h3>africa</h3></li> -->
-      <li ng-click="stockistFilter = 'australia'"><h3>australia</h3></li>
-      <li ng-click="stockistFilter = 'online'"><h3>online</h3></li>
+      <li ng-click="stockistFilter = 'australia'"><h3 class="stockist-filter-name" ng-class="{'active': stockistFilter == 'australia'}">australia</h3></li>
+      <li ng-click="stockistFilter = 'online'"><h3 class="stockist-filter-name" ng-class="{'active': stockistFilter == 'online'}">online</h3></li>
 
     </ul>
 

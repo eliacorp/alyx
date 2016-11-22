@@ -1,72 +1,62 @@
-
-<!-- saved from url=(0050)https://moltin.com/templates/order_dispatched.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body cz-shortcut-listen="true">
-	   {% if shipping %}
-
-	   {% endif %}
-	   <table border="0" cellpadding="2" cellspacing="0" style="width: 100%;font-family:&#39;Helvetica Neue&#39;,&#39;Helvetica&#39;,sans-serif">
+<table border="0" cellpadding="2" cellspacing="0" style="width: 100%;">
 <tbody>
 	<tr>
 	   <td>
-	      <p><img src="https://s3-us-west-2.amazonaws.com/asset.alyx/logo/ALYX_TYPE_LOGO_FINAL.svg" style="width: 150px;" alt="Moltin"></p>
+	      <p><img src="https://s3-us-west-2.amazonaws.com/asset.alyx/logo/ALYX_TYPE_LOGO_FINAL.svg" alt="Moltin"/></p>
 	   </td>
 	   <td style="text-align: right;">
-	   <p><strong>Order reference: #{{ id }}</strong></p>
+	   <p><strong>Order ID: #{{ id }}</strong></p>
 	   </td>
 	</tr>
 
 	<tr>
 	   <td colspan="2">
-	  	 <br>
+	  	 <br />
 	  	  {% if customer.data.first_name %}
-	  	    <p>Hi {{ customer.data.first_name }},</p>
+	  	    <p>Dear {{ customer.data.first_name }},</p>
 	      {% elseif bill_to.first_name %}
-	      	<p>Hi {{ bill_to.first_name }},</p>
+	      	<p>Dear {{ bill_to.first_name }},</p>
 	      {% elseif ship_to.first_name %}
-	      	<p>Hi {{ ship_to.first_name }},</p>
+	      	<p>Dear {{ ship_to.first_name }},</p>
 	      {% endif %}
 
 	      <p>Thank you for your recent order, we're just letting you know that your order has been dispatched as well as to confirm the details once again.</p>
-	      <br>
+	      <br />
 	   </td>
 	</tr>
-	<tr><td>
-	      <p><strong>Shipping Information</strong></p>
+	<tr>
+	   {% if shipping %}
+	   <td>
+	      <p><strong>Shipping Information:</strong></p>
 	      <p>
-	      {% if ship_to.data.first_name %}{{ ship_to.data.first_name }}{% endif %}{% if ship_to.data.last_name %} {{ ship_to.data.last_name }}{% endif %}<br>
-	      {% if ship_to.data.company %}{{ ship_to.data.company }}<br>{% endif %}
-	      {% if ship_to.data.address_1 %}{{ ship_to.data.address_1 }}<br>{% endif %}
-	      {% if ship_to.data.address_2 %}{{ ship_to.data.address_2 }}<br>{% endif %}
-	      {% if ship_to.data.city %}{{ ship_to.data.city }}<br>{% endif %}
-	      {% if ship_to.data.county %}{{ ship_to.data.county }}<br>{% endif %}
-	      {% if ship_to.data.postcode %}{{ ship_to.data.postcode }}<br>{% endif %}
+	      {% if ship_to.data.first_name %}{{ ship_to.data.first_name }}<br />{% elseif ship_to.data.last_name %}{{ ship_to.data.last_name }}<br />{% endif %}
+	      {% if ship_to.data.company %}{{ ship_to.data.company }}<br />{% endif %}
+	      {% if ship_to.data.address_1 %}{{ ship_to.data.address_1 }}<br />{% endif %}
+	      {% if ship_to.data.address_2 %}{{ ship_to.data.address_2 }}<br />{% endif %}
+	      {% if ship_to.data.city %}{{ ship_to.data.city }}<br />{% endif %}
+	      {% if ship_to.data.county %}{{ ship_to.data.county }}<br />{% endif %}
+	      {% if ship_to.data.postcode %}{{ ship_to.data.postcode }}<br />{% endif %}
 	      {% if ship_to.data.country %}{{ ship_to.data.country.name }}{% endif %}
 	      </p>
-	   </td><td>
+	   </td>
+	   {% endif %}
+	   <td>
 	      <p><strong>Billing Information:</strong></p>
-	      {% if bill_to.data.first_name %}{{ bill_to.data.first_name }}{% endif %}{% if bill_to.data.last_name %} {{ bill_to.data.last_name }}{% endif %}<br>
-	      {% if bill_to.data.company %}{{ bill_to.data.company }}<br>{% endif %}
-	      {% if bill_to.data.address_1 %}{{ bill_to.data.address_1 }}<br>{% endif %}
-	      {% if bill_to.data.address_2 %}{{ bill_to.data.address_2 }}<br>{% endif %}
-	      {% if bill_to.data.city %}{{ bill_to.data.city }}<br>{% endif %}
-	      {% if bill_to.data.county %}{{ bill_to.data.county }}<br>{% endif %}
-	      {% if bill_to.data.postcode %}{{ bill_to.data.postcode }}<br>{% endif %}
+	      {% if bill_to.data.first_name %}{{ bill_to.data.first_name }}<br />{% elseif bill_to.data.last_name %}{{ bill_to.data.last_name }}<br />{% endif %}
+	      {% if bill_to.data.company %}{{ bill_to.data.company }}<br />{% endif %}
+	      {% if bill_to.data.address_1 %}{{ bill_to.data.address_1 }}<br />{% endif %}
+	      {% if bill_to.data.address_2 %}{{ bill_to.data.address_2 }}<br />{% endif %}
+	      {% if bill_to.data.city %}{{ bill_to.data.city }}<br />{% endif %}
+	      {% if bill_to.data.county %}{{ bill_to.data.county }}<br />{% endif %}
+	      {% if bill_to.data.postcode %}{{ bill_to.data.postcode }}<br />{% endif %}
 	      {% if bill_to.data.country %}{{ bill_to.data.country.name }}{% endif %}
 	   </td>
 	</tr>
 	<tr>
 		<td colspan="2">
-		<br>
-		<br>
-
-			   	{% if shipping %}
-
-				{% endif %}
-
-			{% for item in items.data %}
-
-			{% endfor %}
-			<table border="0" cellpadding="2" cellspacing="0" style="width: 100%">
+		<br />
+		<br />
+<table border="0" cellpadding="2" cellspacing="0" style="width: 100%">
 			<thead>
 			   <tr style="border-top: 1px solid #ccc">
 			    <th></th>
@@ -82,41 +72,48 @@
 					<td colspan="3">&nbsp;</td>
 					<td><strong>Sub-total:</strong></td>
 					<td>{{ subtotal }}</td>
-			   	</tr><tr>
+			   	</tr>
+			   	{% if shipping %}
+				<tr>
 				 	<td colspan="3">&nbsp;</td>
 				   	<td><strong>Postage:</strong></td>
 				   	<td>
 				   		{{ shipping_price }}
 				   	</td>
-				</tr><tr>
+				</tr>
+				{% endif %}
+				<tr>
 					<td colspan="3">&nbsp;</td>
 					<td><strong>Total:</strong></td>
 					<td>{{ total }}</td>
 				</tr>
 			</tfoot>
 
-			<tbody><tr style="border-top: 1px solid #ccc">
+			<tbody>
+			{% for item in items %}
+				<tr style="border-top: 1px solid #ccc">
 					<td>
 					{% if item.product.data.images is empty %}
 					{% else %}
-					<img src="http://%7B%7B%20item.product.data.images.0.segments.domain%20%7D%7Dw60/h228/fit/%7B%7B%20item.product.data.images.0.segments.suffix%20%7D%7D" alt="{{ item.title }}">
+					<img src="http://{{ item.product.data.images.0.segments.domain }}w60/h60/fit/{{ item.product.data.images.0.segments.suffix }}" alt="{{ item.title }}" />
 					{% endif %}
 					</td>
-					<td>{{ item.title }}<br> Item No: {{ item.sku }}</td>
-					<td align="center">{{ item.price.value }}</td>
+					<td>{{ item.title }}<br /> Item No: {{ item.sku }}</td>
+					<td align="center">{{ item.price }}</td>
 					<td align="center">{{ item.quantity }}</td>
-			 	</tr></tbody>
+					<td align="center"><!--{{ item.total }}--></td>
+			 	</tr>
+			{% endfor %}
+			</tbody>
 		</table>
 		</td>
 	</tr>
 	<tr>
 	   <td colspan="2">
-	      <br>
-	      <br>
-	      <p>Thanks for your custom, and we hope to see you back soon!</p>
+	      <br />
+	      <br />
+	      <p>Once again, thank you for your custom, and we hope to see you back soon!</p>
 	   </td>
 	</tr>
 </tbody>
 </table>
-<p>	&nbsp;</p>
-</body></html>

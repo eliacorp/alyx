@@ -1541,6 +1541,8 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       console.log(response);
       $rootScope.Processed = { value: true, error: false, data: response.data };
       $rootScope.pageLoading = false;
+      $rootScope.getOrderItems();
+      $scope.eraseCart();
       $rootScope.loadVideo();
     }, function (error) {
       console.log(error);
@@ -1549,6 +1551,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     });
   };
 
+  //loading the final video
   $rootScope.loadVideo = function () {
     setTimeout(function () {
       var vid = document.getElementById("processed-video");
@@ -1584,8 +1587,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     });
   };
 
-  $rootScope.getOrderItems();
-
   $scope.searchProduct = function (data) {
     var contents = data;
     console.log("updateOverallStockFN");
@@ -1613,6 +1614,14 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
 
   $scope.updateStockLevel = function (thisProduct, stock) {
     $http.post('/product/' + thisProduct + '/stock_level/' + stock).then(function (response) {
+      console.log(response);
+    }, function (error) {
+      console.log(error);
+    });
+  };
+
+  $scope.eraseCart = function () {
+    $http.post('/cart/erase').then(function (response) {
       console.log(response);
     }, function (error) {
       console.log(error);

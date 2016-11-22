@@ -1675,7 +1675,10 @@ input, select, textarea {
         letter-spacing: 2px;
         font-weight: normal;
         text-transform: none;
-        margin-top: 20px; }
+        margin-top: 10px;
+        width: 100%;
+        display: block;
+        clear: both; }
     .processed-content .processed-content-text a {
       font-size: 10px;
       line-height: 17px;
@@ -2674,6 +2677,10 @@ input, select, textarea {
   .stockist-filter ul li h3:hover {
     color: #FFFFFF;
     background-color: #000000; }
+
+.stockist-filter-name.active {
+  background-color: #000000;
+  color: #FFFFFF !important; }
 
 .social-wrapper .social-content {
   width: 100%;

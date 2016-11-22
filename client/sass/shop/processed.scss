@@ -24,7 +24,10 @@
       text-align: left;
       .processed-content-text-span{
         @include p();
-        margin-top: $margin-top-p;
+        margin-top: $margin-top-p2;
+        width: 100%;
+        display: block;
+        clear: both;
       }
     }
     a{

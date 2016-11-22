@@ -56,6 +56,8 @@ $rootScope.changeOrderStatus =(status, data)=>{
     console.log(response);
     $rootScope.Processed = {value: true, error:false, data:response.data};
     $rootScope.pageLoading = false;
+    $rootScope.getOrderItems();
+    $scope.eraseCart();
     $rootScope.loadVideo();
   }, function(error){
     console.log(error);
@@ -67,6 +69,9 @@ $rootScope.changeOrderStatus =(status, data)=>{
 
 
 
+
+
+//loading the final video
 $rootScope.loadVideo = ()=>{
   setTimeout(function(){
     var vid = document.getElementById("processed-video");
@@ -109,7 +114,7 @@ $rootScope.getOrderItems = ()=>{
   })
 }
 
-$rootScope.getOrderItems();
+
 
  $scope.searchProduct = (data) =>{
   var contents = data;
@@ -141,6 +146,18 @@ $rootScope.getOrderItems();
 
 $scope.updateStockLevel =(thisProduct, stock)=>{
   $http.post('/product/'+thisProduct+'/stock_level/'+stock)
+  .then( function(response){
+    console.log(response);
+
+  }, function(error){
+    console.log(error);
+
+  })
+}
+
+
+$scope.eraseCart =()=>{
+  $http.post('/cart/erase')
   .then( function(response){
     console.log(response);
 
