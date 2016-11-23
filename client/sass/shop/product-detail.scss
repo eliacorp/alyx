@@ -65,6 +65,30 @@
   height:100vh;
 }
 
+.detail-sizechart-opener{
+  width:auto;
+  display: inline-block;
+  @include p2();
+  @include hover-effect-color($light-grey, $black);
+  vertical-align: text-top;
+}
+
+.detail-sizechart{
+  position: fixed;
+  top:0;
+  left: 0;
+  width:100vw;
+  height:100vh;
+  z-index:22;
+  background-color: $white;
+  .detail-sizechart-img{
+    position: relative;
+    width:60%;
+    margin: auto;
+    display: block;
+
+  }
+}
 
 
 
@@ -100,6 +124,10 @@
     margin-top: 0;
   }
 
+}
+
+.detail-text-tax{
+  @include p2();
 }
 
 .detail-price{
@@ -139,18 +167,19 @@
   margin-top:$margin-top-p;
   .detail-modifiers-ul{
     display: block;
-    width:200px;
+    width:auto;
+    display: inline-block;
     .detail-modifiers-ul-placeholder{
       width:auto;
       display: block;
-      float:left;
+      // float:left;
       @include h3();
       text-transform: uppercase;
     }
     .detail-modifiers-variations{
       width:auto;
       display: block;
-      float:left;
+      // float:left;
       // margin-left: $margin-left-paragraph;
       .detail-modifiers-variations-li{
         display: inline-block;

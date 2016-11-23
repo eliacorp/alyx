@@ -307,6 +307,7 @@ $rootScope.getProductsFN();
           url: '/getCollections'
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
+              console.log(response.data);
           }, function (response) {
 
             // called asynchronously if an error occurs

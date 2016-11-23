@@ -759,6 +759,57 @@ h3 {
   width: 50%;
   height: 100vh; }
 
+.detail-sizechart-opener {
+  width: auto;
+  display: inline-block;
+  font-size: 8px;
+  line-height: 17px;
+  font-family: "akzidenz-grotesk";
+  letter-spacing: 2px;
+  font-weight: normal;
+  text-transform: none;
+  color: #D3D3D3;
+  transition: color 0.4s ease;
+  -webkit-transition: color 0.4s ease;
+  -moz-transition: color 0.4s ease;
+  -ms-transition: color 0.4s ease;
+  -o-transition: color 0.4s ease;
+  vertical-align: text-top; }
+  .detail-sizechart-opener:hover {
+    color: #000000;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-device-width: 767px) {
+      .detail-sizechart-opener:hover {
+        color: #D3D3D3 !important; } }
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {
+      .detail-sizechart-opener:hover {
+        color: #D3D3D3 !important; } }
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
+      .detail-sizechart-opener:hover {
+        color: #D3D3D3 !important; } }
+
+.detail-sizechart {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 22;
+  background-color: #FFFFFF; }
+  .detail-sizechart .detail-sizechart-img {
+    position: relative;
+    width: 60%;
+    margin: auto;
+    display: block; }
+
 .detail-text {
   position: relative;
   width: 100%;
@@ -788,6 +839,14 @@ h3 {
     margin-top: 0; }
   .detail-text .detail-text-origin {
     margin-top: 0; }
+
+.detail-text-tax {
+  font-size: 8px;
+  line-height: 17px;
+  font-family: "akzidenz-grotesk";
+  letter-spacing: 2px;
+  font-weight: normal;
+  text-transform: none; }
 
 .detail-price {
   position: relative;
@@ -827,11 +886,11 @@ h3 {
   margin-top: 20px; }
   .detail-modifiers .detail-modifiers-ul {
     display: block;
-    width: 200px; }
+    width: auto;
+    display: inline-block; }
     .detail-modifiers .detail-modifiers-ul .detail-modifiers-ul-placeholder {
       width: auto;
       display: block;
-      float: left;
       font-size: 13px;
       line-height: 27px;
       font-family: "akzidenz-grotesk-condensed";
@@ -839,8 +898,7 @@ h3 {
       text-transform: uppercase; }
     .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations {
       width: auto;
-      display: block;
-      float: left; }
+      display: block; }
       .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li {
         display: inline-block;
         margin-left: 10px;

@@ -8,6 +8,16 @@
       </div>
 
 
+      <div class="detail-sizechart" ng-show="openSizechart" ng-click="openSizechart=false">
+        <table>
+          <tr>
+            <td>
+              <img src="{{Detail.size_chart.data.url.https}}" alt="size chart" class="detail-sizechart-img"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+
 
       <!-- right -->
       <div class="detail-right">
@@ -19,9 +29,11 @@
           <p class="detail-text-color">color: {{Detail.color.data.value}}</p>
           <p class="detail-text-fabrics">fabrics: {{Detail.fabrics}}</p>
           <p class="detail-text-origin">made in: {{Detail.origin.data.value}}</p>
+
         </div>
 
         <p class="detail-price">{{Detail.price.data.formatted.without_tax}}</p>
+        <p class="detail-text-tax">prices do not include taxes</p>
 
 
         <div class="detail-modifiers">
@@ -37,7 +49,13 @@
             </div>
             <!-- <div class="">{{selectedVariation[m.id].variation_title}}  </div> -->
           </ul>
+
+          <a class="detail-sizechart-opener" ng-click="openSizechart=!openSizechart">
+            ?
+          </a>
+
         </div>
+
 
         <p class="detail-error" ng-show="variationErrorMessage">{{variationErrorMessage}}</p>
 

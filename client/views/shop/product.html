@@ -3,10 +3,8 @@
 
 <div class="product-filter">
 
-
-
   <ul class="product-filter-ul">
-    <li class="product-filter-li" ng-repeat="c in Collection_shop" ng-class="{'filter-selected': c.slug == filter.collection.selected}">
+    <li class="product-filter-li" ng-repeat="c in Collection_shop" ng-class="{'filter-selected': c.slug == filter.collection.selected}" ng-if="c.status.data.key==1">
       <a ng-click="selectFilter('collection', c.slug)">{{c.title}}</a>
     </li>
   </ul>

@@ -310,6 +310,13 @@ function setToHappen(d){
       var ship_to = data.shipment;
       var bill_to = data.billing;
       var shipment_method = data.shipment_method;
+      var fiscal_code;
+      if(data.fiscal_code){
+        fiscal_code = data.fiscal_code;
+      }else{
+        fiscal_code = '';
+      }
+
 
 
         moltin.Cart.Complete({
@@ -319,6 +326,7 @@ function setToHappen(d){
             last_name:  customer.last_name,
             email: customer.email
           },
+          fiscal_code:fiscal_code,
           bill_to: {
             first_name: bill_to.first_name,
             last_name:  ship_to.last_name,
