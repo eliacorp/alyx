@@ -327,6 +327,13 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
 
   $rootScope.getContentType('stockist', 'my.stockist.date desc');
 
+  $rootScope.showCart = false;
+
+  $rootScope.retrieveElement = function (id) {
+    var element = _angular2.default.element(document.querySelectorAll("#" + id)[0]);
+    return element;
+  };
+
   //MOBILE
 
   $rootScope.windowHeight = $window.innerHeight;
@@ -334,6 +341,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   jQuery($window).resize(function () {
     $rootScope.windowHeight = $window.innerHeight;
     $rootScope.half_windowHeight = $window.innerHeight / 2;
+    $rootScope.checkSize();
+    $scope.landscapeFunction();
 
     // $rootScope.checkSize();
     $scope.$apply();
@@ -343,12 +352,87 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   $rootScope.logoCorner = false;
   $rootScope.showDetail = false;
 
-  $rootScope.showCart = false;
+  //....this is the function that checks the header of the browser and sees what device it is
+  $rootScope.isMobile, $rootScope.isDevice, $rootScope.isMobileDevice;
+  $rootScope.checkSize = function () {
+    $rootScope.checkDevice = {
+      Android: function Android() {
+        return navigator.userAgent.match(/Android/i);
+      },
+      BlackBerry: function BlackBerry() {
+        return navigator.userAgent.match(/BlackBerry/i);
+      },
+      iOS: function iOS() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      },
+      Opera: function Opera() {
+        return navigator.userAgent.match(/Opera Mini/i);
+      },
+      Windows: function Windows() {
+        return navigator.userAgent.match(/IEMobile/i);
+      },
+      any: function any() {
+        return $rootScope.checkDevice.Android() || $rootScope.checkDevice.BlackBerry() || $rootScope.checkDevice.iOS() || $rootScope.checkDevice.Opera() || $rootScope.checkDevice.Windows();
+      }
+    };
 
-  $rootScope.retrieveElement = function (id) {
-    var element = _angular2.default.element(document.querySelectorAll("#" + id)[0]);
-    return element;
+    //........checks the width
+    $scope.mobileQuery = window.matchMedia("(max-width: 767px)");
+    $rootScope.isMobile = $scope.mobileQuery.matches;
+
+    //.........returning true if device
+    if ($scope.checkDevice.any()) {
+      $rootScope.isDevice = true;
+    } else {
+      $rootScope.isDevice = false;
+    }
+
+    if ($rootScope.isDevice == true && $scope.isMobile == true) {
+      $rootScope.isMobileDevice = true;
+    } else {
+      $rootScope.isMobileDevice = false;
+    }
+
+    if ($rootScope.isDevice) {
+      $rootScope.mobileLocation = function (url) {
+        $location.path(url).search();
+      };
+      $rootScope.mobileExternalLocation = function (url) {
+        $window.open(url, '_blank');
+      };
+    } else if (!$rootScope.isDevice) {
+      $rootScope.mobileLocation = function (url) {
+        return false;
+      };
+      $rootScope.mobileExternalLocation = function (url) {
+        return false;
+      };
+    }
+  }; //checkSize
+  $rootScope.checkSize();
+  $rootScope.landscapeView = false;
+
+  //function removing website if landscape
+
+  $scope.landscapeFunction = function () {
+
+    if ($rootScope.isMobile == true) {
+      if (window.innerHeight < window.innerWidth) {
+        $rootScope.landscapeView = true;
+        $rootScope.pageLoading = true;
+        $(".landscape-view-wrapper").css({
+          "width": "100vw",
+          "height": "100vh",
+          "display": "block"
+        });
+      } else {
+        $rootScope.landscapeView = false;
+        $rootScope.pageLoading = false;
+      }
+    }
   };
+
+  $scope.landscapeFunction();
 }) // end of appCtrl
 
 .directive('logoDirective', function ($rootScope, $location, $window, $timeout) {
@@ -1594,19 +1678,21 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
 
     for (var i in contents) {
 
-      var key = Object.keys(contents[i].product.data.modifiers)[0];
+      if (contents[i].product.data.modifiers.length != 0) {
+        var key = Object.keys(contents[i].product.data.modifiers)[0];
 
-      var thisProduct = contents[i].product.data.modifiers[key].data.product;
-      console.log(contents[i].product.data.modifiers[key].data.product);
+        var thisProduct = contents[i].product.data.modifiers[key].data.product;
+        console.log(contents[i].product.data.modifiers[key].data.product);
 
-      for (var p in $rootScope.Product) {
-        if ($rootScope.Product[p].id == thisProduct) {
-          // var thisProduct = $rootScope.Product[p].id;
-          var quantity = contents[i].quantity;
-          var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
-          console.log('thisProduct: ' + thisProduct);
-          console.log('stock: ' + stock);
-          $scope.updateStockLevel(thisProduct, stock);
+        for (var p in $rootScope.Product) {
+          if ($rootScope.Product[p].id == thisProduct) {
+            // var thisProduct = $rootScope.Product[p].id;
+            var quantity = contents[i].quantity;
+            var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
+            console.log('thisProduct: ' + thisProduct);
+            console.log('stock: ' + stock);
+            $scope.updateStockLevel(thisProduct, stock);
+          }
         }
       }
     } //for loop
@@ -1800,6 +1886,7 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   $rootScope.howManyVAriationsSelected = 0;
   $rootScope.page = "detail";
   $rootScope.Variations;
+  $scope.sizeLoading = false;
 
   // var sku =$routeParams.detail;
   // $rootScope.detailUpdate(sku);
@@ -1822,16 +1909,16 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
     // }
   }, true);
 
-  $scope.$on('$routeChangeSuccess', function () {});
-
   $scope.getVariationsLevel = function (productId) {
     console.log('productId', productId);
+    $scope.sizeLoading = true;
 
     $http({
       url: '/product/' + productId + '/variations/get',
       method: 'GET'
     }).then(function (response) {
       $rootScope.Variations = response.data.result;
+      $scope.sizeLoading = false;
       var n = 0;
       for (var m in $rootScope.Detail.modifiers) {
         for (var v in $rootScope.Detail.modifiers[m].variations) {

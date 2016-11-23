@@ -96,6 +96,12 @@
   left: 50%;
   bottom:$margin-sides;
   z-index:$z-logo;
+  @include respond-to(phone){
+    top:$margin-sides;
+    left:$margin-sides;
+    bottom: auto;
+    margin: auto;
+  }
   img{
     left: 33px;
     bottom: 19px;

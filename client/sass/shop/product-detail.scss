@@ -14,6 +14,10 @@
   margin-left:75px;
   height:100vh;
   position: relative;
+  @include respond-to(phone){
+    width:95%;
+    margin-left: 2.5%;
+  }
 
 }
 
@@ -86,6 +90,16 @@
       margin-top: 0;
     }
   }
+  .detail-text-color{
+
+  }
+  .detail-text-fabrics{
+    margin-top: 0;
+  }
+  .detail-text-origin{
+    margin-top: 0;
+  }
+
 }
 
 .detail-price{
@@ -122,7 +136,7 @@
   position: relative;
   left:0px;
   margin-left:0px;
-  margin-top:$margin-top-list;
+  margin-top:$margin-top-p;
   .detail-modifiers-ul{
     display: block;
     width:200px;
@@ -137,10 +151,16 @@
       width:auto;
       display: block;
       float:left;
-      margin-left: $margin-left-paragraph;
+      // margin-left: $margin-left-paragraph;
       .detail-modifiers-variations-li{
         display: inline-block;
         margin-left: $margin-left-paragraph;
+        @include respond-to(phone){
+          margin-left: 30px;
+        }
+        &:nth-child(1){
+          margin-left: 0;
+        }
         a{
           @include h3();
           color: $light-grey;

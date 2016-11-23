@@ -12,6 +12,10 @@
   height:100vh;
   position: relative;
   overflow-x:scroll;
+  @include respond-to(phone){
+    width:95%;
+    margin-left: 2.5%;
+  }
 }
 
 
@@ -21,6 +25,10 @@
   margin:auto;
   height: auto;
   margin-top:$margin-top;
+  @include respond-to(phone){
+    width: 90%;
+    padding-bottom: 100px;
+  }
 }
 
 
@@ -221,9 +229,23 @@ input, select, textarea {
     a{
       @include p();
     }
+    @include respond-to(phone){
+      width: 80%;
+      height: 50px;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
   input{
     @include p();
+    @include respond-to(phone){
+      display: inline-block;
+      vertical-align: top;
+      width: 33px;
+      height: 20px;
+      margin: 0;
+      float: left;
+    }
   }
 }
 

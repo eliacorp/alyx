@@ -16,6 +16,9 @@
           <h1>{{Detail.title}}</h1>
           <p class="detail-text-sku">{{Detail.sku}}</p>
           <p>{{Detail.description}}</p>
+          <p class="detail-text-color">color: {{Detail.color.data.value}}</p>
+          <p class="detail-text-fabrics">fabrics: {{Detail.fabrics}}</p>
+          <p class="detail-text-origin">made in: {{Detail.origin.data.value}}</p>
         </div>
 
         <p class="detail-price">{{Detail.price.data.formatted.without_tax}}</p>
@@ -23,9 +26,10 @@
 
         <div class="detail-modifiers">
           <ul class="detail-modifiers-ul" ng-repeat="m in Detail.modifiers">
-            <p class="detail-modifiers-ul-placeholder" ng-click="showSelection(m.id)">{{m.title}} </p>
+            <p class="detail-modifiers-ul-placeholder blink-infinite" ng-click="showSelection(m.id)" ng-show="sizeLoading">{{m.title}} </p>
 
             <div class="detail-modifiers-variations">
+
               <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
               ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}" ng-if="v.stock_level>0" >
                 <a>{{v.title}}</a>

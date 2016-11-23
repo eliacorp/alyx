@@ -3,7 +3,7 @@
 <tbody>
 	<tr>
 	   <td>
-	      <p><img src="https://s3-us-west-2.amazonaws.com/asset.alyx/logo/ALYX_TYPE_LOGO_FINAL.svg" style="width: 150px;" alt="Moltin"/></p>
+	      <p><img src="https://s3-us-west-2.amazonaws.com/asset.alyx/logo/ALYX_TYPE_LOGO_FINAL.svg" style="width: 150px;" alt="ALYX"/></p>
 	   </td>
 	   <td style="text-align: right;">
 	   <p><strong>Order reference: #{{ id }}</strong></p>
@@ -73,7 +73,7 @@
 					<td>
 					{% if item.product.data.images is empty %}
 					{% else %}
-					<img src="http://{{ item.product.data.images.0.segments.domain }}w60/h228/fit/{{ item.product.data.images.0.segments.suffix }}" alt="{{ item.title }}" />
+					<img src="http://{{ item.product.data.images.0.segments.domain }}{{ item.product.data.images.0.segments.suffix }}" alt="{{ item.title }}" style="width: 100px;"/>
 					{% endif %}
 					</td>
 					<td align="center">{{ item.quantity }}</td>
@@ -94,4 +94,3 @@
 	</tr>
 </tbody>
 </table>
-<p>	&nbsp;</p>

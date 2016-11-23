@@ -229,6 +229,7 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
   $rootScope.howManyVAriationsSelected = 0;
   $rootScope.page = "detail";
   $rootScope.Variations;
+  $scope.sizeLoading = false;
 
 
 
@@ -255,22 +256,18 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
 
-  $scope.$on('$routeChangeSuccess', function(){
-
-
-
-  });
-
 
 
   $scope.getVariationsLevel = (productId)=>{
     console.log('productId', productId);
+    $scope.sizeLoading = true;
 
     $http({
       url: '/product/'+productId+'/variations/get',
       method: 'GET',
     }).then(function(response){
       $rootScope.Variations=response.data.result;
+      $scope.sizeLoading = false;
       var n = 0;
       for (var m in $rootScope.Detail.modifiers){
         for (var v in $rootScope.Detail.modifiers[m].variations){

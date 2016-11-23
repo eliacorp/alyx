@@ -434,24 +434,6 @@ $rootScope.Stockist;
 
 
 
-//MOBILE
-
-
-$rootScope.windowHeight= $window.innerHeight;
-$rootScope.half_windowHeight = $window.innerHeight/2;
-  jQuery($window).resize(function(){
-    $rootScope.windowHeight = $window.innerHeight;
-    $rootScope.half_windowHeight = $window.innerHeight/2;
-
-
-    // $rootScope.checkSize();
-      $scope.$apply();
-  });
-
-
-//remove logo on scroll
-$rootScope.logoCorner=false;
-$rootScope.showDetail=false;
 
 
 
@@ -464,6 +446,124 @@ $rootScope.showDetail=false;
     var element = angular.element(document.querySelectorAll("#"+id)[0]);
     return element
   }
+
+
+
+
+
+
+
+
+
+  //MOBILE
+
+
+  $rootScope.windowHeight= $window.innerHeight;
+  $rootScope.half_windowHeight = $window.innerHeight/2;
+    jQuery($window).resize(function(){
+      $rootScope.windowHeight = $window.innerHeight;
+      $rootScope.half_windowHeight = $window.innerHeight/2;
+      $rootScope.checkSize();
+      $scope.landscapeFunction();
+
+      // $rootScope.checkSize();
+        $scope.$apply();
+    });
+
+
+  //remove logo on scroll
+  $rootScope.logoCorner=false;
+  $rootScope.showDetail=false;
+
+
+      //....this is the function that checks the header of the browser and sees what device it is
+      $rootScope.isMobile, $rootScope.isDevice, $rootScope.isMobileDevice;
+      $rootScope.checkSize = function(){
+          $rootScope.checkDevice = {
+                Android: function() {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                BlackBerry: function() {
+                    return navigator.userAgent.match(/BlackBerry/i);
+                },
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                },
+                Opera: function() {
+                    return navigator.userAgent.match(/Opera Mini/i);
+                },
+                Windows: function() {
+                    return navigator.userAgent.match(/IEMobile/i);
+                },
+                any: function() {
+                    return ($rootScope.checkDevice.Android() || $rootScope.checkDevice.BlackBerry() || $rootScope.checkDevice.iOS() || $rootScope.checkDevice.Opera() || $rootScope.checkDevice.Windows());
+                }
+            };
+
+          //........checks the width
+            $scope.mobileQuery=window.matchMedia( "(max-width: 767px)" );
+            $rootScope.isMobile=$scope.mobileQuery.matches;
+
+          //.........returning true if device
+            if ($scope.checkDevice.any()){
+              $rootScope.isDevice= true;
+            }else{
+                $rootScope.isDevice=false;
+            }
+
+            if (($rootScope.isDevice==true)&&($scope.isMobile==true)){
+              $rootScope.isMobileDevice= true;
+            }else{
+                $rootScope.isMobileDevice=false;
+            }
+
+
+
+
+              if ($rootScope.isDevice){
+                  $rootScope.mobileLocation = function(url){
+                    $location.path(url).search();
+                  }
+                  $rootScope.mobileExternalLocation = function(url){
+                    $window.open(url, '_blank');
+                  }
+              } else if (!$rootScope.isDevice){
+                  $rootScope.mobileLocation = function(url){
+                    return false;
+                  }
+                  $rootScope.mobileExternalLocation = function(url){
+                    return false;
+                  }
+              }
+
+        }//checkSize
+        $rootScope.checkSize();
+        $rootScope.landscapeView = false;
+
+       //function removing website if landscape
+
+        $scope.landscapeFunction = function(){
+
+          if ($rootScope.isMobile==true){
+              if(window.innerHeight < window.innerWidth){
+                $rootScope.landscapeView = true;
+                $rootScope.pageLoading = true;
+                $(".landscape-view-wrapper").css({
+                  "width":"100vw",
+                  "height": "100vh",
+                  "display": "block"
+              });
+              }else{
+                $rootScope.landscapeView = false;
+                $rootScope.pageLoading = false;
+              }
+          }
+        }
+
+      $scope.landscapeFunction();
+
+
+
 
 
 

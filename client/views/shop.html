@@ -42,11 +42,14 @@
 
 
 
-  <div class="shop-right" ng-show="shopLocation != 'processed'" ng-class="{'whiteBar': Section.name == 'products'}">
+  <div class="shop-right" ng-show="shopLocation != 'processed'" ng-class="{'whiteBar': Section.name == 'products', 'cart-full-mobile': isMobile && !shopLocation}" >
     <div class="shop-button">
+
       <div class="shop-button-entry shop-right-button-cart" ng-show="Location =='/shop' || shopLocation == 'product'" ng-controller="cartCtrl">
-        <a  href="/shop/cart" class="shop-button-entry-a"><span>CART</span></a>
-        <p class="dollar-contents" ng-class="{'blink': cartChanged}" ng-cloak>{{Cart.totals.post_discount.rounded.without_tax}} $</p>
+        <a  href="/shop/cart" class="shop-button-entry-a">
+          <span>CART</span>
+          <p class="dollar-contents" ng-class="{'blink': cartChanged}" ng-cloak>{{Cart.totals.post_discount.rounded.without_tax}} $</p>
+        </a>
       </div>
 
       <div class="shop-button-entry shop-right-button-shipment" ng-show="shopLocation =='cart'" ng-click="cartToShipment()" ng-class="{'shop-button-entry-inactive': Cart.total_items==0}">

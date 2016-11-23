@@ -123,21 +123,26 @@ $rootScope.getOrderItems = ()=>{
 
     for (var i in contents){
 
-      var key = Object.keys(contents[i].product.data.modifiers)[0];
+      if(contents[i].product.data.modifiers.length!=0){
+        var key = Object.keys(contents[i].product.data.modifiers)[0];
 
-      var thisProduct = contents[i].product.data.modifiers[key].data.product
-      console.log(contents[i].product.data.modifiers[key].data.product);
+        var thisProduct = contents[i].product.data.modifiers[key].data.product
+        console.log(contents[i].product.data.modifiers[key].data.product);
 
-        for (var p in $rootScope.Product){
-          if($rootScope.Product[p].id==thisProduct){
-            // var thisProduct = $rootScope.Product[p].id;
-            var quantity = contents[i].quantity;
-            var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
-            console.log('thisProduct: '+thisProduct);
-            console.log('stock: '+stock);
-            $scope.updateStockLevel(thisProduct, stock);
+          for (var p in $rootScope.Product){
+            if($rootScope.Product[p].id==thisProduct){
+              // var thisProduct = $rootScope.Product[p].id;
+              var quantity = contents[i].quantity;
+              var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
+              console.log('thisProduct: '+thisProduct);
+              console.log('stock: '+stock);
+              $scope.updateStockLevel(thisProduct, stock);
+            }
           }
-        }
+
+      }
+
+
     }//for loop
 }
 

@@ -196,32 +196,6 @@ h3{
 
 
 
-.dollar{
-  position: absolute;
-  width:90px;
-  height:100vh;
-  right:0;
-  top:0;
-  z-index:$z-dollar;
-  background-color: rgba(0,0,0,0.8);
-
-  a{
-    width:100vh;
-    @include transform-element(rotate(-90deg));
-    display:block;
-    @include h1();
-    line-height: normal;
-    font-size: 30px;
-
-  }
-  .dollar-contents{
-    font-family: helvetica;
-    line-height: normal;
-    font-size: 30px;
-  }
-}
-
-
 
 
 

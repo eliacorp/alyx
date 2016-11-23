@@ -329,38 +329,6 @@ h3 {
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px; }
 
-.dollar {
-  position: absolute;
-  width: 90px;
-  height: 100vh;
-  right: 0;
-  top: 0;
-  z-index: 10;
-  background-color: rgba(0, 0, 0, 0.8); }
-  .dollar a {
-    width: 100vh;
-    transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    /* IE 9 */
-    -webkit-transform: rotate(-90deg);
-    /* Safari */
-    -moz-transform: rotate(-90deg);
-    /* Mozilla */
-    -o-transform: rotate(-90deg);
-    /* Opera */
-    transform-origin: 0 0;
-    display: block;
-    font-size: 23px;
-    line-height: 50px;
-    font-family: "akzidenz-grotesk-condensed";
-    letter-spacing: 4px;
-    line-height: normal;
-    font-size: 30px; }
-  .dollar .dollar-contents {
-    font-family: helvetica;
-    line-height: normal;
-    font-size: 30px; }
-
 @keyframes goCorner {
   0% {
     right: 50%;
@@ -533,7 +501,16 @@ h3 {
   margin-left: -25px;
   left: 50%;
   bottom: 20px;
-  z-index: 15; }
+  z-index: 15;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .logo {
+      top: 20px;
+      left: 20px;
+      bottom: auto;
+      margin: auto; } }
   .logo img {
     left: 33px;
     bottom: 19px;
@@ -572,13 +549,27 @@ h3 {
   position: relative;
   display: inline-block;
   overflow-y: scroll;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .product {
+      width: 95%;
+      margin-left: 2.5%;
+      padding-left: 0; } }
 
 .product-ul {
   width: 82%;
   height: auto;
   margin: auto;
-  padding-top: 100px; }
+  padding-top: 100px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .product-ul {
+      width: 90%; } }
   .product-ul:nth-child(1) {
     padding-top: 0; }
   .product-ul .product-li {
@@ -588,9 +579,29 @@ h3 {
     margin: auto;
     margin-bottom: 20vh;
     margin-right: 17%;
-    float: left; }
+    float: left;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .product-ul .product-li {
+        width: 40%;
+        margin-right: 10%; } }
     .product-ul .product-li:nth-child(3n+0) {
-      margin-right: 0; }
+      margin-right: 0;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .product-ul .product-li:nth-child(3n+0) {
+          margin-right: 10%; } }
+    .product-ul .product-li:nth-child(2n+0) {
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .product-ul .product-li:nth-child(2n+0) {
+          margin-right: 0%; } }
     .product-ul .product-li a {
       display: block;
       width: 100%;
@@ -708,7 +719,14 @@ h3 {
   width: calc(100vw - 150px);
   margin-left: 75px;
   height: 100vh;
-  position: relative; }
+  position: relative;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .detail-content {
+      width: 95%;
+      margin-left: 2.5%; } }
 
 .detail-left {
   position: absolute;
@@ -766,6 +784,10 @@ h3 {
     margin-top: 10px; }
     .detail-text p:nth-child(1) {
       margin-top: 0; }
+  .detail-text .detail-text-fabrics {
+    margin-top: 0; }
+  .detail-text .detail-text-origin {
+    margin-top: 0; }
 
 .detail-price {
   position: relative;
@@ -802,7 +824,7 @@ h3 {
   position: relative;
   left: 0px;
   margin-left: 0px;
-  margin-top: 40px; }
+  margin-top: 20px; }
   .detail-modifiers .detail-modifiers-ul {
     display: block;
     width: 200px; }
@@ -818,11 +840,18 @@ h3 {
     .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations {
       width: auto;
       display: block;
-      float: left;
-      margin-left: 10px; }
+      float: left; }
       .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li {
         display: inline-block;
-        margin-left: 10px; }
+        margin-left: 10px;
+        /*  @if $media == large-desktop {
+            @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+          }*/ }
+        @media only screen and (min-width: 0px) and (max-width: 767px) {
+          .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li {
+            margin-left: 30px; } }
+        .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li:nth-child(1) {
+          margin-left: 0; }
         .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a {
           font-size: 13px;
           line-height: 27px;
@@ -939,13 +968,26 @@ h3 {
   margin-left: 75px;
   height: 100vh;
   position: relative;
-  overflow-x: scroll; }
+  overflow-x: scroll;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .cart-content {
+      width: 95%;
+      margin-left: 2.5%; } }
 
 .cart-ul {
   display: block;
   margin: auto;
   width: 400px;
-  padding-top: 100px; }
+  padding-top: 100px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .cart-ul {
+      width: 100%; } }
   .cart-ul .cart-li {
     display: block;
     width: 100%;
@@ -956,7 +998,13 @@ h3 {
       width: 70px;
       display: inline-block;
       vertical-align: top;
-      float: left; }
+      float: left;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .cart-ul .cart-li .cart-li-img {
+          width: 18%; } }
     .cart-ul .cart-li .cart-li-info {
       position: relative;
       display: inline-block;
@@ -964,7 +1012,14 @@ h3 {
       margin-left: 20px;
       height: 105px;
       vertical-align: top;
-      float: left; }
+      float: left;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .cart-ul .cart-li .cart-li-info {
+          width: 77%;
+          margin-left: 5%; } }
       .cart-ul .cart-li .cart-li-info .cart-li-p {
         width: auto;
         display: inline-block;
@@ -1018,7 +1073,14 @@ h3 {
   display: block;
   margin: auto;
   width: 400px;
-  margin-top: 100px; }
+  margin-top: 100px;
+  padding-bottom: 200px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .cart-total {
+      width: 100%; } }
   .cart-total p {
     font-size: 10px;
     line-height: 17px;
@@ -1073,10 +1135,27 @@ h3 {
   width: 75px;
   height: 100vh;
   border-right: 5px solid #000000;
-  z-index: 11; }
+  z-index: 11;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .shop-left {
+      border-top: 5px solid #000000;
+      border-right: 0;
+      width: 50vw;
+      bottom: 0;
+      top: auto;
+      height: 75px; } }
 
 .shop-left.shop-left-processed {
-  border-right: none; }
+  border-right: none;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .shop-left.shop-left-processed {
+      width: 100%; } }
   .shop-left.shop-left-processed:hover {
     border-right: 5px solid #000000;
     background-color: #FFFFFF; }
@@ -1102,7 +1181,33 @@ h3 {
   -webkit-transition: all 0.6s ease;
   -moz-transition: all 0.6s ease;
   -ms-transition: all 0.6s ease;
-  -o-transition: all 0.6s ease; }
+  -o-transition: all 0.6s ease;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .shop-right {
+      border-top: 5px solid #000000;
+      border-left: 0;
+      width: 50vw;
+      bottom: 0;
+      top: auto;
+      height: 75px; } }
+
+.shop-right.cart-full-mobile {
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .shop-right.cart-full-mobile {
+      width: 100vw !important; } }
+  .shop-right.cart-full-mobile .shop-button-entry {
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .shop-right.cart-full-mobile .shop-button-entry {
+        width: 100vw !important; } }
 
 .error {
   position: fixed;
@@ -1111,7 +1216,17 @@ h3 {
   width: 150px;
   height: 100vh;
   z-index: 15;
-  background: #FFFFFF; }
+  background: #FFFFFF;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .error {
+      right: 0;
+      top: 0;
+      width: 100vw;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.9); } }
   .error .error-text {
     font-size: 16px;
     line-height: 28px;
@@ -1191,6 +1306,18 @@ h3 {
       height: 100%;
       display: block;
       position: relative; }
+      .shop-button .shop-button-entry .shop-button-entry-a .dollar-contents {
+        /*  @if $media == large-desktop {
+            @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+          }*/ }
+        @media only screen and (min-width: 0px) and (max-width: 767px) {
+          .shop-button .shop-button-entry .shop-button-entry-a .dollar-contents {
+            width: auto;
+            position: absolute;
+            right: 10px;
+            top: 0;
+            z-index: 0;
+            line-height: 70px; } }
     .shop-button .shop-button-entry p, .shop-button .shop-button-entry span {
       font-size: 16px;
       line-height: 28px;
@@ -1219,7 +1346,23 @@ h3 {
       -webkit-transform-origin: 0 50%;
       -moz-transform-origin: 0 50%;
       -ms-transform-origin: 0 50%;
-      -o-transform-origin: 0 50%; }
+      -o-transform-origin: 0 50%;
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .shop-button .shop-button-entry p, .shop-button .shop-button-entry span {
+          transform: rotate(0deg) translate(0%, 0%);
+          -ms-transform: rotate(0deg) translate(0%, 0%);
+          /* IE 9 */
+          -webkit-transform: rotate(0deg) translate(0%, 0%);
+          /* Safari */
+          -moz-transform: rotate(0deg) translate(0%, 0%);
+          /* Mozilla */
+          -o-transform: rotate(0deg) translate(0%, 0%);
+          /* Opera */
+          transform-origin: 0 0;
+          width: 100%; } }
     .shop-button .shop-button-entry p {
       top: 20px;
       margin-top: 0; }
@@ -1331,13 +1474,27 @@ h3 {
   margin-left: 75px;
   height: 100vh;
   position: relative;
-  overflow-x: scroll; }
+  overflow-x: scroll;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .shipment-content {
+      width: 95%;
+      margin-left: 2.5%; } }
 
 .shipment-form {
   width: 400px;
   margin: auto;
   height: auto;
-  margin-top: 100px; }
+  margin-top: 100px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .shipment-form {
+      width: 90%;
+      padding-bottom: 100px; } }
 
 .customer {
   width: 100%;
@@ -1507,7 +1664,10 @@ input, select, textarea {
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     font-weight: normal;
-    text-transform: none; }
+    text-transform: none;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
     .termsAndServices label a {
       font-size: 10px;
       line-height: 17px;
@@ -1515,13 +1675,30 @@ input, select, textarea {
       letter-spacing: 2px;
       font-weight: normal;
       text-transform: none; }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .termsAndServices label {
+        width: 80%;
+        height: 50px;
+        display: inline-block;
+        vertical-align: middle; } }
   .termsAndServices input {
     font-size: 10px;
     line-height: 17px;
     font-family: "akzidenz-grotesk";
     letter-spacing: 2px;
     font-weight: normal;
-    text-transform: none; }
+    text-transform: none;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .termsAndServices input {
+        display: inline-block;
+        vertical-align: top;
+        width: 33px;
+        height: 20px;
+        margin: 0;
+        float: left; } }
 
 .terms {
   position: fixed;
@@ -1559,19 +1736,40 @@ input, select, textarea {
   width: calc(100vw - 150px);
   margin-left: 75px;
   height: 100vh;
-  position: relative; }
+  position: relative;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .payment-content {
+      width: 95%;
+      margin-left: 2.5%; } }
 
 .payment-content-container {
   width: 400px;
   margin: auto;
   height: auto;
-  padding-top: 100px; }
+  padding-top: 100px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .payment-content-container {
+      width: 90%;
+      padding-bottom: 100px; } }
 
 .payment-form {
   width: 100%;
   margin: auto;
   height: auto;
-  margin-top: 40px; }
+  margin-top: 40px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .payment-form {
+      width: 100%;
+      padding-bottom: 100px; } }
 
 .payment-h1 {
   text-align: center; }
@@ -1617,7 +1815,13 @@ input, select, textarea {
   width: 400px;
   margin: auto;
   height: auto;
-  margin-top: 40px; }
+  margin-top: 40px;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .payment-choice {
+      width: 100%; } }
   .payment-choice .payment-choice-ul {
     width: 100%;
     height: 28px;
