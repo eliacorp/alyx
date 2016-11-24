@@ -22,7 +22,8 @@
   margin: auto;
   padding-top:$margin-top;
   @include respond-to(phone){
-    width:90%;
+    width:50%;
+    margin-right: 30px;
   }
   &:nth-child(1){
     padding-top:0;
@@ -36,13 +37,13 @@
     margin-right:17%;
     float:left;
     @include respond-to(phone){
-      width:40%;
-      margin-right:10%;
+      width:100%;
+      margin-right:0%;
     }
     &:nth-child(3n+0){
       margin-right:0;
       @include respond-to(phone){
-        margin-right:10%;
+        margin-right:0%;
       }
     }
     &:nth-child(2n+0){

@@ -37,6 +37,11 @@
     width:30vw;
     height:auto;
     display: block;
+    &:nth-last-child(1) {
+      @include respond-to(phone){
+        padding-bottom: 100px;
+      }
+    }
   }
 }
 
@@ -63,6 +68,9 @@
   top:0;
   width:50%;
   height:100vh;
+  @include respond-to(phone){
+    overflow-y: scroll;
+  }
 }
 
 .detail-sizechart-opener{
@@ -145,6 +153,12 @@
   bottom:140px;
   right:0;
   width:100%;
+  @include respond-to(phone){
+    position: relative;
+    margin-top: $margin-top-list;
+    padding-bottom: 200px;
+    bottom:auto;
+  }
   .detail-add-plus-variation{
     // color: rgba(0,0,0,0.1);
   }
@@ -157,6 +171,10 @@
     line-height: 50px;
     text-align: center;
     vertical-align: middle;
+    @include respond-to(phone){
+      position: relative;
+      top:0;
+    }
   }
 }
 

@@ -569,7 +569,8 @@ h3 {
     }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     .product-ul {
-      width: 90%; } }
+      width: 50%;
+      margin-right: 30px; } }
   .product-ul:nth-child(1) {
     padding-top: 0; }
   .product-ul .product-li {
@@ -585,8 +586,8 @@ h3 {
       }*/ }
     @media only screen and (min-width: 0px) and (max-width: 767px) {
       .product-ul .product-li {
-        width: 40%;
-        margin-right: 10%; } }
+        width: 100%;
+        margin-right: 0%; } }
     .product-ul .product-li:nth-child(3n+0) {
       margin-right: 0;
       /*  @if $media == large-desktop {
@@ -594,7 +595,7 @@ h3 {
         }*/ }
       @media only screen and (min-width: 0px) and (max-width: 767px) {
         .product-ul .product-li:nth-child(3n+0) {
-          margin-right: 10%; } }
+          margin-right: 0%; } }
     .product-ul .product-li:nth-child(2n+0) {
       /*  @if $media == large-desktop {
           @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
@@ -740,6 +741,13 @@ h3 {
     width: 30vw;
     height: auto;
     display: block; }
+    .detail-left .detail-image:nth-last-child(1) {
+      /*  @if $media == large-desktop {
+          @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+        }*/ }
+      @media only screen and (min-width: 0px) and (max-width: 767px) {
+        .detail-left .detail-image:nth-last-child(1) {
+          padding-bottom: 100px; } }
 
 .detail-left.zoom-detail {
   width: 100%;
@@ -757,7 +765,13 @@ h3 {
   right: 0;
   top: 0;
   width: 50%;
-  height: 100vh; }
+  height: 100vh;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .detail-right {
+      overflow-y: scroll; } }
 
 .detail-sizechart-opener {
   width: auto;
@@ -865,7 +879,16 @@ h3 {
   height: 50px;
   bottom: 140px;
   right: 0;
-  width: 100%; }
+  width: 100%;
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .detail-add {
+      position: relative;
+      margin-top: 40px;
+      padding-bottom: 200px;
+      bottom: auto; } }
   .detail-add p {
     position: absolute;
     bottom: 0px;
@@ -877,7 +900,14 @@ h3 {
     height: 50px;
     line-height: 50px;
     text-align: center;
-    vertical-align: middle; }
+    vertical-align: middle;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .detail-add p {
+        position: relative;
+        top: 0; } }
 
 .detail-modifiers {
   position: relative;
