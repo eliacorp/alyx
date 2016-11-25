@@ -50,3 +50,20 @@
     display: block;
   }
 }
+
+
+
+
+
+.processed-content.canceled{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  top:0;
+  .processed-content-text{
+    position: relative;
+    margin: auto;
+    margin-right: 0;
+    right: 0;
+  }
+}

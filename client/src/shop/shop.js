@@ -30,24 +30,18 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
                       }else if($rootScope.filter.collection.selected){
 
-                        console.log("collection",$rootScope.Product[i].collection);
                         if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
                           $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                         }
 
                       }else if($rootScope.filter.gender.selected){
-
                         for (var c in $rootScope.Product[i].category.data){
                           if($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected){
                             $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
                           }
                         }
                       }
-
-
                     }
-
-
                   }
                   return $rootScope.filtered;
                 }

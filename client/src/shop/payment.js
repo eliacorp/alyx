@@ -31,12 +31,16 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
 
   $rootScope.checkPayment = ()=>{
-    if($scope.paymentForm.$valid){
-      $rootScope.changeOrderGateway();
+    if($rootScope.checkout.gateway == 'stripe'){
+      if($scope.paymentForm.$valid){
+        $rootScope.changeOrderGateway();
+      }else{
+        $rootScope.error = {value: true, text:'data invalid'};
+      }
     }else{
-      alert('invalid');
-      $rootScope.error = {value: true, text:'data invalid'};
+      $rootScope.changeOrderGateway();
     }
+
   }
 
 

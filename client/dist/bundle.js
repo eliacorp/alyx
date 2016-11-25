@@ -1474,11 +1474,14 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
   }, false);
 
   $rootScope.checkPayment = function () {
-    if ($scope.paymentForm.$valid) {
-      $rootScope.changeOrderGateway();
+    if ($rootScope.checkout.gateway == 'stripe') {
+      if ($scope.paymentForm.$valid) {
+        $rootScope.changeOrderGateway();
+      } else {
+        $rootScope.error = { value: true, text: 'data invalid' };
+      }
     } else {
-      alert('invalid');
-      $rootScope.error = { value: true, text: 'data invalid' };
+      $rootScope.changeOrderGateway();
     }
   };
 
@@ -1594,8 +1597,9 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       url: '/order/' + orderID + '/get',
       method: 'GET'
     }).then(function (response) {
-
+      console.log("response");
       console.log(response);
+
       $rootScope.Processed = { value: false, error: false, data: response.data };
       $rootScope.changeOrderStatus('paid', response.data);
     }, function (error) {
@@ -1816,12 +1820,10 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
               }
             } else if ($rootScope.filter.collection.selected) {
 
-              console.log("collection", $rootScope.Product[i].collection);
               if ($rootScope.Product[i].collection.data.slug == filter.collection.selected) {
                 $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
               }
             } else if ($rootScope.filter.gender.selected) {
-
               for (var c in $rootScope.Product[i].category.data) {
                 if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) {
                   $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);

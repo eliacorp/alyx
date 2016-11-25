@@ -193,6 +193,7 @@
       // float:left;
       @include h3();
       text-transform: uppercase;
+      transition: 0;
     }
     .detail-modifiers-variations{
       width:auto;

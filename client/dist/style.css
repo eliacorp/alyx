@@ -925,7 +925,8 @@ h3 {
       line-height: 27px;
       font-family: "akzidenz-grotesk-condensed";
       letter-spacing: 4px;
-      text-transform: uppercase; }
+      text-transform: uppercase;
+      transition: 0; }
     .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations {
       width: auto;
       display: block; }
@@ -1996,6 +1997,17 @@ input, select, textarea {
   .processed-video video {
     width: 60vw;
     display: block; }
+
+.processed-content.canceled {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  top: 0; }
+  .processed-content.canceled .processed-content-text {
+    position: relative;
+    margin: auto;
+    margin-right: 0;
+    right: 0; }
 
 .lookbook {
   position: relative; }

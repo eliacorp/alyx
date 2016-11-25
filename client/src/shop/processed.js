@@ -13,8 +13,9 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
       url: '/order/'+orderID+'/get',
       method: 'GET'
     }).then( function(response){
-
+      console.log("response");
       console.log(response);
+
       $rootScope.Processed = {value: false, error:false, data:response.data};
       $rootScope.changeOrderStatus('paid', response.data);
     }, function(error){

@@ -80,6 +80,7 @@ function authMoltin(req, res, next){
   moltin.Authenticate(function(data) {
 
     if(data){
+
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
         // console.log("1 runs");
         //     console.log(data);
@@ -100,6 +101,9 @@ function authMoltin(req, res, next){
       req.mySession.expires = data.expires;
 
       next();
+
+
+
 
 
     }else{
@@ -166,7 +170,6 @@ function setToHappen(d){
       }, function(error, response, c) {
         console.log(error);
         console.log(c);
-        console.log(response);
         res.json(error);
           // Something went wrong...
       });
@@ -252,7 +255,6 @@ function setToHappen(d){
             // Update the cart display
         }, function(error, response, c){
               console.log(error);
-              console.log(response);
               console.log(c);
         });
 
@@ -279,14 +281,13 @@ function setToHappen(d){
         if (!error && response.statusCode == 200) {
           var info = JSON.parse(body);
           var responseTime = new Date() - start;
-          console.log('Request time in ms', responseTime);
-          console.log(body);
           res.status(response.statusCode).json(info.result);
         }else{
             var info = JSON.parse(body);
             // res.status(response.statusCode).json(info);
 
         }
+
       }
 
       request(options, callback);
@@ -304,8 +305,6 @@ function setToHappen(d){
 
 
     function cartToOrder(req, res, data){
-      console.log("wait for the order");
-      console.log(data);
       var customer = data.customer;
       var ship_to = data.shipment;
       var bill_to = data.billing;
@@ -352,18 +351,9 @@ function setToHappen(d){
           shipping: shipment_method
         }, function(order) {
 
-          console.log("wait for the order");
-          console.log(order);
-
-
           if (Europe.indexOf( order.ship_to.data.country.data.code ) != -1){
-
             var tax_value = (order.totals.subtotal.raw * 0.22);
             var total_value = (order.totals.shipping_price.raw  + tax_value + order.totals.subtotal.raw);
-
-
-            console.log("tax_value:", tax_value);
-
             var tax = {};
             var total = {};
             var totals = {};
@@ -374,15 +364,11 @@ function setToHappen(d){
                 'rounded': Math.round(tax_value),
                 'raw':tax_value.toFixed(2)
               }
-              console.log(tax);
               total=total_value.toFixed(2);
-              console.log(total);
               totals['tax']=tax;
               totals['total']=total;
             // totals['shipping_price']=order.totals.shipping_price;
             // totals['subtotal']=order.totals.subtotal;
-            console.log(totals);
-            console.log(order.id);
             var id=order.id;
             addTax(req, res, totals, id);
 
@@ -408,15 +394,11 @@ function setToHappen(d){
 
     function addTax(req, res, obj, id){
 
-      console.log('obj', obj);
-      console.log('id', id);
-
       moltin.Order.Update(id, obj, function(order) {
-        console.log(order);
         res.status(200).json(order);
       }, function(error, response, c) {
           res.status(400).json(error);
-          console.log(response);
+          console.log(error);
           // Something went wrong...
       });
 
@@ -579,7 +561,6 @@ function getVariationsLevel(req, res){
       var orderID = req.params.order;
       var obj = req.body;
       moltin.Order.Update(orderID, obj, function(order) {
-        console.log(order);
         res.status(200).json(order);
       }, function(error, response, c) {
           res.status(400).json(error);
@@ -595,8 +576,6 @@ function getVariationsLevel(req, res){
 
 function getOrderItems(req, res){
   var id = req.params.order;
-  console.log("req.params.id",req.params.order);
-
   var url = 'https://api.molt.in/v1/orders/'+id+'/items';
   var access_token = req.mySession.access_token;
 
@@ -608,7 +587,6 @@ function getOrderItems(req, res){
   };
 
   function callback(error, response, body) {
-    console.log(error, response, body);
     if (!error && response.statusCode == 200) {
       var info = JSON.parse(body);
       res.status(response.statusCode).json(info);
@@ -634,17 +612,11 @@ function updateProductStock(req, res){
 
   var id = req.params.id;
   var quantity = req.params.quantity;
-  console.log("id: "+id);
-  console.log("newStock: "+quantity);
-
 
     moltin.Product.Update(id, {
         stock_level:  quantity
     }, function(product) {
-
-        console.log(product);
         req.mySession.updated_stock = true;
-        console.log("overall stock update successful");
         res.status(200).json(product);
 
     }, function(error, response, c) {
@@ -686,6 +658,7 @@ function eraseCart(req, res){
      var support = fs.readFileSync("./server/data/support.json");
      var support = JSON.parse(support);
      res.json(support);
+
     });
 
 
@@ -693,6 +666,31 @@ function eraseCart(req, res){
 
 
 
+
+    //
+    // function eraseAllOrders(){
+
+        // console.log("erase all orders");
+        //
+        // moltin.Order.List(null, function(order) {
+        //     console.log(order);
+        //     for (var i in order){
+        //
+        //       var id = order[i].id;
+        //       id = id.toString();
+        //
+        //       moltin.Order.Delete(id, function(data) {
+        //           // Success
+        //       }, function(error) {
+        //           // Something went wrong...
+        //       });
+        //
+        //     }
+        // }, function(error) {
+        //     // Something went wrong...
+        // });
+
+    // }
 
 
 
