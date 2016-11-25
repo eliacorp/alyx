@@ -52,9 +52,9 @@ app.use(function(req, res, next) {
     // authMoltin(req, res, next);
 
     var token = generateCrypto();
+    // moltin.Cart.Identifier(true, token);
+    // req.mySession.cartID = token;
 
-      moltin.Cart.Identifier(true, token);
-      req.mySession.cartID = token;
 
 
   }else{
@@ -98,7 +98,7 @@ function authMoltin(req, res){
 
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
         console.log("1 runs");
-        // moltin.Cart.Identifier(true, true);
+        moltin.Cart.Identifier(true, req.mySession.access_token);
 
         //     console.log(data);
         res.status(200).json(data);
@@ -108,11 +108,13 @@ function authMoltin(req, res){
         // console.log("2 runs");
         // console.log(data);
         req.mySession.access_token = data.token;
+        moltin.Cart.Identifier(true, req.mySession.access_token);
         res.status(200).json(data);
       }else{
           // moltin.Cart.Identifier(true, true);
         // console.log("3 runs");
         req.mySession.access_token = data.access_token;
+        moltin.Cart.Identifier(true, req.mySession.access_token);
         // console.log(req.mySession.access_token);
         res.status(200).json(data);
       }
