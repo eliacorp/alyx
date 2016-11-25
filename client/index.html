@@ -68,7 +68,7 @@
       <a ng-click="openNav()">
          <!-- ng-click="goHorizontal('products', 0);" -->
         <logo-directive></logo-directive>
-        <img src="assets/collaboration/fragment-design.svg" alt="collaboration" ng-show="filter.collection.selected == 'fragment-design'"/>
+        <img src="assets/collaboration/fragment-design.svg" alt="collaboration" ng-show="!pageLoading && filter.collection.selected == 'fragment-design'"/>
       </a>
     </div>
 
