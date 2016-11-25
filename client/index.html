@@ -60,7 +60,7 @@
 
   <body>
 
-    <div class="landscape-view-wrapper" ng-show="(landscapeView && isMobile) && !pageLoading">
+    <div class="landscape-view-wrapper" ng-class="{'show-landscape': landscapeView && isMobile}">
       <table>
         <tr>
           <td>

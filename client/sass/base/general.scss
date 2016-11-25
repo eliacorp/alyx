@@ -197,11 +197,12 @@ h3{
 
 
 /*.........................landscape............................*/
+
 .landscape-view-wrapper{
+  display: none;
   @include respond-to(phone){
     width: 100vw !important;
     height: 100vh;
-    display: block;
     background-color: white;
     z-index:999;
     position: fixed;
@@ -221,7 +222,9 @@ h3{
 }
 
 
-
+.landscape-view-wrapper.show-landscape{
+  display: block;
+}
 
 
 

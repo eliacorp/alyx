@@ -468,7 +468,7 @@ $rootScope.Stockist;
       $scope.landscapeFunction();
 
       // $rootScope.checkSize();
-        $scope.$apply();
+        $rootScope.$apply();
     });
 
 
@@ -549,11 +549,11 @@ $rootScope.Stockist;
               if(window.innerHeight < window.innerWidth){
                 $rootScope.landscapeView = true;
                 $rootScope.pageLoading = true;
-                $(".landscape-view-wrapper").css({
-                  "width":"100vw",
-                  "height": "100vh",
-                  "display": "block"
-              });
+              //   $(".landscape-view-wrapper").css({
+              //     "width":"100vw",
+              //     "height": "100vh",
+              //     "display": "block"
+              // });
               }else{
                 $rootScope.landscapeView = false;
                 $rootScope.pageLoading = false;

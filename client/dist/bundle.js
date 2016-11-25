@@ -346,7 +346,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     $scope.landscapeFunction();
 
     // $rootScope.checkSize();
-    $scope.$apply();
+    $rootScope.$apply();
   });
 
   //remove logo on scroll
@@ -421,15 +421,15 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
       if (window.innerHeight < window.innerWidth) {
         $rootScope.landscapeView = true;
         $rootScope.pageLoading = true;
-        $(".landscape-view-wrapper").css({
-          "width": "100vw",
-          "height": "100vh",
-          "display": "block"
-        });
+        //   $(".landscape-view-wrapper").css({
+        //     "width":"100vw",
+        //     "height": "100vh",
+        //     "display": "block"
+        // });
       } else {
-        $rootScope.landscapeView = false;
-        $rootScope.pageLoading = false;
-      }
+          $rootScope.landscapeView = false;
+          $rootScope.pageLoading = false;
+        }
     }
   };
 

@@ -331,6 +331,7 @@ h3 {
 
 /*.........................landscape............................*/
 .landscape-view-wrapper {
+  display: none;
   /*  @if $media == large-desktop {
       @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
     }*/ }
@@ -338,7 +339,6 @@ h3 {
     .landscape-view-wrapper {
       width: 100vw !important;
       height: 100vh;
-      display: block;
       background-color: white;
       z-index: 999;
       position: fixed;
@@ -348,6 +348,9 @@ h3 {
     .landscape-view-wrapper .landscape-view-div .landscape-view-p {
       width: 100%;
       text-align: center; }
+
+.landscape-view-wrapper.show-landscape {
+  display: block; }
 
 @keyframes goCorner {
   0% {
