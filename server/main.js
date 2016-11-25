@@ -47,7 +47,9 @@ app.use(function(req, res, next) {
 
   if (!req.mySession.access_token || !req.mySession.expires) {
     res.setHeader('X-Seen-You', 'false');
+      moltin.Cart.Identifier(true, true);
     // authMoltin(req, res, next);
+
 
   }else{
     var timeLeft = setToHappen(req.mySession.expires);
@@ -248,16 +250,15 @@ function setToHappen(d){
 
 
     function getCart(req, res){
-        moltin.Cart.Contents(function(items) {
-          // res.writeHead(200, {'Content-Type': 'application/json'});
-          res.json(items);
-          // res.end(items);
-            // Update the cart display
-        }, function(error, response, c){
-              console.log(error);
-              console.log(c);
-        });
-
+      moltin.Cart.Contents(function(items) {
+        // res.writeHead(200, {'Content-Type': 'application/json'});
+        res.json(items);
+        // res.end(items);
+          // Update the cart display
+      }, function(error, response, c){
+            console.log(error);
+            console.log(c);
+      });
     }
 
 
