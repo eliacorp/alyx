@@ -23,13 +23,13 @@ let moltin = require('moltin')({
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else
-        next();
-});
+// app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//         res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else
+//         next();
+// });
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -47,21 +47,21 @@ app.use(function(req, res, next) {
 
   if (!req.mySession.access_token || !req.mySession.expires) {
     res.setHeader('X-Seen-You', 'false');
-    authMoltin(req, res, next);
+    // authMoltin(req, res, next);
 
   }else{
     var timeLeft = setToHappen(req.mySession.expires);
     if(timeLeft<1000){
-      authMoltin(req, res, next);
+      // authMoltin(req, res, next);
     }else{
       // authMoltin(req, res, next);
-      moltin.Authenticate(function(data) {
-      });
-      next();
+
     }
 
 
   }
+
+  next();
 
 
 });
@@ -72,37 +72,33 @@ app.use(function(req, res, next) {
 
 
 app.get('/authenticate', function(req, res){
-  authMoltin();
+  authMoltin(req, res);
 });
 
 
-function authMoltin(req, res, next){
+function authMoltin(req, res){
   moltin.Authenticate(function(data) {
 
     if(data){
 
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
-        // console.log("1 runs");
+        console.log("1 runs");
         //     console.log(data);
-        // res.status(200).json(data);
+        res.status(200).json(data);
 
       }else if(data.token){
         // console.log("2 runs");
         // console.log(data);
         req.mySession.access_token = data.token;
-        // res.status(200).json(data);
+        res.status(200).json(data);
       }else{
         // console.log("3 runs");
         req.mySession.access_token = data.access_token;
         // console.log(req.mySession.access_token);
-        // res.status(200).json(data);
+        res.status(200).json(data);
       }
 
       req.mySession.expires = data.expires;
-
-      next();
-
-
 
 
 

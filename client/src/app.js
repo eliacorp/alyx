@@ -43,36 +43,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-    // $rootScope.authentication = function(){
-    //
-    //       // Simple GET request example:
-    //       $http({
-    //         method: 'GET',
-    //         url: '/authenticate'
-    //       }).then(function successCallback(response) {
-    //
-    //         if(response.data.access_token || response.data.token){
-    //             // this callback will be called asynchronously
-    //             // when the response is available
-    //             console.log(response.data);
-    //             var expires = response.data.expires;
-    //             var identifier = response.data.identifier;
-    //             var expires_in = response.data.expires_in;
-    //             var access_token = response.data.access_token;
-    //             var type = response.data.token_type;
-    //
-    //             // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-    //
-    //         }
-    //
-    //         }, function errorCallback(response) {
-    //           // called asynchronously if an error occurs
-    //           // or server returns response with an error status.
-    //         });
-    //
-    // }//addToCart
-    //
-    // $rootScope.authentication();
+
 
 
 }])
@@ -227,6 +198,41 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   }
 
 
+
+  $rootScope.authentication = function(){
+
+        // Simple GET request example:
+        $http({
+          method: 'GET',
+          url: '/authenticate'
+        }).then(function successCallback(response) {
+
+          if(response.data.access_token || response.data.token){
+              // this callback will be called asynchronously
+              // when the response is available
+              console.log(response.data);
+              var expires = response.data.expires;
+              var identifier = response.data.identifier;
+              var expires_in = response.data.expires_in;
+              var access_token = response.data.access_token;
+              var type = response.data.token_type;
+
+              $rootScope.getProductsFN();
+              $rootScope.getCollections();
+
+              // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
+
+          }
+
+          }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
+
+  }//addToCart
+
+  $rootScope.authentication();
+
 // function eraseCookie(name) {
 //   $rootScope.createCookie(name,"",-1);
 // }
@@ -287,7 +293,7 @@ $rootScope.getProductsFN=function(){
 }
 
 
-$rootScope.getProductsFN();
+
 
 
 
@@ -316,7 +322,7 @@ $rootScope.getProductsFN();
 
   }//getCollections
 
-$rootScope.getCollections();
+
 
 
 
