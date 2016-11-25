@@ -86,14 +86,13 @@ app.use(function(req, res, next) {
     }else{
 
 
-            crypto.randomBytes(18, function(err, buffer) {
-              req.mySession.cartID = buffer.toString('hex');
-              console.log("crypto_token: "+req.mySession.cartID );
+            // crypto.randomBytes(18, function(err, buffer) {
+            //   req.mySession.cartID = buffer.toString('hex');
+            //   console.log("crypto_token: "+req.mySession.cartID );
+            //
+            // });
 
-            });
-
-            console.log("token: "+req.mySession.cartID );
-            moltin.Cart.Identifier(true, req.mySession.cartID);
+            // moltin.Cart.Identifier(true, req.mySession.cartID);
 
 
       console.log("req.mySession.cartID"+req.mySession.cartID);
