@@ -196,8 +196,29 @@ h3{
 
 
 
+/*.........................landscape............................*/
+.landscape-view-wrapper{
+  @include respond-to(phone){
+    width: 100vw !important;
+    height: 100vh;
+    display: block;
+    background-color: white;
+    z-index:999;
+    position: fixed;
+    z-index: $z-landscape;
+  }
 
+  .landscape-view-div{
+    width: 100%;
+    .landscape-view-p{
+      width: 100%;
+      text-align: center;
+    }
+  }
+  .logo-landscape{
 
+  }
+}
 
 
 

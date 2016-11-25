@@ -60,6 +60,22 @@
 
   <body>
 
+    <div class="landscape-view-wrapper" ng-show="(landscapeView && isMobile) && !pageLoading">
+      <table>
+        <tr>
+          <td>
+            <div class="landscape-view-div">
+              <p class="landscape-view-p">please rotate the device for the best website experience</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+        <!-- <div class = "logo-landscape">
+        <logo-directive></logo-directive>
+        </div> -->
+    </div>
+
 
     <div class="clickOut" ng-click="closeCart()" ng-show="showCart" ng-cloak>
     </div>

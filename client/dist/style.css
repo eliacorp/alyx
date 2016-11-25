@@ -329,6 +329,26 @@ h3 {
   font-family: "akzidenz-grotesk-condensed";
   letter-spacing: 4px; }
 
+/*.........................landscape............................*/
+.landscape-view-wrapper {
+  /*  @if $media == large-desktop {
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
+  @media only screen and (min-width: 0px) and (max-width: 767px) {
+    .landscape-view-wrapper {
+      width: 100vw !important;
+      height: 100vh;
+      display: block;
+      background-color: white;
+      z-index: 999;
+      position: fixed;
+      z-index: 14; } }
+  .landscape-view-wrapper .landscape-view-div {
+    width: 100%; }
+    .landscape-view-wrapper .landscape-view-div .landscape-view-p {
+      width: 100%;
+      text-align: center; }
+
 @keyframes goCorner {
   0% {
     right: 50%;
