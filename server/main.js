@@ -83,6 +83,7 @@ function authMoltin(req, res){
 
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
         console.log("1 runs");
+        moltin.Cart.Identifier(true, true);
 
         //     console.log(data);
         res.status(200).json(data);
