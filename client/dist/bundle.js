@@ -1246,9 +1246,9 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
     }, function (error) {});
   }; //updateCart
 
-  // setTimeout(function(){
-  //   $rootScope.updateCart();
-  // },2000);
+  setTimeout(function () {
+    $rootScope.updateCart();
+  }, 2000);
 
   $rootScope.removeItem = function (id) {
 

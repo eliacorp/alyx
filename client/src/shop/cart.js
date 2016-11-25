@@ -47,9 +47,9 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
         });
   }//updateCart
 
-// setTimeout(function(){
-//   $rootScope.updateCart();
-// },2000);
+setTimeout(function(){
+  $rootScope.updateCart();
+},1000);
 
 
 
