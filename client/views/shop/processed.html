@@ -1,21 +1,25 @@
 <div class="processed" id="processed" ng-controller="processedCtrl">
 
   <div class="processed-content">
+
+    <div class="processed-content-text" ng-show="Processed.error">
+      <p>{{Processed.data}}</p>
+    </div>
+
+
     <div class="processed-video" ng-if="Processed.value" ng-click="playPause()">
       <video src="https://player.vimeo.com/external/190032199.hd.mp4?s=a79117224eaa5b3ec2cd877d791c615e4bdfa47c&profile_id=174" autoplay id="processed-video">
 
       </video>
 
     </div>
-    <div class="processed-content-text" ng-show="Processed.error">
-      <p>{{error.text}}</p>
-    </div>
+
 
     <div class="processed-content-text" ng-show="Processed.value">
 
       <p class="processed-content-text-p">
         <span class="processed-content-text-span">
-          your order will be shipped to
+          Your order will be shipped to
           {{Processed.data.ship_to.data.address_1}}
           {{Processed.data.ship_to.data.city}}
           {{Processed.data.ship_to.data.county}}

@@ -55,9 +55,9 @@
         z-index: $z-social-main;
         @include respond-to(phone){
           width: 100vw;
-          height: 15vh;
+          height: 15vw;
           position: fixed;
-          bottom:70px;
+          bottom:50px;
           overflow-x: scroll;
           overflow-y: hidden;
           -webkit-overflow-scrolling: touch;
@@ -91,6 +91,9 @@
             @include respond-to(phone){
               display: inline-block;
               float: none;
+              width:15vw;
+              height:15vw;
+              margin-left: 3vw;
             }
             .social-images-loader-div{
               .social-loader{
@@ -277,6 +280,10 @@
   left: $margin-sides;
   line-height: 24px;
   z-index: $z-social-main;
+  @include respond-to(phone){
+    right: 20px;
+    left: auto;
+  }
   a{
     color: $black-transparent;
     @include h3();

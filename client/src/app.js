@@ -138,7 +138,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     })
 
     .when('/shop/processed/:order/:method/canceled', {
-      templateUrl: 'views/shop/canceled.html',
+      templateUrl: 'views/shop/processed-canceled.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })

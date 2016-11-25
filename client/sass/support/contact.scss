@@ -19,6 +19,12 @@
         width: 100%;
         word-wrap: break-word;
       }
+      .contact-li-sub{
+        margin-top: $margin-top-p;
+        &:nth-child(1){
+          margin-top: 0;
+        }
+      }
       .contact-h3{
         text-transform: uppercase;
         @include h2();

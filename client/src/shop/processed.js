@@ -48,6 +48,7 @@ $rootScope.changeOrderStatus =(status, data)=>{
     obj = {status: status, payment_number: $routeParams.token};
   }else if($routeParams.method == 'stripe'){
     obj = {status: status, payment_number:data.id};
+    $scope.eraseCart();
   }
 
 
@@ -55,9 +56,13 @@ $rootScope.changeOrderStatus =(status, data)=>{
   .then( function(response){
     console.log(response);
     $rootScope.Processed = {value: true, error:false, data:response.data};
-    $rootScope.pageLoading = false;
-    $rootScope.getOrderItems();
-    $scope.eraseCart();
+    console.log("order order order");
+    console.log(response.data);
+    if(response.data.status.value.key !='paid'){
+      $rootScope.pageLoading = false;
+      $rootScope.getOrderItems();
+    }
+
     $rootScope.loadVideo();
   }, function(error){
     console.log(error);
@@ -101,10 +106,18 @@ $rootScope.getOrderItems = ()=>{
     url: '/order/'+orderID+'/items',
     method: 'GET'
   }).then( function(response){
+    console.log("getOrderItems");
     console.log(response.data);
 
     $rootScope.Processed.data.items= response.data;
-    $scope.searchProduct(response.data.result);
+    if($routeParams.method == 'paypal-express'){
+      $rootScope.$on('productArrived', function(){
+        $scope.searchProduct(response.data.result);
+      });
+
+    }else {
+      $scope.searchProduct(response.data.result);
+    }
 
 
   }, function(error){
@@ -118,24 +131,108 @@ $rootScope.getOrderItems = ()=>{
 
  $scope.searchProduct = (data) =>{
   var contents = data;
-  console.log("updateOverallStockFN");
-  console.log(contents);
 
     for (var i in contents){
 
       if(contents[i].product.data.modifiers.length!=0){
         var key = Object.keys(contents[i].product.data.modifiers)[0];
-
         var thisProduct = contents[i].product.data.modifiers[key].data.product
-        console.log(contents[i].product.data.modifiers[key].data.product);
 
           for (var p in $rootScope.Product){
             if($rootScope.Product[p].id==thisProduct){
               // var thisProduct = $rootScope.Product[p].id;
               var quantity = contents[i].quantity;
               var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
-              console.log('thisProduct: '+thisProduct);
-              console.log('stock: '+stock);
+              $scope.updateStockLevel(thisProduct, stock);
+            }
+
+          }
+
+
+
+
+
+
+          if($routeParams.method=='paypal-express'){
+            $http({
+              url: '/product/'+thisProduct+'/variations/get',
+              method: 'GET',
+            }).then(function(response){
+
+
+// $rootScope.Product[p].stock_level
+
+              for (var p in $rootScope.Product){
+                if($rootScope.Product[p].id==thisProduct){
+
+                  $rootScope.Variations=response.data.result;
+                  $scope.sizeLoading = false;
+
+                  for (var m in $rootScope.Product[p].modifiers){
+                    for (var v in $rootScope.Product[p].modifiers[m].variations){
+
+                      for (var t in $rootScope.Variations){
+                        var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+                        var title = $rootScope.Variations[t].modifiers[key].var_title;
+
+                        if(title==$rootScope.Product[p].modifiers[m].variations[v].title){
+                          $rootScope.Product[p].modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+
+
+
+                          if(contents[i].product.data.modifiers[key].var_title == $rootScope.Variations[t].modifiers[key].var_title){
+                            console.log("var title:"+$rootScope.Variations[t].modifiers[key].var_title);
+                            console.log("key"+key);
+
+                            var v_thisProduct = contents[i].product.data.id;
+                            var v_quantity = contents[i].quantity;
+                            console.log("$rootScope.Product[p].modifiers[m].variations[v].stock_level: "+$rootScope.Product[p].modifiers[m].variations[v].stock_level);
+                            console.log("contents[i].quantity: "+contents[i].quantity);
+                            var v_stock = $rootScope.Product[p].modifiers[m].variations[v].stock_level - contents[i].quantity;
+                            $scope.updateStockLevel(v_thisProduct, v_stock);
+
+                          }
+
+
+
+
+
+                        }
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+
+
+
+            },function(error){
+              console.log(error);
+                $route.reload();
+
+            });
+          }
+
+
+
+
+
+
+      }else if((contents[i].product.data.modifiers.length==0) && ($routeParams.method=='paypal-express')){
+        //temporary paypal fix for items with no variation
+          //if the item has no vaiation
+          var thisProduct = contents[i].product.data.id;
+          $scope.updateStockLevel(thisProduct, stock);
+
+          for (var p in $rootScope.Product){
+            if($rootScope.Product[p].id==thisProduct){
+              // var thisProduct = $rootScope.Product[p].id;
+              var quantity = contents[i].quantity;
+              var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
               $scope.updateStockLevel(thisProduct, stock);
             }
           }
@@ -171,6 +268,11 @@ $scope.eraseCart =()=>{
 
   })
 }
+
+
+
+
+
 
 
 

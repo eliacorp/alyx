@@ -114,7 +114,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     // controller: 'shopCtrl',
     reloadOnSearch: false
   }).when('/shop/processed/:order/:method/canceled', {
-    templateUrl: 'views/shop/canceled.html',
+    templateUrl: 'views/shop/processed-canceled.html',
     // controller: 'shopCtrl',
     reloadOnSearch: false
   }).when('/shop/privacy', {
@@ -1314,24 +1314,24 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     gateway: '',
     shipment_method: '1336838094099317449',
     fiscal_code: '',
-    shipment: { first_name: 'Elia Fornari',
-      last_name: 'Fornari',
-      address_1: '400 S. Burnside #MH Tower 37-00H',
-      city: 'Los Angeles',
-      county: 'California',
-      country: 'US',
-      postcode: '90036',
-      phone: '3157273461'
+    shipment: { first_name: '',
+      last_name: '',
+      address_1: '',
+      city: '',
+      county: '',
+      country: '',
+      postcode: '',
+      phone: ''
     },
     billing: {
-      first_name: 'Elia Fornari',
-      last_name: 'Fornari',
-      address_1: '400 S. Burnside #MH Tower 37-00H',
-      city: 'Los Angeles',
-      county: 'California',
-      country: 'US',
-      postcode: '90036',
-      phone: '3157273461'
+      first_name: '',
+      last_name: '',
+      address_1: '',
+      city: '',
+      county: '',
+      country: '',
+      postcode: '',
+      phone: ''
     }
   };
 
@@ -1459,10 +1459,10 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     gateway: '',
     first_name: $rootScope.checkout.billing.first_name,
     last_name: $rootScope.checkout.billing.last_name,
-    number: '5555555555554444',
-    expiry_month: '02',
-    expiry_year: '2018',
-    cvv: '756'
+    number: '',
+    expiry_month: '',
+    expiry_year: '',
+    cvv: ''
   };
 
   $scope.$watch('paymentForm.$valid', function (newVal, oldVal) {
@@ -1505,6 +1505,8 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
     $rootScope.payment.gateway = $rootScope.checkout.gateway;
     $rootScope.pageLoading = true;
+    console.log("checkout");
+    console.log($rootScope.checkout);
 
     $http({
       url: '/orderToPayment',
@@ -1532,6 +1534,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       $rootScope.Processed = { value: true, error: true, data: response.data };
       $rootScope.pageLoading = false;
       $rootScope.cartLoading = false;
+      $location.path('/shop/processed/' + $rootScope.checkout.id + '/' + $rootScope.checkout.gateway + '/canceled', true);
     });
   }; //paymentToProcess
 
@@ -1555,9 +1558,6 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       console.log(response.data.url);
 
       window.open(response.data.url, "_self", "", false);
-
-      // top.window.opener.location('http://localhost:8081');
-      // http://localhost:8081/shop/processed?token=EC-7RJ70752S4425240G&PayerID=A7AF4APMN32NW
 
       if (response.data.data.paid) {
         $rootScope.cartLoading = false;
@@ -1624,14 +1624,19 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       obj = { status: status, payment_number: $routeParams.token };
     } else if ($routeParams.method == 'stripe') {
       obj = { status: status, payment_number: data.id };
+      $scope.eraseCart();
     }
 
     $http.post('/order/' + orderID + '/put', obj).then(function (response) {
       console.log(response);
       $rootScope.Processed = { value: true, error: false, data: response.data };
-      $rootScope.pageLoading = false;
-      $rootScope.getOrderItems();
-      $scope.eraseCart();
+      console.log("order order order");
+      console.log(response.data);
+      if (response.data.status.value.key != 'paid') {
+        $rootScope.pageLoading = false;
+        $rootScope.getOrderItems();
+      }
+
       $rootScope.loadVideo();
     }, function (error) {
       console.log(error);
@@ -1666,10 +1671,17 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       url: '/order/' + orderID + '/items',
       method: 'GET'
     }).then(function (response) {
+      console.log("getOrderItems");
       console.log(response.data);
 
       $rootScope.Processed.data.items = response.data;
-      $scope.searchProduct(response.data.result);
+      if ($routeParams.method == 'paypal-express') {
+        $rootScope.$on('productArrived', function () {
+          $scope.searchProduct(response.data.result);
+        });
+      } else {
+        $scope.searchProduct(response.data.result);
+      }
     }, function (error) {
       console.log(error);
       $rootScope.Processed = { value: false, error: true, data: error.data };
@@ -1678,24 +1690,79 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
 
   $scope.searchProduct = function (data) {
     var contents = data;
-    console.log("updateOverallStockFN");
-    console.log(contents);
 
     for (var i in contents) {
 
       if (contents[i].product.data.modifiers.length != 0) {
         var key = Object.keys(contents[i].product.data.modifiers)[0];
-
         var thisProduct = contents[i].product.data.modifiers[key].data.product;
-        console.log(contents[i].product.data.modifiers[key].data.product);
 
         for (var p in $rootScope.Product) {
           if ($rootScope.Product[p].id == thisProduct) {
             // var thisProduct = $rootScope.Product[p].id;
             var quantity = contents[i].quantity;
             var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
-            console.log('thisProduct: ' + thisProduct);
-            console.log('stock: ' + stock);
+            $scope.updateStockLevel(thisProduct, stock);
+          }
+        }
+
+        if ($routeParams.method == 'paypal-express') {
+          $http({
+            url: '/product/' + thisProduct + '/variations/get',
+            method: 'GET'
+          }).then(function (response) {
+
+            // $rootScope.Product[p].stock_level
+
+            for (var p in $rootScope.Product) {
+              if ($rootScope.Product[p].id == thisProduct) {
+
+                $rootScope.Variations = response.data.result;
+                $scope.sizeLoading = false;
+
+                for (var m in $rootScope.Product[p].modifiers) {
+                  for (var v in $rootScope.Product[p].modifiers[m].variations) {
+
+                    for (var t in $rootScope.Variations) {
+                      var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+                      var title = $rootScope.Variations[t].modifiers[key].var_title;
+
+                      if (title == $rootScope.Product[p].modifiers[m].variations[v].title) {
+                        $rootScope.Product[p].modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+
+                        if (contents[i].product.data.modifiers[key].var_title == $rootScope.Variations[t].modifiers[key].var_title) {
+                          console.log("var title:" + $rootScope.Variations[t].modifiers[key].var_title);
+                          console.log("key" + key);
+
+                          var v_thisProduct = contents[i].product.data.id;
+                          var v_quantity = contents[i].quantity;
+                          console.log("$rootScope.Product[p].modifiers[m].variations[v].stock_level: " + $rootScope.Product[p].modifiers[m].variations[v].stock_level);
+                          console.log("contents[i].quantity: " + contents[i].quantity);
+                          var v_stock = $rootScope.Product[p].modifiers[m].variations[v].stock_level - contents[i].quantity;
+                          $scope.updateStockLevel(v_thisProduct, v_stock);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }, function (error) {
+            console.log(error);
+            $route.reload();
+          });
+        }
+      } else if (contents[i].product.data.modifiers.length == 0 && $routeParams.method == 'paypal-express') {
+        //temporary paypal fix for items with no variation
+        //if the item has no vaiation
+        var thisProduct = contents[i].product.data.id;
+        $scope.updateStockLevel(thisProduct, stock);
+
+        for (var p in $rootScope.Product) {
+          if ($rootScope.Product[p].id == thisProduct) {
+            // var thisProduct = $rootScope.Product[p].id;
+            var quantity = contents[i].quantity;
+            var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
             $scope.updateStockLevel(thisProduct, stock);
           }
         }

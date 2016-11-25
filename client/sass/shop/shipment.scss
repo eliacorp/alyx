@@ -167,6 +167,11 @@ input, select{
     box-shadow: none;
     border-radius: none;
     padding-left: 5px;
+    @include respond-to(phone){
+      width: 200%;
+      display: block;
+
+    }
   }
 
 }

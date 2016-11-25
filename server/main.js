@@ -430,8 +430,8 @@ function setToHappen(d){
       if(order.gateway == 'paypal-express'){
         var obj={};
         obj={
-              return_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express',
-              cancel_url: 'http://localhost:8081/shop/processed/'+order.id+'/paypal-express/canceled'
+              return_url: 'https://alyxstudio.com/shop/processed/'+order.id+'/paypal-express',
+              cancel_url: 'https://alyxstudio.com/shop/processed/'+order.id+'/paypal-express/canceled'
             }
 
 
@@ -468,8 +468,6 @@ function setToHappen(d){
                     cvv: cvv
                 }
               }
-
-              // https://api.molt.in/v1/carts/checkout/payment/{method}/{orderID}
 
             moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
 

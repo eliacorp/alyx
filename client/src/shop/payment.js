@@ -12,10 +12,10 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
                             gateway:'',
                             first_name: $rootScope.checkout.billing.first_name,
                             last_name: $rootScope.checkout.billing.last_name,
-                            number: '5555555555554444',
-                            expiry_month: '02',
-                            expiry_year:  '2018',
-                            cvv:  '756'
+                            number: '',
+                            expiry_month: '',
+                            expiry_year:  '',
+                            cvv:  ''
                           };
 
 
@@ -73,6 +73,8 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
       $rootScope.payment.gateway = $rootScope.checkout.gateway;
       $rootScope.pageLoading = true;
+      console.log("checkout");
+      console.log($rootScope.checkout);
 
           $http({
             url: '/orderToPayment',
@@ -103,6 +105,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
             $rootScope.Processed={value: true, error:true, data:response.data};
             $rootScope.pageLoading = false;
             $rootScope.cartLoading = false;
+            $location.path('/shop/processed/'+$rootScope.checkout.id+'/'+$rootScope.checkout.gateway+'/canceled', true);
           })
     }//paymentToProcess
 
@@ -132,8 +135,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
                 false
               )
 
-              // top.window.opener.location('http://localhost:8081');
-              // http://localhost:8081/shop/processed?token=EC-7RJ70752S4425240G&PayerID=A7AF4APMN32NW
+
 
               if(response.data.data.paid){
                 $rootScope.cartLoading = false;

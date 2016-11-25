@@ -18,25 +18,25 @@ $rootScope.checkout = {
           shipment_method: '1336838094099317449',
           fiscal_code:'',
           shipment:
-                   { first_name: 'Elia Fornari',
-                     last_name: 'Fornari',
-                     address_1: '400 S. Burnside #MH Tower 37-00H',
-                     city: 'Los Angeles',
-                     county: 'California',
-                     country: 'US',
-                     postcode: '90036',
-                     phone: '3157273461'
+                   { first_name: '',
+                     last_name: '',
+                     address_1: '',
+                     city: '',
+                     county: '',
+                     country: '',
+                     postcode: '',
+                     phone: ''
                    },
           billing:
                   {
-                     first_name: 'Elia Fornari',
-                     last_name: 'Fornari',
-                     address_1: '400 S. Burnside #MH Tower 37-00H',
-                     city: 'Los Angeles',
-                     county: 'California',
-                     country: 'US',
-                     postcode: '90036',
-                     phone: '3157273461'
+                     first_name: '',
+                     last_name: '',
+                     address_1: '',
+                     city: '',
+                     county: '',
+                     country: '',
+                     postcode: '',
+                     phone: ''
                    }
    };
 

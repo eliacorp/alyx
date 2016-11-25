@@ -1075,7 +1075,7 @@ h3 {
     }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     .cart-ul {
-      width: 100%; } }
+      width: 90%; } }
   .cart-ul .cart-li {
     display: block;
     width: 100%;
@@ -1168,7 +1168,7 @@ h3 {
     }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     .cart-total {
-      width: 100%; } }
+      width: 90%; } }
   .cart-total p {
     font-size: 10px;
     line-height: 17px;
@@ -1702,7 +1702,14 @@ input, select {
     appearance: none;
     box-shadow: none;
     border-radius: none;
-    padding-left: 5px; }
+    padding-left: 5px;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .form-entry .select {
+        width: 200%;
+        display: block; } }
 
 input:hover, input:focus {
     outline: 0; }
@@ -2849,6 +2856,10 @@ input, select, textarea {
         margin-bottom: 15px;
         width: 100%;
         word-wrap: break-word; } }
+    .contact-wrapper .contact-ul .contact-li .contact-li-sub {
+      margin-top: 20px; }
+      .contact-wrapper .contact-ul .contact-li .contact-li-sub:nth-child(1) {
+        margin-top: 0; }
     .contact-wrapper .contact-ul .contact-li .contact-h3 {
       text-transform: uppercase;
       font-size: 16px;
@@ -3049,9 +3060,9 @@ input, select, textarea {
     @media only screen and (min-width: 0px) and (max-width: 767px) {
       .social-wrapper .social-content .insta-wrapper {
         width: 100vw;
-        height: 15vh;
+        height: 15vw;
         position: fixed;
-        bottom: 70px;
+        bottom: 50px;
         overflow-x: scroll;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch; } }
@@ -3087,7 +3098,10 @@ input, select, textarea {
         @media only screen and (min-width: 0px) and (max-width: 767px) {
           .social-wrapper .social-content .insta-wrapper .insta-grid .insta-li {
             display: inline-block;
-            float: none; } }
+            float: none;
+            width: 15vw;
+            height: 15vw;
+            margin-left: 3vw; } }
         .social-wrapper .social-content .insta-wrapper .insta-grid .insta-li .instagram-image-a {
           width: 100%;
           height: 100%;
@@ -3310,7 +3324,14 @@ input, select, textarea {
     top: 20px;
     left: 20px;
     line-height: 24px;
-    z-index: 7; }
+    z-index: 7;
+    /*  @if $media == large-desktop {
+        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+      }*/ }
+    @media only screen and (min-width: 0px) and (max-width: 767px) {
+      .social-wrapper .social-content .social-account {
+        right: 20px;
+        left: auto; } }
     .social-wrapper .social-content .social-account a {
       color: rgba(0, 0, 0, 0.3);
       font-size: 13px;
