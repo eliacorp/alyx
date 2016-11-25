@@ -214,6 +214,9 @@
           color: $light-grey;
           text-transform: uppercase;
           @include hover-effect-color($light-grey, $black);
+          @include respond-to(phone-device){
+            color: $black !important;
+          }
         }
       }
     }

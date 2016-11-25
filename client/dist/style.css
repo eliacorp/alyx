@@ -976,7 +976,10 @@ h3 {
           -webkit-transition: color 0.4s ease;
           -moz-transition: color 0.4s ease;
           -ms-transition: color 0.4s ease;
-          -o-transition: color 0.4s ease; }
+          -o-transition: color 0.4s ease;
+          /*  @if $media == large-desktop {
+              @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+            }*/ }
           .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a:hover {
             color: #000000;
             /*  @if $media == large-desktop {
@@ -997,6 +1000,9 @@ h3 {
             @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {
               .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a:hover {
                 color: #D3D3D3 !important; } }
+          @media only screen and (min-width: 0px) and (max-device-width: 767px) {
+            .detail-modifiers .detail-modifiers-ul .detail-modifiers-variations .detail-modifiers-variations-li a {
+              color: #000000 !important; } }
 
 .detail-error {
   position: absolute;
