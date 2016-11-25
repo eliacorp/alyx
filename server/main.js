@@ -22,6 +22,12 @@ let moltin = require('moltin')({
 
 
 
+
+
+
+
+
+
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 // app.use(function(req, res, next) {
@@ -40,48 +46,80 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.use(sessions({
   cookieName: 'mySession', // cookie name dictates the key name added to the request object
-  secret: 'blarghbhjadeeblahuihbuyhrgblarg', // should be a large unguessable string
+  secret:'jfadjhwnbsjdhmaevnbdkshnbeahsdh', // should be a large unguessable string
   duration: 3600 * 1000, // how long the session will stay valid in ms
   activeDuration: 3600 * 1000 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
 }));
+
+
+function generateCrypto(){
+  var crypto_token;
+ crypto.randomBytes(18, function(err, buffer) {
+  crypto_token = buffer.toString('hex');
+   console.log("crypto_token: "+crypto_token);
+
+ });
+
+return crypto_token;
+}
+
+
+
 app.use(function(req, res, next) {
 
-  if (!req.mySession.access_token || !req.mySession.expires) {
-    res.setHeader('X-Seen-You', 'false');
-      // moltin.Cart.Identifier(true, true);
-    // authMoltin(req, res, next);
+    if(!req.mySession.cartID){
 
-    var token = generateCrypto();
-    // moltin.Cart.Identifier(true, token);
-    // req.mySession.cartID = token;
+      // var token = generateCrypto();
 
 
+      crypto.randomBytes(18, function(err, buffer) {
+        req.mySession.cartID = buffer.toString('hex');
+        console.log("crypto_token: "+req.mySession.cartID );
 
-  }else{
-    var timeLeft = setToHappen(req.mySession.expires);
-    if(timeLeft<1000){
-      // authMoltin(req, res, next);
+      });
+
+      console.log("token: "+req.mySession.cartID );
+      moltin.Cart.Identifier(true, req.mySession.cartID);
+
+
+        next();
     }else{
-      // authMoltin(req, res, next);
 
+
+            crypto.randomBytes(18, function(err, buffer) {
+              req.mySession.cartID = buffer.toString('hex');
+              console.log("crypto_token: "+req.mySession.cartID );
+
+            });
+
+            console.log("token: "+req.mySession.cartID );
+            moltin.Cart.Identifier(true, req.mySession.cartID);
+
+
+      console.log("req.mySession.cartID"+req.mySession.cartID);
+
+        next();
     }
 
 
-  }
+  // if (!req.mySession.access_token || !req.mySession.expires) {
+  //   res.setHeader('X-Seen-You', 'false');
+  //     // moltin.Cart.Identifier(true, true);
+  //   // authMoltin(req, res, next);
+  // }else{
+  //   var timeLeft = setToHappen(req.mySession.expires);
+  //   if(timeLeft<1000){
+  //     // authMoltin(req, res, next);
+  //   }else{
+  //     // authMoltin(req, res, next);
+  //   }
+  // }
 
-  next();
 
 
 });
 
 
-var generateCrypto=()=>{
-  crypto.randomBytes(18, function(err, buffer) {
-    var token = buffer.toString('hex');
-    console.log('token', token);
-    return token;
-  });
-}
 
 
 
@@ -98,24 +136,24 @@ function authMoltin(req, res){
 
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
         console.log("1 runs");
-        moltin.Cart.Identifier(true, req.mySession.access_token);
-
+        data.cart=req.mySession.cartID;
+        console.log(data);
         //     console.log(data);
         res.status(200).json(data);
 
       }else if(data.token){
-          // moltin.Cart.Identifier(true, true);
-        // console.log("2 runs");
+        console.log("2 runs");
         // console.log(data);
         req.mySession.access_token = data.token;
-        moltin.Cart.Identifier(true, req.mySession.access_token);
+        data.cart=req.mySession.cartID;
+        console.log(data);
         res.status(200).json(data);
       }else{
-          // moltin.Cart.Identifier(true, true);
-        // console.log("3 runs");
+        console.log("3 runs");
         req.mySession.access_token = data.access_token;
-        moltin.Cart.Identifier(true, req.mySession.access_token);
         // console.log(req.mySession.access_token);
+        data.cart=req.mySession.cartID;
+        console.log(data);
         res.status(200).json(data);
       }
 
