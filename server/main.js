@@ -11,6 +11,7 @@ var util = require('util');
 let ejs = require('ejs');
 let sessions = require('client-sessions');
 let request = require('request');
+let crypto = require('crypto');
 let app = express();
 
 
@@ -47,8 +48,13 @@ app.use(function(req, res, next) {
 
   if (!req.mySession.access_token || !req.mySession.expires) {
     res.setHeader('X-Seen-You', 'false');
-      moltin.Cart.Identifier(true, true);
+      // moltin.Cart.Identifier(true, true);
     // authMoltin(req, res, next);
+
+    var token = generateCrypto();
+
+      moltin.Cart.Identifier(true, token);
+      req.mySession.cartID = token;
 
 
   }else{
@@ -69,6 +75,13 @@ app.use(function(req, res, next) {
 });
 
 
+var generateCrypto=()=>{
+  crypto.randomBytes(18, function(err, buffer) {
+    var token = buffer.toString('hex');
+    console.log('token', token);
+    return token;
+  });
+}
 
 
 
@@ -85,19 +98,19 @@ function authMoltin(req, res){
 
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
         console.log("1 runs");
-        moltin.Cart.Identifier(true, true);
+        // moltin.Cart.Identifier(true, true);
 
         //     console.log(data);
         res.status(200).json(data);
 
       }else if(data.token){
-          moltin.Cart.Identifier(true, true);
+          // moltin.Cart.Identifier(true, true);
         // console.log("2 runs");
         // console.log(data);
         req.mySession.access_token = data.token;
         res.status(200).json(data);
       }else{
-          moltin.Cart.Identifier(true, true);
+          // moltin.Cart.Identifier(true, true);
         // console.log("3 runs");
         req.mySession.access_token = data.access_token;
         // console.log(req.mySession.access_token);

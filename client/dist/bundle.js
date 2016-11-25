@@ -147,6 +147,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }
   };
 
+  $rootScope.Auth;
+
   $rootScope.authentication = function () {
 
     // Simple GET request example:
@@ -164,6 +166,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
         var expires_in = response.data.expires_in;
         var access_token = response.data.access_token;
         var type = response.data.token_type;
+
+        $rootScope.Auth = response.data;
 
         $rootScope.getProductsFN();
         $rootScope.getCollections();
@@ -1209,7 +1213,7 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
 
   $rootScope.openCart = function () {
     $rootScope.updateCart();
-    $location.path('/shop/cart', true);
+    $location.path('shop/cart', true);
   };
 
   $rootScope.closeCart = function () {

@@ -199,6 +199,9 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
+
+$rootScope.Auth;
+
   $rootScope.authentication = function(){
 
         // Simple GET request example:
@@ -216,6 +219,8 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
               var expires_in = response.data.expires_in;
               var access_token = response.data.access_token;
               var type = response.data.token_type;
+
+              $rootScope.Auth =response.data;
 
               $rootScope.getProductsFN();
               $rootScope.getCollections();
