@@ -35,7 +35,7 @@
 
 
 
-    <form name="paymentForm" novalidate class="payment-form" method="post" ng-if="checkout.gateway=='stripe'">
+    <form name="paymentForm" novalidate class="payment-form" method="post" ng-show="checkout.gateway=='stripe'">
 
 
       <div class="payment-form-card">
@@ -46,13 +46,13 @@
           </input>
         </div>
         <div class="form-entry">
-          <input type="text" name="month" value="expiry month" ng-model="payment.expiry_month" required="required" placeholder="expiry month" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry month'" min="0" max="2">
+          <input type="text" name="month" value="expiry month" ng-model="payment.expiry_month" required="required" placeholder="expiry month (mm)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry month (mm)'" min="0" max="2">
             <span ng-show="paymentForm.month.$error.integer">The value is not a valid integer!</span>
             <span ng-show="paymentForm.month.$error.min || paymentForm.month.$error.max">The value must be in range 0 to 2!</span>
           </input>
         </div>
         <div class="form-entry">
-          <input type="text" name="year" value="expiry year" ng-model="payment.expiry_year" required="required" placeholder="expiry year" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry year'"  min="3" max="3">
+          <input type="text" name="year" value="expiry year" ng-model="payment.expiry_year" required="required" placeholder="expiry yea (yyyy)r" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry year (yyyy)'"  min="3" max="3">
             <span ng-show="paymentForm.year.$error.integer">The value is not a valid integer!</span>
             <span ng-show="paymentForm.year.$error.min || paymentForm.year.$error.max">The value must be in range 0 to 4!</span>
           </input>
