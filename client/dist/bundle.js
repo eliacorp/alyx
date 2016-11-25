@@ -1208,8 +1208,8 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   $rootScope.cartChanged = false;
 
   $rootScope.openCart = function () {
-    $rootScope.showCart = !$rootScope.showCart;
     $rootScope.updateCart();
+    $location.path('/shop/cart', true);
   };
 
   $rootScope.closeCart = function () {
@@ -1242,9 +1242,9 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
     }, function (error) {});
   }; //updateCart
 
-  setTimeout(function () {
-    $rootScope.updateCart();
-  }, 2000);
+  // setTimeout(function(){
+  //   $rootScope.updateCart();
+  // },2000);
 
   $rootScope.removeItem = function (id) {
 
@@ -1889,6 +1889,7 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
       }
     }).then(function (response) {
       $rootScope.Cart = response;
+      console.log(response);
       $rootScope.updateCart();
     });
   }; //addToCart
@@ -1903,7 +1904,8 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
         method: 'POST',
         data: $rootScope.selectedVariation
       }).then(function (response) {
-        // $rootScope.Cart = response;
+        $rootScope.Cart = response;
+        console.log(response);
         $rootScope.updateCart();
       });
     } else {

@@ -8,8 +8,8 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
   $rootScope.cartChanged = false;
 
   $rootScope.openCart = function(){
-    $rootScope.showCart = !$rootScope.showCart;
     $rootScope.updateCart();
+    $location.path('shop/cart', true);
   }
 
   $rootScope.closeCart = function(){
@@ -47,9 +47,9 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
         });
   }//updateCart
 
-setTimeout(function(){
-  $rootScope.updateCart();
-},2000);
+// setTimeout(function(){
+//   $rootScope.updateCart();
+// },2000);
 
 
 

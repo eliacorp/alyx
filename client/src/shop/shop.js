@@ -125,6 +125,7 @@ $rootScope.addToCart = function(id){
               }
       }).then(function(response){
         $rootScope.Cart = response;
+        console.log(response);
         $rootScope.updateCart();
       });
 }//addToCart
@@ -140,7 +141,8 @@ $rootScope.addToCart = function(id){
         method: 'POST',
         data: $rootScope.selectedVariation
       }).then(function(response){
-        // $rootScope.Cart = response;
+        $rootScope.Cart = response;
+        console.log(response);
         $rootScope.updateCart();
       });
     }else{
