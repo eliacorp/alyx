@@ -13,14 +13,14 @@
   @include support-wrapper;
   .contact-ul{
     .contact-li{
-      margin-bottom: 20px;
+      margin-bottom: $margin-top-list;
       @include respond-to(phone){
         margin-bottom: 15px;
         width: 100%;
         word-wrap: break-word;
       }
       .contact-li-sub{
-        margin-top: $margin-top-p;
+        margin-bottom: $margin-top-p;
         &:nth-child(1){
           margin-top: 0;
         }

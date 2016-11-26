@@ -2932,7 +2932,7 @@ input, select, textarea {
       right: auto;
       top: auto; } }
   .contact-wrapper .contact-ul .contact-li {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     /*  @if $media == large-desktop {
         @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
       }*/ }
@@ -2942,7 +2942,7 @@ input, select, textarea {
         width: 100%;
         word-wrap: break-word; } }
     .contact-wrapper .contact-ul .contact-li .contact-li-sub {
-      margin-top: 20px; }
+      margin-bottom: 20px; }
       .contact-wrapper .contact-ul .contact-li .contact-li-sub:nth-child(1) {
         margin-top: 0; }
     .contact-wrapper .contact-ul .contact-li .contact-h3 {
