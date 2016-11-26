@@ -38,7 +38,6 @@
 
         <div class="detail-modifiers">
           <ul class="detail-modifiers-ul" ng-repeat="m in Detail.modifiers">
-            <p class="detail-modifiers-ul-placeholder blink-infinite" ng-click="showSelection(m.id)" ng-show="sizeLoading">{{m.title}} </p>
 
             <div class="detail-modifiers-variations" ng-show="!sizeLoading">
 
@@ -47,6 +46,8 @@
                 <a>{{v.title}}</a>
               </li>
             </div>
+            <p class="detail-modifiers-ul-placeholder blink-infinite" ng-click="showSelection(m.id)" ng-show="sizeLoading">{{m.title}} </p>
+
             <!-- <div class="">{{selectedVariation[m.id].variation_title}}  </div> -->
           </ul>
 
