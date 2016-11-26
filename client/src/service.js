@@ -126,8 +126,10 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
                 //  scrollLength = document.getElementById("html body").scrollHeight;
                  windowheight = $rootScope.windowHeight;
                  scroll = scrollPosition + number;
+
+                 console.log(scrollPosition, number);
                   element.stop().animate({
-                    scrollTop: scroll
+                    scrollTop: number
                   },600,
                     'swing'
                     // function() {
@@ -135,7 +137,7 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
                     //   // console.log($location.path());
                     // }
                   );
-                }, 600);
+                }, 800);
 
 
       };

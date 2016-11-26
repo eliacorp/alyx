@@ -28,28 +28,32 @@ Support.controller('supportCtrl', function($scope, $anchorScroll, $http, $rootSc
 
 
 
+  $rootScope.supportScrollTo = ()=>{
+  	if($location.path()=='/about'||$location.path()=='/contact'||$location.path()=='/stockists'){
+  		var path = $location.path();
+  		path = path.replace(/\//g, '');
+  		console.log(path);
+  		var anchor = path+"Hash";
+  		console.log('anchor: '+anchor);
+  		anchorSmoothScroll.scrollTo(anchor);
+  	}
+  }
+
+
 
 
 
 		$scope.$on("supportDataArrived", function (event) {
       $scope.contact = $rootScope.contactData.contact;
     	$scope.about = $rootScope.aboutData;
+
+      $rootScope.supportScrollTo();
+
 		});
 
 
 
-$rootScope.supportScrollTo = ()=>{
-	if($location.path()=='/about'||$location.path()=='/contact'||$location.path()=='/stockists'){
-		var path = $location.path();
-		path = path.replace(/\//g, '');
-		console.log(path);
-		var anchor = path+"Hash";
-		console.log('anchor: '+anchor);
-		anchorSmoothScroll.scrollTo(anchor);
-	}
-}
 
-$rootScope.supportScrollTo();
 
 
 

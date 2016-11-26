@@ -1026,15 +1026,17 @@ Service.service('anchorSmoothScroll', function ($location, $rootScope) {
       //  scrollLength = document.getElementById("html body").scrollHeight;
       windowheight = $rootScope.windowHeight;
       scroll = scrollPosition + number;
+
+      console.log(scrollPosition, number);
       element.stop().animate({
-        scrollTop: scroll
+        scrollTop: number
       }, 600, 'swing'
       // function() {
       //   // $location.path(section, false);
       //   // console.log($location.path());
       // }
       );
-    }, 600);
+    }, 800);
   };
 
   this.scrollHorizontally = function (number, section) {
@@ -2639,11 +2641,6 @@ Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootS
 		console.log('error', error);
 	});
 
-	$scope.$on("supportDataArrived", function (event) {
-		$scope.contact = $rootScope.contactData.contact;
-		$scope.about = $rootScope.aboutData;
-	});
-
 	$rootScope.supportScrollTo = function () {
 		if ($location.path() == '/about' || $location.path() == '/contact' || $location.path() == '/stockists') {
 			var path = $location.path();
@@ -2655,7 +2652,12 @@ Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootS
 		}
 	};
 
-	$rootScope.supportScrollTo();
+	$scope.$on("supportDataArrived", function (event) {
+		$scope.contact = $rootScope.contactData.contact;
+		$scope.about = $rootScope.aboutData;
+
+		$rootScope.supportScrollTo();
+	});
 
 	$scope.supportHashFn = function (x) {
 		var newHash = x;
