@@ -52,32 +52,39 @@
 		<table border="0" cellpadding="2" cellspacing="0" style="width: 100%">
 			<thead>
 			   <tr style="border-top: 1px solid #ccc">
-			    <th></th>
-			   	<th style="font-weight:bold;text-align:left">Product</th>
-			   	<th style="font-weight:bold;text-align:left">Quantity</th>
-			   	<th style="font-weight:bold;text-align:left">Total</th>
+			    <!-- <th></th> -->
+			   	<th style="font-weight:bold;text-align:left" colspan="3">Product</th>
+			   	<th style="font-weight:bold;text-align:left" colspan="3">Quantity</th>
+			   	<th style="font-weight:bold;text-align:left" colspan="3">Price</th>
 			   </tr>
 			</thead>
 
 			<tfoot>
+
 				<tr>
-					<td colspan="3">&nbsp;</td>
+					<!-- <td colspan="3">&nbsp;</td> -->
+					<td><strong>Shipping:</strong></td>
+					<td align="left">{{ shipping.data.price.value }}</td>
+				</tr>
+				<tr>
+					<!-- <td colspan="3">&nbsp;</td> -->
 					<td><strong>Total:</strong></td>
-					<td align="right">{{ total }}</td>
+					<td align="left">€ {{ total }}</td>
 				</tr>
 			</tfoot>
 
 			<tbody>
 			{% for item in items %}
 				<tr style="border-top: 1px solid #ccc">
-					<td>
+					<td colspan="3">
 					{% if item.product.data.images is empty %}
 					{% else %}
 					<img src="http://{{ item.product.data.images.0.segments.domain }}{{ item.product.data.images.0.segments.suffix }}" alt="{{ item.title }}" style="width: 100px;"/>
 					{% endif %}
 					</td>
-					<td align="center">{{ item.quantity }}</td>
-					<td align="center">{{ item.totals.value }}</td>
+					<td align="left" colspan="3">{{ item.quantity }}</td>
+					<td align="left" colspan="3">€ {{ item.totals.value }}</td>
+					<!-- item.totals.value -->
 			 	</tr>
 			{% endfor %}
 			</tbody>

@@ -147,40 +147,43 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }
   };
 
-  $rootScope.Auth;
-
-  $rootScope.authentication = function () {
-
-    // Simple GET request example:
-    $http({
-      method: 'GET',
-      url: '/authenticate'
-    }).then(function successCallback(response) {
-
-      if (response.data.access_token || response.data.token) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log(response.data);
-        var expires = response.data.expires;
-        var identifier = response.data.identifier;
-        var expires_in = response.data.expires_in;
-        var access_token = response.data.access_token;
-        var type = response.data.token_type;
-
-        $rootScope.Auth = response.data;
-
-        $rootScope.getProductsFN();
-        $rootScope.getCollections();
-
-        // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-      }
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-    });
-  }; //addToCart
-
-  $rootScope.authentication();
+  // $rootScope.Auth;
+  //
+  //   $rootScope.authentication = function(){
+  //
+  //         // Simple GET request example:
+  //         $http({
+  //           method: 'GET',
+  //           url: '/authenticate'
+  //         }).then(function successCallback(response) {
+  //
+  //           if(response.data.access_token || response.data.token){
+  //               // this callback will be called asynchronously
+  //               // when the response is available
+  //               console.log(response.data);
+  //               var expires = response.data.expires;
+  //               var identifier = response.data.identifier;
+  //               var expires_in = response.data.expires_in;
+  //               var access_token = response.data.access_token;
+  //               var type = response.data.token_type;
+  //
+  //               $rootScope.Auth =response.data;
+  //
+  //               $rootScope.getProductsFN();
+  //               $rootScope.getCollections();
+  //
+  //               // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
+  //
+  //           }
+  //
+  //           }, function errorCallback(response) {
+  //             // called asynchronously if an error occurs
+  //             // or server returns response with an error status.
+  //           });
+  //
+  //   }//addToCart
+  //
+  //   $rootScope.authentication();
 
   // function eraseCookie(name) {
   //   $rootScope.createCookie(name,"",-1);
@@ -233,6 +236,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     });
   };
 
+  $rootScope.getProductsFN();
+
   //get shop collections
   $rootScope.getCollections = function () {
 
@@ -249,6 +254,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
       // or server returns response with an error status.
     });
   }; //getCollections
+
+  $rootScope.getCollections();
 
   $rootScope.setPage = function (page) {
     $rootScope.page = page;
@@ -1248,7 +1255,7 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
 
   setTimeout(function () {
     $rootScope.updateCart();
-  }, 2000);
+  }, 1000);
 
   $rootScope.removeItem = function (id) {
 
@@ -1340,22 +1347,31 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
   $rootScope.shipmentToPayment = function (event) {
     if ($scope.checkoutForm.$valid) {
 
-      $location.path('/shop/payment');
-      mailchimp.register($rootScope.checkout);
-
       $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
-        $rootScope.Order = response.data;
-        $rootScope.payment.id = response.data.id;
-        console.log($rootScope.Order);
+
+        console.log(response);
         console.log("posted successfully");
-      }, function (data) {
+
+        $rootScope.Order = response.data;
+        // $rootScope.payment.id = response.data.id;
+
+        $location.path('/shop/payment', true);
+        mailchimp.register($rootScope.checkout);
+      }, function (response) {
+        $rootScope.error = { value: true, text: response.data };
+        // event.preventDefault();
+        setTimeout(function () {
+          $rootScope.error = { value: false, text: '' };
+          $rootScope.$apply();
+        }, 2000);
+
         console.error("error in posting");
       });
     } else {
       $rootScope.error = { value: true, text: 'fill in the form correctly' };
       // event.preventDefault();
       setTimeout(function () {
-        $rootScope.error = { value: false, text: 'fill in the form correctly' };
+        $rootScope.error = { value: false, text: '' };
         $rootScope.$apply();
       }, 2000);
     }
@@ -1365,6 +1381,8 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     console.log("change");
     console.log("old", oldVal);
     console.log("new", newVal);
+    console.log(checkoutForm);
+    console.log(checkoutForm.$error);
     if ($scope.checkoutForm.$valid) {
       $rootScope.shipment_forwardActive = true;
     } else {
@@ -1455,7 +1473,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
   $rootScope.Processed = { value: false, error: false, data: '' };
 
   $rootScope.payment = {
-    id: '',
+    id: $rootScope.Order.id,
     gateway: '',
     first_name: $rootScope.checkout.billing.first_name,
     last_name: $rootScope.checkout.billing.last_name,
@@ -1479,6 +1497,10 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
         $rootScope.changeOrderGateway();
       } else {
         $rootScope.error = { value: true, text: 'data invalid' };
+        setTimeout(function () {
+          $rootScope.error = { value: false, text: 'data invalid' };
+          $rootScope.$apply();
+        }, 2000);
       }
     } else {
       $rootScope.changeOrderGateway();

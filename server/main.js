@@ -70,8 +70,6 @@ app.use(function(req, res, next) {
     if(!req.mySession.cartID){
 
       // var token = generateCrypto();
-
-
       crypto.randomBytes(18, function(err, buffer) {
         req.mySession.cartID = buffer.toString('hex');
         console.log("crypto_token: "+req.mySession.cartID );
@@ -81,38 +79,31 @@ app.use(function(req, res, next) {
       console.log("token: "+req.mySession.cartID );
       moltin.Cart.Identifier(true, req.mySession.cartID);
 
-
-        next();
     }else{
-
-
-            // crypto.randomBytes(18, function(err, buffer) {
-            //   req.mySession.cartID = buffer.toString('hex');
-            //   console.log("crypto_token: "+req.mySession.cartID );
-            //
-            // });
-
-            // moltin.Cart.Identifier(true, req.mySession.cartID);
-
 
       console.log("req.mySession.cartID"+req.mySession.cartID);
 
-        next();
     }
 
 
-  // if (!req.mySession.access_token || !req.mySession.expires) {
-  //   res.setHeader('X-Seen-You', 'false');
-  //     // moltin.Cart.Identifier(true, true);
-  //   // authMoltin(req, res, next);
-  // }else{
-  //   var timeLeft = setToHappen(req.mySession.expires);
-  //   if(timeLeft<1000){
-  //     // authMoltin(req, res, next);
-  //   }else{
-  //     // authMoltin(req, res, next);
-  //   }
-  // }
+
+    if (!req.mySession.access_token || !req.mySession.expires) {
+      res.setHeader('X-Seen-You', 'false');
+      authMoltin(req, res, next);
+
+    }else{
+      var timeLeft = setToHappen(req.mySession.expires);
+
+      if(timeLeft<1000){
+        authMoltin(req, res, next);
+      }else{
+        // authMoltin(req, res, next);
+        moltin.Authenticate(function(data) {
+        });
+        next();
+      }
+
+    }
 
 
 
@@ -123,12 +114,12 @@ app.use(function(req, res, next) {
 
 
 
-app.get('/authenticate', function(req, res){
-  authMoltin(req, res);
-});
+// app.get('/authenticate', function(req, res){
+//   authMoltin();
+// });
 
 
-function authMoltin(req, res){
+function authMoltin(req, res, next){
   moltin.Authenticate(function(data) {
 
     if(data){
@@ -138,25 +129,27 @@ function authMoltin(req, res){
         data.cart=req.mySession.cartID;
         console.log(data);
         //     console.log(data);
-        res.status(200).json(data);
+        // res.status(200).json(data);
 
       }else if(data.token){
         console.log("2 runs");
         // console.log(data);
         req.mySession.access_token = data.token;
+
         data.cart=req.mySession.cartID;
         console.log(data);
-        res.status(200).json(data);
+        // res.status(200).json(data);
       }else{
         console.log("3 runs");
         req.mySession.access_token = data.access_token;
         // console.log(req.mySession.access_token);
         data.cart=req.mySession.cartID;
         console.log(data);
-        res.status(200).json(data);
+        // res.status(200).json(data);
       }
 
       req.mySession.expires = data.expires;
+      next();
 
 
 
@@ -437,7 +430,9 @@ function setToHappen(d){
 
         }, function(error, response, c) {
           console.log(error, c);
-          res.json(error);
+          console.log(response.body);
+          console.log(response);
+          res.status(c).json(response);
         });
 
 
@@ -492,6 +487,7 @@ function setToHappen(d){
         var expiry_month = order.expiry_month;
         var expiry_year = order.expiry_year;
         var cvv = order.cvv;
+        console.log("order.id: "+order.id);
         var obj={};
         obj = {
                   data: {
@@ -516,6 +512,7 @@ function setToHappen(d){
               console.log("payment failed!");
               console.log("c: "+c);
               console.log("error: "+error);
+              console.log(response.body);
 
                 res.status(c).json(response);
 

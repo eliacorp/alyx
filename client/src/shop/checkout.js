@@ -48,18 +48,29 @@ $rootScope.checkout = {
   $rootScope.shipmentToPayment = (event) =>{
     if($scope.checkoutForm.$valid){
 
-      $location.path('/shop/payment');
-      mailchimp.register($rootScope.checkout);
+
 
       $http.post('/cartToOrder', $rootScope.checkout)
 
       .then(function(response) {
-        $rootScope.Order=response.data;
-        $rootScope.payment.id = response.data.id;
-        console.log($rootScope.Order);
+
+        console.log(response);
         console.log("posted successfully");
 
-      }, function(data) {
+        $rootScope.Order=response.data;
+        // $rootScope.payment.id = response.data.id;
+
+        $location.path('/shop/payment', true);
+        mailchimp.register($rootScope.checkout);
+
+      }, function(response) {
+        $rootScope.error = {value: true, text:response.data};
+        // event.preventDefault();
+        setTimeout(function(){
+          $rootScope.error = {value: false, text:''};
+          $rootScope.$apply();
+        }, 2000);
+
           console.error("error in posting");
       });
 
@@ -68,7 +79,7 @@ $rootScope.checkout = {
       $rootScope.error = {value: true, text:'fill in the form correctly'};
       // event.preventDefault();
       setTimeout(function(){
-        $rootScope.error = {value: false, text:'fill in the form correctly'};
+        $rootScope.error = {value: false, text:''};
         $rootScope.$apply();
       }, 2000);
     }
@@ -79,6 +90,8 @@ $rootScope.checkout = {
     console.log("change");
     console.log("old", oldVal);
     console.log("new", newVal);
+    console.log(checkoutForm);
+    console.log(checkoutForm.$error);
     if ($scope.checkoutForm.$valid){
       $rootScope.shipment_forwardActive = true;
     }else{

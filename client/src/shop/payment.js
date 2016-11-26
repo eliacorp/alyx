@@ -8,7 +8,7 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
   $rootScope.Processed={value: false, error:false, data:''};
 
     $rootScope.payment = {
-                            id: '',
+                            id: $rootScope.Order.id,
                             gateway:'',
                             first_name: $rootScope.checkout.billing.first_name,
                             last_name: $rootScope.checkout.billing.last_name,
@@ -36,6 +36,10 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
         $rootScope.changeOrderGateway();
       }else{
         $rootScope.error = {value: true, text:'data invalid'};
+        setTimeout(function(){
+          $rootScope.error = {value: false, text:'data invalid'};
+          $rootScope.$apply();
+        }, 2000);
       }
     }else{
       $rootScope.changeOrderGateway();

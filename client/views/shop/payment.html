@@ -52,7 +52,7 @@
           </input>
         </div>
         <div class="form-entry">
-          <input type="text" name="year" value="expiry year" ng-model="payment.expiry_year" required="required" placeholder="expiry yea (yyyy)r" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry year (yyyy)'"  min="3" max="3">
+          <input type="text" name="year" value="expiry year" ng-model="payment.expiry_year" required="required" placeholder="expiry year (yyyy)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry year (yyyy)'"  min="3" max="3">
             <span ng-show="paymentForm.year.$error.integer">The value is not a valid integer!</span>
             <span ng-show="paymentForm.year.$error.min || paymentForm.year.$error.max">The value must be in range 0 to 4!</span>
           </input>
