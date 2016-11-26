@@ -82,6 +82,7 @@ app.use(function(req, res, next) {
     }else{
 
       console.log("req.mySession.cartID"+req.mySession.cartID);
+      moltin.Cart.Identifier(true, req.mySession.cartID);
 
     }
 
