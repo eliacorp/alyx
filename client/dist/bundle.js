@@ -1922,7 +1922,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
 
   $scope.getVariationsLevel = function (productId) {
     $scope.sizeLoading = true;
-
     $http({
       url: '/product/' + productId + '/variations/get',
       method: 'GET'

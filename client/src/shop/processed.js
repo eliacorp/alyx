@@ -126,7 +126,7 @@ $rootScope.getOrderItems = ()=>{
 
       if(contents[i].product.data.modifiers.length!=0){
         var key = Object.keys(contents[i].product.data.modifiers)[0];
-        var thisProduct = contents[i].product.data.modifiers[key].data.product
+        var thisProduct = contents[i].product.data.modifiers[key].data.product;
 
           for (var p in $rootScope.Product){
             if($rootScope.Product[p].id==thisProduct){
