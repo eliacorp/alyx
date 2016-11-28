@@ -17,7 +17,6 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
   }
 
   $rootScope.$watch('Cart', function(newValue) {
-      console.log("animate");
       // $rootScope.Cart = newValue;
       $rootScope.animateCart();
 
@@ -26,20 +25,15 @@ Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$h
 
 
   $rootScope.updateCart = function(){
-    console.log("updatecart");
         $http({
           url: '/cart/get',
           method: 'GET'
         }).then(function(response){
-          console.log(response);
           $rootScope.Cart = response.data;
-
-          console.log($rootScope.Cart);
           $rootScope.animateCart();
 
           //attaching item id if cart>0
           if(!$rootScope.Cart.total_items==0){
-            console.log("cart has some stuff");
             $rootScope.attachItemID($rootScope.Cart.contents);
           }
         }, function(error){
@@ -74,17 +68,13 @@ $rootScope.removeItem = function(id){
                 id: id
               }
       }).then(function(response){
-        console.log("object removed");
         $rootScope.Cart = response;
-
         $rootScope.updateCart();
-        console.log(response);
       });
 }
 
 
   $rootScope.cartToShipment = function(){
-    console.log("toShipment");
     if($rootScope.Cart.total_items>0){
       $location.path('/shop/shipment', true);
     }else{
@@ -101,7 +91,6 @@ $rootScope.removeItem = function(id){
   //function that animates the cart button when you add a product
   $rootScope.animateCart = () =>{
     $rootScope.cartChanged = true;
-    console.log("animate");
     setTimeout(function(){$rootScope.cartChanged = false; $rootScope.$apply();}, 900);
   }
 

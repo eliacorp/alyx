@@ -15,8 +15,6 @@ Collection.controller('collectionCtrl', function($scope, $location, $rootScope, 
 	$rootScope.chooseCollection=()=>{
 		for (var i in $rootScope.collections){
 			if($rootScope.collections[i].slug==$routeParams.collection){
-				console.log($rootScope.collections[i].slug);
-				console.log($rootScope.Collection);
 				$rootScope.Collection = $rootScope.collections[i];
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 			}

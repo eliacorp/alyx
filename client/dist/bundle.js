@@ -25,8 +25,6 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   var original = $location.path;
   $location.path = function (path, reload) {
     if (reload === false) {
-      // $rootScope.pageLoading = false;
-      console.log("$rootScope.pageLoading", $rootScope.pageLoading);
       var lastRoute = $route.current;
       var un = $rootScope.$on('$locationChangeSuccess', function () {
         $route.current = lastRoute;
@@ -218,11 +216,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   $rootScope.Product;
 
   $rootScope.getProductsFN = function () {
-    console.log("getting products");
     $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
       $rootScope.Product = response.data;
-      console.log(response);
-      console.log($rootScope.Product);
       // for (var i in $rootScope.Product){
       //   $rootScope.detailUpdate($rootScope.Product[i].sku);
       //   return false;
@@ -247,9 +242,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
       url: '/getCollections'
     }).then(function (response) {
       $rootScope.Collection_shop = response.data;
-      console.log(response.data);
     }, function (response) {
-
+      console.log(response);
       // called asynchronously if an error occurs
       // or server returns response with an error status.
     });
@@ -268,9 +262,7 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
       method: 'GET',
       url: 'assets/countries.json'
     }).then(function (response) {
-
       $rootScope.countries = response.data;
-      console.log(response.data);
     }, function (response) {
 
       $scope.error = { value: true, text: 'countries not available, this page will be reloaded' };
@@ -293,7 +285,6 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
 
         if (type == 'collection') {
           $rootScope.collections = response.results;
-          console.log($rootScope.collections);
           $rootScope.chooseCollection();
           if (collectionRan == false) {
             collectionRan = true;
@@ -302,11 +293,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
             // }, 900);
           }
         } else if (type == 'stockist') {
-            console.log(type + " type");
-            console.log("stockist");
             stockistRan = true;
             $rootScope.Stockist = response.results;
-            console.log(response.results);
             if (stockistRan == false) {
               stockistRan = true;
               // setTimeout(function(){
@@ -548,8 +536,6 @@ Collection.controller('collectionCtrl', function ($scope, $location, $rootScope,
 	$rootScope.chooseCollection = function () {
 		for (var i in $rootScope.collections) {
 			if ($rootScope.collections[i].slug == $routeParams.collection) {
-				console.log($rootScope.collections[i].slug);
-				console.log($rootScope.Collection);
 				$rootScope.Collection = $rootScope.collections[i];
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 			}
@@ -578,14 +564,10 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 	$scope.lookbookStatus = "read";
 
 	$scope.selectMainLook = function (index) {
-
-		console.log(index);
 		$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
-		console.log($scope.mainLook);
 	};
 
 	$rootScope.$on("collectionReady", function () {
-		console.log("collectionReady");
 		// $scope.selectMainLook(1);
 		$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 	});
@@ -725,7 +707,6 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 
 			if (index < arrayLength) {
 				index = index + 1;
-				console.log(index);
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
 			} else {
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
@@ -734,7 +715,6 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 
 			if (index > 0) {
 				index = index - 1;
-				console.log(index);
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
 			} else {
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[arrayLength];
@@ -1026,8 +1006,6 @@ Service.service('anchorSmoothScroll', function ($location, $rootScope) {
       //  scrollLength = document.getElementById("html body").scrollHeight;
       windowheight = $rootScope.windowHeight;
       scroll = scrollPosition + number;
-
-      console.log(scrollPosition, number);
       element.stop().animate({
         scrollTop: number
       }, 600, 'swing'
@@ -1147,7 +1125,6 @@ Service.service('mailchimp', function ($location, $rootScope, $resource) {
       //COMPILING ADDRESS
       var newaddress = [];
       for (i in mailchimp.ADDRESS) {
-        console.log(i);
         if (i == 'addr1') {
           newaddress = newaddress + mailchimp.ADDRESS[i];
         } else {
@@ -1230,26 +1207,20 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   };
 
   $rootScope.$watch('Cart', function (newValue) {
-    console.log("animate");
     // $rootScope.Cart = newValue;
     $rootScope.animateCart();
   });
 
   $rootScope.updateCart = function () {
-    console.log("updatecart");
     $http({
       url: '/cart/get',
       method: 'GET'
     }).then(function (response) {
-      console.log(response);
       $rootScope.Cart = response.data;
-
-      console.log($rootScope.Cart);
       $rootScope.animateCart();
 
       //attaching item id if cart>0
       if (!$rootScope.Cart.total_items == 0) {
-        console.log("cart has some stuff");
         $rootScope.attachItemID($rootScope.Cart.contents);
       }
     }, function (error) {});
@@ -1273,16 +1244,12 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
         id: id
       }
     }).then(function (response) {
-      console.log("object removed");
       $rootScope.Cart = response;
-
       $rootScope.updateCart();
-      console.log(response);
     });
   };
 
   $rootScope.cartToShipment = function () {
-    console.log("toShipment");
     if ($rootScope.Cart.total_items > 0) {
       $location.path('/shop/shipment', true);
     } else {
@@ -1297,7 +1264,6 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
   //function that animates the cart button when you add a product
   $rootScope.animateCart = function () {
     $rootScope.cartChanged = true;
-    console.log("animate");
     setTimeout(function () {
       $rootScope.cartChanged = false;$rootScope.$apply();
     }, 900);
@@ -1350,13 +1316,8 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     if ($scope.checkoutForm.$valid) {
 
       $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
-
-        console.log(response);
-        console.log("posted successfully");
-
         $rootScope.Order = response.data;
         // $rootScope.payment.id = response.data.id;
-
         $location.path('/shop/payment', true);
         mailchimp.register($rootScope.checkout);
       }, function (response) {
@@ -1366,7 +1327,6 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
           $rootScope.error = { value: false, text: '' };
           $rootScope.$apply();
         }, 2000);
-
         console.error("error in posting");
       });
     } else {
@@ -1380,11 +1340,6 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
   };
 
   $scope.$watch('checkoutForm.$valid', function (newVal, oldVal) {
-    console.log("change");
-    console.log("old", oldVal);
-    console.log("new", newVal);
-    console.log(checkoutForm);
-    console.log(checkoutForm.$error);
     if ($scope.checkoutForm.$valid) {
       $rootScope.shipment_forwardActive = true;
     } else {
@@ -1397,7 +1352,6 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
   // }//cartToOrder
 
   $rootScope.backFromCheckout = function () {
-    console.log($rootScope.templates[0]);
     $rootScope.template = $rootScope.templates[0];
     $rootScope.showCart = true;
     $rootScope.backFromPayment();
@@ -1412,9 +1366,7 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
   // '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
 
   $scope.$watch('isBillingDifferent', function (value) {
-    console.log($scope.isBillingDifferent);
     if (!$scope.isBillingDifferent) {
-      console.log($rootScope.checkout);
       $rootScope.checkout.billing.first_name = $rootScope.checkout.shipment.first_name;
       $rootScope.checkout.billing.last_name = $rootScope.checkout.shipment.last_name;
       $rootScope.checkout.billing.address_1 = $rootScope.checkout.shipment.address_1;
@@ -1429,11 +1381,9 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
   var Europe = ['AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'DE', 'GR', 'HU', 'IS', 'IE', 'KZ', 'XK', 'LV', 'LI', 'LT', 'LU', 'MK', 'MT', 'MD', 'MC', 'ME', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB'];
   var NorthAmerica = ['US', 'CA', 'MX'];
   $scope.$watch('checkout', function (value) {
-    console.log(value);
     // $rootScope.checkout.customer.first_name = $rootScope.checkout.shipment.first_name;
     // $rootScope.checkout.customer.last_name = $rootScope.checkout.shipment.last_name;
     if (!$scope.isBillingDifferent) {
-      console.log($rootScope.checkout);
       $rootScope.checkout.billing.first_name = $rootScope.checkout.shipment.first_name;
       $rootScope.checkout.billing.last_name = $rootScope.checkout.shipment.last_name;
       $rootScope.checkout.billing.address_1 = $rootScope.checkout.shipment.address_1;
@@ -1444,22 +1394,16 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
       $rootScope.checkout.billing.phone = $rootScope.checkout.shipment.phone;
     }
 
-    console.log('country: ' + $rootScope.checkout.shipment.country);
     if (NorthAmerica.indexOf($rootScope.checkout.shipment.country) != -1) {
       $rootScope.checkout.shipment_method = '1374911520424591424';
-      console.log('north america');
     } else if ($rootScope.checkout.shipment.country == 'IT') {
       $rootScope.checkout.shipment_method = '1374912184424857665';
-      console.log('Italy');
     } else if (Europe.indexOf($rootScope.checkout.shipment.country) != -1) {
       $rootScope.checkout.shipment_method = '1305371023712977230';
-      console.log('EU');
     } else if ($rootScope.checkout.shipment.country == 'RU') {
       $rootScope.checkout.shipment_method = '1374912619718115394';
-      console.log('Russia');
     } else {
       $rootScope.checkout.shipment_method = '1374913497787269187';
-      console.log('INT');
     }
   }, true);
 });
@@ -1511,15 +1455,11 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
   $rootScope.changeOrderGateway = function () {
     var orderID = $rootScope.Order.id;
-    console.log('orderID:' + orderID);
-
     if ($rootScope.checkout.gateway == 'stripe') {
       $rootScope.paymentToProcess();
     } else if ($rootScope.checkout.gateway == 'paypal-express') {
       var obj = { gateway: $rootScope.checkout.gateway };
       $http.post('/order/' + orderID + '/put', obj).then(function (response) {
-        console.log(response);
-
         $rootScope.paymentToProcess_paypal();
       }, function (error) {
         console.log(error);
@@ -1532,8 +1472,6 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
 
     $rootScope.payment.gateway = $rootScope.checkout.gateway;
     $rootScope.pageLoading = true;
-    console.log("checkout");
-    console.log($rootScope.checkout);
 
     $http({
       url: '/orderToPayment',
@@ -1544,11 +1482,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       transformRequest: transformRequestAsFormPost,
       data: $rootScope.payment
     }).then(function (response) {
-
       if (response.data.data.paid) {
-
-        console.log(response.data);
-
         $rootScope.cartLoading = false;
         $rootScope.Processed = { value: true, error: false, data: response.data.order };
         $rootScope.Transaction = response.data.data;
@@ -1579,10 +1513,6 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       transformRequest: transformRequestAsFormPost,
       data: $rootScope.payment
     }).then(function (response) {
-
-      console.log("paypal succeeded");
-      console.log(response);
-      console.log(response.data.url);
 
       window.open(response.data.url, "_self", "", false);
 
@@ -1621,8 +1551,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       url: '/order/' + orderID + '/get',
       method: 'GET'
     }).then(function (response) {
-      console.log("response");
-      console.log(response);
 
       $rootScope.Processed = { value: false, error: false, data: response.data };
       $rootScope.changeOrderStatus('paid', response.data);
@@ -1637,8 +1565,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     if ($routeParams.method == 'paypal-express') {
       $rootScope.retrieveOrder();
     } else if ($routeParams.method == 'stripe') {
-      console.log('stripe stripe stripe stripe');
-      console.log($rootScope.Transaction);
       $rootScope.changeOrderStatus('paid', $rootScope.Transaction);
     }
   }, 600);
@@ -1656,10 +1582,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     }
 
     $http.post('/order/' + orderID + '/put', obj).then(function (response) {
-      console.log(response);
       $rootScope.Processed = { value: true, error: false, data: response.data };
-      console.log("order order order");
-      console.log(response.data);
       if (response.data.status.value.key != 'paid') {
         $rootScope.pageLoading = false;
         $rootScope.getOrderItems();
@@ -1694,14 +1617,10 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
 
   $rootScope.getOrderItems = function () {
     var orderID = $routeParams.order;
-    console.log("$routeParams.order:", $routeParams.order);
     $http({
       url: '/order/' + orderID + '/items',
       method: 'GET'
     }).then(function (response) {
-      console.log("getOrderItems");
-      console.log(response.data);
-
       $rootScope.Processed.data.items = response.data;
       if ($routeParams.method == 'paypal-express') {
         $rootScope.$on('productArrived', function () {
@@ -1740,8 +1659,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
             method: 'GET'
           }).then(function (response) {
 
-            // $rootScope.Product[p].stock_level
-
             for (var p in $rootScope.Product) {
               if ($rootScope.Product[p].id == thisProduct) {
 
@@ -1759,13 +1676,8 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
                         $rootScope.Product[p].modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
 
                         if (contents[i].product.data.modifiers[key].var_title == $rootScope.Variations[t].modifiers[key].var_title) {
-                          console.log("var title:" + $rootScope.Variations[t].modifiers[key].var_title);
-                          console.log("key" + key);
-
                           var v_thisProduct = contents[i].product.data.id;
                           var v_quantity = contents[i].quantity;
-                          console.log("$rootScope.Product[p].modifiers[m].variations[v].stock_level: " + $rootScope.Product[p].modifiers[m].variations[v].stock_level);
-                          console.log("contents[i].quantity: " + contents[i].quantity);
                           var v_stock = $rootScope.Product[p].modifiers[m].variations[v].stock_level - contents[i].quantity;
                           $scope.updateStockLevel(v_thisProduct, v_stock);
                         }
@@ -1895,7 +1807,6 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
     } else {
       $location.search(thistype, id);
       $rootScope.filter[thistype].selected = id;
-      console.log($rootScope.filter);
     }
   };
 
@@ -2010,7 +1921,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   }, true);
 
   $scope.getVariationsLevel = function (productId) {
-    console.log('productId', productId);
     $scope.sizeLoading = true;
 
     $http({
@@ -2021,14 +1931,28 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
       $scope.sizeLoading = false;
       var n = 0;
       for (var m in $rootScope.Detail.modifiers) {
+
+        $scope.arrFromMyObj = Object.keys($rootScope.Detail.modifiers[m].variations).map(function (key) {
+          return $rootScope.Detail.modifiers[m].variations[key];
+        });
+        $rootScope.Detail.modifiers[m].variations = $scope.arrFromMyObj;
+
         for (var v in $rootScope.Detail.modifiers[m].variations) {
 
           for (var t in $rootScope.Variations) {
             var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+
             var title = $rootScope.Variations[t].modifiers[key].var_title;
 
             if (title == $rootScope.Detail.modifiers[m].variations[v].title) {
+              var findCherries = function findCherries(fruit) {
+                return fruit.title === title;
+              };
+
               $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+
+              var thisObj = $scope.orderSize.find(findCherries);
+              $rootScope.Detail.modifiers[m].variations[v].index = thisObj.index;
             }
           }
         }
@@ -2063,7 +1987,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
             open: true
           };
           go = false;
-          console.log($rootScope.Variations);
         }
 
         if (go == true) {
@@ -2105,6 +2028,177 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
       }
     }
   };
+
+  // $scope.orderSize=[
+  //   "25",
+  //   "26",
+  //   "27",
+  //   "28",
+  //   "29",
+  //   "30",
+  //   "31"
+  // ];
+  //
+
+  $scope.orderSize = [{
+    title: "XS",
+    type: 'string',
+    index: 0
+  }, {
+    title: "xs",
+    type: 'string',
+    index: 0
+  }, {
+    title: "S",
+    type: 'string',
+    index: 1
+  }, {
+    title: "s",
+    type: 'string',
+    index: 1
+  }, {
+    title: "M",
+    type: 'string',
+    index: 2
+  }, {
+    title: "m",
+    type: 'string',
+    index: 2
+  }, {
+    title: "L",
+    type: 'string',
+    index: 3
+  }, {
+    title: "l",
+    type: 'string',
+    index: 3
+  }, {
+    title: "XL",
+    type: 'string',
+    index: 4
+  }, {
+    title: "xl",
+    type: 'string',
+    index: 4
+  }, {
+    title: "XXL",
+    type: 'string',
+    index: 5
+  }, {
+    title: "xxl",
+    type: 'string',
+    index: 5
+  }, {
+    title: "23",
+    type: 'string',
+    index: 6
+  }, {
+    title: "24",
+    type: 'string',
+    index: 7
+  }, {
+    title: "25",
+    type: 'string',
+    index: 8
+  }, {
+    title: "26",
+    type: 'string',
+    index: 9
+  }, {
+    title: "27",
+    type: 'string',
+    index: 10
+  }, {
+    title: "28",
+    type: 'string',
+    index: 11
+  }, {
+    title: "29",
+    type: 'string',
+    index: 12
+  }, {
+    title: "30",
+    type: 'string',
+    index: 13
+  }, {
+    title: "31",
+    type: 'string',
+    index: 14
+  }, {
+    title: "32",
+    type: 'string',
+    index: 15
+  }, {
+    title: "33",
+    type: 'string',
+    index: 16
+  }, {
+    title: "34",
+    type: 'string',
+    index: 17
+  }, {
+    title: "35",
+    type: 'string',
+    index: 18
+  }, {
+    title: "36",
+    type: 'string',
+    index: 19
+  }, {
+    title: "37",
+    type: 'string',
+    index: 20
+  }, {
+    title: "38",
+    type: 'string',
+    index: 21
+  }, {
+    title: "39",
+    type: 'string',
+    index: 22
+  }, {
+    title: "40",
+    type: 'string',
+    index: 23
+  }, {
+    title: "41",
+    type: 'string',
+    index: 24
+  }, {
+    title: "42",
+    type: 'string',
+    index: 25
+  }, {
+    title: "43",
+    type: 'string',
+    index: 26
+  }, {
+    title: "44",
+    type: 'string',
+    index: 27
+  }, {
+    title: "45",
+    type: 'string',
+    index: 28
+  }];
+
+  $scope.orderVariant = function (arr) {
+    for (var a in arr) {}
+  };
+
+  // "S",
+  // "M",
+  // "L",
+  // "XL",
+  // "23",
+  // "24",
+  // "25",
+  // "26",
+  // "27",
+  // "28",
+  // "29",
+  // "30",
+  // "31"
 });
 
 },{}],11:[function(require,module,exports){
@@ -2181,13 +2275,10 @@ Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routePara
     if (!$scope.instaTotal[numberOne].videos) {
       $scope.isVideo = false;
       $scope.mainSocialImage = $scope.instaTotal[numberOne].images.standard_resolution.url;
-
-      console.log("first:" + $scope.instaTotal[numberOne].images.standard_resolution.url);
     } else if ($scope.instaTotal[numberOne].videos) {
       $scope.isVideo = true;
       var riskyVideo = $scope.instaTotal[numberOne].videos.standard_resolution.url;
       $scope.mainSocialVideo = $sce.trustAsResourceUrl(riskyVideo);
-      console.log("first:" + $scope.mainSocialVideo);
     }
     $scope.mainLink = $scope.instaTotal[numberOne].link;
     $scope.mainSocialDescription = $scope.instaTotal[numberOne].caption.text;
@@ -2325,10 +2416,6 @@ Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routePara
 
   var endpoint = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=16826015.d8005a1.744387638806403c90dfcc2a747fa970&callback=JSON_CALLBACK";
   $http({ url: endpoint, method: 'JSONP', cache: true, isArray: true }).success(function (response) {
-    // callback(response);
-
-    console.log(response);
-
     $scope.instaTotal = response.data;
     setTimeout(function () {
       $scope.thisSocialImage(1);
@@ -2645,9 +2732,7 @@ Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootS
 		if ($location.path() == '/about' || $location.path() == '/contact' || $location.path() == '/stockists') {
 			var path = $location.path();
 			path = path.replace(/\//g, '');
-			console.log(path);
 			var anchor = path + "Hash";
-			console.log('anchor: ' + anchor);
 			anchorSmoothScroll.scrollTo(anchor);
 		}
 	};
@@ -2680,24 +2765,16 @@ Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootS
 		var stockistsOffset = jQuery('#stockistsHash').offset().top;
 		var aboutOffset = jQuery('#aboutHash').offset().top;
 		var contactOffset = jQuery('#contactHash').offset().top;
-		console.log(stockistsOffset, aboutOffset, contactOffset);
 
 		jQuery($window).bind("scroll.support", function (event) {
-
 			scroll = jQuery($window).scrollTop();
-
 			if (scroll >= aboutOffset && scroll < contactOffset) {
-				console.log("about");
 				$rootScope.stockistFilterShow = false;
 			} else if (scroll >= contactOffset && scroll < stockistsOffset) {
-				console.log("contact");
 				$rootScope.stockistFilterShow = false;
 			} else if (scroll >= stockistsOffset) {
-				console.log("stockist");
 				$rootScope.stockistFilterShow = true;
 			}
-			//
-
 			$rootScope.$apply();
 		});
 	}, 600);

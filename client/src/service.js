@@ -126,8 +126,6 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
                 //  scrollLength = document.getElementById("html body").scrollHeight;
                  windowheight = $rootScope.windowHeight;
                  scroll = scrollPosition + number;
-
-                 console.log(scrollPosition, number);
                   element.stop().animate({
                     scrollTop: number
                   },600,
@@ -283,7 +281,6 @@ Service.service('mailchimp', function($location, $rootScope, $resource){
       //COMPILING ADDRESS
             var newaddress = [];
             for(i in mailchimp.ADDRESS){
-              console.log(i);
               if(i=='addr1'){
                 newaddress = newaddress +mailchimp.ADDRESS[i];
               }else{

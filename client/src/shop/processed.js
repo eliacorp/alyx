@@ -13,8 +13,6 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
       url: '/order/'+orderID+'/get',
       method: 'GET'
     }).then( function(response){
-      console.log("response");
-      console.log(response);
 
       $rootScope.Processed = {value: false, error:false, data:response.data};
       $rootScope.changeOrderStatus('paid', response.data);
@@ -30,8 +28,6 @@ setTimeout(function(){
   if($routeParams.method == 'paypal-express'){
     $rootScope.retrieveOrder();
   }else if($routeParams.method == 'stripe'){
-    console.log('stripe stripe stripe stripe');
-    console.log($rootScope.Transaction);
     $rootScope.changeOrderStatus('paid', $rootScope.Transaction);
   }
 },600);
@@ -55,10 +51,7 @@ $rootScope.changeOrderStatus =(status, data)=>{
 
   $http.post('/order/'+orderID+'/put', obj)
   .then( function(response){
-    console.log(response);
     $rootScope.Processed = {value: true, error:false, data:response.data};
-    console.log("order order order");
-    console.log(response.data);
     if(response.data.status.value.key !='paid'){
       $rootScope.pageLoading = false;
       $rootScope.getOrderItems();
@@ -102,14 +95,10 @@ $rootScope.loadVideo = ()=>{
 
 $rootScope.getOrderItems = ()=>{
   var orderID = $routeParams.order;
-  console.log("$routeParams.order:",$routeParams.order);
   $http({
     url: '/order/'+orderID+'/items',
     method: 'GET'
   }).then( function(response){
-    console.log("getOrderItems");
-    console.log(response.data);
-
     $rootScope.Processed.data.items= response.data;
     if($routeParams.method == 'paypal-express'){
       $rootScope.$on('productArrived', function(){
@@ -160,9 +149,6 @@ $rootScope.getOrderItems = ()=>{
               method: 'GET',
             }).then(function(response){
 
-
-// $rootScope.Product[p].stock_level
-
               for (var p in $rootScope.Product){
                 if($rootScope.Product[p].id==thisProduct){
 
@@ -182,34 +168,17 @@ $rootScope.getOrderItems = ()=>{
 
 
                           if(contents[i].product.data.modifiers[key].var_title == $rootScope.Variations[t].modifiers[key].var_title){
-                            console.log("var title:"+$rootScope.Variations[t].modifiers[key].var_title);
-                            console.log("key"+key);
-
                             var v_thisProduct = contents[i].product.data.id;
                             var v_quantity = contents[i].quantity;
-                            console.log("$rootScope.Product[p].modifiers[m].variations[v].stock_level: "+$rootScope.Product[p].modifiers[m].variations[v].stock_level);
-                            console.log("contents[i].quantity: "+contents[i].quantity);
                             var v_stock = $rootScope.Product[p].modifiers[m].variations[v].stock_level - contents[i].quantity;
                             $scope.updateStockLevel(v_thisProduct, v_stock);
-
                           }
-
-
-
-
-
                         }
                       }
-
                     }
-
                   }
-
                 }
               }
-
-
-
 
             },function(error){
               console.log(error);

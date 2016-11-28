@@ -81,15 +81,10 @@ $scope.thisSocialImage = function(number){
     if(!$scope.instaTotal[numberOne].videos){
       $scope.isVideo = false;
         $scope.mainSocialImage = $scope.instaTotal[numberOne].images.standard_resolution.url;
-
-        console.log("first:"+$scope.instaTotal[numberOne].images.standard_resolution.url);
-
     }else if($scope.instaTotal[numberOne].videos){
       $scope.isVideo = true;
       var riskyVideo = $scope.instaTotal[numberOne].videos.standard_resolution.url;
       $scope.mainSocialVideo = $sce.trustAsResourceUrl(riskyVideo);
-      console.log("first:"+$scope.mainSocialVideo);
-
     }
   $scope.mainLink =$scope.instaTotal[numberOne].link;
   $scope.mainSocialDescription = $scope.instaTotal[numberOne].caption.text;
@@ -283,26 +278,13 @@ $scope.filterAllLoadMore = function(){
 
 	var endpoint = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=16826015.d8005a1.744387638806403c90dfcc2a747fa970&callback=JSON_CALLBACK";
 				$http({url: endpoint, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-						// callback(response);
-
-            console.log(response);
-
 							$scope.instaTotal = response.data;
               setTimeout(function(){
                 $scope.thisSocialImage(1);
                 $rootScope.pageLoading=false;
                 $rootScope.$apply();
               }, 900);
-
-
-
 				}); //0
-
-
-
-
-
-
 
 
 

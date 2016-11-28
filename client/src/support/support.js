@@ -32,9 +32,7 @@ Support.controller('supportCtrl', function($scope, $anchorScroll, $http, $rootSc
   	if($location.path()=='/about'||$location.path()=='/contact'||$location.path()=='/stockists'){
   		var path = $location.path();
   		path = path.replace(/\//g, '');
-  		console.log(path);
   		var anchor = path+"Hash";
-  		console.log('anchor: '+anchor);
   		anchorSmoothScroll.scrollTo(anchor);
   	}
   }
@@ -81,31 +79,17 @@ setTimeout(function(){
 	var stockistsOffset = jQuery('#stockistsHash').offset().top;
 	var aboutOffset = jQuery('#aboutHash').offset().top;
 	var contactOffset = jQuery('#contactHash').offset().top;
-	console.log(stockistsOffset, aboutOffset, contactOffset);
-
 
 	jQuery($window).bind("scroll.support", function(event) {
-
 					scroll =  jQuery($window).scrollTop();
-
-
 					if((scroll>=aboutOffset)&&(scroll<contactOffset)){
-						console.log("about");
 						$rootScope.stockistFilterShow = false;
-
 					}else if((scroll>=contactOffset)&&(scroll<stockistsOffset)){
-						console.log("contact");
 						$rootScope.stockistFilterShow = false;
-
 					}else if(scroll>=stockistsOffset){
-						console.log("stockist");
 						$rootScope.stockistFilterShow = true;
-
 					}
-					//
-
 					$rootScope.$apply();
-
 		});
 
 }, 600);

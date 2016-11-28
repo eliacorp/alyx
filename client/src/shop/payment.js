@@ -52,16 +52,12 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
   $rootScope.changeOrderGateway =()=>{
     var orderID = $rootScope.Order.id;
-    console.log('orderID:'+ orderID);
-
     if($rootScope.checkout.gateway == 'stripe'){
       $rootScope.paymentToProcess();
     }else if($rootScope.checkout.gateway == 'paypal-express'){
       var obj = {gateway: $rootScope.checkout.gateway};
       $http.post('/order/'+orderID+'/put', obj)
       .then( function(response){
-        console.log(response);
-
         $rootScope.paymentToProcess_paypal();
       }, function(error){
         console.log(error);
@@ -81,8 +77,6 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
       $rootScope.payment.gateway = $rootScope.checkout.gateway;
       $rootScope.pageLoading = true;
-      console.log("checkout");
-      console.log($rootScope.checkout);
 
           $http({
             url: '/orderToPayment',
@@ -93,20 +87,13 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
             transformRequest: transformRequestAsFormPost,
             data: $rootScope.payment
           }).then( function(response){
-
               if(response.data.data.paid){
-
-                console.log(response.data);
-
                 $rootScope.cartLoading = false;
                 $rootScope.Processed={value: true, error:false, data:response.data.order};
                 $rootScope.Transaction = response.data.data;
                 $rootScope.pageLoading = false;
                 $location.path('/shop/processed/'+response.data.order.id+'/'+$rootScope.checkout.gateway, true);
-
               }
-
-
           }, function(response){
             console.log("payment failed!");
             console.log(response);
@@ -131,10 +118,6 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
             transformRequest: transformRequestAsFormPost,
             data: $rootScope.payment
           }).then( function(response){
-
-              console.log("paypal succeeded");
-              console.log(response);
-              console.log(response.data.url);
 
               window.open(
                 response.data.url,

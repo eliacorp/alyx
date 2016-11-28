@@ -16,8 +16,6 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     var original = $location.path;
     $location.path = function (path, reload) {
         if (reload === false) {
-          // $rootScope.pageLoading = false;
-          console.log("$rootScope.pageLoading", $rootScope.pageLoading);
             var lastRoute = $route.current;
             var un = $rootScope.$on('$locationChangeSuccess', function () {
                 $route.current = lastRoute;
@@ -282,11 +280,8 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 $rootScope.Product;
 
 $rootScope.getProductsFN=function(){
-  console.log("getting products");
   $http({method: 'GET', url: '/getProducts'}).then(function(response){
     $rootScope.Product = response.data;
-    console.log(response);
-    console.log($rootScope.Product);
     // for (var i in $rootScope.Product){
     //   $rootScope.detailUpdate($rootScope.Product[i].sku);
     //   return false;
@@ -323,9 +318,8 @@ $rootScope.getProductsFN();
           url: '/getCollections'
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
-              console.log(response.data);
           }, function (response) {
-
+            console.log(response);
             // called asynchronously if an error occurs
             // or server returns response with an error status.
           });
@@ -353,11 +347,7 @@ $rootScope.setPage = (page)=>{
       method: 'GET',
       url: 'assets/countries.json'
     }).then(function(response) {
-
       $rootScope.countries = response.data;
-      console.log(response.data);
-
-
     }, function(response) {
 
       $scope.error = {value: true, text:'countries not available, this page will be reloaded'};
@@ -397,7 +387,6 @@ $rootScope.Stockist;
 
                     if (type =='collection'){
                       $rootScope.collections = response.results;
-                      console.log($rootScope.collections);
                       $rootScope.chooseCollection();
                       if(collectionRan == false){
                         collectionRan = true;
@@ -406,11 +395,8 @@ $rootScope.Stockist;
                         // }, 900);
                         }
                       }else if(type =='stockist'){
-                        console.log(type+ " type");
-                        console.log("stockist");
                         stockistRan = true;
                         $rootScope.Stockist = response.results;
-                        console.log(response.results);
                         if(stockistRan == false){
                           stockistRan = true;
                           // setTimeout(function(){

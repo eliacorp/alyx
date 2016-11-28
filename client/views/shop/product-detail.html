@@ -39,9 +39,9 @@
         <div class="detail-modifiers">
           <ul class="detail-modifiers-ul" ng-repeat="m in Detail.modifiers">
 
-            <div class="detail-modifiers-variations" ng-show="!sizeLoading">
+            <div class="detail-modifiers-variations" ng-if="!sizeLoading">
 
-              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
+              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations | orderBy: 'index'" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
               ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}" ng-if="v.stock_level>0" >
                 <a>{{v.title}}</a>
               </li>

@@ -94,7 +94,6 @@ $rootScope.selectFilter=(thistype, id)=>{
   }else{
     $location.search(thistype, id);
     $rootScope.filter[thistype].selected = id;
-    console.log($rootScope.filter);
   }
 
 
@@ -255,9 +254,7 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
   $scope.getVariationsLevel = (productId)=>{
-    console.log('productId', productId);
     $scope.sizeLoading = true;
-
     $http({
       url: '/product/'+productId+'/variations/get',
       method: 'GET',
@@ -266,20 +263,41 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
       $scope.sizeLoading = false;
       var n = 0;
       for (var m in $rootScope.Detail.modifiers){
+
+        $scope.arrFromMyObj = Object.keys($rootScope.Detail.modifiers[m].variations).map(function(key) {
+          return $rootScope.Detail.modifiers[m].variations[key];
+        });
+        $rootScope.Detail.modifiers[m].variations=$scope.arrFromMyObj;
+
         for (var v in $rootScope.Detail.modifiers[m].variations){
 
           for (var t in $rootScope.Variations){
             var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+
             var title = $rootScope.Variations[t].modifiers[key].var_title;
 
             if(title==$rootScope.Detail.modifiers[m].variations[v].title){
               $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+
+
+              function findCherries(fruit) {
+                return fruit.title === title;
+              }
+              var thisObj = $scope.orderSize.find(findCherries);
+              $rootScope.Detail.modifiers[m].variations[v].index = thisObj.index;
             }
           }
+
+
+
+
 
         }
 
       }
+
+
+
 
     },function(error){
       console.log(error);
@@ -315,8 +333,6 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
               open: true
             }
             go = false;
-            console.log($rootScope.Variations);
-
 
         }
 
@@ -370,9 +386,218 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
 
+// $scope.orderSize=[
+//   "25",
+//   "26",
+//   "27",
+//   "28",
+//   "29",
+//   "30",
+//   "31"
+// ];
+//
 
 
+$scope.orderSize=[
+  {
+    title:"XS",
+    type: 'string',
+    index:0
+  },
+  {
+    title:"xs",
+    type: 'string',
+    index:0
+  },
+  {
+    title:"S",
+    type: 'string',
+    index:1
+  },
+  {
+    title:"s",
+    type: 'string',
+    index:1
+  },
+  {
+    title:"M",
+    type: 'string',
+    index:2
+  },
+  {
+    title:"m",
+    type: 'string',
+    index:2
+  },
+  {
+    title:"L",
+    type: 'string',
+    index:3
+  },
+  {
+    title:"l",
+    type: 'string',
+    index:3
+  },
+  {
+    title:"XL",
+    type: 'string',
+    index:4
+  },
+  {
+    title:"xl",
+    type: 'string',
+    index:4
+  },
+  {
+    title:"XXL",
+    type: 'string',
+    index:5
+  },
+  {
+    title:"xxl",
+    type: 'string',
+    index:5
+  },
+  {
+    title:"23",
+    type: 'string',
+    index:6
+  },
+  {
+    title:"24",
+    type: 'string',
+    index:7
+  },
+  {
+    title:"25",
+    type: 'string',
+    index:8
+  },
+  {
+    title:"26",
+    type: 'string',
+    index:9
+  },
+  {
+    title:"27",
+    type: 'string',
+    index:10
+  },
+  {
+    title:"28",
+    type: 'string',
+    index:11
+  },
+  {
+    title:"29",
+    type: 'string',
+    index:12
+  },
+  {
+    title:"30",
+    type: 'string',
+    index:13
+  },
+  {
+    title:"31",
+    type: 'string',
+    index:14
+  },
+  {
+    title:"32",
+    type: 'string',
+    index:15
+  },
+  {
+    title:"33",
+    type: 'string',
+    index:16
+  },
+  {
+    title:"34",
+    type: 'string',
+    index:17
+  },
+  {
+    title:"35",
+    type: 'string',
+    index:18
+  },
+  {
+    title:"36",
+    type: 'string',
+    index:19
+  },
+  {
+    title:"37",
+    type: 'string',
+    index:20
+  },
+  {
+    title:"38",
+    type: 'string',
+    index:21
+  },
+  {
+    title:"39",
+    type: 'string',
+    index:22
+  },
+  {
+    title:"40",
+    type: 'string',
+    index:23
+  },
+  {
+    title:"41",
+    type: 'string',
+    index:24
+  },
+  {
+    title:"42",
+    type: 'string',
+    index:25
+  },
+  {
+    title:"43",
+    type: 'string',
+    index:26
+  },
+  {
+    title:"44",
+    type: 'string',
+    index:27
+  },
+  {
+    title:"45",
+    type: 'string',
+    index:28
+  }
+]
 
+
+$scope.orderVariant = (arr)=>{
+  for (var a in arr){
+
+  }
+
+}
+
+
+// "S",
+// "M",
+// "L",
+// "XL",
+// "23",
+// "24",
+// "25",
+// "26",
+// "27",
+// "28",
+// "29",
+// "30",
+// "31"
 
 
 

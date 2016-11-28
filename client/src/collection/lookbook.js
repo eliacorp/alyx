@@ -12,11 +12,7 @@ $scope.lookbookStatus ="read";
 
 
 $scope.selectMainLook=(index)=>{
-
-	console.log(index);
 	$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
-	console.log($scope.mainLook);
-
 };
 
 
@@ -25,7 +21,6 @@ $scope.selectMainLook=(index)=>{
 
 
 $rootScope.$on("collectionReady", function(){
-	console.log("collectionReady");
 	// $scope.selectMainLook(1);
 	$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 
@@ -191,7 +186,6 @@ var newMain;
 
 				if(index <arrayLength){
 					index = index+1;
-					console.log(index);
 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
 				}else{
 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
@@ -202,7 +196,6 @@ var newMain;
 
  				if(index > 0){
  					index = index-1;
- 					console.log(index);
  					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
  				}else{
  					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[arrayLength];
