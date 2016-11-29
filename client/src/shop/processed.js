@@ -101,9 +101,14 @@ $rootScope.getOrderItems = ()=>{
   }).then( function(response){
     $rootScope.Processed.data.items= response.data;
     if($routeParams.method == 'paypal-express'){
-      $rootScope.$on('productArrived', function(){
+      if($rootScope.Product){
         $scope.searchProduct(response.data.result);
-      });
+      }else{
+        $rootScope.$on('productArrived', function(){
+          console.log("productArrived");
+          $scope.searchProduct(response.data.result);
+        });
+      }
 
     }else {
       $scope.searchProduct(response.data.result);
@@ -196,7 +201,7 @@ $rootScope.getOrderItems = ()=>{
         //temporary paypal fix for items with no variation
           //if the item has no vaiation
           var thisProduct = contents[i].product.data.id;
-          $scope.updateStockLevel(thisProduct, stock);
+          // $scope.updateStockLevel(thisProduct, stock);
 
           for (var p in $rootScope.Product){
             if($rootScope.Product[p].id==thisProduct){
