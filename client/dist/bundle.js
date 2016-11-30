@@ -49,7 +49,10 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
-  $routeProvider.when('/shop/product/:detail', {
+  $routeProvider.when('/googledf3523ad2411ec20.html', {
+    templateUrl: '/googledf3523ad2411ec20.html',
+    reloadOnSearch: false
+  }).when('/shop/product/:detail', {
     templateUrl: 'views/shop/product-detail.html',
     controller: 'detailCtrl',
     reloadOnSearch: false
@@ -1623,9 +1626,14 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     }).then(function (response) {
       $rootScope.Processed.data.items = response.data;
       if ($routeParams.method == 'paypal-express') {
-        $rootScope.$on('productArrived', function () {
+        if ($rootScope.Product) {
           $scope.searchProduct(response.data.result);
-        });
+        } else {
+          $rootScope.$on('productArrived', function () {
+            console.log("productArrived");
+            $scope.searchProduct(response.data.result);
+          });
+        }
       } else {
         $scope.searchProduct(response.data.result);
       }
@@ -1696,7 +1704,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
         //temporary paypal fix for items with no variation
         //if the item has no vaiation
         var thisProduct = contents[i].product.data.id;
-        $scope.updateStockLevel(thisProduct, stock);
+        // $scope.updateStockLevel(thisProduct, stock);
 
         for (var p in $rootScope.Product) {
           if ($rootScope.Product[p].id == thisProduct) {

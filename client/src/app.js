@@ -57,6 +57,12 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   $routeProvider
 
 
+
+    .when('/googledf3523ad2411ec20.html', {
+      templateUrl: '/googledf3523ad2411ec20.html',
+      reloadOnSearch: false
+    })
+
     .when('/shop/product/:detail', {
       templateUrl: 'views/shop/product-detail.html',
       controller: 'detailCtrl',
