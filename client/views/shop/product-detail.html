@@ -1,4 +1,4 @@
-<div class="detail" ng-controller="detailCtrl" ng-init="isSelectionOpen=true" id="detail"  ng-init="zoomDetail=false">
+<div class="detail" ng-controller="detailCtrl" ng-init="zoomDetail=false; openSizechart=false" id="detail">
   <div class="detail-content">
 
 
@@ -19,8 +19,11 @@
       </div>
 
 
+
+
       <!-- right -->
       <div class="detail-right">
+
 
         <div class="detail-text">
           <h1>{{Detail.title}}</h1>
@@ -51,7 +54,7 @@
             <!-- <div class="">{{selectedVariation[m.id].variation_title}}  </div> -->
           </ul>
 
-          <a class="detail-sizechart-opener" ng-click="openSizechart=!openSizechart" ng-if="Detail.size_chart">
+          <a class="detail-sizechart-opener" ng-click="openSizechart_FN()" ng-if="Detail.size_chart">
             ?
           </a>
 

@@ -225,6 +225,11 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
   $rootScope.page = "detail";
   $rootScope.Variations;
   $scope.sizeLoading = false;
+  $scope.openSizechart=false;
+
+  $scope.openSizechart_FN = ()=>{
+    $scope.openSizechart=!$scope.openSizechart;
+  }
 
 
 

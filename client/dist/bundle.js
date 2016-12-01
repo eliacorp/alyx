@@ -1908,6 +1908,11 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   $rootScope.page = "detail";
   $rootScope.Variations;
   $scope.sizeLoading = false;
+  $scope.openSizechart = false;
+
+  $scope.openSizechart_FN = function () {
+    $scope.openSizechart = !$scope.openSizechart;
+  };
 
   // var sku =$routeParams.detail;
   // $rootScope.detailUpdate(sku);
