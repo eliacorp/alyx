@@ -88,7 +88,7 @@
 
 
         <div class="form-entry">
-          <input type="text" name="postcode_shipment" value="postcode" ng-model="checkout.shipment.postcode"  required ng-minlength="5" ng-maxlength="8" placeholder="postcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'postcode'" ng-change="formatPostcode()">
+          <input type="text" name="postcode_shipment" value="postcode" ng-model="checkout.shipment.postcode"  required ng-minlength="4" ng-maxlength="8" placeholder="postcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'postcode'" ng-change="formatPostcode()">
           <span class="form-error" ng-show="checkoutForm.postcode_shipment.$error.required && checkoutForm.postcode_shipment.$touched">required</span>
 <!-- ng-pattern="postcodeRegex" -->
             <span class="form-error" ng-show="checkoutForm.postcode_shipment.$error.minlength && checkoutForm.postcode_shipment.$touched">Postcode is too short.</span>
@@ -163,7 +163,7 @@
 
 
         <div class="form-entry">
-          <input type="text" name="postcode_billing" value="postcode" ng-model="checkout.billing.postcode" required ng-minlength="5" ng-maxlength="8" placeholder="postcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'postcode'">
+          <input type="text" name="postcode_billing" value="postcode" ng-model="checkout.billing.postcode" required ng-minlength="4" ng-maxlength="8" placeholder="postcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'postcode'">
             <span class="form-error" ng-show="checkoutForm.postcode_billing.$error.required && checkoutForm.postcode_billing.$touched">required</span>
              <!-- ng-pattern="postcodeRegex" -->
             <span class="form-error" ng-show="checkoutForm.postcode_billing.$error.minlength && checkoutForm.postcode_billing.$touched">Postcode is too short.</span>
