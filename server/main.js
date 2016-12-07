@@ -56,7 +56,7 @@ function generateCrypto(){
   var crypto_token;
  crypto.randomBytes(18, function(err, buffer) {
   crypto_token = buffer.toString('hex');
-   console.log("crypto_token: "+crypto_token);
+  //  console.log("crypto_token: "+crypto_token);
 
  });
 
@@ -72,16 +72,16 @@ app.use(function(req, res, next) {
       // var token = generateCrypto();
       crypto.randomBytes(18, function(err, buffer) {
         req.mySession.cartID = buffer.toString('hex');
-        console.log("crypto_token: "+req.mySession.cartID );
+        // console.log("crypto_token: "+req.mySession.cartID );
 
       });
 
-      console.log("token: "+req.mySession.cartID );
+      // console.log("token: "+req.mySession.cartID );
       moltin.Cart.Identifier(true, req.mySession.cartID);
 
     }else{
 
-      console.log("req.mySession.cartID"+req.mySession.cartID);
+      // console.log("req.mySession.cartID"+req.mySession.cartID);
       moltin.Cart.Identifier(true, req.mySession.cartID);
 
     }
@@ -467,6 +467,9 @@ function setToHappen(d){
         console.log("order id",order.id);
         var obj={};
         obj={
+            data: {
+              key: 'value'
+            },
               return_url: 'https://alyxstudio.com/shop/processed/'+order.id+'/paypal-express',
               cancel_url: 'https://alyxstudio.com/shop/processed/'+order.id+'/paypal-express/canceled'
             }
