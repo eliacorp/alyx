@@ -30,13 +30,13 @@ let moltin = require('moltin')({
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else
-        next();
-});
+// app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//         res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else
+//         next();
+// });
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -292,6 +292,11 @@ function setToHappen(d){
     app.post('/cart/erase', function(req, res){
       eraseCart(req, res);
     })
+
+    app.post('/checkout/payment/complete_purchase/:order', function(req, res){
+      completePurchase_Paypal(req, res);
+    })
+
 
 
 
@@ -684,23 +689,57 @@ function updateProductStock(req, res){
 
 
 
-function eraseCart(req, res){
+  function eraseCart(req, res){
 
-  moltin.Cart.Delete(function() {
+    moltin.Cart.Delete(function() {
+        res.status(c).json(response);
+
+    }, function(error) {
+      console.log("stock level update failed!");
+      console.log("c: "+c);
+      console.log("error: "+error);
       res.status(c).json(response);
+    });
 
-  }, function(error) {
-    console.log("stock level update failed!");
-    console.log("c: "+c);
-    console.log("error: "+error);
-    res.status(c).json(response);
-  });
-
-}
+  }
 
 
 
+  function completePurchase_Paypal(req, res){
+    var orderID = req.params.order;
+    var url = 'https://api.molt.in/v1/checkout/payment/complete_purchase/'+orderID;
+    var access_token = req.mySession.access_token;
+    var body = req.body;
+    console.log("completePurchase_Paypal");
+    console.log(req.body);
 
+    var options = {
+      url: url,
+      headers: {
+        'Authorization': 'Bearer '+access_token
+      },
+      form:body
+    };
+
+
+    request.post(options, function(error,response,body){
+
+      console.log("error", error);
+      console.log("response");
+      console.log(response);
+      if (!error && response.statusCode == 200) {
+        var info = JSON.parse(body);
+        console.log(body);
+        console.log(info);
+        res.status(response.statusCode).json(info);
+      }else{
+        console.log(error);
+        var info = JSON.parse(body);
+        // res.status(response.statusCode).json(info);
+
+      }
+    });
+  };
 
 
 

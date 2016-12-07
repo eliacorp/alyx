@@ -1953,7 +1953,7 @@ input, select, textarea {
     display: block; }
     .payment-choice .payment-choice-ul .payment-choice-li {
       display: inline-block;
-      width: 100%;
+      width: 50%;
       float: left;
       height: 28px; }
       .payment-choice .payment-choice-ul .payment-choice-li a {
