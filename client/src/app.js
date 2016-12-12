@@ -288,6 +288,7 @@ $rootScope.Product;
 $rootScope.getProductsFN=function(){
   $http({method: 'GET', url: '/getProducts'}).then(function(response){
     $rootScope.Product = response.data;
+    console.log(response.data);
     // for (var i in $rootScope.Product){
     //   $rootScope.detailUpdate($rootScope.Product[i].sku);
     //   return false;

@@ -27,7 +27,7 @@
 <!--  -->
 
   <ul class="product-ul" >
-    <li class="product-li" ng-repeat="p in Product | shopFilter | orderBy: 'date' track by $index" ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
+    <li class="product-li" ng-repeat="p in Product | shopFilter | orderBy: '-date' track by $index" ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
       <a href="shop/product/{{p.sku}}" >
         <!-- ng-click="thisProduct(p.sku)" -->
 
