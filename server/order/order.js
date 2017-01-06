@@ -13,7 +13,7 @@ exports.sendMail = function (req, res) {
 
 
   //STEP 1    readFileSync
-  var html = fs.readFileSync("data/order-send.html");
+  var html = fs.readFileSync("order/order-send.html");
   var smtpConfig = {
     host: 'smtp.gmail.com',
     port: 465,
@@ -31,8 +31,8 @@ exports.sendMail = function (req, res) {
         var transporter = nodemailer.createTransport(smtpConfig);
 
         // create template based sender function
-        var sendPwdReset = transporter.templateSender({
-            subject: 'Password reset for {{username}}!',
+        var sendEmail = transporter.templateSender({
+            subject: 'alyxstudio.com | new order received',
             text: 'Hello, {{username}}, Please go here to reset your password: {{ reset }}',
             html: html,
             messageId: body.token
@@ -44,7 +44,7 @@ exports.sendMail = function (req, res) {
 
       console.log('http://localhost:8081/user/'+body.email+'/reset/?token='+body.token);
       // use template based sender to send a message
-      sendPwdReset({
+      sendEmail({
           to: 'dev@eliafornari.com'
       }, {
           username: body.email,
