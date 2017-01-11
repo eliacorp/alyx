@@ -5,61 +5,100 @@ let crypto = require('crypto');
 let request = require('request');
 let nodemailer = require('nodemailer');
 let fs = require('fs');
+// require external renderer
+let EmailTemplate = require('email-templates').EmailTemplate;
 
 
 
 
-exports.sendMail = function (req, res) {
 
+exports.mail = function (req, res) {
+
+  var body = req.body;
 
   //STEP 1    readFileSync
-  var html = fs.readFileSync("order/order-send.html");
   var smtpConfig = {
     host: 'smtp.gmail.com',
     port: 465,
     secure: true, // use SSL
     auth: {
         user: 'service@alyxstudio.com',
-        pass: 'Nina2Simone7'
+        pass: 'rolls##around^'
     }
   };
 
 
+
+
+
+  //STEP 2  context data for the template renderer
+
+  var context = {
+      name: {
+          last: 'Receiver',
+          first: 'Name'
+      }
+  };
+
+
+
+
+
   //STEP 3     SEND EMAIL
     var sendEmail = ()=>{
-
         var transporter = nodemailer.createTransport(smtpConfig);
+        var templateDir = require('path').join('server/order/email');
 
-        // create template based sender function
-        var sendEmail = transporter.templateSender({
-            subject: 'alyxstudio.com | new order received',
-            text: 'Hello, {{username}}, Please go here to reset your password: {{ reset }}',
-            html: html,
-            messageId: body.token
+        // Create a template based sender
+        var templateSender = transporter.templateSender(new EmailTemplate(templateDir), {
+            // default fields for all messages send using this template
+            from: 'service@alyxstudio.com',
 
-        }, {
-            from: 'sender@example.com',
+            // EmailTemplate fills text and html fields but not subject
+            // so we need to add it separately
+            subject: 'new online order | ALYX'
+        });
+
+        console.log('Template Configured');
+
+        // Message object, add mail specific fields here
+        var message = {
+            to: 'dev@eliafornari.com'
+        };
+
+        // context for the template renderer
+        var context = body;
+
+        // {
+        //     name: {
+        //         last: 'Receiver',
+        //         first: 'Name'
+        //     }
+        // };
+
+
+
+
+
+        console.log('Sending Mail');
+        // send using template
+        templateSender(message, context, function (error, info) {
+            if (error) {
+                console.log('Error occurred');
+                console.log(error.message);
+                return;
+            }
+            // print rfc822 message to console
+            console.log('Generated mime-message source:\n%s', info.response.toString());
+            res.status(200).json(info.response);
+
         });
 
 
-      console.log('http://localhost:8081/user/'+body.email+'/reset/?token='+body.token);
-      // use template based sender to send a message
-      sendEmail({
-          to: 'dev@eliafornari.com'
-      }, {
-          username: body.email,
-          reset: 'http://localhost:8081/user/'+body.email+'/reset/?token='+body.token
-      }, function(err, info){
-          if(err){
-              console.log('Error');
-              console.log(err, info);
-              res.status(400).json(err);
-          }else{
-              console.log('email reset sent');
 
-              res.status(200).json(info);
-          }
-      });
-    }
+    } //sendEmail function
+
+
+    sendEmail();
 
 };//export sendMail

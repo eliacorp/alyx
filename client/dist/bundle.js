@@ -1665,6 +1665,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     }).then(function (response) {
       console.log(response);
       $rootScope.Processed.data.items = response.data;
+      // $scope.mailOrder($rootScope.Processed.data);
       if ($routeParams.method == 'paypal-express') {
         console.log('method:', $routeParams.method);
 
@@ -1783,6 +1784,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     } //for loop
   };
 
+  // update global stock level of the product
   $scope.updateStockLevel = function (thisProduct, stock) {
     $http.post('/product/' + thisProduct + '/stock_level/' + stock).then(function (response) {
       console.log(response);
@@ -1791,8 +1793,19 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     });
   };
 
+  // erase shopping cart
   $scope.eraseCart = function () {
     $http.post('/cart/erase').then(function (response) {
+      console.log(response);
+    }, function (error) {
+      console.log(error);
+    });
+  };
+
+  // send order data as email to our team
+  $scope.mailOrder = function (order) {
+    $http.post('/mail/order/' + order.id, order).then(function (response) {
+      console.log("mailOrder");
       console.log(response);
     }, function (error) {
       console.log(error);

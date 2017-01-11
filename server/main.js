@@ -12,6 +12,7 @@ let ejs = require('ejs');
 let sessions = require('client-sessions');
 let request = require('request');
 let crypto = require('crypto');
+let order  = require('./order/order.js');
 let app = express();
 
 
@@ -287,15 +288,19 @@ function setToHappen(d){
 
     app.post('/product/:id/stock_level/:quantity', function(req, res){
       updateProductStock(req, res);
-    })
+    });
 
     app.post('/cart/erase', function(req, res){
       eraseCart(req, res);
-    })
+    });
 
     app.post('/checkout/payment/complete_purchase/:order', function(req, res){
       completePurchase_Paypal(req, res);
-    })
+    });
+
+    app.post('/mail/order/:order', function(req, res){
+      order.mail(req, res);
+    });
 
 
 

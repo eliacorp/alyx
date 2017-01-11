@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ALYX | new online order</title>
+  </head>
+  <body>
+    <style media="screen">
+      /*body{
+        width:100%;
+        height:100%;
+        color: #000000;
+        text-decoration: none;
+      }
+      p{
+      }
+      a{
+      }*/
+    </style>
+
+    <!-- Order Paid -->
+    <table border="0" cellpadding="2" cellspacing="0" style="width: 100%;font-family:'Helvetica Neue','Helvetica',sans-serif">
+    <tbody>
+    	<tr>
+    	   <td>
+    	      <p><img src="https://s3-us-west-2.amazonaws.com/asset.alyx/logo/ALYX_TYPE_LOGO_FINAL.svg" style="width: 150px;" alt="ALYX"/></p>
+    	   </td>
+    	   <td style="text-align: right;">
+    	   <p><strong>Order reference: #{{ id }}</strong></p>
+    	   </td>
+    	</tr>
+
+    	<tr>
+    	   <td colspan="2">
+    	  	 <br />
+    	      <p>There is a new order. here is the receipt:</p>
+    	      <br />
+    	   </td>
+    	</tr>
+    	<tr>
+
+    	   <td>
+    	      <p><strong>Shipping Information</strong></p>
+    	      <p>
+    	      {{ship_to.data.first_name}} {{ ship_to.data.last_name }}<br/>
+    	      {{ ship_to.data.company }}<br/>
+    	      {{ ship_to.data.address_1 }}<br/>
+    	      {{ ship_to.data.address_2 }}<br/>
+    	      {{ ship_to.data.city }}<br/>
+    	      {{ ship_to.data.county }}<br/>
+    	      {{ ship_to.data.postcode }}<br/>
+    	      {{ ship_to.data.country.name }}
+    	      </p>
+    	   </td>
+
+    	   <td>
+    	      <p><strong>Billing Information:</strong></p>
+    	      {{ bill_to.data.first_name }} {{ bill_to.data.last_name }}<br/>
+    	      {{ bill_to.data.company }}<br />
+    	      {{ bill_to.data.address_1 }}<br />
+    	      {{ bill_to.data.address_2 }}<br />
+    	      {{ bill_to.data.city }}<br />
+    	      {{ bill_to.data.county }}<br />
+    	      {{ bill_to.data.postcode }}<br />
+    	      {{ bill_to.data.country.name }}
+    	   </td>
+    	</tr>
+    	<tr>
+    		<td colspan="2">
+    		<br />
+    		<br />
+    		<table border="0" cellpadding="2" cellspacing="0" style="width: 100%">
+    			<thead>
+    			   <tr style="border-top: 1px solid #ccc">
+    			    <!-- <th></th> -->
+    			   	<th style="font-weight:bold;text-align:left" colspan="3">Product</th>
+    			   	<th style="font-weight:bold;text-align:left" colspan="3">Quantity</th>
+    			   	<th style="font-weight:bold;text-align:left" colspan="3">Price</th>
+    			   </tr>
+    			</thead>
+
+    			<tbody>
+    			{{#each items.result as |item value|}}
+
+    				<tr style="border-top: 1px solid #ccc">
+
+    					<td colspan="3">
+                {{#if item.product.data.images}}
+                  <img src="http://{{ item.product.data.images.0.segments.domain }}{{ item.product.data.images.0.segments.suffix }}" alt="{{ item.title }}" style="width: 100px;"/>
+                {{else}}
+                  no image
+                {{/if}}
+              </td>
+              <td align="left" colspan="3">{{ item.quantity }}</td>
+              <td align="left" colspan="3">{{ item.totals.value }}</td>
+
+    			 	</tr>
+    			{{/each}}
+    			</tbody>
+
+          <tfoot style="display: block;padding-top: 50px;">
+
+            <tr>
+              <!-- <td colspan="3">&nbsp;</td> -->
+              <td><strong>Shipping:</strong></td>
+              <td align="left">{{ shipping.data.price.value }}</td>
+            </tr>
+            <tr>
+              <!-- <td colspan="3">&nbsp;</td> -->
+              <td><strong>Total:</strong></td>
+              <td align="left">€ {{ total }}</td>
+            </tr>
+          </tfoot>
+
+          
+    		</table>
+    		</td>
+    	</tr>
+
+    </tbody>
+    </table>
+
+
+
+  </body>
+</html>

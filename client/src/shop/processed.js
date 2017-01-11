@@ -148,6 +148,7 @@ $rootScope.getOrderItems = ()=>{
   }).then( function(response){
     console.log(response);
     $rootScope.Processed.data.items= response.data;
+    // $scope.mailOrder($rootScope.Processed.data);
     if($routeParams.method == 'paypal-express'){
       console.log('method:',$routeParams.method);
 
@@ -197,13 +198,7 @@ $rootScope.getOrderItems = ()=>{
               var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
               $scope.updateStockLevel(thisProduct, stock);
             }
-
           }
-
-
-
-
-
 
           // if($routeParams.method=='paypal-express'){
           //   $http({
@@ -287,12 +282,11 @@ $rootScope.getOrderItems = ()=>{
 
 
 
-
+// update global stock level of the product
 $scope.updateStockLevel =(thisProduct, stock)=>{
   $http.post('/product/'+thisProduct+'/stock_level/'+stock)
   .then( function(response){
     console.log(response);
-
   }, function(error){
     console.log(error);
 
@@ -300,6 +294,8 @@ $scope.updateStockLevel =(thisProduct, stock)=>{
 }
 
 
+
+// erase shopping cart
 $scope.eraseCart =()=>{
   $http.post('/cart/erase')
   .then( function(response){
@@ -313,6 +309,21 @@ $scope.eraseCart =()=>{
 
 
 
+
+
+
+// send order data as email to our team
+$scope.mailOrder=(order)=>{
+  $http.post('/mail/order/'+order.id, order)
+  .then( function(response){
+    console.log("mailOrder");
+    console.log(response);
+
+  }, function(error){
+    console.log(error);
+  });
+
+}
 
 
 
