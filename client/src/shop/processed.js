@@ -148,7 +148,7 @@ $rootScope.getOrderItems = ()=>{
   }).then( function(response){
     console.log(response);
     $rootScope.Processed.data.items= response.data;
-    $scope.mailOrder($rootScope.Processed.data);
+    // $scope.mailOrder($rootScope.Processed.data);
     if($routeParams.method == 'paypal-express'){
       console.log('method:',$routeParams.method);
 
