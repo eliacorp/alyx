@@ -134,26 +134,60 @@ $rootScope.addToCart = function(id){
 
   $rootScope.addVariation = function(){
 
-    if($rootScope.selectedVariation){
-      $http({
-        url: '/addVariation',
-        method: 'POST',
-        data: $rootScope.selectedVariation
-      }).then(function(response){
-        $rootScope.Cart = response;
-        console.log(response);
-        $rootScope.updateCart();
-      });
-    }else{
-      $scope.variationErrorMessage = "select a size first"
-      setTimeout(function(){
-        $scope.variationErrorMessage = false;
-        $rootScope.$apply();
-      });
+    console.log($scope.maxVariation($rootScope.selectedVariation));
+
+    if($scope.maxVariation($rootScope.selectedVariation) == true){
+      if($rootScope.selectedVariation){
+        $http({
+          url: '/addVariation',
+          method: 'POST',
+          data: $rootScope.selectedVariation
+        }).then(function(response){
+          $rootScope.Cart = response;
+          console.log(response);
+          $rootScope.updateCart();
+        });
+      }else{
+        $scope.variationErrorMessage = "select a size first";
+        setTimeout(function(){
+          $scope.variationErrorMessage = false;
+          $rootScope.$apply();
+        });
+      }
     }
 
 
+
+
   }//addToCart
+
+
+
+  $scope.maxVariation=(obj)=>{
+    for (var m in obj){
+      var modifierId = obj[m].modifier_id;
+      var variationId = obj[m].variation_id;
+      if($rootScope.Cart.contents.length==0){
+        return true;
+      }else {
+        for(var i in $rootScope.Cart.contents){
+          if($rootScope.Cart.contents[i].options[modifierId] == variationId){
+            if($rootScope.Cart.contents[i].stock_level > $rootScope.Cart.contents[i].quantity){
+              return true;
+            }else{
+              $rootScope.error = {value: true, text:"you reached the maximum amount of this variation"};
+              setTimeout(function(){
+                $rootScope.error = {value: false, text:""};
+                $rootScope.$apply();
+              }, 2000);
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+    }
+  }
 
 
 
@@ -283,7 +317,6 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
             if(title==$rootScope.Detail.modifiers[m].variations[v].title){
               $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
-
 
               function findCherries(fruit) {
                 return fruit.title === title;
@@ -582,12 +615,6 @@ $scope.orderSize=[
 ]
 
 
-$scope.orderVariant = (arr)=>{
-  for (var a in arr){
-
-  }
-
-}
 
 
 // "S",

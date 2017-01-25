@@ -1665,7 +1665,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     }).then(function (response) {
       console.log(response);
       $rootScope.Processed.data.items = response.data;
-      // $scope.mailOrder($rootScope.Processed.data);
+      $scope.mailOrder($rootScope.Processed.data);
       if ($routeParams.method == 'paypal-express') {
         console.log('method:', $routeParams.method);
 
@@ -1923,24 +1923,54 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
 
   $rootScope.addVariation = function () {
 
-    if ($rootScope.selectedVariation) {
-      $http({
-        url: '/addVariation',
-        method: 'POST',
-        data: $rootScope.selectedVariation
-      }).then(function (response) {
-        $rootScope.Cart = response;
-        console.log(response);
-        $rootScope.updateCart();
-      });
-    } else {
-      $scope.variationErrorMessage = "select a size first";
-      setTimeout(function () {
-        $scope.variationErrorMessage = false;
-        $rootScope.$apply();
-      });
+    console.log($scope.maxVariation($rootScope.selectedVariation));
+
+    if ($scope.maxVariation($rootScope.selectedVariation) == true) {
+      if ($rootScope.selectedVariation) {
+        $http({
+          url: '/addVariation',
+          method: 'POST',
+          data: $rootScope.selectedVariation
+        }).then(function (response) {
+          $rootScope.Cart = response;
+          console.log(response);
+          $rootScope.updateCart();
+        });
+      } else {
+        $scope.variationErrorMessage = "select a size first";
+        setTimeout(function () {
+          $scope.variationErrorMessage = false;
+          $rootScope.$apply();
+        });
+      }
     }
   }; //addToCart
+
+  $scope.maxVariation = function (obj) {
+    for (var m in obj) {
+      var modifierId = obj[m].modifier_id;
+      var variationId = obj[m].variation_id;
+      if ($rootScope.Cart.contents.length == 0) {
+        return true;
+      } else {
+        for (var i in $rootScope.Cart.contents) {
+          if ($rootScope.Cart.contents[i].options[modifierId] == variationId) {
+            if ($rootScope.Cart.contents[i].stock_level > $rootScope.Cart.contents[i].quantity) {
+              return true;
+            } else {
+              $rootScope.error = { value: true, text: "you reached the maximum amount of this variation" };
+              setTimeout(function () {
+                $rootScope.error = { value: false, text: "" };
+                $rootScope.$apply();
+              }, 2000);
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+    }
+  };
 
   // $rootScope.updateCart = function(){
   //       $http({
@@ -2271,10 +2301,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
     type: 'string',
     index: 28
   }];
-
-  $scope.orderVariant = function (arr) {
-    for (var a in arr) {}
-  };
 
   // "S",
   // "M",

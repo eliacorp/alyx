@@ -33,12 +33,6 @@ exports.mail = function (req, res) {
 
   //STEP 2  context data for the template renderer
 
-  var context = {
-      name: {
-          last: 'Receiver',
-          first: 'Name'
-      }
-  };
 
 
 
@@ -63,7 +57,7 @@ exports.mail = function (req, res) {
 
         // Message object, add mail specific fields here
         var message = {
-            to: 'dev@eliafornari.com'
+            to: 'order@alyxstudio.com'
         };
 
         // context for the template renderer
