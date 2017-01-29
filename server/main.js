@@ -124,7 +124,9 @@ app.use(function(req, res, next) {
 function authMoltin(req, res, next){
   moltin.Authenticate(function(data) {
 
+
     if(data){
+
 
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
         console.log("1 runs");
@@ -150,6 +152,7 @@ function authMoltin(req, res, next){
         // res.status(200).json(data);
       }
 
+
       req.mySession.expires = data.expires;
       next();
 
@@ -158,6 +161,8 @@ function authMoltin(req, res, next){
     }else{
       res.status(500);
     }
+
+
 
   });
 }
@@ -597,6 +602,8 @@ function getVariationsLevel(req, res){
           res.status(response.statusCode).json(info.result);
         }else{
           console.log(error);
+            console.log("collections done");
+            console.log(body);
           var info = JSON.parse(body);
           // res.status(response.statusCode).json(info);
 

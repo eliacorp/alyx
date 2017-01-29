@@ -6,7 +6,7 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
 
 
 
-
+//retrieve order data
   $rootScope.retrieveOrder = ()=>{
     var orderID = $routeParams.order;
     console.log("retrieveOrder");
@@ -14,16 +14,11 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
       url: '/order/'+orderID+'/get',
       method: 'GET'
     }).then( function(response){
-      console.log(response);
-
       if(response.data.status.data.key =='unpaid'){
         $rootScope.completePayment_Paypal();
       }else{
         $rootScope.Processed = {value: true, error:false, data:response.data};
-
       }
-
-
     }, function(error){
       console.log(error);
       $rootScope.Processed = {value: false, error:true, data:error.data};
@@ -31,6 +26,8 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
   }
 
 
+
+//first process
 setTimeout(function(){
   if($routeParams.method == 'paypal-express'){
     $rootScope.retrieveOrder();
@@ -45,6 +42,9 @@ setTimeout(function(){
 
 
 
+
+
+//paypal complete purchase function
 $rootScope.completePayment_Paypal = ()=>{
   var orderID = $routeParams.order;
   var obj = {token: $routeParams.token, PayerID: $routeParams.PayerID};
@@ -79,7 +79,6 @@ $rootScope.changeOrderStatus =(data)=>{
   var obj = {};
 
   if($routeParams.method == 'paypal-express'){
-    // data.status.value = status;
     obj = {payment_number: $routeParams.token};
     // $scope.eraseCart();
   }else if($routeParams.method == 'stripe'){
@@ -121,7 +120,6 @@ $rootScope.loadVideo = ()=>{
   setTimeout(function(){
     var vid = document.getElementById("processed-video");
     vid.volume = 0.2;
-
     $rootScope.playPause =()=> {
       if(vid.paused){
         vid.play();
@@ -148,7 +146,7 @@ $rootScope.getOrderItems = ()=>{
   }).then( function(response){
     console.log(response);
     $rootScope.Processed.data.items= response.data;
-    // $scope.mailOrder($rootScope.Processed.data);
+    $scope.mailOrder($rootScope.Processed.data);
     if($routeParams.method == 'paypal-express'){
       console.log('method:',$routeParams.method);
 

@@ -1551,6 +1551,7 @@ var Processed = angular.module('myApp');
 
 Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams) {
 
+  //retrieve order data
   $rootScope.retrieveOrder = function () {
     var orderID = $routeParams.order;
     console.log("retrieveOrder");
@@ -1558,8 +1559,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       url: '/order/' + orderID + '/get',
       method: 'GET'
     }).then(function (response) {
-      console.log(response);
-
       if (response.data.status.data.key == 'unpaid') {
         $rootScope.completePayment_Paypal();
       } else {
@@ -1571,6 +1570,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     });
   };
 
+  //first process
   setTimeout(function () {
     if ($routeParams.method == 'paypal-express') {
       $rootScope.retrieveOrder();
@@ -1581,6 +1581,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       }
   }, 600);
 
+  //paypal complete purchase function
   $rootScope.completePayment_Paypal = function () {
     var orderID = $routeParams.order;
     var obj = { token: $routeParams.token, PayerID: $routeParams.PayerID };
@@ -1609,7 +1610,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     var obj = {};
 
     if ($routeParams.method == 'paypal-express') {
-      // data.status.value = status;
       obj = { payment_number: $routeParams.token };
       // $scope.eraseCart();
     } else if ($routeParams.method == 'stripe') {
@@ -1642,7 +1642,6 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     setTimeout(function () {
       var vid = document.getElementById("processed-video");
       vid.volume = 0.2;
-
       $rootScope.playPause = function () {
         if (vid.paused) {
           vid.play();
@@ -1665,7 +1664,7 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     }).then(function (response) {
       console.log(response);
       $rootScope.Processed.data.items = response.data;
-      // $scope.mailOrder($rootScope.Processed.data);
+      $scope.mailOrder($rootScope.Processed.data);
       if ($routeParams.method == 'paypal-express') {
         console.log('method:', $routeParams.method);
 
