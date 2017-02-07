@@ -547,7 +547,6 @@ function setToHappen(d){
 
 
     // curl -X GET https://api.molt.in/v1/products/1379862576992617248/variations -H "Authorization: Bearer ea9f070f4f093161bf344bd8fc120a2f6574a042"
-
     // curl -X GET https://api.molt.in/v1/products/1019656230785778497/variations /
 function getVariationsLevel(req, res){
   var id = req.params.id.toString();
@@ -684,6 +683,9 @@ function updateProductStock(req, res){
 
   var id = req.params.id;
   var quantity = req.params.quantity;
+  console.log("updateProductStock");
+  console.log("id: "+id);
+  console.log("quantity: "+quantity);
 
     moltin.Product.Update(id, {
         stock_level:  quantity
@@ -698,7 +700,6 @@ function updateProductStock(req, res){
       res.status(c).json(response);
         // Something went wrong...
     });
-
 
 }
 
@@ -726,7 +727,6 @@ function updateProductStock(req, res){
     var access_token = req.mySession.access_token;
     var body = req.body;
     console.log("completePurchase_Paypal");
-    console.log(req.body);
 
     var options = {
       url: url,
