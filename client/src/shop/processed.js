@@ -31,8 +31,6 @@ Processed.controller('processedCtrl', function($scope, $location, $rootScope, $t
 setTimeout(function(){
   if($routeParams.method == 'paypal-express'){
     $rootScope.retrieveOrder();
-    // $rootScope.Processed = {value: false, error:false, data:response.data};
-    // $rootScope.changeOrderStatus(response.data);
 
   }else if($routeParams.method == 'stripe'){
     $rootScope.changeOrderStatus($rootScope.Transaction);
