@@ -36,7 +36,6 @@
     margin-bottom: 20vh;
     margin-right:17%;
     float:left;
-    background-color: $black;
     position: relative;
     @include respond-to(phone){
       width:100%;
@@ -104,6 +103,7 @@
 
 .product-image-one{
   position: relative;
+  display: block;
 }
 
 .product-image-two{
