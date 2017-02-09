@@ -1,29 +1,28 @@
 
 
 // IMPORT PARTIALS
-
-@import "video-js";
-
-@import "base/00_reset";
-@import "base/02_variables";
-@import "base/04_mixins";
-@import "base/01_general";
-@import "base/03_nav";
-@import "base/05_fonts";
-@import "base/06_pop";
+@import "base/reset";
+@import "base/fonts";
+@import "base/variables";
+@import "base/mixins";
+@import "base/keyframes";
+@import "base/general";
+@import "base/nav";
 
 
+@import "shop/product";
+@import "shop/product-detail";
+@import "shop/cart";
+@import "shop/shop";
+@import "shop/shipment";
+@import "shop/payment";
+@import "shop/processed";
 
 
+@import "collection/lookbook";
 
+@import "support/about";
+@import "support/contact";
+@import "support/stockist";
 
-
-// IMPORT PAGES
-@import "partials/about";
-@import "partials/catalogue";
-@import "partials/contact";
-@import "partials/film";
-@import "partials/heroes";
-@import "partials/lookbook";
-@import "partials/social";
-@import "partials/stockists";
+@import "social/social";

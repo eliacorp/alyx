@@ -1,0 +1,285 @@
+/*....................................General settings..................................*/
+
+
+
+
+/*.....................TEXT MARK STYLES......................*/
+
+::-moz-selection {
+    background: transparent;
+    text-shadow: none;
+}
+
+
+::selection {
+    background: transparent;
+    text-shadow: none;
+}
+input::-moz-selection{
+    background: $yellow !important;
+    text-shadow: none;
+}
+
+input::selection{
+    background: $yellow !important;
+    text-shadow: none;
+}
+
+
+a:active{
+  color: $blue;
+}
+.ng-click-active{
+  color:$blue !important;
+  stroke: $blue;
+  a, p, li{
+    color:$blue !important;
+  }
+}
+
+
+
+
+
+
+
+/*....................HIDING SCROLLBAR.....................*/
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+
+
+
+*{
+  -webkit-overflow-scrolling: touch;
+}
+
+
+
+
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+
+
+
+/*.....................GENERAL STYLES......................*/
+
+html{
+  font-family: helvetica;
+  font-weight: 900;
+  width: 100%;
+  margin: 0, 0;
+  padding: 0, 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0, 0;
+  padding: 0, 0;
+  display: table;
+  text-transform: uppercase;
+}
+
+
+p, span{
+  @include p();
+  font-size: $font-size-p;
+  list-style-type: none;
+  letter-spacing:$letter-spacing-p;
+  color: $black;
+}
+
+
+input, textarea, select, a, li {
+  text-decoration: none;
+}
+
+a{
+  @include h3();
+  cursor:pointer;
+  @include hover-effect-color($black, $light-grey);
+}
+
+
+
+
+
+
+/*.........................MAIN............................*/
+main {
+  height: auto;
+  width:100vw;
+  height:auto;
+  position: relative;
+  display: block;
+  list-style-type: none;
+  display: block;
+  // overflow: scroll;
+}
+
+
+
+
+
+/*
+ * This class will be applied to the <html> element as soon as fonts have started loading.
+ */
+.wf-loading {
+}
+
+.wf-loading h1, .wf-loading h2, .wf-loading h3, .wf-loading p, .wf-loading a, .wf-loading span, .wf-loading input, .wf-loading select{
+  visibility: hidden;
+}
+
+/*
+ * This class is applied to the <html> element when fonts have loaded and are rendered.
+ */
+ // .wf-active h1, .wf-active h2, .wf-active h3, .wf-active p, .wf-active a, .wf-active span, .wf-active input, .wf-active select{
+ //   visibility: visible;
+ // }
+
+/*
+ * This class is applied to the <html> element if Typekit does not support the current browser.
+ */
+.wf-inactive {
+}
+
+.wf-inactive h1, .wf-inactive h2, .wf-inactive h3, .wf-inactive p, .wf-inactive a, .wf-inactive span, .wf-inactive input, .wf-inactive select{
+  visibility: hidden;
+}
+
+
+
+
+
+table{
+  height: 100%;
+  width:100%;
+  tr{
+    td{
+      vertical-align: middle;
+      height: 100%;
+    }
+  }
+}
+
+
+
+h1{
+  @include h1();
+}
+
+h2{
+  @include h2();
+}
+
+h3{
+  @include h3();
+}
+
+
+
+
+
+
+
+
+/*.........................landscape............................*/
+
+.landscape-view-wrapper{
+  display: none;
+  @include respond-to(phone){
+    width: 100vw !important;
+    height: 100vh;
+    background-color: white;
+    z-index:999;
+    position: fixed;
+    z-index: $z-landscape;
+  }
+
+  .landscape-view-div{
+    width: 100%;
+    .landscape-view-p{
+      width: 100%;
+      text-align: center;
+    }
+  }
+  .logo-landscape{
+
+  }
+}
+
+
+.landscape-view-wrapper.show-landscape{
+  display: block;
+}
+
+
+
+
+
+
+@keyframes goCorner {
+  0% { right: 50%;top: 50%;}
+  100% { right:$margin-sides;top: $margin-sides;}
+}
+
+@-webkit-keyframes goCorner {
+  0% { right: 50%;top: 50%;}
+  100% { right:$margin-sides;top: $margin-sides;}
+}
+
+@-moz-keyframes goCorner {
+  0% { right: 50%;top: 50%;}
+  100% { right:$margin-sides;top: $margin-sides;}
+}
+
+@-ms-keyframes goCorner {
+  0% { right: 50%;top: 50%;}
+  100% { right:$margin-sides;top: $margin-sides;}
+}
+
+@-o-keyframes goCorner {
+  0% { right: 50%;top: 50%;}
+  100% { right:$margin-sides;top: $margin-sides;}
+}
+
+
+
+
+
+$animation-bezier: ease-in-out;
+$animation-speed: 1s;
+
+
+/*.............................Loader............................*/
+
+
+
+
+
+
+/*.............................NG-CLOAK............................*/
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+  cursor: pointer;
+}

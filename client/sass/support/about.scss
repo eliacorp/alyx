@@ -1,0 +1,116 @@
+.anchor-about{
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  @include respond-to(phone){
+    height: auto;
+  }
+}
+
+
+@mixin support-wrapper(){
+  display: block;
+  width: 39vw;
+  height: 80vh;
+  position: absolute;
+  right: 2vw;
+  top: 10vh;
+  @include respond-to(phone){
+    width: 46vw;
+    height: auto;
+    position: relative;
+    margin-right: 2vw;
+    margin-left: 51vw;
+    margin-top: 10vh;
+    right:auto;
+    top:auto;
+  }
+}
+
+
+
+
+
+
+.about-portrait{
+  position: fixed;
+  display: block;
+  height: 100vh;
+  width: 42vw;
+  left: 15vw;
+  top: 0;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  z-index: -1;
+  opacity: 1;
+  @include respond-to(phone){
+    height: 100vh;
+    width: 49vw;
+    left:0;
+    background-position: 50% 0;
+  }
+}
+
+
+
+.about-wrapper{
+@include support-wrapper;
+
+.about-mft{
+  display: block;
+  width: 150px;
+  height: 150px;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  margin-bottom: 35px;
+  @include respond-to(phone){
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    z-index: $z-support;
+    opacity: 1;
+    margin-bottom: 40px;
+  }
+}
+
+
+.about-h3{
+  @include h2();
+}
+
+.about-intro{
+  margin-bottom: 15px;
+  .about-intro-li{
+    .about-intro-p{
+      text-transform: none;
+      @include p();
+      @include respond-to(phone){
+        letter-spacing: normal;
+        text-transform: none;
+      }
+    }
+  }
+}
+
+
+  .about-text{
+    .about-text-li{
+      @include respond-to(phone){
+        width:auto;
+      }
+      .about-text-p{
+        @include p();
+        text-transform: none;
+      }
+    }
+  }
+
+  .about-credit{
+    @include p();
+    letter-spacing: normal;
+    text-transform: none;
+  }
+}

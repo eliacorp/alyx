@@ -1,0 +1,410 @@
+.shop{
+  position: relative;
+  background-color: transparent;
+  // width:100vw;
+  // height:100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+
+
+.checkout-button{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  color: red;
+  background-color: black;
+  @include h1();
+  border: 0;
+  outline: 0;
+}
+
+
+
+.shop-left{
+  position: fixed;
+  left:0;
+  top:0;
+  width:75px;
+  height:100vh;
+  border-right: 5px solid $black;
+  z-index:$z-shop-buttons;
+  @include respond-to(phone){
+    border-top: 5px solid $black;
+    border-right: 0;
+    width:50vw;
+    bottom:0;
+    top:auto;
+    height:75px;
+  }
+}
+.shop-left.shop-left-processed{
+  border-right: none;
+  @include respond-to(phone){
+    width: 100%;
+  }
+  &:hover{
+    border-right: 5px solid $black;
+    background-color: #FFFFFF;
+  }
+}
+
+
+//in products this class makes the right bar transparent
+.whiteBar{
+  background-color: rgba(0,0,0,0) !important;
+}
+.whiteBar a, .whiteBar p{
+  color: #000000 !important;
+}
+
+.whiteText{
+  color: #FFFFFF !important;
+}
+
+
+
+.shop-right{
+  position: fixed;
+  right:0;
+  top:0;
+  width:75px;
+  height:100vh;
+  border-left: 5px solid $black;
+  z-index:$z-shop-buttons;
+  @include transition(all, 0.6s, ease);
+  @include respond-to(phone){
+    border-top: 5px solid $black;
+    border-left: 0;
+    width:50vw;
+    bottom:0;
+    top:auto;
+    height:75px;
+  }
+}
+
+.shop-right.cart-full-mobile{
+  @include respond-to(phone){
+    width:100vw !important;
+  }
+  .shop-button-entry{
+    @include respond-to(phone){
+      width:100vw !important;
+    }
+  }
+}
+
+
+.error{
+  position: fixed;
+  right:120px;
+  top:0;
+  width:150px;
+  height:100vh;
+  z-index:$z-error;
+  background: $white;
+  @include respond-to(phone){
+    right: 0;
+    top: 0;
+    width: 100vw;
+    z-index: 10;
+    background: rgba(255,255,255,0.9);
+  }
+  .error-text{
+    @include h2();
+    width:100%;
+    color:$red;
+    word-break: initial;
+    white-space: normal;
+    text-align: center;
+    display: block;
+    // height:75px;
+    // position: absolute;
+    // top:50%;
+    // right:auto;
+    // margin-top: -37.5px;
+    // text-align: center;
+    // line-height: 75px;
+    // vertical-align: middle;
+    // @include transform-element(rotate(-90deg) translate(-50%, 50%));
+    // @include transform-origin(0 50%);
+  }
+}
+
+.shop-button{
+  height: 100%;
+  width: 100%;
+  .shop-button-entry{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background-color: $white;
+    @include hover-effect-color-child(#000000, #FFFFFF);
+    @include hover-effect-background-color(#FFFFFF, #000000);
+    .shop-button-entry-a{
+      width:100%;
+      height:100%;
+      display: block;
+      position: relative;
+      .dollar-contents{
+        @include respond-to(phone){
+          width:auto;
+          position: absolute;
+          right:10px;
+          top:0;
+          z-index:0;
+          line-height: 70px;
+        }
+      }
+
+    }
+    p,span{
+      @include h2();
+      width:100px;
+      height:75px;
+      position: absolute;
+      top:50%;
+      right:auto;
+      margin-top: -37.5px;
+      text-align: center;
+      line-height: 75px;
+      vertical-align: middle;
+      @include transform-element(rotate(-90deg) translate(-50%, 50%));
+      @include transform-origin(0 50%);
+
+      @include respond-to(phone){
+        @include transform-element(rotate(0deg) translate(0%, 0%));
+        width:100%;
+      }
+    }
+
+    p{
+      top: $margin-sides;
+      margin-top:0;
+    }
+  }
+}
+
+.shop-button-entry.shop-button-entry-processed{
+  background-color: transparent;
+}
+
+.shop-button-entry-inactive{
+  background-color: $white !important;
+  span{
+    color: $black !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+// .dollar{
+//   position: absolute;
+//   width:90px;
+//   height:100vh;
+//   right:0;
+//   top:0;
+//   z-index:$z-dollar;
+//   background-color: rgba(0,0,0,0.8);
+//
+//   a{
+//     width:100vh;
+//     @include transform-element(rotate(-90deg));
+//     display:block;
+//     @include h1();
+//     line-height: normal;
+//     font-size: 30px;
+//     .dollar-contents{
+//       font-family: helvetica;
+//       line-height: normal;
+//       font-size: 30px;
+//       @include respond-to(phone){
+//         width:auto;
+//         position: absolute;
+//         right:10px;
+//         top:0;
+//         z-index:-1;
+//       }
+//     }
+//
+//   }
+//
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .blink-infinite {
+    animation: blink 1s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+    -moz-animation: blink 1s steps(5, start) infinite;
+    -ms-animation: blink 1s steps(5, start) infinite;
+    -o-animation: blink 1s steps(5, start) infinite;
+    color: $black;
+  }
+
+
+  .blink {
+    animation: blink .2s steps(5, start) 3;
+    -webkit-animation: blink .2s steps(5, start) 3;
+    -moz-animation: blink .2s steps(5, start) 3;
+    -ms-animation: blink .2s steps(5, start) 3;
+    -o-animation: blink .2s steps(5, start) 3;
+  }
+
+  .blink-once {
+    animation: blink .2s steps(5, start) 1;
+    -webkit-animation: blink .2s steps(5, start) 1;
+    -moz-animation: blink .2s steps(5, start) 1;
+    -ms-animation: blink .2s steps(5, start) 1;
+    -o-animation: blink .2s steps(5, start) 1;
+  }
+
+  // .dollar-contents.blink{
+  //   color: #FFFFFF !important;
+  // }
+
+
+  @keyframes blink {
+    0%{
+      visibility: visible;
+    }
+    10% {
+      visibility: hidden;
+    }
+    20% {
+      visibility: visible;
+    }
+    40% {
+      visibility: hidden;
+    }
+    50% {
+      visibility: hidden;
+    }
+    100%{
+      visibility: visible;
+    }
+  }
+  @-webkit-keyframes blink {
+    0%{
+      visibility: visible;
+    }
+    10% {
+      visibility: hidden;
+    }
+    20% {
+      visibility: visible;
+    }
+    40% {
+      visibility: hidden;
+    }
+    50% {
+      visibility: hidden;
+    }
+    100%{
+      visibility: visible;
+    }
+  }
+
+  @-moz-keyframes blink {
+    0%{
+      visibility: visible;
+    }
+    10% {
+      visibility: hidden;
+    }
+    20% {
+      visibility: visible;
+    }
+    40% {
+      visibility: hidden;
+    }
+    50% {
+      visibility: hidden;
+    }
+    100%{
+      visibility: visible;
+    }
+  }
+
+  @-ms-keyframes blink {
+    0%{
+      visibility: visible;
+    }
+    10% {
+      visibility: hidden;
+    }
+    20% {
+      visibility: visible;
+    }
+    40% {
+      visibility: hidden;
+    }
+    50% {
+      visibility: hidden;
+    }
+    100%{
+      visibility: visible;
+    }
+  }
+
+  @-o-keyframes blink {
+    0%{
+      visibility: visible;
+    }
+    10% {
+      visibility: hidden;
+    }
+    20% {
+      visibility: visible;
+    }
+    40% {
+      visibility: hidden;
+    }
+    50% {
+      visibility: hidden;
+    }
+    100%{
+      visibility: visible;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+//

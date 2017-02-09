@@ -1,0 +1,76 @@
+.anchor-stockists{
+  height: 650vh;
+  width: 100vw;
+  display: block;
+  position: relative;
+
+  @include respond-to(phone){
+    width: 100vw;
+    height:auto;
+    display: block;
+    position: relative;
+    padding-top: 70px;
+  }
+}
+
+
+.stockist-wrapper{
+  @include support-wrapper;
+  display: table;
+  height: auto;
+  @include respond-to(phone){
+    padding-bottom: 80px;
+    display: block;
+  }
+  .stockist-ul{
+    padding-bottom:$margin-top;
+    .stockist-li{
+      display: block;
+      margin-top: $margin-top-list;
+      text-transform: none;
+      @include respond-to(phone){
+        width: 100%;
+        word-wrap: break-word;
+      }
+      .stockist-name{
+        text-transform: uppercase;
+        color: #000000;
+        margin-bottom: 5px;
+        @include h2();
+
+      }
+      .stockist-street{
+        @include p();
+      }
+      .stockist-country-address{
+        @include p();
+      }
+    }
+  }
+}
+
+
+
+
+.stockist-filter{
+  position: fixed;
+  right:$margin-sides;
+  top:200px;
+  z-index: $z-stockist-filter;
+  ul{
+    li{
+      h3{
+        &:hover{
+          color: $white;
+          background-color: $black;
+        }
+      }
+    }
+  }
+}
+
+
+.stockist-filter-name.active{
+  background-color: $black;
+  color: $white !important;
+}

@@ -1,0 +1,75 @@
+<div class="detail" ng-controller="detailCtrl" ng-init="zoomDetail=false; openSizechart=false" id="detail">
+  <div class="detail-content">
+
+
+      <!-- left -->
+      <div class="detail-left" ng-class="{'zoom-detail':zoomDetail}" ng-click="zoomDetail=!zoomDetail">
+        <img class="detail-image" ng-class="{'zoom-detail':zoomDetail}" src="{{i.url.https}}" alt="{{Detail.description}}" ng-repeat="i in Detail.images"/>
+      </div>
+
+
+      <div class="detail-sizechart" ng-show="openSizechart" ng-click="openSizechart=false">
+        <table>
+          <tr>
+            <td>
+              <img src="{{Detail.size_chart.data.url.https}}" alt="size chart" class="detail-sizechart-img"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+
+
+
+      <!-- right -->
+      <div class="detail-right">
+
+
+        <div class="detail-text">
+          <h1>{{Detail.title}}</h1>
+          <p class="detail-text-sku">{{Detail.sku}}</p>
+          <p>{{Detail.description}}</p>
+          <p class="detail-text-color" ng-if="Detail.color.data.value">color: {{Detail.color.data.value}}</p>
+          <p class="detail-text-fabrics" ng-if="Detail.fabrics">fabrics: {{Detail.fabrics}}</p>
+          <!-- <p class="detail-text-origin" ng-if="Detail.origin.data.value">made in: {{Detail.origin.data.value}}</p> -->
+
+        </div>
+
+        <p class="detail-price">{{Detail.price.data.formatted.without_tax}}</p>
+        <p class="detail-text-tax" ng-if="Detail.price.data.formatted.without_tax">prices do not include taxes</p>
+
+
+        <div class="detail-modifiers">
+          <ul class="detail-modifiers-ul" ng-repeat="m in Detail.modifiers">
+
+            <div class="detail-modifiers-variations" ng-if="!sizeLoading">
+
+              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations | orderBy: 'index'" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
+              ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}" ng-if="v.stock_level>0" >
+                <a>{{v.title}}</a>
+              </li>
+            </div>
+            <p class="detail-modifiers-ul-placeholder blink-infinite" ng-click="showSelection(m.id)" ng-show="sizeLoading">{{m.title}} </p>
+
+            <!-- <div class="">{{selectedVariation[m.id].variation_title}}  </div> -->
+          </ul>
+
+          <a class="detail-sizechart-opener" ng-click="openSizechart_FN()" ng-if="Detail.size_chart">
+            ?
+          </a>
+
+        </div>
+
+
+        <!-- <p class="detail-error" ng-show="variationErrorMessage">{{variationErrorMessage}}</p> -->
+
+
+        <div class="detail-add" ng-cloak>
+          <p class="hvr-bob" ng-show="!Detail.has_variation" ng-click="addToCart(Detail.id)" ng-cloak>ADD TO CART</p>
+          <p class="detail-add-plus-variation hvr-bob" ng-show="Detail.has_variation" ng-click="addVariation()" ng-class="{'activeAdd': howManyVAriationsSelected>=Detail.total_variations}" ng-cloak>ADD TO CART</p>
+        </div>
+
+      </div>
+
+  </div>
+</div>

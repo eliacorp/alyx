@@ -1,0 +1,160 @@
+.nav{
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100vw;
+  height:100vh;
+  background-color: rgba(255,255,255,0.96);
+  z-index: $z-nav;
+}
+
+.nav-close{
+  display: block;
+  width:100%;
+  height:100%;
+  position: fixed;
+  background-color: transparent;
+  z-index:$z-nav-close;
+}
+
+
+.nav-ul{
+  height:auto;
+  width:200px;
+  margin: auto;
+  z-index:$z-nav-ul;
+  .nav-li{
+    display: block;
+    margin-bottom: $margin-bottom-h2;
+    a{
+      @include h2();
+      display: block;
+      color: $light-grey;
+    }
+    h2{
+      // color: $light-grey;
+      @include hover-effect-color($black, $light-grey);
+    }
+    .nav-li-sub{
+      display: block;
+      margin-top: $margin-bottom-h2;
+      margin-bottom: $margin-bottom-h1;
+      a{
+        @include h3();
+        display: block;
+        @include hover-effect-color($black, $light-grey);
+      }
+    }
+  }
+}
+
+
+/*.....................ACTIVE CLASSES......................*/
+
+.active{
+  color: $light-grey !important;
+}
+
+
+
+
+.nav{
+  opacity: 1;
+}
+.nav.ng-hide{
+  opacity: 0;
+}
+
+.nav.ng-hide-remove.ng-hide-remove-active{
+  transition: opacity $transition-medium ease;
+  -webkit-transition: opacity $transition-medium ease;
+  -moz-transition: opacity $transition-medium ease;
+  -ms-transition: opacity $transition-medium ease;
+  -o-transition: opacity $transition-medium ease;
+}
+
+.nav.ng-hide-add.ng-hide-add-active{
+  transition: opacity $transition-medium ease;
+  -webkit-transition: opacity $transition-medium ease;
+  -moz-transition: opacity $transition-medium ease;
+  -ms-transition: opacity $transition-medium ease;
+  -o-transition: opacity $transition-medium ease;
+}
+
+
+
+
+
+
+
+/*.............................Logo............................*/
+
+.logo{
+  width:50px;
+  position: fixed;
+  margin-left: -25px;
+  left: 50%;
+  bottom:$margin-sides;
+  z-index:$z-logo;
+  @include respond-to(phone){
+    top:$margin-sides;
+    left:$margin-sides;
+    bottom: auto;
+    margin: auto;
+  }
+  img{
+    left: 33px;
+    bottom: 19px;
+    width: 33px;
+    height: 33px;
+    position: absolute;
+  }
+
+}
+
+
+.logo.logo-left{
+  left:$margin-sides;
+  margin-left: 0;
+}
+
+
+
+// .logo{
+//   position: fixed;
+//   left: 50%;
+//   top: auto;
+// }
+
+
+.logo.corner{
+  position: fixed;
+  margin-right:auto;
+  right:$margin-sides;
+  top: $margin-sides;
+  transform: rotateY(0deg) !important;
+  -webkit-transform: rotateY(0deg) !important;
+
+  -webkit-animation: none;
+  -moz-animation: none;
+  -ms-animation: none;
+  -o-animation: none;
+  animation: none;
+}
+
+
+.logo.corner-remove.corner-remove-active{
+  // -webkit-animation: goCorner $animation-speed $animation-bezier;
+  // -moz-animation: goCorner $animation-speed $animation-bezier;
+  // -ms-animation: goCorner $animation-speed $animation-bezier;
+  // -o-animation: goCorner $animation-speed $animation-bezier;
+  // animation: goCorner $animation-speed $animation-bezier;
+}
+
+.logo.corner-add.corner-add-active{
+  -webkit-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  -moz-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  -ms-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  -o-animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+  animation: goCorner $animation-speed $animation-bezier, rotating 1s linear infinite;
+}

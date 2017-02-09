@@ -1,0 +1,106 @@
+
+<div class="payment" ng-controller="paymentCtrl" id="payment" ng-init="checkout.gateway='stripe'">
+<!-- 3 -->
+
+<div class="payment-content">
+
+  <div class="payment-content-container">
+
+    <h1 class="payment-h1">PAYMENT</h1>
+
+
+
+
+    <div class="payment-choice">
+      <ul class="payment-choice-ul">
+        <li class="payment-choice-li" ng-click="checkout.gateway='stripe'" ng-class="{'active': checkout.gateway == 'stripe'}"> <a>CARD</a></li>
+        <li class="payment-choice-li" ng-click="checkout.gateway='paypal-express'" ng-class="{'active': checkout.gateway == 'paypal-express'}"> <a>PAYPAL</a></li>
+      </ul>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="payment-form" ng-if="checkout.gateway=='paypal-express'">
+      <p>
+        click the pay button to be redirected to the paypal payment form
+      </p>
+    </div>
+
+
+
+
+
+    <form name="paymentForm" novalidate class="payment-form" method="post" ng-show="checkout.gateway=='stripe'">
+
+
+      <div class="payment-form-card">
+        <div class="form-entry">
+          <input type="text" name="number" value="card number" ng-model="payment.number" required="required" placeholder="card number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'card number'" min="0" max="10">
+            <span ng-show="paymentForm.number.$error.integer">The value is not a valid integer!</span>
+            <span ng-show="paymentForm.number.$error.min || paymentForm.number.$error.max">The value must be in range 0 to 10!</span>
+          </input>
+        </div>
+        <div class="form-entry">
+          <input type="text" name="month" value="expiry month" ng-model="payment.expiry_month" required="required" placeholder="expiry month (mm)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry month (mm)'" min="0" max="2">
+            <span ng-show="paymentForm.month.$error.integer">The value is not a valid integer!</span>
+            <span ng-show="paymentForm.month.$error.min || paymentForm.month.$error.max">The value must be in range 0 to 2!</span>
+          </input>
+        </div>
+        <div class="form-entry">
+          <input type="text" name="year" value="expiry year" ng-model="payment.expiry_year" required="required" placeholder="expiry year (yyyy)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'expiry year (yyyy)'"  min="3" max="3">
+            <span ng-show="paymentForm.year.$error.integer">The value is not a valid integer!</span>
+            <span ng-show="paymentForm.year.$error.min || paymentForm.year.$error.max">The value must be in range 0 to 4!</span>
+          </input>
+        </div>
+        <div class="form-entry">
+          <input type="text" name="cvv" value="cvv" ng-model="payment.cvv" ng-value="cvv" required="required" placeholder="cvv" onfocus="this.placeholder = ''" onblur="this.placeholder = 'cvv'">
+            <span ng-show="paymentForm.cvv.$error.integer">The value is not a valid integer!</span>
+            <span ng-show="paymentForm.cvv.$error.min || paymentForm.cvv.$error.max">The value must be 3 characters</span>
+          </input>
+        </div>
+      </div>
+
+      <p class="form-creditcards-accepted">
+        <span>visa</span><span>mastercard</span><span>american express</span>
+      </p>
+
+
+      <!-- <button type="submit" class="checkout-button hvr-sweep-to-right" ng-disabled="paymentForm.$invalid">PAY</button> -->
+      <!-- hvr-sweep-to-right -->
+
+    </form>
+
+    <div class="payment-total" ng-if="!Order.totals.formatted">
+      <p ng-if="Order.totals.subtotal.formatted">SUBTOTAL <span>{{Order.totals.subtotal.formatted}}</span></p>
+      <p>SHIPPING <span>{{Order.totals.shipping_price.formatted}}</span></p>
+      <p>TOTAL <span>{{Order.totals.total.formatted}}</span></p>
+    </div>
+
+    <div class="payment-total" ng-if="Order.totals.formatted">
+      <p ng-if="Order.totals.formatted.subtotal">SUBTOTAL <span>{{Order.totals.formatted.subtotal}}</span></p>
+      <p>SHIPPING <span>{{Order.totals.formatted.shipping_price}}</span></p>
+      <p>TAX <span>{{Order.totals.formatted.tax}}</span></p>
+      <p>TOTAL <span>{{Order.totals.formatted.total}}</span></p>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  </div> <!--  payment-content -->
+
+
+</div>

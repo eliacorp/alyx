@@ -1,0 +1,115 @@
+/*....................................SCSS VARIABLES..................................*/
+
+
+
+// ........................................................FONT WEIGHTS
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-heavy: 900;
+
+
+// ........................................................FONT SIZES
+$font-size-h1:23px;
+$font-size-h2:16px;
+$font-size-h3:13px;
+$font-size-p: 10px;
+$font-size-p2: 8px;
+
+// ........................................................FONT FAMILIES
+$font-family-h1:"akzidenz-grotesk-condensed";
+$font-family-h2: "akzidenz-grotesk-condensed";
+$font-family-h3: "akzidenz-grotesk-condensed";
+$font-family-p: "akzidenz-grotesk";
+$font-family-p2: "akzidenz-grotesk";
+
+
+// ........................................................FONT LINEHEIGHTS
+$line-height-h1: 50px;
+$line-height-h2: 28px;
+$line-height-h3: 27px;
+$line-height-p: 17px;
+$line-height-p2: 17px;
+
+
+
+$letter-spacing-h1: 4px;
+$letter-spacing-h2: 4px;
+$letter-spacing-h3: 4px;
+$letter-spacing-p: 2px;
+$letter-spacing-p2: 2px;
+
+// ........................................................COLORS
+$black: #000000;
+$black-transparent: rgba(0,0,0,0.3);
+$white: #FFFFFF;
+$yellow: #FFFF00;
+$green: #00FF00;
+$red: #FF0000;
+$blue: #0000FF;
+$light-grey: #D3D3D3;
+$light-light-grey: #eaeaea;
+$border-grey:#c5c5c5;
+
+
+// ........................................................MARGINS
+$margin-sides: 20px;
+$margin-bottom: 35px;
+$margin-bottom-h1:20px;
+$margin-bottom-h2:10px;
+$margin-bottom-p:10px;
+$margin-top: 100px;
+$margin-top-list:40px;
+$margin-top-p:20px;
+$margin-top-p2:10px;
+$margin-sides-mobile:10px;
+$margin-left-paragraph:10px;
+$padding-bottom:150px;
+
+// ........................................................TRANSITION TIMINGS
+$transition-extreme-slow: 1.4s;
+$transition-slow: .6s;
+$transition-medium: .4s;
+$transition-fast: .2s;
+
+
+
+// ........................................................Z-INDEXES
+$z-loader:16;
+$z-logo:15;
+$z-landscape:14;
+
+$z-terms-content:13;
+$z-terms-close:12;
+$z-terms:12;
+
+
+$z-error:15;
+
+
+
+$z-nav-ul:13;
+$z-nav-close:12;
+$z-nav:12;
+
+$z-stockist-filter:8;
+$z-social-load:8;
+$z-social-view-on-instagram:8;
+$z-social-main:7;
+
+$z-shop-buttons:11;
+$z-cart: 10;
+$z-clickOut: 12;
+
+$z-products:10;
+
+$z-dollar:10;
+$z-lookbook-side:10;
+$z-lookbook-main-img:-1;
+$z-lookbook-desc:6;
+$z-support:6;
+
+$z-detail:6;
+
+
+
+/*....................................................................................*/

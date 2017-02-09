@@ -1,0 +1,118 @@
+.cart{
+  width:100vw;
+  height:auto;
+  position: relative;
+  display: inline-block;
+  *display:inline;/* For IE7*/
+  *zoom:1;/* For IE7*/
+  vertical-align:top;
+}
+
+.cart-content{
+  width:calc(100vw - 150px);
+  margin-left:75px;
+  height:100vh;
+  position: relative;
+  overflow-x:scroll;
+  @include respond-to(phone){
+    width:95%;
+    margin-left: 2.5%;
+  }
+}
+
+.cart-ul{
+  display:block;
+  margin:auto;
+  width:400px;
+  padding-top:$margin-top;
+  @include respond-to(phone){
+    width: 90%;
+  }
+  .cart-li{
+    display: block;
+    width:100%;
+    height:105px;
+    margin-top:$margin-top-list;
+    .cart-li-img{
+      height: auto;
+      width:70px;
+      display:inline-block;
+      vertical-align:top;
+      float: left;
+      @include respond-to(phone){
+        width:18%;
+      }
+    }
+    .cart-li-info{
+      position: relative;
+      display: inline-block;
+      width:310px;
+      margin-left: 20px;
+      height: 105px;
+      vertical-align:top;
+      float: left;
+      @include respond-to(phone){
+        width:77%;
+        margin-left: 5%;
+      }
+      .cart-li-p{
+        width:auto;
+        display:inline-block;
+        vertical-align:top;
+        clear: both;
+        display: block;
+        text-transform:uppercase;
+      }
+      .cart-li-price{
+        display: block;
+        clear: both;
+      }
+      .cart-li-remove{
+        width:auto;
+        font-size:15px;
+        height: 105px;
+        display:inline-block;
+        vertical-align:middle;
+        line-height: 105px;
+        float:right;
+        position: absolute;
+        top:0;
+        right:0;
+        color: $black;
+        @include hover-effect-color($black, $light-grey);
+      }
+    }
+
+  }
+}
+
+
+
+
+.cart-total{
+  display:block;
+  margin:auto;
+  width:400px;
+  margin-top:$margin-top;
+  padding-bottom: 200px;
+  @include respond-to(phone){
+    width: 90%;
+  }
+  p{
+    @include p();
+  }
+  .cart-total-value{
+    float:right;
+  }
+}
+
+.cart-error{
+  display:block;
+  margin:auto;
+  width:300px;
+  margin-top:$margin-top;
+  p{
+    text-align: center;
+    @include p();
+  }
+}

@@ -1,0 +1,130 @@
+.payment{
+  width:100vw;
+  height:auto;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.payment-content{
+  width:calc(100vw - 150px);
+  margin-left:75px;
+  height:100vh;
+  position: relative;
+  @include respond-to(phone){
+    width:95%;
+    margin-left: 2.5%;
+  }
+}
+
+.payment-content-container{
+  width: 400px;
+  margin:auto;
+  height: auto;
+  padding-top:$margin-top;
+  @include respond-to(phone){
+    width: 90%;
+    padding-bottom: 100px;
+  }
+}
+
+
+.payment-form{
+  width: 100%;
+  margin:auto;
+  height: auto;
+  margin-top:$margin-top-list;
+  @include respond-to(phone){
+    width: 100%;
+    padding-bottom: 100px;
+  }
+}
+
+
+.payment-h1{
+  // padding-top: $margin-top;
+  text-align: center;
+}
+
+
+
+.payment-total{
+  width: 100%;
+  position: relative;
+  margin:auto;
+  margin-top: $margin-top;
+  padding-bottom: $padding-bottom;
+  height: auto;
+  p{
+    @include p();
+    width:100%;
+    span{
+      float:right;
+    }
+  }
+}
+
+.form-creditcards-accepted{
+  // margin-top: $margin-top-list;
+  margin-top: 5px;
+  span{
+    @include p2();
+    margin-left: 10px;
+
+    &:nth-child(1){
+      margin-left:0;
+    }
+  }
+}
+
+
+.payment-header{
+  @include h2();
+}
+
+
+.payment-choice{
+  width: 400px;
+  margin:auto;
+  height: auto;
+  margin-top:$margin-top-list;
+  @include respond-to(phone){
+    width: 100%;
+  }
+  .payment-choice-ul{
+    width: 100%;
+    height: $line-height-h2;
+    display: block;
+    .payment-choice-li{
+      display: inline-block;
+      width: 50%;
+      float: left;
+      height: $line-height-h2;
+      a{
+        display: block;
+        @include h2();
+        width: 100%;
+        text-align: center;
+      }
+      &:hover{
+        background-color: $black;
+        a{
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+.payment-choice-li.active{
+  background-color: $black;
+  a{
+    color: $white !important;
+  }
+}

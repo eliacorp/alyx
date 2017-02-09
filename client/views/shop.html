@@ -1,0 +1,80 @@
+<div class="shop" summary="shop alyx products" id="shop" ng-controller="shopCtrl" ng-show="firstBase=='shop'">
+
+  <!-- ng-controller="shopCtrl" -->
+  <div class="shop-left" ng-hide="Location == '/shop' || shopLocation =='collection'" ng-class="{'shop-left-processed': shopLocation == 'processed'}">
+    <div class="shop-button">
+
+      <div class="shop-button-entry shop-right-button-cart" ng-show="shopLocation =='product'">
+        <a href="/shop" class="shop-button-entry-a"><span>PRODUCTS</span></a>
+      </div>
+
+      <div class="shop-button-entry shop-right-button-cart" ng-show="shopLocation =='cart'">
+        <a href="/shop/product/{{Detail.sku}}" class="shop-button-entry-a"><span>DETAIL</span></a>
+      </div>
+
+      <div class="shop-button-entry shop-right-button-shipment" ng-show="shopLocation =='shipment'">
+        <a href="/shop/cart" class="shop-button-entry-a"><span>CART</span></a>
+      </div>
+
+      <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation == 'payment' || shopLocation == 'choice'">
+        <a href="/shop/shipment" class="shop-button-entry-a"><span>SHIPMENT</span></a>
+      </div>
+
+      <div class="shop-button-entry shop-button-entry-processed" ng-show="shopLocation == 'processed'">
+        <a href="/shop" class="shop-button-entry-a">
+          <span>BACK</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="error" ng-show="error.value">
+    <table>
+      <td>
+        <td>
+          <h2 class="error-text">{{error.text}}</h2>
+        </td>
+      </td>
+    </table>
+  </div>
+
+
+
+
+  <div class="shop-right" ng-show="shopLocation != 'processed'" ng-class="{'whiteBar': Section.name == 'products', 'cart-full-mobile': isMobile && !shopLocation}" >
+    <div class="shop-button">
+
+      <div class="shop-button-entry shop-right-button-cart" ng-show="Location =='/shop' || shopLocation == 'product'" ng-controller="cartCtrl">
+        <a class="shop-button-entry-a" ng-click="openCart()">
+          <span>CART</span>
+          <p class="dollar-contents" ng-class="{'blink': cartChanged}" ng-cloak>{{Cart.totals.post_discount.rounded.without_tax}} €</p>
+        </a>
+      </div>
+
+      <div class="shop-button-entry shop-right-button-shipment" ng-show="shopLocation =='cart'" ng-click="cartToShipment()" ng-class="{'shop-button-entry-inactive': Cart.total_items==0}">
+        <a ng-class="{'blink-infinite': Cart.total_items!=0}" class="shop-button-entry-a" ng-hide="Cart.total_items==0"></a>
+          <span>SHIPMENT</span>
+      </div>
+
+      <!-- <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation =='shipment'" ng-click="checkShipment()">
+        <a ng-class="{'blink-infinite': Section.forwardActive}" class="shop-button-entry-a"><span>CHOOSE PAYMENT</span></a>
+      </div> -->
+
+      <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation =='shipment'" ng-click="shipmentToPayment()">
+        <a ng-class="{'blink-infinite': shipment_forwardActive}" class="shop-button-entry-a"><span>PAYMENT</span></a>
+      </div>
+
+      <div class="shop-button-entry shop-right-button-processed" ng-show="shopLocation =='payment'" ng-click="checkPayment()">
+        <a class="shop-button-entry-a" ng-class="{'blink-infinite': payment_forwardActive && checkout.gateway=='stripe'}"> <span>PAY</span></a>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+</div>

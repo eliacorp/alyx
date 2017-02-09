@@ -1,25 +1,9 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var About = angular.module('myApp');
-About.controller('aboutCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
+var _angular = require('angular');
 
-	$scope.about = $rootScope.aboutData;
-});
-
-About.directive('aboutDirective', function ($rootScope, $location) {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/about.html',
-		replace: true
-	};
-});
-
-},{}],2:[function(require,module,exports){
-'use strict';
-// import videojs from 'video.js';
-
-require('angular');
+var _angular2 = _interopRequireDefault(_angular);
 
 require('angular-route');
 
@@ -27,1604 +11,570 @@ require('angular-animate');
 
 require('angular-resource');
 
-require('angular-touch');
-
 var _prismic = require('prismic.io');
 
 var _prismic2 = _interopRequireDefault(_prismic);
 
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Application = angular.module('myApp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngTouch']);
+// /*global $ */
 
-Application.controller('appCtrl', function (getService, $scope, $rootScope, $routeParams) {
+_angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['$rootScope', '$location', '$route', '$templateCache', '$http', function ($rootScope, $location, $route, $templateCache, $http) {
+  $rootScope.pageLoading = true;
 
-  //............................................................GET requests.........................................................
+  var original = $location.path;
+  $location.path = function (path, reload) {
+    if (reload === false) {
+      var lastRoute = $route.current;
+      var un = $rootScope.$on('$locationChangeSuccess', function () {
+        $route.current = lastRoute;
+        un();
+      });
+    } else if (reload === true) {
 
-  $rootScope.addShift = function () {
-    // jQuery('.navigation-header-content').addClass('blink');
-    setTimeout(function () {
-      (0, _jquery2.default)('.navigation-header-wrapper').addClass('shift');
-      (0, _jquery2.default)('.navigation-table').css("display", "table");
-    }, 1000);
-  };
+      var currentPageTemplate = $route.current.templateUrl;
+      $templateCache.remove(currentPageTemplate);
 
-  $rootScope.addBlink = function () {
-    (0, _jquery2.default)('.navigation-header-content').addClass('blink');
-  };
-
-  $rootScope.removeBlink = function () {
-    (0, _jquery2.default)('.navigation-header-content').removeClass('blink');
-  };
-
-  $rootScope.hideNavFN = function () {
-    $scope.navHide = true;
-  };
-
-  $rootScope.hideNavOneFN = function () {
-    $scope.navHideOne = true;
-  };
-});
-
-//.............................................................. FW15............................................................................
-
-Application.controller('fwfifteenCtrl', function ($anchorScroll, $location, $scope, anchorSmoothScroll, $window, $route, getService, $rootScope, $routeParams) {
-
-  // $scope.firstScroll();
-  $scope.hasBlinkOnce = false;
-  $rootScope.addShift();
-  $rootScope.addBlink();
-  $scope.mainLookShow = false;
-  $rootScope.headerSectionName = "";
-  $rootScope.catalogueSection = 0;
-  $rootScope.heroesSection = 0;
-  $rootScope.isHeroes = false;
-  $rootScope.isCatalogue = false;
-  $rootScope.hideArrow;
-  $rootScope.hideReadInterview = false;
-  $scope.scrollBackHappened = 0;
-  if (!$rootScope.isMobile) {
-    $scope.lookbookVH = "3609px;";
-  }
-
-  //...........................initializing season variables
-  $rootScope.currentPosition = "fw15";
-  $rootScope.seasonData = [];
-  $rootScope.film = {};
-  $rootScope.catalogue = {};
-  $rootScope.heroes = {};
-  $rootScope.lookbook = {};
-
-  //initializing the variable that stop the scroll of the sections
-  $scope.enableHeroesScroll = false;
-  $scope.enableLookbookScroll = false;
-  $scope.burgerColor = "#FFFFFF";
-  var navActiveCheck = false;
-
-  $rootScope.resetLookbook = function () {
-    $scope.mainLookShow = false;
-    $rootScope.readScrollDisable();
-  };
-
-  // This service's function returns a promise, but we'll deal with that shortly
-
-  getService.get("fw15")
-  // getService.get('fw15')
-  // then() called when son gets back
-  .then(function (data) {
-    $rootScope.seasonData = data;
-    $rootScope.metaData = data[0];
-    $rootScope.film = data[1];
-    $rootScope.catalogue = data[2];
-    $rootScope.heroes = data[3];
-    $rootScope.lookbook = data[4];
-
-    $scope.$broadcast("myEvent");
-    $scope.$broadcast("content_loaded_fw15");
-  }, function (error) {
-    // promise rejected, could log the error with: console.log('error', error);
-    console.log('error', error);
-  });
-  // .then(function(){
-  //   setTimeout(function(){
-  //     $rootScope.endLoader();
-  //   }, 600);
-  //
-  // });
-
-  $rootScope.headerHide = true;
-
-  $scope.headerHideOn = function () {
-
-    if ($scope.headerHide == false) {
-      $rootScope.headerHide = true;
+      var un = $rootScope.$on('$locationChangeSuccess', function () {
+        // $route.current = 'worldoftheblonds/'+$routeParams.category+'/'+$routeParams.event;
+        un();
+        $route.reload();
+      });
     }
+    return original.apply($location, [path]);
   };
+}]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
-  $scope.headerHideOff = function () {
+  // $anchorScrollProvider.disableAutoScrolling();
 
-    if ($scope.headerHide == true) {
-      $rootScope.headerHide = false;
-    }
+  // use the HTML5 History API
+  $locationProvider.html5Mode(true);
+  $routeProvider.when('/googledf3523ad2411ec20.html', {
+    templateUrl: '/googledf3523ad2411ec20.html',
+    reloadOnSearch: false
+  }).when('/shop/product/:detail', {
+    templateUrl: 'views/shop/product-detail.html',
+    controller: 'detailCtrl',
+    reloadOnSearch: false
+  }).when('/shop/collection', {
+    templateUrl: 'views/shop/product.html',
+    reloadOnSearch: false
+  }).when('/shop/cart', {
+    templateUrl: 'views/shop/cart.html',
+    controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/shipment', {
+    templateUrl: 'views/shop/shipment.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/shipment/terms', {
+    templateUrl: 'views/shop/shipment.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/choice', {
+    templateUrl: 'views/shop/choice.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/payment', {
+    templateUrl: 'views/shop/payment.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/processed/:order/:method', {
+    templateUrl: 'views/shop/processed.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/processed/:order/:method/canceled', {
+    templateUrl: 'views/shop/processed-canceled.html',
+    // controller: 'shopCtrl',
+    reloadOnSearch: false
+  }).when('/shop/privacy', {
+    templateUrl: 'views/shop/privacy.html',
+    controller: 'privacyCtrl',
+    reloadOnSearch: true
+  }).when('/collection/:collection', {
+    templateUrl: 'views/collection/collection.html',
+    controller: 'collectionCtrl',
+    reloadOnSearch: true
+  }).when('/about', {
+    templateUrl: 'views/support/support.html',
+    controller: 'supportCtrl',
+    reloadOnSearch: false
+  }).when('/contact', {
+    templateUrl: 'views/support/support.html',
+    controller: 'supportCtrl',
+    reloadOnSearch: false
+  }).when('/stockists', {
+    templateUrl: 'views/support/support.html',
+    controller: 'supportCtrl',
+    reloadOnSearch: false
+  }).when('/social', {
+    templateUrl: 'views/social/social.html',
+    controller: 'socialCtrl',
+    reloadOnSearch: false
+  })
+
+  /*............................. Take-all routing ........................*/
+
+  .when('/shop', {
+    templateUrl: 'views/shop/product.html',
+    controller: 'shopCtrl',
+    reloadOnSearch: false
+  })
+
+  // put your least specific route at the bottom
+  .otherwise({ redirectTo: '/shop' });
+}]) //config
+
+.filter('trustUrl', function ($sce) {
+  return function (url) {
+    // if (url){
+    var trusted = $sce.trustAsResourceUrl(url);
+    return trusted;
+    // }
   };
+}).controller('appCtrl', function ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll) {
+  $rootScope.pageLoading = true;
+  $rootScope.token;
+  $rootScope.Collection_shop;
 
-  $scope.fw_hashFn = function (x) {
-    var newHash = x;
-    if ($location.path() !== x) {
-
-      if (x === "intro") {
-        $location.path("", false);
-      } else {
-        // set the $location.hash to `newHash` and
-        // $anchorScroll will automatically scroll to it
-        $location.path("fw15/" + x, false);
-      }
+  $rootScope.noRefresh = function (url) {
+    var str = url;
+    str = str.substring(1, str.length);
+    if ($location.path() != url) {
+      anchorSmoothScroll.scrollTo(str);
+      $location.path(url, false);
     } else {
-      // call $anchorScroll() explicitly,
-      // since $location.hash hasn't changed
-
       // $anchorScroll();
     }
   };
 
-  //..................................................changing anchor link on scroll
-
-  // setTimeout(function(){
-
-  // $scope.burgerColorOffset = jQuery('#issueHash').offset().top -1;
-
-  // $scope.navigationLinks = [];
+  // $rootScope.Auth;
   //
-  // for (i = 1; i < $rootScope.seasonData.length; i++){
-  //   $scope.paths = $rootScope.seasonData[i].navigation;
-  //   $scope.navigationLinks = $scope.navigationLinks.concat($scope.paths);
+  //   $rootScope.authentication = function(){
   //
+  //         // Simple GET request example:
+  //         $http({
+  //           method: 'GET',
+  //           url: '/authenticate'
+  //         }).then(function successCallback(response) {
+  //
+  //           if(response.data.access_token || response.data.token){
+  //               // this callback will be called asynchronously
+  //               // when the response is available
+  //               console.log(response.data);
+  //               var expires = response.data.expires;
+  //               var identifier = response.data.identifier;
+  //               var expires_in = response.data.expires_in;
+  //               var access_token = response.data.access_token;
+  //               var type = response.data.token_type;
+  //
+  //               $rootScope.Auth =response.data;
+  //
+  //               $rootScope.getProductsFN();
+  //               $rootScope.getCollections();
+  //
+  //               // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
+  //
+  //           }
+  //
+  //           }, function errorCallback(response) {
+  //             // called asynchronously if an error occurs
+  //             // or server returns response with an error status.
+  //           });
+  //
+  //   }//addToCart
+  //
+  //   $rootScope.authentication();
+
+  // function eraseCookie(name) {
+  //   $rootScope.createCookie(name,"",-1);
+  // }
+  //
+  // function deleteAllCookies() {
+  //   var cookies = document.cookie.split(";");
+  //   for (var i = 0; i < cookies.length; i++)
+  //     eraseCookie(cookies[i].split("=")[0]);
+  // }
+  //
+  // // deleteAllCookies();
+  // $rootScope.createCookie = function(name,value,time) {
+  // 	var expires = "; expires="+time;
+  // 	document.cookie = name+"="+value+expires+";";
+  // }
+  //
+  // $rootScope.readCookie = function(name) {
+  // 	var nameEQ = name + "=";
+  // 	var ca = document.cookie.split(';');
+  // 	for(var i=0;i < ca.length;i++) {
+  // 		var c = ca[i];
+  // 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+  //       if (c.indexOf(nameEQ) == 0){
+  //         return c.substring(nameEQ.length,c.length);
+  //       }
+  // 	}
+  // 	// return null;
   // }
 
-  //function that defines the offset of each anchor, hence where the path should change
-
-  $rootScope.fw15_scroller = function (navState) {
-
-    // $scope.burgerColorOffset = jQuery('#issueHash').offset().top -1;
-
-    $scope.navigationLinks = [];
-
-    for (var i = 1; i < $rootScope.seasonData.length; i++) {
-      $scope.paths = $rootScope.seasonData[i].navigation;
-      $scope.navigationLinks = $scope.navigationLinks.concat($scope.paths);
-    }
-
-    //initializing
-    $scope.navHideOne = true;
-    $scope.navFadeOne = 0;
-
-    (0, _jquery2.default)($window).unbind("scroll.fw_fifteen_scroll");
-    (0, _jquery2.default)($window).unbind("scroll.ss_sixteen_scroll");
-    (0, _jquery2.default)($window).unbind("scroll.support_scroll");
-
-    var scroll = 0;
-    $scope.offset = [];
-
-    for (i in $scope.navigationLinks) {
-
-      $scope.thisoffset = (0, _jquery2.default)('#' + $scope.navigationLinks[i] + 'Hash').offset().top - 1;
-      $scope.offset = $scope.offset.concat($scope.thisoffset);
-    }
-
-    //....nav-one offset
-
-    if (!$rootScope.isMobile) {
-      $scope.navOffset = (0, _jquery2.default)('#fw15-navHash').offset().top - 1;
-    }
-
-    //....height of a window
-    $scope.windowHeight = $window.innerHeight;
-    $scope.lookbookOffset = (0, _jquery2.default)('#lookbookHash').offset().top - 1;
-
-    /*catalog
-    1  //bianco
-    2  //nero  //bianco
-    3  //nero
-    4  //bianco
-    5  //bianco
-    6  //bianco
-    7  //bianco
-     //heroes
-    8  //bianco
-    9  //nero //bianco //nero //transparent //nero
-    10  //bianco
-    11  //nero
-    12  //nero
-      //lookbook
-    13  //nero
-     //nav
-    14  //transparent
-     */
-
-    // $scope.burgerDistance = $scope.offset[0] - 144;
-    $scope.catalogOneDistance = $scope.offset[1] + $scope.windowHeight;
-    $scope.catalogTwoDistance = $scope.offset[1] + $scope.windowHeight * 2;
-    $scope.catalogThreeDistance = $scope.offset[1] + $scope.windowHeight * 3;
-    $scope.catalogFourDistance = $scope.offset[1] + $scope.windowHeight * 4;
-    $scope.catalogFiveDistance = $scope.offset[1] + $scope.windowHeight * 5;
-    $scope.catalogSixDistance = $scope.offset[1] + $scope.windowHeight * 6;
-    $scope.catalogSevenDistance = $scope.offset[2];
-    $scope.heroesOneDistance = $scope.offset[2] + $scope.windowHeight; //first heroes
-    $scope.heroesTwoDistance = $scope.offset[2] + $scope.windowHeight * 2; //second heroes
-    // $scope.heroesThreeDistance = $scope.offset[2]+($scope.windowHeight*3);//third heroes
-    // $scope.heroesFourDistance = $scope.offset[2]+($scope.windowHeight*4);//four heroes
-    $scope.heroesThreeDistance = $scope.lookbookOffset; //fifth heroes
-
-    $scope.lookbookDistance = $scope.navOffset; //one lookbook
-    $scope.navOneDistance = $scope.navOffset + $scope.windowHeight; //one nav
-
-    $scope.burgerOffset = [
-    // $scope.burgerDistance,
-    $scope.catalogOneDistance, //0
-    $scope.catalogTwoDistance, //1
-    $scope.catalogThreeDistance, //2
-    $scope.catalogFourDistance, //3
-    $scope.catalogFiveDistance, //4
-    $scope.catalogSixDistance, //5
-    $scope.catalogSevenDistance, //6
-    $scope.heroesOneDistance, //7
-    $scope.heroesTwoDistance, //8
-    $scope.heroesThreeDistance, //9
-    $scope.lookbookDistance, //10
-    $scope.navOneDistance //11
-
-    ];
-    // $scope.heroesFourDistance, //10
-    // $scope.heroesFiveDistance, //11
-
-    (0, _jquery2.default)($window).bind("scroll.fw_fifteen_scroll", function (event) {
-
-      scroll = (0, _jquery2.default)($window).scrollTop();
-
-      if (!$rootScope.isMobile) {
-        // nav fade out
-        if (scroll < 200) {
-          $scope.navFade = (scroll - 200) * -1 / 200;
-          $scope.navHide = false;
-        }
-        //..............................................................................fading in second nav
-        // nav ONE fade in
-        else if (scroll >= 200 && scroll < $scope.navOffset - $scope.windowHeight) {
-
-            $scope.navHideOne = true;
-            $rootScope.hideArrow = true;
-            $scope.supportFade = 0;
-            $scope.navFade = 0;
-            $scope.navHide = true;
-            $rootScope.removeBlink();
-
-            (0, _jquery2.default)(".lookbook-ul").css({ "position": "absolute" });
-            (0, _jquery2.default)(".lookbook-ul").css({ "top": "0" });
-          } else if (scroll > $scope.navOffset - $scope.windowHeight && scroll < $scope.navOffset + $scope.windowHeight) {
-
-            (0, _jquery2.default)(".lookbook-ul").css({ "position": "fixed" });
-            (0, _jquery2.default)(".lookbook-ul").css({ "top": "-2830px" });
-
-            $scope.navFadeOne = ($scope.navOffset - $scope.windowHeight - scroll) * -1 / 200;
-            $scope.navHideOne = false;
-          }
-      }
-
-      if (scroll > $scope.burgerOffset[7] && scroll <= $scope.burgerOffset[8]) {
-        $scope.mainLookShow = false;
-      } else if (scroll > $scope.burgerOffset[8] && scroll <= $scope.burgerOffset[9]) {
-        $scope.mainLookShow = false;
-        $scope.enableHeroesScroll = true;
-        $scope.mainLookShow = false;
-      } else if (scroll > $scope.burgerOffset[9] && scroll <= $scope.burgerOffset[10]) {
-        $rootScope.shiftImage_heroes = false;
-        $scope.lookbookMainMargin = 1 * ($scope.burgerOffset[11] + 48 - scroll);
-        if (scroll >= $scope.burgerOffset[10] + 400) {
-          $scope.looksStagger = true;
-        }
-        $scope.mainLookShow = true;
-
-        if ($rootScope.isMobile) {
-          $scope.mainLookShow = false;
-        }
-      } else if (scroll > $scope.burgerOffset[10] && scroll <= $scope.burgerOffset[11]) {
-        $scope.mainLookShow = false;
-      } else if (scroll > $scope.burgerOffset[11] && scroll <= $scope.burgerOffset[12]) {} else if (scroll > $scope.burgerOffset[12] && scroll <= $scope.burgerOffset[13]) {}
-
-      //..................................................................burger scroll function
-
-      if (scroll < $scope.offset[0] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOn();
-      } else if (scroll >= $scope.offset[0] && scroll < $scope.offset[1] && navState === false) {
-
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-        $scope.isHeroes = false;
-        $scope.isCatalogue = false;
-
-        if (scroll <= $scope.offset[0] + 500) {
-          $scope.showSound = true;
-        } else if (scroll >= $scope.offset[0] + 500) {
-          $scope.showSound = false;
-        }
-      } else if (scroll >= $scope.offset[1] && scroll < $scope.burgerOffset[0] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-        $scope.showSound = false;
-
-        $rootScope.catalogueSection = 0;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[0] && scroll < $scope.burgerOffset[1] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOff();
-
-        $rootScope.catalogueSection = 1;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[1] && scroll < $scope.burgerOffset[2] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOff();
-
-        $rootScope.catalogueSection = 2;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[2] && scroll < $scope.burgerOffset[3] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOff();
-
-        $rootScope.catalogueSection = 3;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[3] && scroll < $scope.burgerOffset[4] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-
-        $rootScope.catalogueSection = 4;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[4] && scroll < $scope.burgerOffset[5] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-
-        $rootScope.catalogueSection = 5;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[5] && scroll < $scope.burgerOffset[6] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-
-        $rootScope.catalogueSection = 6;
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = true;
-      } else if (scroll >= $scope.burgerOffset[6] && scroll < $scope.burgerOffset[7] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-
-        $rootScope.heroesSection = 0;
-        $rootScope.isHeroes = true;
-        $rootScope.isCatalogue = false;
-
-        if (scroll > $scope.burgerOffset[6] && scroll <= $scope.burgerOffset[6] + 300) {
-          $rootScope.heroesReadInterview(false);
-        }
-      } else if (scroll >= $scope.burgerOffset[7] && scroll < $scope.burgerOffset[8] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOff();
-
-        $rootScope.heroesSection = 1;
-        $rootScope.isHeroes = true;
-        $rootScope.isCatalogue = false;
-
-        if (scroll <= $scope.burgerOffset[8] - 200) {
-          $rootScope.hideReadInterview = false;
-        } else if (scroll >= $scope.burgerOffset[8] - 200) {
-          $rootScope.hideReadInterview = true;
-        }
-
-        console.log("this heroessss");
-      } else if (scroll >= $scope.burgerOffset[8] && scroll < $scope.burgerOffset[9] && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.headerHideOff();
-
-        $rootScope.heroesSection = 2;
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = false;
-        $rootScope.isLookbook = true;
-
-        if (scroll > $scope.burgerOffset[9] - 300 && scroll <= $scope.burgerOffset[9]) {
-          $rootScope.heroesReadInterview(false);
-        }
-
-        $rootScope.hideReadInterview = true;
-      } else if (scroll >= $scope.burgerOffset[9] && scroll < $scope.burgerOffset[10] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOff();
-
-        $rootScope.isHeroes = false;
-        $rootScope.isCatalogue = false;
-
-        $rootScope.isLookbook = true;
-      } else if (scroll >= $scope.burgerOffset[10] && scroll < $scope.burgerOffset[11] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOff();
-
-        $rootScope.isLookbook = true;
-      } else if (scroll >= $scope.burgerOffset[11] && scroll < $scope.burgerOffset[12] && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.headerHideOn();
-      } else if (scroll >= $scope.burgerOffset[12] && scroll < $scope.burgerOffset[13] && navState === false) {}
-
-      //................................scroll back _ catalogue
-
-      if (scroll >= $scope.burgerOffset[0] - 200 && scroll < $scope.burgerOffset[1]) {
-
-        if ($scope.scrollBackHappened != 1) {
-          $rootScope.scrollBack(1);
-          $scope.scrollBackHappened = 1;
-        }
-      } else if (scroll >= $scope.burgerOffset[5] - 200 && scroll < $scope.burgerOffset[6]) {
-
-        if ($scope.scrollBackHappened != 2) {
-          $rootScope.scrollBack(6);
-        }
-        $scope.scrollBackHappened = 2;
-      }
-
-      //................................scroll back _ heroes
-
-      if (scroll >= $scope.burgerOffset[6] - 200) {
-        if ($scope.heroes_scrollBackHappened != 1) {
-          $rootScope.heroes_scrollBack(0);
-        }
-        $scope.heroes_scrollBackHappened = 1;
-      }
-
-      // ................................url
-
-      if (scroll < $scope.offset[0]) {
-
-        $scope.fw_hashFn("intro");
-        $rootScope.headerSectionName = "";
-      } else if (scroll >= $scope.offset[0] && scroll < $scope.offset[1]) {
-
-        //film
-        $scope.fw_hashFn($scope.navigationLinks[0]);
-        $rootScope.headerSectionName = $scope.navigationLinks[0];
-      } else if (scroll >= $scope.offset[1] && scroll < $scope.offset[2]) {
-
-        //catalogue
-        $scope.fw_hashFn($scope.navigationLinks[1]);
-        $rootScope.headerSectionName = $scope.navigationLinks[1];
-      } else if (scroll >= $scope.offset[2] && scroll < $scope.offset[3]) {
-
-        //heroes
-        $scope.fw_hashFn($scope.navigationLinks[2]);
-        $rootScope.headerSectionName = $scope.navigationLinks[2];
-      } else if (scroll >= $scope.offset[3] && scroll < $scope.navOffset) {
-
-        //lookbook
-        $scope.fw_hashFn($scope.navigationLinks[3]);
-        $rootScope.headerSectionName = $scope.navigationLinks[3];
-      } else if (scroll >= $scope.navOffset && !$rootScope.isMobile) {
-
-        // $routeParams.section = "intro";
-        $rootScope.headerSectionName = "";
-
-        //lookbook
-        $scope.fw_hashFn("intro");
-      }
-
-      $scope.$apply();
-    }); //..end of scroll
-
-    $scope.$broadcast("content_loaded_fw15");
-  }; //end of the scroller function
-
-  // }, 5000);  // end timeout
-
-  $scope.$on('$viewContentLoaded', function () {
-    setTimeout(function () {
-      $rootScope.fw15_scroller(navActiveCheck);
-    }, 600);
-  });
-}); //..end of controller
-
-//.............................................................. SS16............................................................................
-
-Application.controller('sssixteenCtrl', function ($anchorScroll, $location, $scope, anchorSmoothScroll, $window, $route, getService, $rootScope, $routeParams) {
-
-  //
-  // $scope.firstScroll();
-  $scope.hasBlinkOnce = false;
-  $rootScope.addBlink();
-  $rootScope.addShift();
-  $scope.mainLookShow = false;
-  $rootScope.headerSectionName = "";
-  $rootScope.isLookbook = true;
-  if (!$rootScope.isMobile) {
-    $scope.lookbookVH = "4509px;";
-  }
-
-  //...........................initializing season variables
-  $rootScope.currentPosition = "ss16";
-  $rootScope.seasonData = [];
-
-  $rootScope.film = {};
-  $rootScope.catalogue = {};
-  $rootScope.heroes = {};
-  $rootScope.lookbook = {};
-  $rootScope.headerHide = true;
-  $scope.enableLookbookScroll = false;
-  var navActiveCheck = false;
-
-  // This service's function returns a promise, but we'll deal with that shortly
-
-  getService.get("ss16")
-  // getService.get('fw15')
-  // then() called when son gets back
-  .then(function (data) {
-
-    $rootScope.seasonData = data;
-    $rootScope.metaData = data[0];
-    $rootScope.lookbook = data[1];
-    $scope.$broadcast("myEvent");
-    return $rootScope.ss16_scroller(navActiveCheck);
-  }, function (error) {
-    // promise rejected, could log the error with: console.log('error', error);
-    console.log('error', error);
-  });
-
-  $scope.ss_hashFn = function (x) {
-    var newHash = x;
-    if ($location.path() !== x) {
-
-      if (x === "intro") {
-        $location.path("", false);
-      } else {
-        // set the $location.hash to `newHash` and
-        // $anchorScroll will automatically scroll to it
-        $location.path("ss16/" + x, false);
-      }
-    } else {
-      // call $anchorScroll() explicitly,
-      // since $location.hash hasn't changed
-      $anchorScroll();
-    }
-  };
-
-  $rootScope.headerHide = true;
-
-  $scope.headerHideOn = function () {
-    if ($rootScope.headerHide == false) {
-      $rootScope.headerHide = true;
-    }
-  };
-
-  $scope.headerHideOff = function () {
-
-    if ($rootScope.headerHide == true) {
-
-      $rootScope.headerHide = false;
-    }
-  };
-
-  $rootScope.ss16_scroller = function (navState) {
-
-    (0, _jquery2.default)($window).unbind("scroll.fw_fifteen_scroll");
-    (0, _jquery2.default)($window).unbind("scroll.ss_sixteen_scroll");
-    (0, _jquery2.default)($window).unbind("scroll.support_scroll");
-
-    setTimeout(function () {
-
-      $scope.navigationLinks = [];
-
-      for (var i = 1; i < $rootScope.seasonData.length; i++) {
-        $scope.paths = $rootScope.seasonData[i].navigation;
-        $scope.navigationLinks = $scope.navigationLinks.concat($scope.paths);
-      }
-
-      //initializing
-      var scroll = 0;
-      $scope.offset = [];
-      $scope.navHideOne = true;
-      $scope.navFadeOne = 0;
-      $scope.enableLookbookScroll = false;
-
-      if (!$rootScope.isMobile) {
-        $scope.navOffset = (0, _jquery2.default)('#ss16-navHash').offset().top - 1;
-      }
-
-      //....lookbook offset
-      $scope.lookbookOffset = (0, _jquery2.default)('#lookbookHash').offset().top - 1;
-      //....height of a window
-      $scope.windowHeight = $window.innerHeight;
-
-      for (i in $scope.navigationLinks) {
-        $scope.thisoffset = (0, _jquery2.default)('#' + $scope.navigationLinks[i] + 'Hash').offset().top - 1;
-        $scope.offset = $scope.offset.concat($scope.thisoffset);
-      }
-
-      //........SCROLL
-
-      (0, _jquery2.default)($window).bind("scroll.ss_sixteen_scroll", function (event) {
-
-        scroll = (0, _jquery2.default)($window).scrollTop();
-        // var scroll =  angular.element($window).yOffset;
-
-        // nav fade out
-        if (scroll < 200) {
-          $scope.navFade = (scroll - 200) * -1 / 200;
-          $scope.navHide = false;
-        }
-
-        //..............................................................................fading in second nav
-
-        // nav ONE fade in
-
-        else if (scroll >= 200 && scroll < $scope.navOffset - $scope.windowHeight) {
-
-            $scope.navHideOne = true;
-            $scope.supportFade = 0;
-
-            $scope.navFade = 0;
-            $scope.navHide = true;
-            $rootScope.removeBlink();
-
-            (0, _jquery2.default)(".lookbook-ul").css({ "position": "absolute" });
-            (0, _jquery2.default)(".lookbook-ul").css({ "top": "0" });
-          } else if (scroll > $scope.navOffset - $scope.windowHeight && scroll < $scope.navOffset + $scope.windowHeight) {
-
-            (0, _jquery2.default)(".lookbook-ul").css({ "position": "fixed" });
-            (0, _jquery2.default)(".lookbook-ul").css({ "top": "-3730px" });
-
-            if (scroll > $scope.navOffset - $scope.windowHeight && scroll <= $scope.navOffset) {
-
-              if ($scope.hasBlinkOnce == true) {
-
-                (0, _jquery2.default)('.navigation-one').addClass('blink-once');
-
-                $scope.hasBlinkOnce = false;
-              }
-            } else if (scroll > $scope.navOffset) {
-
-              $scope.hasBlinkOnce = true;
-              (0, _jquery2.default)('.navigation-one').removeClass('blink-once');
-            }
-
-            $scope.navFadeOne = ($scope.navOffset - $scope.windowHeight - scroll) * -1 / 200;
-            $scope.navHideOne = false;
-          }
-
-        //..................................................................burger scroll function
-
-        if (scroll < $scope.offset[0] && navState === false) {
-          $scope.burgerColor = "#FFFFFF";
-          $scope.headerHideOn();
-
-          $scope.ss_hashFn("intro");
-          $rootScope.headerSectionName = "";
-          $scope.mainLookShow = false;
-        } else if (scroll >= $scope.offset[0] && scroll < $scope.navOffset && navState === false) {
-          $scope.burgerColor = "#000000";
-          $scope.headerHideOff();
-
-          $scope.ss_hashFn($scope.navigationLinks[0]);
-          $rootScope.headerSectionName = $scope.navigationLinks[0];
-          $scope.mainLookShow = true;
-        } else if (scroll >= $scope.navOffset && navState === false) {
-          $scope.burgerColor = "#FFFFFF";
-          $scope.headerHideOn();
-          $scope.ss_hashFn("intro");
-          $rootScope.headerSectionName = "";
-          $scope.mainLookShow = true;
-        }
-
-        $scope.$apply();
-      });
-    }, 600);
-    $scope.$broadcast("content_loaded_ss16");
-  }; //SS scroller function
-}); //end of ss16
-
-//............................................................. SUPPORT............................................................................
-
-Application.controller('supportCtrl', function ($anchorScroll, $location, $scope, anchorSmoothScroll, $window, $route, getService, $rootScope, $routeParams) {
-
-  $scope.burgerColor = "#000000";
-  $scope.hasBlinkOnce = false;
-  $rootScope.addBlink();
-  $rootScope.addShift();
-  $rootScope.currentPosition = "support";
-  var navActiveCheck = false;
-  $rootScope.headerSectionName = "";
-
-  $rootScope.support = [];
-  $rootScope.aboutData = {};
-  $rootScope.contactData = {};
-  $rootScope.stockistsData = {};
-  // This service's function returns a promise, but we'll deal with that shortly
-
-  getService.get("support")
-  // then() called when son gets back
-  .then(function (data) {
-
-    $rootScope.support = data;
-    $rootScope.aboutData = data[0];
-    $rootScope.contactData = data[1];
-    $rootScope.stockistsData = data[2];
-    $scope.$broadcast("supportDataArrived");
-  }, function (error) {
-    // promise rejected, could log the error with: console.log('error', error);
-    console.log('error', error);
-  });
-  // .then(function(){
-  //   setTimeout(function(){
-  //     $rootScope.endLoader();
-  //   }, 600);
-  // });
-
-  $scope.supportHashFn = function (x) {
-    var newHash = x;
-
-    if ($location.path() !== x) {
-
-      if (x === "intro") {
-        $location.path("/", false);
-      } else {
-        // set the $location.hash to `newHash` and
-        // $anchorScroll will automatically scroll to it
-        $location.path(x, false);
-      }
-    } else {
-      $anchorScroll();
-    }
-  };
-
-  $rootScope.headerHide = true;
-
-  $scope.support_headerHideOn = function () {
-
-    if ($rootScope.headerHide == false) {
-
-      $rootScope.headerHide = true;
-    }
-  };
-
-  $scope.support_headerHideOff = function () {
-
-    if ($rootScope.headerHide == true) {
-
-      $rootScope.headerHide = false;
-    }
-  };
-
-  $rootScope.support_scroller = function (navState) {
-
-    (0, _jquery2.default)($window).unbind("scroll.fw_fifteen_scroll");
-    (0, _jquery2.default)($window).unbind("scroll.ss_sixteen_scroll");
-    (0, _jquery2.default)($window).unbind("scroll.support_scroll");
-
-    //initializing
-    // $scope.headerHide = true;
-    $scope.navHideOne = true;
-    $scope.navFadeOne = 0;
-    var support_scroll = 0;
-
-    //...about offset
-    $scope.aboutOffset = (0, _jquery2.default)('#aboutHash').offset().top - 1;
-    //...contact offset
-    $scope.contactOffset = (0, _jquery2.default)('#contactHash').offset().top - 1;
-    //...stocklists offset
-    $scope.stockistsOffset = (0, _jquery2.default)('#stockistsHash').offset().top - 1;
-
-    //....height of a window
-    $scope.windowHeight = $window.innerHeight;
-
-    //....nav-one offset
-    // $scope.navOffset = jQuery('#ss116-navHash').offset().top -1;
-
-    // angular.element(document.getElementById('#lookbook-image-28')).ready(function () {
-    // setTimeout(function(){
-    $scope.navSupportOffset = (0, _jquery2.default)('#support-navHash').offset().top - 1;
-    // }, 3000);
-    //  });
-
-    (0, _jquery2.default)($window).bind("scroll.support_scroll", function (event) {
-
-      support_scroll = (0, _jquery2.default)($window).scrollTop();
-
-      if (support_scroll < $scope.aboutOffset) {
-
-        $scope.supportHashFn('intro');
-        $rootScope.headerSectionName = "";
-      } else if (support_scroll >= $scope.aboutOffset && support_scroll < $scope.contactOffset) {
-
-        $scope.supportHashFn('about');
-        // $routeParams.section = 'about';
-        $rootScope.headerSectionName = "about";
-      } else if (support_scroll >= $scope.contactOffset && support_scroll < $scope.stockistsOffset) {
-
-        $scope.supportHashFn('contact');
-        //  $routeParams.section = 'contact';
-        $rootScope.headerSectionName = "contact";
-      } else if (support_scroll > $scope.stockistsOffset && support_scroll < $scope.navSupportOffset) {
-
-        $scope.supportHashFn('stockists');
-        // $routeParams.section = 'stockists';
-        $rootScope.headerSectionName = "stockists";
-      } else if (support_scroll >= $scope.navSupportOffset) {
-        $scope.supportHashFn('intro');
-        $rootScope.headerSectionName = "";
-      }
-
-      // nav fade out
-      if (support_scroll < 200) {
-        $scope.navFade = (support_scroll - 200) * -1 / 200;
-        $scope.navHide = false;
-      } else if (support_scroll >= 200) {
-
-        $scope.navFade = 0;
-        $scope.navHide = true;
-        $rootScope.removeBlink();
-      }
-
-      //..............................................................................fading in second nav
-
-      // nav ONE fade in
-
-      if (support_scroll < $scope.navSupportOffset - 200) {
-        $scope.navHideOne = true;
-        $scope.supportFade = 0;
-      } else if (support_scroll > $scope.navSupportOffset - 200 && support_scroll < $scope.navSupportOffset + $scope.windowHeight) {
-
-        if (support_scroll > $scope.navSupportOffset - 200 && support_scroll <= $scope.navSupportOffset) {
-
-          if ($scope.hasBlinkOnce == true) {
-            (0, _jquery2.default)('.navigation-one').addClass('blink-once');
-            $scope.hasBlinkOnce = false;
-          }
-        } else if (support_scroll > $scope.navSupportOffset) {
-
-          $scope.hasBlinkOnce = true;
-
-          (0, _jquery2.default)('.navigation-one').removeClass('blink-once');
-        }
-
-        $scope.navFadeOne = ($scope.navSupportOffset - 200 - support_scroll) * -1 / 200;
-        $scope.navHideOne = false;
-      }
-
-      //..................................................................burger scroll function
-
-      if (support_scroll < $scope.aboutOffset && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.support_headerHideOn();
-      } else if (support_scroll >= $scope.aboutOffset && support_scroll < $scope.navSupportOffset && navState === false) {
-        $scope.burgerColor = "#000000";
-        $scope.support_headerHideOff();
-      } else if (support_scroll >= $scope.navSupportOffset && navState === false) {
-        $scope.burgerColor = "#FFFFFF";
-        $scope.support_headerHideOn();
-      }
-
-      $scope.$apply();
+  //get products
+  $rootScope.Product;
+
+  $rootScope.getProductsFN = function () {
+    $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
+      $rootScope.Product = response.data;
+      console.log(response.data);
+      // for (var i in $rootScope.Product){
+      //   $rootScope.detailUpdate($rootScope.Product[i].sku);
+      //   return false;
+      // }
+      $rootScope.$broadcast("productArrived");
+      $rootScope.pageLoading = false;
+    }, function (error) {
+      console.log(error);
+      console.log("products status 400");
+      // $rootScope.getProductsFN();
     });
-
-    $scope.$broadcast("content_loaded_support");
   };
 
-  setTimeout(function () {
+  $rootScope.getProductsFN();
 
-    $rootScope.support_scroller(navActiveCheck);
-  }, 600);
-}); // end of the support controller
+  //get shop collections
+  $rootScope.getCollections = function () {
 
-Application.directive('imageFadeDirective', function ($rootScope, $location, $timeout, $window) {
-  return {
-    restrict: 'A',
-    link: function link(scope, elem, attr) {
+    // Simple GET request example:
+    $http({
+      method: 'GET',
+      url: '/getCollections'
+    }).then(function (response) {
+      $rootScope.Collection_shop = response.data;
+    }, function (response) {
+      console.log(response);
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }; //getCollections
 
-      if (!$rootScope.isMobile) {
-        $timeout(function () {
-          var windowHeight = $window.innerHeight;
-          scope.imageWidth = elem[0].offsetHeight;
-          var imageScroll = elem[0].offsetTop;
-          scope.thisElement = elem;
-          scope.child = elem.children();
-          scope.thisID = scope.child.attr("id");
-          var thisChild = angular.element(document.querySelector('#' + scope.thisID));
-          (0, _jquery2.default)($window).bind("scroll.image_fade_scroll", function (event) {
-            var scrolled = false;
-            var window_scroll = (0, _jquery2.default)($window).scrollTop();
-            if (window_scroll > imageScroll - windowHeight / 1.7 && scrolled == false) {
-              scope.thisElement.addClass("fadeScroll");
-              thisChild.addClass("fadeUp");
-              var scrolled = true;
+  $rootScope.getCollections();
+
+  $rootScope.setPage = function (page) {
+    $rootScope.page = page;
+  };
+
+  $rootScope.countries = [];
+
+  $rootScope.getCountries = function () {
+    $http({
+      method: 'GET',
+      url: 'assets/countries.json'
+    }).then(function (response) {
+      $rootScope.countries = response.data;
+    }, function (response) {
+
+      $scope.error = { value: true, text: 'countries not available, this page will be reloaded' };
+      $route.reload();
+    });
+  };
+  $rootScope.getCountries();
+
+  var stockistRan = false;
+  var collectionRan = false;
+
+  $rootScope.Stockist;
+
+  $rootScope.getContentType = function (type, orderField) {
+
+    _prismic2.default.Api('https://alyx.cdn.prismic.io/api', function (err, Api) {
+      Api.form('everything').ref(Api.master()).query(_prismic2.default.Predicates.at("document.type", type)).orderings('[' + orderField + ']').pageSize(100).submit(function (err, response) {
+
+        var Data = response;
+
+        if (type == 'collection') {
+          $rootScope.collections = response.results;
+          $rootScope.chooseCollection();
+          if (collectionRan == false) {
+            collectionRan = true;
+            // setTimeout(function(){
+            $rootScope.$broadcast('collectionReady');
+            // }, 900);
+          }
+        } else if (type == 'stockist') {
+            stockistRan = true;
+            $rootScope.Stockist = response.results;
+            if (stockistRan == false) {
+              stockistRan = true;
+              // setTimeout(function(){
+              $rootScope.$broadcast('stockistReady');
+              // }, 900);
             }
-          });
-        }, 600);
+          } else {
+              return false;
+            }
+        $rootScope.$apply();
+
+        // The documents object contains a Response object with all documents of type "product".
+        var page = response.page; // The current page number, the first one being 1
+        var results = response.results; // An array containing the results of the current page;
+        // you may need to retrieve more pages to get all results
+        var prev_page = response.prev_page; // the URL of the previous page (may be null)
+        var next_page = response.next_page; // the URL of the next page (may be null)
+        var results_per_page = response.results_per_page; // max number of results per page
+        var results_size = response.results_size; // the size of the current page
+        var total_pages = response.total_pages; // the number of pages
+        var total_results_size = response.total_results_size; // the total size of results across all pages
+        return results;
+      });
+    });
+  }; //get content type
+
+  $rootScope.getContentType('stockist', 'my.stockist.date desc');
+
+  $rootScope.showCart = false;
+
+  $rootScope.retrieveElement = function (id) {
+    var element = _angular2.default.element(document.querySelectorAll("#" + id)[0]);
+    return element;
+  };
+
+  //MOBILE
+
+  $rootScope.windowHeight = $window.innerHeight;
+  $rootScope.half_windowHeight = $window.innerHeight / 2;
+  jQuery($window).resize(function () {
+    $rootScope.windowHeight = $window.innerHeight;
+    $rootScope.half_windowHeight = $window.innerHeight / 2;
+    $rootScope.checkSize();
+    $scope.landscapeFunction();
+
+    // $rootScope.checkSize();
+    $rootScope.$apply();
+  });
+
+  //remove logo on scroll
+  $rootScope.logoCorner = false;
+  $rootScope.showDetail = false;
+
+  //....this is the function that checks the header of the browser and sees what device it is
+  $rootScope.isMobile, $rootScope.isDevice, $rootScope.isMobileDevice;
+  $rootScope.checkSize = function () {
+    $rootScope.checkDevice = {
+      Android: function Android() {
+        return navigator.userAgent.match(/Android/i);
+      },
+      BlackBerry: function BlackBerry() {
+        return navigator.userAgent.match(/BlackBerry/i);
+      },
+      iOS: function iOS() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      },
+      Opera: function Opera() {
+        return navigator.userAgent.match(/Opera Mini/i);
+      },
+      Windows: function Windows() {
+        return navigator.userAgent.match(/IEMobile/i);
+      },
+      any: function any() {
+        return $rootScope.checkDevice.Android() || $rootScope.checkDevice.BlackBerry() || $rootScope.checkDevice.iOS() || $rootScope.checkDevice.Opera() || $rootScope.checkDevice.Windows();
       }
+    };
+
+    //........checks the width
+    $scope.mobileQuery = window.matchMedia("(max-width: 767px)");
+    $rootScope.isMobile = $scope.mobileQuery.matches;
+
+    //.........returning true if device
+    if ($scope.checkDevice.any()) {
+      $rootScope.isDevice = true;
+    } else {
+      $rootScope.isDevice = false;
     }
+
+    if ($rootScope.isDevice == true && $scope.isMobile == true) {
+      $rootScope.isMobileDevice = true;
+    } else {
+      $rootScope.isMobileDevice = false;
+    }
+
+    if ($rootScope.isDevice) {
+      $rootScope.mobileLocation = function (url) {
+        $location.path(url).search();
+      };
+      $rootScope.mobileExternalLocation = function (url) {
+        $window.open(url, '_blank');
+      };
+    } else if (!$rootScope.isDevice) {
+      $rootScope.mobileLocation = function (url) {
+        return false;
+      };
+      $rootScope.mobileExternalLocation = function (url) {
+        return false;
+      };
+    }
+  }; //checkSize
+  $rootScope.checkSize();
+  $rootScope.landscapeView = false;
+
+  //function removing website if landscape
+
+  $scope.landscapeFunction = function () {
+
+    if ($rootScope.isMobile == true) {
+      if (window.innerHeight < window.innerWidth) {
+        $rootScope.landscapeView = true;
+        $rootScope.pageLoading = true;
+        //   $(".landscape-view-wrapper").css({
+        //     "width":"100vw",
+        //     "height": "100vh",
+        //     "display": "block"
+        // });
+      } else {
+          $rootScope.landscapeView = false;
+          $rootScope.pageLoading = false;
+        }
+    }
+  };
+
+  $scope.landscapeFunction();
+}) // end of appCtrl
+
+.directive('logoDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/components/logo.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('shopDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('productDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/product.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('detailDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/product-detail.html',
+    controller: 'detailCtrl',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('cartDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/cart.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('shipmentDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/shipment.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('choiceDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/choice.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('paymentDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/payment.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('termsDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/terms.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
+  };
+}).directive('processedDirective', function ($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/processed.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
   };
 });
 
 var jqueryUI = require('./vendor/jquery-ui.min.js');
-var services = require("./services.js");
-var routes = require("./routes.js");
-var about = require("./logo.js");
-var about = require("./about.js");
-var catalogue = require("./catalogue.js");
-var contact = require("./contact.js");
-var film = require("./film.js");
-var heroes = require("./heroes.js");
-var lookbook = require("./lookbook.js");
-
-var social = require("./social.js");
-var stockists = require("./stockists.js");
+var jQuery = require('jquery');
 var nav = require("./nav.js");
+var shop = require("./shop/shop.js");
+var cart = require("./shop/cart.js");
+var checkout = require("./shop/checkout.js");
+var payment = require("./shop/payment.js");
+var processed = require("./shop/processed.js");
+var service = require('./service.js');
+var collection = require('./collection/collection.js');
+var lookbook = require('./collection/lookbook.js');
+var support = require('./support/support.js');
+var social = require('./social/social.js');
 
-},{"./about.js":1,"./catalogue.js":3,"./contact.js":4,"./film.js":5,"./heroes.js":6,"./logo.js":7,"./lookbook.js":8,"./nav.js":9,"./routes.js":10,"./services.js":11,"./social.js":12,"./stockists.js":13,"./vendor/jquery-ui.min.js":14,"angular":24,"angular-animate":16,"angular-resource":18,"angular-route":20,"angular-touch":22,"jquery":37,"prismic.io":45}],3:[function(require,module,exports){
+//
+
+},{"./collection/collection.js":2,"./collection/lookbook.js":3,"./nav.js":4,"./service.js":5,"./shop/cart.js":6,"./shop/checkout.js":7,"./shop/payment.js":8,"./shop/processed.js":9,"./shop/shop.js":10,"./social/social.js":11,"./support/support.js":12,"./vendor/jquery-ui.min.js":13,"angular":21,"angular-animate":15,"angular-resource":17,"angular-route":19,"jquery":34,"prismic.io":42}],2:[function(require,module,exports){
 'use strict';
 
-var Catalogue = angular.module('myApp');
-Catalogue.controller('catalogueCtrl', function ($scope, $http, $rootScope, $location, getService, $routeParams, $window, $document, $route, $templateCache, preload) {
+var Collection = angular.module('myApp');
 
-	$scope.units = [];
-	$scope.$on("myEvent", function (event) {
-		$scope.units = $rootScope.catalogue.units;
-	});
+Collection.controller('collectionCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $routeParams) {
 
-	jQuery($window).bind("scroll.catalogue_scroll", function (event) {
-		$scope.isScrolling = true;
-	});
+	$rootScope.collections = [];
+	$rootScope.Collection = [];
+	var collectionRan = false;
 
-	$rootScope.windowWidth = $window.innerWidth;
-	$rootScope.slideLeft = function (element) {
-		var thisElement = jQuery("#catalogue-unit-" + element);
-		var childElement = jQuery("#catalogue-ul-" + element);
-		var scrollBy;
-		var horizontalOffset = childElement.offset().left;
-		var moduleDifference = -1 * horizontalOffset / $rootScope.windowWidth;
-		if (moduleDifference >= 0 && moduleDifference < 1) {
-			scrollBy = $rootScope.windowWidth + horizontalOffset;
-		} else if (moduleDifference >= 1 && moduleDifference < 2) {
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth);
-		} else if (moduleDifference >= 2 && moduleDifference < 3) {
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 2);
-		}
+	// $rootScope.getContentType('collection', 'my.collection.date desc');
 
-		jQuery("#catalogue-unit-" + element).animate({
-			scrollLeft: '-=' + scrollBy
-		}, 1000, 'easeOutQuad');
-
-		if ($scope.isScrolling == false) {
-			var distance = jQuery("#catalogue-unit-" + element).offset().top;
-			$rootScope.adjustToSection(distance, element);
-		}
-	};
-
-	$rootScope.slideRight = function (element) {
-		var thisElement = jQuery("#catalogue-unit-" + element);
-		var childElement = jQuery("#catalogue-ul-" + element);
-		var scrollBy;
-		var horizontalOffset = childElement.offset().left;
-		var moduleDifference = -1 * horizontalOffset / $rootScope.windowWidth;
-		if (moduleDifference >= 0 && moduleDifference < 1) {
-			scrollBy = $rootScope.windowWidth + horizontalOffset;
-		} else if (moduleDifference >= 1 && moduleDifference < 2) {
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth);
-		} else if (moduleDifference >= 2 && moduleDifference < 3) {
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 2);
-		}
-
-		jQuery("#catalogue-unit-" + element).animate({
-			scrollLeft: '+=' + scrollBy
-		}, 1000, 'easeOutQuad');
-
-		var distance = jQuery("#catalogue-unit-" + element).offset().top;
-		$rootScope.adjustToSection(distance);
-	};
-
-	//scroll back
-	setTimeout(function () {
-
-		jQuery("#catalogue-unit-1").animate({
-			scrollLeft: '+=' + $rootScope.windowWidth
-		}, 10, 'easeOutQuad');
-
-		jQuery("#catalogue-unit-6").animate({
-			scrollLeft: '+=' + $rootScope.windowWidth
-		}, 10, 'easeOutQuad');
-	}, 600);
-
-	$rootScope.scrollBack = function (i) {
-
-		jQuery("#catalogue-unit-" + i).animate({
-			scrollLeft: '-=' + $rootScope.windowWidth
-		}, 1000, 'easeOutQuad');
-	};
-
-	$rootScope.adjustToSection = function (y) {
-		jQuery("html body").animate({
-			scrollTop: y
-		}, 1000, 'easeOutQuad');
-	};
-
-	$scope.left_arrow_present = [];
-	$scope.right_arrow_present = [];
-	$scope.horizontalOffset;
-
-	setTimeout(function () {
-		for (var i in $rootScope.catalogue.units) {
-			$scope.left_arrow_present.push(false);
-			$scope.right_arrow_present.push(true);
-		} //for loop
-
-		$scope.containerWidth_1 = jQuery("#catalogue-ul-1").width() - $rootScope.windowWidth;
-
-		//................................................................. CATALOGUE 1
-
-		jQuery("#catalogue-unit-1").bind('scroll.catalogue_1', function () {
-
-			var pixelScroll = jQuery(this).scrollLeft();
-
-			if (pixelScroll < $rootScope.windowWidth) {
-
-				$scope.left_arrow_present[1] = false;
-				$scope.right_arrow_present[1] = true;
-			} else if (pixelScroll >= $rootScope.windowWidth && pixelScroll < $scope.containerWidth_1) {
-				$scope.left_arrow_present[1] = true;
-				$scope.right_arrow_present[1] = true;
-			} else if (pixelScroll >= $rootScope.windowWidth && pixelScroll >= $scope.containerWidth_1) {
-				$scope.left_arrow_present[1] = true;
-				$scope.right_arrow_present[1] = false;
+	$rootScope.chooseCollection = function () {
+		for (var i in $rootScope.collections) {
+			if ($rootScope.collections[i].slug == $routeParams.collection) {
+				$rootScope.Collection = $rootScope.collections[i];
+				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 			}
-
-			$scope.$apply();
-		}); //catalogue 1
-
-		$scope.containerWidth_6 = jQuery("#catalogue-ul-6").width() - $rootScope.windowWidth;
-
-		//................................................................. CATALOGUE 6
-		jQuery("#catalogue-unit-6").bind('scroll.catalogue_6', function () {
-			var pixelScroll = jQuery(this).scrollLeft();
-			if (pixelScroll < $rootScope.windowWidth) {
-
-				$scope.left_arrow_present[6] = false;
-				$scope.right_arrow_present[6] = true;
-			} else if (pixelScroll >= $rootScope.windowWidth && pixelScroll < $scope.containerWidth_6) {
-				$scope.left_arrow_present[6] = true;
-				$scope.right_arrow_present[6] = true;
-			} else if (pixelScroll >= $rootScope.windowWidth && pixelScroll >= $scope.containerWidth_6) {
-				$scope.left_arrow_present[6] = true;
-				$scope.right_arrow_present[6] = false;
-			}
-
-			$scope.$apply();
-		}); //catalogue 1
-	}, 600);
-
-	//navigating with keys
-	jQuery(document.documentElement).keyup(function (event) {
-		// handle cursor keys
-		if (event.keyCode == 37 && $rootScope.isCatalogue) {
-
-			$rootScope.slideLeft($rootScope.catalogueSection);
-		} else if (event.keyCode == 39 && $rootScope.isCatalogue) {
-
-			$rootScope.slideRight($rootScope.catalogueSection);
 		}
-	});
+	};
 
-	//.....MOBILE
-
-	if ($rootScope.isMobile) {
-		$scope.swipeHide = false;
-		$scope.units = [];
-		setTimeout(function () {
-			$scope.units = $rootScope.catalogue.units;
-		}, 600);
-
-		var windowWidth = $window.innerWidth;
-		$scope.horizontalOffset;
-		var childElement = jQuery(".catalogue-container");
-		setTimeout(function () {
-			var containerWidth = jQuery(".catalogue-ul").width() - windowWidth;
-			childElement.scroll(function () {
-				var pixelScroll = $(this).scrollLeft();
-				$scope.horizontalOffset = pixelScroll / containerWidth * 100;
-				if (pixelScroll >= 0) {
-					$scope.removeSwipe();
-				}
-				$scope.$apply();
-			});
-		}, 600);
-		$scope.removeSwipe = function () {
-			$scope.swipeHide = true;
-		};
-	}
-});
-Catalogue.directive('catalogueDirective', function ($rootScope, $location) {
+	$rootScope.getContentType('collection', 'my.collection.date desc');
+}).directive('lookbookDirective', function ($rootScope, $location) {
 	return {
 		restrict: 'E',
-		templateUrl: 'views/catalogue.html',
+		templateUrl: 'views/collection/lookbook.html',
 		replace: true
 	};
 });
 
-},{}],4:[function(require,module,exports){
-'use strict';
-
-var Contact = angular.module('myApp');
-Contact.controller('contactCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
-
-	$scope.contact = [];
-	$scope.$on("supportDataArrived", function (event) {
-		$scope.contact = $rootScope.contactData.contact;
-	});
-});
-Contact.directive('contactDirective', function ($rootScope, $location) {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/contact.html',
-		replace: true
-	};
-});
-
-},{}],5:[function(require,module,exports){
-'use strict';
-
-var Film = angular.module('myApp');
-Film.controller('filmCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache, $sce) {
-    $scope.$on("myEvent", function (event) {
-        $rootScope.myVideo;
-        $rootScope.playPause;
-        $rootScope.makeBig;
-        $rootScope.makeSmall;
-        $rootScope.makeNormal;
-        $scope.soundAction = "CLICK FOR";
-
-        //for video js
-        $scope.base = {};
-        $scope.video = {};
-        $scope.handle = {};
-        $scope.videoId = {};
-        $scope.video_volume = 0;
-
-        $scope.handle = $rootScope.film.videoHandle;
-        $scope.videoId = $rootScope.film.videoId;
-
-        $scope.base = 'https://player.vimeo.com/external/' + $scope.handle + '.hd.mp4?s=' + $scope.videoId + '&profile_id=113';
-        $scope.video = $sce.trustAsResourceUrl($scope.base);
-
-        setTimeout(function () {
-            var player;
-            $rootScope.myVideo = document.getElementById("film-fw15");;
-            $rootScope.bootVideo = function () {
-                //  player = videojs('#film-fw15').ready(function(){
-                // $rootScope.myVideo = this;
-                //     // myPlayer.tech.removeControlsListeners();
-                //     // EXAMPLE: Start playing the video.
-                //
-                //
-                //     // $rootScope.myVideo = document.getElementById("videoIntro");
-                //
-                // });
-                if (!$rootScope.isMobileDevice) {
-                    $rootScope.myVideo.play();
-                    $rootScope.myVideo.volume = 0;
-                }
-            };
-
-            $rootScope.bootVideo();
-
-            $rootScope.volume = function () {
-                if ($scope.video_volume == 0) {
-                    console.log("on");
-                    $rootScope.myVideo.volume = 1;
-                    $scope.video_volume = 1;
-                    $scope.soundAction = "STOP";
-                } else {
-                    console.log("off");
-
-                    $rootScope.myVideo.volume = 0;
-                    $scope.video_volume = 0;
-                    $scope.soundAction = "CLICK FOR";
-                }
-            };
-
-            $rootScope.playPause = function () {
-                console.log("play");
-                console.log($rootScope.myVideo);
-
-                if ($rootScope.myVideo.paused) {
-                    $rootScope.myVideo.play();
-                } else {
-                    $rootScope.myVideo.pause();
-                }
-            };
-
-            $rootScope.makeBig = function () {
-                $rootScope.myVideo.width = 560;
-            };
-
-            $rootScope.makeSmall = function () {
-                $rootScope.myVideo.width = 320;
-            };
-
-            $rootScope.makeNormal = function () {
-                $rootScope.myVideo.width = 420;
-            };
-
-            // $scope.$on('$destroy', function () {
-            //     player.dispose();
-            // });
-        }, 1200);
-
-        // });//viewContentLoaded
-    }); //on data arrived event
-});
-
-Film.directive('filmDirective', function ($rootScope, $location) {
-    return {
-        restrict: 'E',
-        templateUrl: 'views/film.html',
-        replace: true
-    };
-});
-
-},{}],6:[function(require,module,exports){
-'use strict';
-
-angular.module('myApp').controller('heroesCtrl', ['$scope', '$anchorScroll', '$http', '$rootScope', '$location', 'getService', '$routeParams', '$window', '$document', 'anchorSmoothScroll', '$route', '$templateCache', '$sce', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache, $sce) {
-	$rootScope.heroes_scrolled = false;
-	$scope.heroesUnits = [];
-	//only after data is pulled
-	$scope.$on("myEvent", function (event) {
-		$scope.heroesUnits = $rootScope.heroes.units;
-	});
-
-	$scope.videoHeroesLoaded = function () {
-
-		setTimeout(function () {
-			$rootScope.heroesVideo = document.getElementById("heroesVideo");
-			$rootScope.heroesVideo.playbackRate = 2;
-		}, 600);
-	};
-
-	$rootScope.windowWidth = $window.innerWidth;
-	// jQuery('#'+$scope.navigationLinks[i]+'Hash').offset().top -1;
-
-	$rootScope.heroesSlideLeft = function (element) {
-		//
-		// anchorSmoothScroll.scrollTo("heroes-unit-"+element);
-
-		// event.preventDefault();
-
-		var thisElement = jQuery("#heroes-unit-" + element);
-
-		var childElement = jQuery("#heroes-ul-" + element);
-
-		var scrollBy;
-
-		var horizontalOffset = childElement.offset().left;
-
-		var moduleDifference = -1 * horizontalOffset / $rootScope.windowWidth;
-		if (moduleDifference >= 0 && moduleDifference < 1) {
-
-			scrollBy = $rootScope.windowWidth + horizontalOffset;
-		} else if (moduleDifference >= 1 && moduleDifference < 2) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth);
-		} else if (moduleDifference >= 2 && moduleDifference < 3) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 2);
-		} else if (moduleDifference >= 3 && moduleDifference < 4) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 3);
-		} else if (moduleDifference >= 4 && moduleDifference < 5) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 4);
-		} else if (moduleDifference >= 5 && moduleDifference < 6) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 5);
-		} else if (moduleDifference >= 6 && moduleDifference < 7) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 6);
-		} else if (moduleDifference >= 7 && moduleDifference < 8) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 7);
-		} else if (moduleDifference >= 8 && moduleDifference < 9) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 8);
-		}
-
-		jQuery("#heroes-unit-" + element).animate({
-			scrollLeft: '-=' + scrollBy
-		}, 1000, 'easeOutQuad');
-
-		var distance = jQuery("#heroes-unit-" + element).offset().top;
-		$rootScope.adjustToSection(distance, element);
-	};
-
-	$rootScope.heroesSlideRight = function (element) {
-
-		// anchorSmoothScroll.scrollTo("heroes-unit-"+element);
-
-		// event.preventDefault();
-
-		var thisElement = jQuery("#heroes-unit-" + element);
-
-		var childElement = jQuery("#heroes-ul-" + element);
-
-		var scrollBy;
-
-		var horizontalOffset = childElement.offset().left;
-
-		var moduleDifference = -1 * horizontalOffset / $rootScope.windowWidth;
-		if (moduleDifference >= 0 && moduleDifference < 1) {
-
-			scrollBy = $rootScope.windowWidth + horizontalOffset;
-		} else if (moduleDifference >= 1 && moduleDifference < 2) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth);
-		} else if (moduleDifference >= 2 && moduleDifference < 3) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 2);
-		} else if (moduleDifference >= 3 && moduleDifference < 4) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 3);
-		} else if (moduleDifference >= 4 && moduleDifference < 5) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 4);
-		} else if (moduleDifference >= 5 && moduleDifference < 6) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 5);
-		} else if (moduleDifference >= 6 && moduleDifference < 7) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 6);
-		} else if (moduleDifference >= 7 && moduleDifference < 8) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 8);
-		} else if (moduleDifference >= 8 && moduleDifference < 9) {
-
-			scrollBy = $rootScope.windowWidth + (horizontalOffset + $rootScope.windowWidth * 9);
-		}
-
-		jQuery("#heroes-unit-" + element).animate({
-			scrollLeft: '+=' + scrollBy
-		}, 1000, 'easeOutQuad');
-
-		var distance = jQuery("#heroes-unit-" + element).offset().top;
-		$rootScope.adjustToSection(distance, element);
-	};
-
-	//scroll back
-	setTimeout(function () {
-		jQuery("#heroes-unit-0").animate({
-			scrollLeft: '+=' + $rootScope.windowWidth
-		}, 10, 'easeOutQuad');
-	}, 600);
-
-	$rootScope.heroes_scrollBack = function (i) {
-		if ($rootScope.heroes_scrolled == false) {
-			jQuery("#heroes-unit-" + i).animate({
-				scrollLeft: '-=' + $rootScope.windowWidth
-			}, 1000, 'easeOutQuad');
-			$rootScope.heroes_scrolled = true;
-		} else {
-			return false;
-		}
-	};
-
-	$scope.heroes_left_arrow_present = [];
-	$scope.heroes_right_arrow_present = [];
-
-	$scope.heroes_horizontalOffset;
-
-	setTimeout(function () {
-		for (var i in $rootScope.catalogue.units) {
-			$scope.heroes_left_arrow_present.push(false);
-			$scope.heroes_right_arrow_present.push(true);
-		} //for loop
-
-		$scope.heroes_containerWidth_1 = jQuery("#heroes-ul-0").width() - $rootScope.windowWidth;
-		//................................................................. heroes 1
-		jQuery("#heroes-unit-0").bind('scroll.heroes_0', function () {
-
-			var pixelScroll = jQuery(this).scrollLeft();
-			if (pixelScroll < $rootScope.windowWidth) {
-				$scope.heroes_left_arrow_present[0] = false;
-				$scope.heroes_right_arrow_present[0] = true;
-			} else if (pixelScroll >= $rootScope.windowWidth && pixelScroll < $scope.heroes_containerWidth_1) {
-				$scope.heroes_left_arrow_present[0] = true;
-				$scope.heroes_right_arrow_present[0] = true;
-			} else if (pixelScroll >= $rootScope.windowWidth && pixelScroll >= $scope.heroes_containerWidth_1) {
-				$scope.heroes_left_arrow_present[0] = true;
-				$scope.heroes_right_arrow_present[0] = false;
-			}
-			$scope.$apply();
-		}); //heroes 1
-	}, 600);
-
-	//navigating with keys
-	jQuery(document.documentElement).keyup(function (event) {
-		// handle cursor keys
-		if (event.keyCode == 37 && $rootScope.isHeroes) {
-			$rootScope.heroesSlideLeft($rootScope.heroesSection);
-		} else if (event.keyCode == 39 && $rootScope.isHeroes) {
-			$rootScope.heroesSlideRight($rootScope.heroesSection);
-		}
-	});
-
-	$rootScope.heroesReadInterview = function (boolean) {
-		if (boolean == false) {
-			$rootScope.shiftImage_heroes = false;
-			$scope.interviewStatus = "read";
-		} else if (boolean == true) {
-			$scope.interviewStatus = "close";
-			$rootScope.shiftImage_heroes = true;
-		}
-	};
-
-	$rootScope.shiftImage_heroes = false;
-	$scope.animating_heroes = false;
-	$scope.interviewStatus = "read";
-	$scope.interviewActive = false;
-
-	$scope.readInterview = function () {
-		if ($scope.interviewActive == true) {
-			$scope.interviewActive = false;
-			$scope.interviewStatus = "read";
-		} else if ($scope.interviewActive == false) {
-			$scope.interviewActive = true;
-			$scope.interviewStatus = "close";
-		}
-
-		if ($scope.animating_heroes == true) {
-			return false;
-		} else if ($scope.animating_heroes == false) {
-			$rootScope.shiftImage_heroes = !$rootScope.shiftImage_heroes;
-			$scope.animating_heroes = true;
-			setTimeout(function () {
-				$scope.animating_heroes = false;
-			}, 1000);
-		}
-	};
-
-	$scope.closeDescription_heroes = function () {
-		$scope.interviewActive = false;
-		$scope.interviewStatus = "read";
-
-		if ($scope.animating_heroes == true) {
-			return false;
-		} else if ($scope.animating_heroes == false) {
-			$rootScope.shiftImage_heroes = !$rootScope.shiftImage_heroes;
-			$scope.animating_heroes = true;
-			setTimeout(function () {
-				$scope.animating_heroes = false;
-			}, 1000);
-		}
-	};
-
-	//disable scroll when the read more is active
-	$rootScope.readScrollDisable_heroes = function () {
-		if ($scope.interviewActive == true) {
-			$rootScope.disableScroll();
-		} else if ($scope.interviewActive == false) {
-			$rootScope.enableScroll();
-		}
-	};
-
-	//for video js
-	$scope.base_heroes = {};
-	$scope.video_heroes = {};
-	$scope.handle_heroes = {};
-	$scope.videoId_heroes = {};
-	$scope.video_volume = 0;
-
-	$scope.$on("myEvent", function (event) {
-		setTimeout(function () {
-			$scope.handle_heroes = $scope.heroesUnits[1].videoHandle;
-			$scope.videoId_heroes = $scope.heroesUnits[1].videoId;
-			$scope.base_heroes = 'https://player.vimeo.com/external/' + $scope.handle_heroes + '.hd.mp4?s=' + $scope.videoId_heroes + '&profile_id=113';
-			$scope.video_heroes = $sce.trustAsResourceUrl($scope.base_heroes);
-		}, 600);
-	});
-
-	var windowWidth = $window.innerWidth;
-	$scope.horizontalOffset;
-	var childElement = jQuery(".heroes-container");
-
-	setTimeout(function () {
-		var containerWidth = jQuery(".heroes-ul").width() - windowWidth;
-		childElement.scroll(function () {
-			var pixelScroll = $(this).scrollLeft();
-			$scope.horizontalOffset = pixelScroll / containerWidth * 100;
-			if (pixelScroll >= 0) {
-				$scope.removeSwipe_h();
-			}
-			$scope.$apply();
-		});
-	}, 600);
-
-	$scope.removeSwipe_h = function () {
-		$scope.swipeHide_h = true;
-	};
-}]).directive('heroesDirective', function ($rootScope, $location) {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/heroes.html',
-		replace: true
-	};
-});
-
-},{}],7:[function(require,module,exports){
-'use strict';
-
-angular.module('myApp').controller('logoCtrl', function ($scope, $rootScope) {}).directive('logoDirective', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/components/logo/logo.html',
-    replace: true
-  };
-}).directive('logoPopDirective', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/components/logo/logo-pop.html',
-    replace: true
-  };
-});
-
-},{}],8:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 var Lookbook = angular.module('myApp');
-Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache, preload) {
+Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
 
-	$scope.mainImage;
-	$scope.mainLook = 1;
-	$scope.lookbookUnits = [];
-	$scope.lookbook_preload_array = [];
-	if (!$rootScope.isMobile) {
-		$scope.showMain = true;
-	}
-
-	$scope.$on("myEvent", function (event) {
-		//only after data is pulled
-		$scope.lookbookUnits = $rootScope.lookbook.units;
-		$scope.mainImage = $rootScope.lookbook.units[0].src_large;
-
-		if (!$rootScope.isMobile) {
-			for (var i in $rootScope.lookbook.units) {
-				$scope.lookbook_preload_array.push($rootScope.lookbook.units[i].src_large);
-			}
-			preload.images($scope.lookbook_preload_array);
-		}
-	});
-
-	$scope.thisImage = function (look, src) {
-		$scope.mainImage = src;
-		$scope.mainLook = look;
-	};
-
+	$scope.mainLook;
 	$scope.shiftImage = false;
 	$scope.animating = false;
 	$rootScope.readActive = false;
 	$scope.lookbookStatus = "read";
+
+	$scope.selectMainLook = function (index) {
+		$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+	};
+
+	$rootScope.$on("collectionReady", function () {
+		// $scope.selectMainLook(1);
+		$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
+	});
 
 	$scope.showDescription = function () {
 
@@ -1638,7 +588,8 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 			}
 		}
 
-		$rootScope.readScrollDisable();
+		//
+		// $rootScope.readScrollDisable();
 
 		if ($scope.animating == true) {
 			return false;
@@ -1656,23 +607,94 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 		}
 	};
 
-	$scope.showMainImage = function () {
-		$scope.showMain = true;
-		$rootScope.disableScroll();
-	};
+	// $scope.mainImage;
+	// $scope.mainLook = 1;
+	// $scope.lookbookUnits = [];
+	// $scope.lookbook_preload_array = [];
+	// if(!$rootScope.isMobile){
+	// 	$scope.showMain = true;
+	// }
+	//
+	// $scope.$on("myEvent", function (event) {
+	// 	//only after data is pulled
+	// 	$scope.lookbookUnits = $rootScope.lookbook.units;
+	// 	$scope.mainImage = $rootScope.lookbook.units[0].src_large;
+	//
+	// 	// if(!$rootScope.isMobile){
+	// 	// 	for (var i in $rootScope.lookbook.units){
+	// 	// 			$scope.lookbook_preload_array.push($rootScope.lookbook.units[i].src_large);
+	// 	// 	}
+	// 	// 	preload.images($scope.lookbook_preload_array);
+	// 	// }
+	//
+	//
+	// });
 
-	$scope.hideMainImage = function () {
-		$scope.showMain = false;
-		$rootScope.enableScroll();
-	};
-
-	$rootScope.readScrollDisable = function () {
-		if ($rootScope.readActive == true) {
-			$rootScope.disableScroll();
-		} else if ($rootScope.readActive == false) {
-			$rootScope.enableScroll();
-		}
-	};
+	// 	$scope.thisImage = function(look, src){
+	// 		$scope.mainImage = src;
+	// 		$scope.mainLook = look;
+	// 	}
+	//
+	//
+	// $scope.shiftImage = false;
+	// $scope.animating = false;
+	// $rootScope.readActive= false;
+	// $scope.lookbookStatus ="read";
+	//
+	//
+	// $scope.showDescription = function(){
+	//
+	// 	if(!$rootScope.isMobile){
+	// 		if($rootScope.readActive == false){
+	// 			$rootScope.readActive= true;
+	// 			$scope.lookbookStatus ="close";
+	// 		}else if($rootScope.readActive == true){
+	// 			$rootScope.readActive= false;
+	// 			$scope.lookbookStatus ="read";
+	// 		}
+	// 	}
+	//
+	//
+	// 		$rootScope.readScrollDisable();
+	//
+	// 		if($scope.animating == true){
+	// 			return false;
+	// 		}else if($scope.animating == false){
+	//
+	// 				$scope.shiftImage = !$scope.shiftImage;
+	// 				$scope.animating = true;
+	// 				setTimeout(function(){
+	// 					$scope.animating = false;
+	// 				}, 1000);
+	// 		}
+	//
+	// 		if($rootScope.isMobile){
+	// 			$scope.showMain = false;
+	// 		}
+	// }
+	//
+	//
+	// $scope.showMainImage= function(){
+	// 	$scope.showMain=true;
+	// 	$rootScope.disableScroll();
+	// }
+	//
+	// $scope.hideMainImage= function(){
+	// 	$scope.showMain=false;
+	// 	$rootScope.enableScroll();
+	// }
+	//
+	//
+	//
+	//
+	// $rootScope.readScrollDisable=function(){
+	// 	if($rootScope.readActive==true){
+	// 		$rootScope.disableScroll();
+	//
+	// 	}else if($rootScope.readActive==false){
+	// 				$rootScope.enableScroll();
+	// 	}
+	// }
 
 	var newMain;
 
@@ -1680,386 +702,259 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 	jQuery(document.documentElement).keyup(function (event) {
 
 		event.preventDefault();
-		// handle cursor keys
-		if (event.keyCode == 39 && $rootScope.isLookbook) {
+		//globals
+		var arrayLength = $rootScope.Collection.data['collection.look'].value.length - 1;
+		var index = $rootScope.Collection.data['collection.look'].value.indexOf($scope.mainLook);
 
-			//left right
-			var index = $scope.mainLook - 1;
-			var arrayLength = $scope.lookbookUnits.length - 1;
+		// handle cursor keys
+		if (event.keyCode == 39) {
 
 			if (index < arrayLength) {
-				var newMain = $scope.mainLook;
-			} else if (index >= arrayLength) {
-				var newMain = 0;
+				index = index + 1;
+				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+			} else {
+				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 			}
-
-			var thisUrl = $scope.lookbookUnits[newMain].src_large;
-			var thisLook = $scope.lookbookUnits[newMain].look;
-
-			$scope.thisImage(thisLook, thisUrl);
-
-			$scope.$apply();
-		} else if (event.keyCode == 37 && $rootScope.isLookbook) {
-			//left arrow
-			var index = $scope.mainLook - 1;
+		} else if (event.keyCode == 37) {
 
 			if (index > 0) {
-				var newMain = $scope.mainLook - 2;
-			} else if (index <= 0) {
-				var newMain = $scope.lookbookUnits.length - 1;
+				index = index - 1;
+				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+			} else {
+				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[arrayLength];
 			}
-
-			var thisUrl = $scope.lookbookUnits[newMain].src_large;
-			var thisLook = $scope.lookbookUnits[newMain].look;
-
-			$scope.thisImage(thisLook, thisUrl);
-
-			$scope.$apply();
 		}
+
+		$scope.$apply();
 	});
-
-	$scope.journalSwipeRight = function () {
-		var mainLookVar = parseInt($scope.mainLook);
-		if ($scope.mainLook == 1) {
-			$scope.mainLook = $scope.lookbookUnits.length - 1;
-			$scope.fastSwipeFN($scope.mainLook);
-			mainImgVar = $scope.mainLook;
-			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
-		} else if ($scope.mainLook >= 1) {
-			$scope.leftScroll();
-			$scope.mainLook = mainLookVar - 1;
-			mainImgVar = mainLookVar - 1;
-			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
-		}
-	};
-
-	$scope.fastSwipeFN = function (int) {
-		setTimeout(function () {
-			var scrollBy = -1 * jQuery("#lookbook-main-img-" + int).offset().left;
-			jQuery(".lookbook-main").animate({
-				scrollLeft: '-=' + scrollBy
-			}, 0, 'easeOutQuad');
-			console.log(scrollBy);
-		}, 50);
-	};
-
-	var windowWidth = $window.innerWidth;
-	$scope.leftScroll = function () {
-		jQuery(".lookbook-main").animate({
-			scrollLeft: '-=' + windowWidth
-		}, 600, 'easeOutQuad');
-	};
-
-	$scope.rightScroll = function () {
-		jQuery(".lookbook-main").animate({
-			scrollLeft: '+=' + windowWidth
-		}, 600, 'easeOutQuad');
-	};
-
-	$scope.journalSwipeLeft = function () {
-		var mainLookVar = parseInt($scope.mainLook);
-		var mainImgVar;
-		if ($scope.mainLook == $scope.lookbookUnits.length - 1) {
-			$scope.fastSwipeFN(1);
-			$scope.mainLook = 1;
-			mainImgVar = 1;
-			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
-		} else if ($scope.mainLook <= $scope.lookbookUnits.length - 1) {
-			$scope.rightScroll();
-			$scope.mainLook = mainLookVar + 1;
-			mainImgVar = mainLookVar + 1;
-			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
-			console.log($scope.mainLook);
-		}
-	};
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//  $scope.journalSwipeRight = function(){
+	// 		var mainLookVar = parseInt($scope.mainLook);
+	// 		 if($scope.mainLook == 1){
+	// 				$scope.mainLook = $scope.lookbookUnits.length-1;
+	// 				$scope.fastSwipeFN($scope.mainLook);
+	// 				mainImgVar=$scope.mainLook;
+	// 				$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+	// 			}else if($scope.mainLook >= 1 ){
+	// 					$scope.leftScroll();
+	// 					$scope.mainLook = mainLookVar-1;
+	// 					mainImgVar=mainLookVar-1
+	// 					$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+	// 			}
+	// }
+	//
+	//
+	// $scope.fastSwipeFN=function(int){
+	// 	setTimeout(function(){
+	// 		var scrollBy = (-1)*(jQuery("#lookbook-main-img-"+int).offset().left);
+	// 			jQuery(".lookbook-main").animate({
+	// 					scrollLeft: '-='+scrollBy
+	// 			}, 0, 'easeOutQuad');
+	// 			console.log(scrollBy);
+	// 		}, 50);
+	// }
+	//
+	// var windowWidth =$window.innerWidth;
+	// $scope.leftScroll=function(){
+	// 	jQuery(".lookbook-main").animate({
+	// 			scrollLeft: '-='+windowWidth
+	// 	}, 600, 'easeOutQuad');
+	// }
+	//
+	// $scope.rightScroll=function(){
+	// 	jQuery(".lookbook-main").animate({
+	// 			scrollLeft: '+='+windowWidth
+	// 	}, 600, 'easeOutQuad');
+	// }
+	//
+	//
+	// $scope.journalSwipeLeft = function(){
+	// 	var mainLookVar = parseInt($scope.mainLook);
+	// 	var mainImgVar;
+	// 	if($scope.mainLook == ($scope.lookbookUnits.length-1)){
+	// 		$scope.fastSwipeFN(1);
+	// 		$scope.mainLook = 1;
+	// 		mainImgVar=1
+	// 		$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+	// 	}else if($scope.mainLook <= ($scope.lookbookUnits.length-1)){
+	// 			$scope.rightScroll();
+	// 			$scope.mainLook = mainLookVar+1;
+	// 			mainImgVar=mainLookVar+1
+	// 			$scope.mainImage = $scope.lookbookUnits[mainImgVar].src;
+	// 			console.log($scope.mainLook);
+	// 	 }
+	// }
+	//
 });
-Lookbook.directive('lookbookDirective', function ($rootScope, $location) {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/lookbook.html',
-		replace: true
-	};
-});
 
-},{}],9:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
-angular.module('myApp').controller('navCtrl', function ($scope, $rootScope, $location, $routeParams, $timeout, $route, getService) {
+var Nav = angular.module('myApp');
 
-  $rootScope.navActive = false;
-  $rootScope.lookActive = true;
-  $scope.pop_animating = false;
+Nav.controller('navCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $routeParams) {
 
-  $rootScope.isActive = function (viewLocation) {
-    return viewLocation == $rootScope.currentPosition;
+  $rootScope.firstBase;
+  $rootScope.Location;
+  $rootScope.logoLeft = false;
+
+  $scope.navCollections = [{
+    "slug": "pre-printemps-17",
+    "name": "pre/printemps 2017"
+  }, {
+    "slug": "printemps-17",
+    "name": "printemps 2017"
+  }, {
+    "slug": "automne-hiver-16",
+    "name": "automne/hiver 2016"
+  }];
+
+  $rootScope.isNavOpen = false;
+
+  $scope.openNav = function () {
+    $rootScope.isNavOpen = !$rootScope.isNavOpen;
   };
 
-  $scope.$on('$routeChangeStart', function (next, current) {
-    //activating a nav entry based on the location you are in
-    $rootScope.isActive();
-  });
-
-  $scope.burgerWrapperElement = jQuery(".pop-wrapper");
-  // $scope.burgerIconElement = jQuery(".burger-icon");
-
-  $rootScope.beNavActive = function () {
-
-    if (!$rootScope.isMobile) {
-
-      $rootScope.navActive = !$rootScope.navActive;
-      // $scope.burgerWrapperElement.toggleClass( "popActive" );
-      if (!$scope.navActive) {
-        $rootScope.$broadcast('navIsNotActive');
-        $rootScope.enableScroll();
-        console.log('enableScroll');
-      } else {
-        $rootScope.$broadcast('navIsActive');
-        $rootScope.disableScroll();
-      }
-
-      console.log($scope.navActive);
-    } else if ($rootScope.isMobile) {
-      if ($scope.pop_animating == true) {
-
-        return false;
-      } else if ($scope.pop_animating == false) {
-
-        $scope.navActive = !$scope.navActive;
-        $rootScope.lookActive = !$rootScope.lookActive;
-        $scope.pop_animating = true;
-        setTimeout(function () {
-          $scope.pop_animating = false;
-        }, 1000);
-      }
-    }
+  $scope.closeNav = function () {
+    $rootScope.isNavOpen = false;
   };
 
-  //...........................initializing season variables
-
-  $rootScope.navigationData = [];
-
-  // This service's function returns a promise, but we'll deal with that shortly
-  getService.get("general")
-  // then() called when son gets back
-  .then(function (data) {
-    $rootScope.navigationData = data;
-    $rootScope.lookbookLength = data[0].length;
-  }, function (error) {
-    // promise rejected, could log the error with: console.log('error', error);
-  });
-
-  $scope.openNavOne = false;
-  $scope.openNavTwo = false;
-  setTimeout(function () {
-    $scope.navOne = $rootScope.navigationData[0].season;
-    $scope.navTwo = $rootScope.navigationData[1].season;
-  }, 900);
-
-  //opening the sub-section of the season nav
-  $rootScope.openSeason = function (season) {
-
-    if ($scope.thisNavSeason != season) {
-      $scope.thisNavSeason = season;
-    } else if ($scope.thisNavSeason == season) {
-      $scope.thisNavSeason = "";
-    }
-  };
-
-  $rootScope.isSubNav = function (season) {
-    if (season == $scope.thisNavSeason) {
+  $rootScope.isBasePath = function () {
+    if ($scope.getFirstPath() == location) {
       return true;
-    } else if (season == $scope.thisNavSeason) {
+    } else {
       return false;
     }
   };
 
-  // left: 37, up: 38, right: 39, down: 40,
-  // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
-  var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+  $rootScope.isLocation = function (location) {
 
-  function preventDefault(e) {
-    e = e || window.event;
-    if (e.preventDefault) e.preventDefault();
-    e.returnValue = false;
-  }
-
-  function preventDefaultForScrollKeys(e) {
-    if (keys[e.keyCode]) {
-      preventDefault(e);
-      return false;
+    if ($location.path() == location) {
+      return true;
+    } else {
+      if ($location.path() == '/collection/' + $routeParams.collection && location == '/collection') {
+        return true;
+      } else {
+        $rootScope.collectionActive = false;
+        return false;
+      }
     }
+  };
+
+  $scope.getFirstPath = function () {
+    var first = $location.path();
+    first.indexOf(1);
+    first.toLowerCase();
+    first = first.split("/")[1];
+    return first;
+  };
+
+  $scope.getSecondPath = function () {
+    var first = $location.path();
+    first.indexOf(1);
+    first.toLowerCase();
+
+    first = first.split("/")[2];
+    return first;
+  };
+
+  if ($scope.getFirstPath() == 'shop') {
+    $rootScope.logoLeft = false;
+  } else {
+    $rootScope.logoLeft = true;
   }
 
-  $rootScope.disableScroll = function () {
-    if (window.addEventListener) // older FF
-      window.addEventListener('DOMMouseScroll', preventDefault, false);
-    window.onwheel = preventDefault; // modern standard
-    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-    window.ontouchmove = preventDefault; // mobile
-    document.onkeydown = preventDefaultForScrollKeys;
-  };
+  $scope.$on('$routeChangeStart', function () {});
 
-  $rootScope.enableScroll = function () {
-    if (window.removeEventListener) window.removeEventListener('DOMMouseScroll', preventDefault, false);
-    window.onmousewheel = document.onmousewheel = null;
-    window.onwheel = null;
-    window.ontouchmove = null;
-    document.onkeydown = null;
-  };
+  $scope.$on('$routeChangeSuccess', function () {
+    $rootScope.Location = $location.path();
+    $rootScope.shopLocation = $scope.getSecondPath();
+    $rootScope.firstBase = $scope.getFirstPath();
+    $rootScope.pageLoading = true;
+    if ($scope.getFirstPath() == 'shop') {
+      $rootScope.logoLeft = false;
+    } else {
+      $rootScope.logoLeft = true;
+    }
 
-  $rootScope.disableBodyScroll = function (element) {
-
-    jQuery('.' + element).bind('mousewheel DOMMouseScroll', function (e) {
-      var e0 = e.originalEvent,
-          delta = e0.wheelDelta || -e0.detail;
-
-      this.scrollTop += (delta < 0 ? 1 : -1) * 30;
-      e.preventDefault();
-    });
-  };
-}).directive('navDirective', function () {
+    if ($scope.getSecondPath) {
+      setTimeout(function () {
+        $rootScope.pageLoading = false;
+        $rootScope.$apply();
+      }, 800);
+    }
+  });
+}).directive('navDirective', function ($rootScope, $location, $window, $timeout) {
   return {
     restrict: 'E',
-    templateUrl: 'views/components/nav/nav.html',
-    replace: true
-  };
-}).directive('navOneDirective', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/components/nav/nav-one.html',
-    replace: true
-  };
-}).directive('navSupportDirective', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/components/nav/nav-support.html',
-    replace: true
-  };
-}).directive('popDirective', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/components/nav/pop.html',
-    replace: true
-  };
-}).directive('arrowDirective', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/components/nav/arrow.html',
-    replace: true
+    templateUrl: 'views/components/nav.html',
+    replace: true,
+    link: function link(scope, elem, attrs) {}
   };
 });
 
-},{}],10:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
+// lib.js
+
 'use strict';
 
-angular.module('myApp').run(['$anchorScroll', '$route', '$rootScope', '$location', 'getService', '$routeParams', '$templateCache', 'preload', function ($anchorScroll, $route, $rootScope, $location, getService, $routeParams, $templateCache, preload) {
+var jQuery = require('jquery');
+var jqueryUI = require('./vendor/jquery-ui.min.js');
 
-  //a change of path should not reload the page
-  var original = $location.path;
-  $location.path = function (path, reload) {
-    if (reload === false) {
-      var lastRoute = $route.current;
-      var un = $rootScope.$on('$locationChangeSuccess', function () {
-        $route.current = lastRoute;
-        un();
-      });
-    } else if (reload === true) {
-      var currentPageTemplate = $route.current.templateUrl;
-      $templateCache.remove(currentPageTemplate);
-      var un = $rootScope.$on('$locationChangeSuccess', function () {
-        $route.current = '/';
-        un();
-        $route.reload();
-      });
+/* Services */
+var Service = angular.module('myApp');
+
+Service.factory("transformRequestAsFormPost", function () {
+  // I prepare the request data for the form post.
+  function transformRequest(data, getHeaders) {
+    var headers = getHeaders();
+    headers["Content-type"] = "application/x-www-form-urlencoded; charset=utf-8";
+    return serializeData(data);
+  }
+  // Return the factory value.
+  return transformRequest;
+  // ---
+  // PRVIATE METHODS.
+  // ---
+  // I serialize the given Object into a key-value pair string. This
+  // method expects an object and will default to the toString() method.
+  // --
+  // NOTE: This is an atered version of the jQuery.param() method which
+  // will serialize a data collection for Form posting.
+  // --
+  // https://github.com/jquery/jquery/blob/master/src/serialize.js#L45
+  function serializeData(data) {
+    // If this is not an object, defer to native stringification.
+    if (!angular.isObject(data)) {
+      return data == null ? "" : data.toString();
     }
-    return original.apply($location, [path]);
-  };
-}]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider, getService) {
-
-  // use the HTML5 History API
-  $locationProvider.html5Mode(true).hashPrefix('!');;
-
-  $routeProvider
-  // $locationChangeStart
-
-  .when('/social', {
-    templateUrl: 'views/social.html',
-    controller: 'socialCtrl',
-    reloadOnSearch: true
-  }).when('/about', {
-    templateUrl: 'views/support.html',
-    controller: 'supportCtrl',
-    reloadOnSearch: false
-  }).when('/stockists', {
-    templateUrl: 'views/support.html',
-    controller: 'supportCtrl',
-    reloadOnSearch: false
-  }).when('/contact', {
-    templateUrl: 'views/support.html',
-    controller: 'supportCtrl',
-    reloadOnSearch: false
-  }).when('/fw15/:section', {
-    templateUrl: 'views/fw_fifteen.html',
-    controller: 'fwfifteenCtrl',
-    reloadOnSearch: false
-  }).when('/ss16/:section', {
-    templateUrl: 'views/ss_sixteen.html',
-    controller: 'sssixteenCtrl',
-    reloadOnSearch: false
-  }).when('/fw15', {
-    templateUrl: 'views/fw_fifteen.html',
-    controller: 'fwfifteenCtrl',
-    reloadOnSearch: false
-    // resolve: {
-    //   app: function(getService, $q, $timeout){
-    //     var deferred = $q.defer();
-    //         $timeout(function () {
-    //           deferred.resolve();
-    //           getService.get("fw15");
-    //           return deferred.promise;
-    //         },700);
-    //   }
-    // }
-  }).when('/ss16', {
-    templateUrl: 'views/ss_sixteen.html',
-    controller: 'sssixteenCtrl',
-    reloadOnSearch: true
-    // resolve: {
-    //   app: function(getService, $q, $timeout){
-    //     var deferred = $q.defer();
-    //         $timeout(function () {
-    //           deferred.resolve();
-    //           getService.get("fw15");
-    //           return deferred.promise;
-    //         },700);
-    //   }
-    // }
-  }).when('/', {
-    // redirectTo: '/fw15',
-
-    templateUrl: 'views/fw_fifteen.html',
-    controller: 'fwfifteenCtrl',
-    reloadOnSearch: false,
-    resolve: {
-      app: function app(getService, $q, $timeout) {
-        var deferred = $q.defer();
-        $timeout(function () {
-          deferred.resolve();
-          getService.get("fw15");
-          return deferred.promise;
-        }, 700);
+    var buffer = [];
+    // Serialize each key in the object.
+    for (var name in data) {
+      if (!data.hasOwnProperty(name)) {
+        continue;
       }
+      var value = data[name];
+      buffer.push(encodeURIComponent(name) + "=" + encodeURIComponent(value == null ? "" : value));
     }
+    // Serialize the buffer and clean it up for transportation.
+    var source = buffer.join("&").replace(/%20/g, "+");
+    return source;
+  }
+});
 
-  })
+Service.service('anchorSmoothScroll', function ($location, $rootScope) {
 
-  // put your least specific route at the bottom
-  .otherwise({ redirectTo: '/' });
-}]).service('anchorSmoothScroll', function () {
-
-  this.scrollTo = function (eID) {
+  this.scrollToJavascript = function (eID) {
 
     // This scrolling function
+    // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
 
     var startY = currentYPosition();
     var stopY = elmYPosition(eID);
@@ -2104,217 +999,1318 @@ angular.module('myApp').run(['$anchorScroll', '$route', '$rootScope', '$location
     }
   };
 
+  this.scrollTo = function (id) {
+
+    setTimeout(function () {
+      var number, element, scroll, scrollPosition, windowheight;
+      number = jQuery('#' + id).offset().top;
+
+      element = jQuery('html body');
+      scrollPosition = jQuery('html body').scrollTop();
+      //  scrollLength = document.getElementById("html body").scrollHeight;
+      windowheight = $rootScope.windowHeight;
+      scroll = scrollPosition + number;
+      element.stop().animate({
+        scrollTop: number
+      }, 600, 'swing'
+      // function() {
+      //   // $location.path(section, false);
+      //   // console.log($location.path());
+      // }
+      );
+    }, 800);
+  };
+
   this.scrollHorizontally = function (number, section) {
 
-    var element = jQuery(".catalogue-ul-" + section);
+    var element = $rootScope.retrieveElement("shop");
+    // var element = jQuery("#shop");
+
     event.preventDefault();
+
+    //
     element.stop().animate({
       scrollLeft: number
-    }, 1000, 'easeInOutQuart');
-  };
-}).controller('routeCtrl', ['$anchorScroll', '$location', '$scope', 'anchorSmoothScroll', '$window', '$route', 'getService', '$rootScope', '$routeParams', 'preload', '$templateCache', function ($anchorScroll, $location, $scope, anchorSmoothScroll, $window, $route, getService, $rootScope, $routeParams, preload, $templateCache) {
-
-  //initializing
-  $rootScope.routeIsForced = false;
-  $scope.navHideOne = true;
-  $scope.navFadeOne = 0;
-  var navActiveCheck = false;
-  $scope.burgerColor = '#FFFFFF';
-  $scope.burgerOffset = [];
-
-  $rootScope.thisSeasonPath;
-  var seasonPath, seasonIndex, thisSubstr;
-
-  $rootScope.findSeasonPath = function (path) {
-    seasonPath = path;
-    seasonIndex = seasonPath.lastIndexOf("/");
-    thisSubstr = seasonPath.substr(1, seasonIndex - 1);
-    $scope.thisSeasonPath = thisSubstr;
+    }, 600, 'swing'
+    // function() {
+    //   // $location.path(section, false);
+    //   // console.log($location.path());
+    // }
+    );
   };
 
-  $rootScope.thisSectionPath;
-  var sectionPath, sectionIndex, thisSectionSubstr, sectionLength;
+  this.scrollHorizontallyFast = function (number, section) {
 
-  $rootScope.findSectionPath = function (path) {
-    sectionPath = path;
-    sectionLength = sectionPath.length;
-    sectionIndex = sectionPath.lastIndexOf("/");
-    thisSectionSubstr = sectionPath.substr(sectionIndex + 1, sectionLength);
-    $rootScope.thisSectionPath = thisSectionSubstr;
+    var element = $rootScope.retrieveElement("shop");
+
+    // event.preventDefault();
+
+    element.stop().animate({
+      scrollLeft: number
+    }, 300, 'easeInOutQuart'
+    // function() {
+    //   // $location.path(section, false);
+    //   // console.log($location.path());
+    // }
+    );
   };
 
-  $scope.thisSeason = function (season) {
-    $rootScope.findSeasonPath($location.path());
+  this.scrollToZero = function (id) {
+
+    var element = jQuery(id);
+
+    event.preventDefault();
+
+    element.stop().animate({
+      scrollTop: 0
+    }, 1000, 'easeInOutQuart'
+    // function() {
+    //   // $location.path(section, false);
+    //   // console.log($location.path());
+    // }
+    );
   };
 
-  $scope.thisSeason("fw15");
-  $rootScope.currentPosition = "fw15";
+  this.scrollOneViewport = function () {
 
-  $scope.Path_Anchor = function (var1, var2) {
-    if (var1 == 'support' || var1 == 'social') {
-      $rootScope.seasonPartial = var1 + ".html";
-
-      if (var1 == 'support') {
-        console.log('support');
-        $location.path(var2, true);
-        $scope.inABit(var2 + 'Hash');
-      } else if (var1 == 'social') {
-        console.log('social');
-        $rootScope.routeIsForced = true;
-        $scope.$broadcast("routeIsForced");
-
-        $rootScope.headerHide = false;
-        console.log("headerHide false");
-
-        $location.path(var2, true);
-
-        $rootScope.endLoader();
-        // $rootScope.routeIsForced= false;
+    setTimeout(function () {
+      var number, element, scroll, scrollPosition, windowheight;
+      element = jQuery('.world-detail-wrapper');
+      windowheight = window.innerHeight;
+      if ($rootScope.isMobile && $rootScope.isDevice) {
+        windowheight = $window.innerHeight + 130;
       }
-      $rootScope.headerHide = false;
-    } else {
 
-      $rootScope.seasonPartial = var1 + ".html";
-      $location.path(var1 + '/' + var2, true);
-      $scope.inABit(var2 + 'Hash');
-      $rootScope.headerHide = false;
-    }
+      element.stop().animate({
+        scrollTop: windowheight
+      }, 1000, 'easeInOutQuart'
+      // function() {
+      //   // $location.path(section, false);
+      //   // console.log($location.path());
+      // }
+      );
+    }, 100);
+  };
+});
+
+Service.service('mailchimp', function ($location, $rootScope, $resource) {
+
+  this.register = function (checkout) {
+
+    var data = {
+      'u': '1e9ad6956936b430ff4152132',
+      'id': 'f74ac40f8c',
+      'dc': 'us14',
+      'username': 'eliafornari',
+      'ADDRESS': {
+        'addr1': checkout.shipment.address_1,
+        'city': checkout.shipment.city,
+        'state': checkout.shipment.county,
+        'zip': checkout.shipment.postcode,
+        'country': checkout.shipment.country
+      },
+      'PHONE': checkout.shipment.phone,
+      'EMAIL': checkout.customer.email,
+      'FNAME': checkout.customer.first_name,
+      'LNAME': checkout.customer.last_name
+    };
+
+    // Handle clicks on the form submission.
+    $rootScope.addSubscription = function (mailchimp) {
+      var actions,
+          MailChimpSubscription,
+          params = {},
+          url;
+
+      // Create a resource for interacting with the MailChimp API
+      url = '//' + mailchimp.username + '.' + mailchimp.dc + '.list-manage.com/subscribe/post-json';
+      var fields = Object.keys(mailchimp);
+
+      //COMPILING ADDRESS
+      var newaddress = [];
+      for (i in mailchimp.ADDRESS) {
+        if (i == 'addr1') {
+          newaddress = newaddress + mailchimp.ADDRESS[i];
+        } else {
+          newaddress = newaddress + '   ' + mailchimp.ADDRESS[i];
+        }
+      }
+      mailchimp.ADDRESS = newaddress;
+
+      for (var i = 0; i < fields.length; i++) {
+        params[fields[i]] = mailchimp[fields[i]];
+      }
+
+      params.c = 'JSON_CALLBACK';
+
+      actions = {
+        'save': {
+          method: 'jsonp'
+        }
+      };
+      MailChimpSubscription = $resource(url, params, actions);
+
+      // Send subscriber data to MailChimp
+      MailChimpSubscription.save(
+      // Successfully sent data to MailChimp.
+      function (response) {
+        // Define message containers.
+        mailchimp.errorMessage = '';
+        mailchimp.successMessage = '';
+
+        // Store the result from MailChimp
+        mailchimp.result = response.result;
+
+        // Mailchimp returned an error.
+        if (response.result === 'error') {
+          if (response.msg) {
+            // Remove error numbers, if any.
+            var errorMessageParts = response.msg.split(' - ');
+            if (errorMessageParts.length > 1) errorMessageParts.shift(); // Remove the error number
+            mailchimp.errorMessage = errorMessageParts.join(' ');
+          } else {
+            mailchimp.errorMessage = 'Sorry! An unknown error occured.';
+          }
+        }
+        // MailChimp returns a success.
+        else if (response.result === 'success') {
+            mailchimp.successMessage = response.msg;
+          }
+
+        //Broadcast the result for global msgs
+        $rootScope.$broadcast('mailchimp-response', response.result, response.msg);
+      },
+
+      // Error sending data to MailChimp
+      function (error) {
+        $log.error('MailChimp Error: %o', error);
+      });
+    };
+
+    $rootScope.addSubscription(data);
+  };
+}); //mailchimp service module
+
+},{"./vendor/jquery-ui.min.js":13,"jquery":34}],6:[function(require,module,exports){
+'use strict';
+
+var Cart = angular.module('myApp');
+
+Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
+  $rootScope.Cart;
+  $rootScope.showCart = false;
+  $rootScope.cartChanged = false;
+
+  $rootScope.openCart = function () {
+    $rootScope.updateCart();
+    $location.path('shop/cart', true);
   };
 
-  $scope.inABit = function (thisBit) {
-    $rootScope.routeIsForced = true;
-    $scope.$broadcast("routeIsForced");
-    setTimeout(function () {
-      $rootScope.gotoAnchor_fast(thisBit);
-      $rootScope.headerHide = false;
-      $rootScope.routeIsForced = false;
-      console.log("headerHide false");
-    }, 1200);
-    $rootScope.endLoader();
+  $rootScope.closeCart = function () {
+    $rootScope.showCart = false;
   };
 
-  //forcing sections reload
-
-  $scope.routeForce = function (url, section) {
-
-    $rootScope.findSeasonPath($location.path());
-
-    // if (($scope.thisSeasonPath == url)||($scope.thisSeasonPath == "")){
-    if ($rootScope.currentPosition == url) {
-      //resetting the lookbook
-      $rootScope.resetLookbook();
-      $rootScope.gotoAnchor(section);
-    } else if ($rootScope.currentPosition != url) {
-
-      $rootScope.currentPosition = url;
-      $rootScope.pageLoading = true;
-      $scope.Path_Anchor(url, section);
-      //hiding the nav
-      $scope.navHide = true;
-    }
-  }; // ROUTE FORCE
-
-  //..................................................changing anchor link on click
-  $rootScope.gotoAnchor = function (x) {
-
-    var str = x;
-    var mainHash;
-    str = str.substring(0, str.length - 4);
-
-    // x= str;
-    var newHash = x;
-    mainHash = x + "Hash";
-
-    if ($rootScope.headerSectionName != newHash) {
-
-      // call $anchorScroll()
-      anchorSmoothScroll.scrollTo(mainHash);
-    } else {}
-  };
-
-  $rootScope.gotoAnchor_fast = function (x) {
-
-    var str = x;
-    var mainHash;
-    str = str.substring(0, str.length - 4);
-
-    // x= str;
-    var newHash = x;
-    mainHash = str + "Hash";
-    if ($routeParams.section !== newHash) {
-      // set the $location.hash to `newHash` and
-      // $anchorScroll will automatically scroll to it
-      var stopY = jQuery("#" + mainHash).offset().top;
-      window.scrollTo(0, stopY);
-    } else {
-      // call $anchorScroll() explicitly,
-      // since $location.hash hasn't changed
-      $anchorScroll();
-    }
-  };
-
-  $rootScope.navActiveCheck = false;
-  $scope.burgerColor = '#FFFFFF';
-
-  //receiving the broadcast of the nav state to be able to understand when to change the color of the burger
-  $scope.$on('navIsActive', function (event, args) {
-    $scope.burgerColor = "#000000";
-    return $rootScope.navActiveCheck = true;
+  $rootScope.$watch('Cart', function (newValue) {
+    // $rootScope.Cart = newValue;
+    $rootScope.animateCart();
   });
 
-  $scope.$on('navIsNotActive', function (event, args) {
-    $scope.burgerColor = "#FFFFFF";
-    return $rootScope.navActiveCheck = false;
+  $rootScope.updateCart = function () {
+    $http({
+      url: '/cart/get',
+      method: 'GET'
+    }).then(function (response) {
+      $rootScope.Cart = response.data;
+      $rootScope.animateCart();
+
+      //attaching item id if cart>0
+      if (!$rootScope.Cart.total_items == 0) {
+        $rootScope.attachItemID($rootScope.Cart.contents);
+      }
+    }, function (error) {});
+  }; //updateCart
+
+  setTimeout(function () {
+    $rootScope.updateCart();
+  }, 1000);
+
+  $rootScope.removeItem = function (id) {
+
+    $http({
+      url: '/removeProduct',
+      method: 'POST',
+      headers: {
+        // 'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: {
+        id: id
+      }
+    }).then(function (response) {
+      $rootScope.Cart = response;
+      $rootScope.updateCart();
+    });
+  };
+
+  $rootScope.cartToShipment = function () {
+    if ($rootScope.Cart.total_items > 0) {
+      $location.path('/shop/shipment', true);
+    } else {
+      $rootScope.noProductsError = true;
+      setTimeout(function () {
+        $rootScope.noProductsError = false;
+        $rootScope.$apply();
+      }, 2000);
+    }
+  };
+
+  //function that animates the cart button when you add a product
+  $rootScope.animateCart = function () {
+    $rootScope.cartChanged = true;
+    setTimeout(function () {
+      $rootScope.cartChanged = false;$rootScope.$apply();
+    }, 900);
+  };
+});
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+var Checkout = angular.module('myApp');
+
+Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, mailchimp) {
+
+  $rootScope.Order;
+  $rootScope.shipment_forwardActive = false;
+
+  $rootScope.checkout = {
+    customer: {
+      first_name: '',
+      last_name: '',
+      email: ''
+    },
+    gateway: '',
+    shipment_method: '1336838094099317449',
+    fiscal_code: '',
+    shipment: { first_name: '',
+      last_name: '',
+      address_1: '',
+      city: '',
+      county: '',
+      country: '',
+      postcode: '',
+      phone: ''
+    },
+    billing: {
+      first_name: '',
+      last_name: '',
+      address_1: '',
+      city: '',
+      county: '',
+      country: '',
+      postcode: '',
+      phone: ''
+    }
+  };
+
+  //shipment
+
+  $rootScope.shipmentToPayment = function (event) {
+    if ($scope.checkoutForm.$valid) {
+
+      $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
+        $rootScope.Order = response.data;
+        // $rootScope.payment.id = response.data.id;
+        $location.path('/shop/payment', true);
+        mailchimp.register($rootScope.checkout);
+      }, function (response) {
+        $rootScope.error = { value: true, text: response.data };
+        // event.preventDefault();
+        setTimeout(function () {
+          $rootScope.error = { value: false, text: '' };
+          $rootScope.$apply();
+        }, 2000);
+        console.error("error in posting");
+      });
+    } else {
+      $rootScope.error = { value: true, text: 'fill in the form correctly' };
+      // event.preventDefault();
+      setTimeout(function () {
+        $rootScope.error = { value: false, text: '' };
+        $rootScope.$apply();
+      }, 2000);
+    }
+  };
+
+  $scope.$watch('checkoutForm.$valid', function (newVal, oldVal) {
+    if ($scope.checkoutForm.$valid) {
+      $rootScope.shipment_forwardActive = true;
+    } else {
+      $rootScope.shipment_forwardActive = false;
+    }
+  }, true);
+
+  // $rootScope.toPaymentChoice = function(){
+  //   $rootScope.goHorizontal('choice', 4);
+  // }//cartToOrder
+
+  $rootScope.backFromCheckout = function () {
+    $rootScope.template = $rootScope.templates[0];
+    $rootScope.showCart = true;
+    $rootScope.backFromPayment();
+  };
+
+  $scope.phoneRegex = '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$';
+  // ^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$
+  //
+  $scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
+  $scope.fiscalRegex = '^([A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1})|([0-9]{11})$';
+
+  // ^[A-Z]{6}[A-Z0-9]{2}[A-Z][A-Z0-9]{2}[A-Z][A-Z0-9]{3}[A-Z]$
+
+  // '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
+
+  $scope.$watch('isBillingDifferent', function (value) {
+    if (!$scope.isBillingDifferent) {
+      $rootScope.checkout.billing.first_name = $rootScope.checkout.shipment.first_name;
+      $rootScope.checkout.billing.last_name = $rootScope.checkout.shipment.last_name;
+      $rootScope.checkout.billing.address_1 = $rootScope.checkout.shipment.address_1;
+      $rootScope.checkout.billing.city = $rootScope.checkout.shipment.city;
+      $rootScope.checkout.billing.county = $rootScope.checkout.shipment.county;
+      $rootScope.checkout.billing.country = $rootScope.checkout.shipment.country;
+      $rootScope.checkout.billing.postcode = $rootScope.checkout.shipment.postcode;
+      $rootScope.checkout.billing.phone = $rootScope.checkout.shipment.phone;
+    }
   });
 
-  //..........end loading with a timeout
+  var Europe = ['AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'DE', 'GR', 'HU', 'IS', 'IE', 'KZ', 'XK', 'LV', 'LI', 'LT', 'LU', 'MK', 'MT', 'MD', 'MC', 'ME', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB'];
+  var NorthAmerica = ['US', 'CA', 'MX'];
+  $scope.$watch('checkout', function (value) {
+    // $rootScope.checkout.customer.first_name = $rootScope.checkout.shipment.first_name;
+    // $rootScope.checkout.customer.last_name = $rootScope.checkout.shipment.last_name;
+    if (!$scope.isBillingDifferent) {
+      $rootScope.checkout.billing.first_name = $rootScope.checkout.shipment.first_name;
+      $rootScope.checkout.billing.last_name = $rootScope.checkout.shipment.last_name;
+      $rootScope.checkout.billing.address_1 = $rootScope.checkout.shipment.address_1;
+      $rootScope.checkout.billing.city = $rootScope.checkout.shipment.city;
+      $rootScope.checkout.billing.county = $rootScope.checkout.shipment.county;
+      $rootScope.checkout.billing.country = $rootScope.checkout.shipment.country;
+      $rootScope.checkout.billing.postcode = $rootScope.checkout.shipment.postcode;
+      $rootScope.checkout.billing.phone = $rootScope.checkout.shipment.phone;
+    }
 
-  $rootScope.endLoader = function () {
-    setTimeout(function () {
+    if (NorthAmerica.indexOf($rootScope.checkout.shipment.country) != -1) {
+      $rootScope.checkout.shipment_method = '1374911520424591424';
+    } else if ($rootScope.checkout.shipment.country == 'IT') {
+      $rootScope.checkout.shipment_method = '1374912184424857665';
+    } else if (Europe.indexOf($rootScope.checkout.shipment.country) != -1) {
+      $rootScope.checkout.shipment_method = '1305371023712977230';
+    } else if ($rootScope.checkout.shipment.country == 'RU') {
+      $rootScope.checkout.shipment_method = '1374912619718115394';
+    } else {
+      $rootScope.checkout.shipment_method = '1374913497787269187';
+    }
+  }, true);
+});
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+var Payment = angular.module('myApp');
+
+Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll) {
+  $rootScope.payment;
+  $rootScope.Transaction;
+  $rootScope.Processed = { value: false, error: false, data: '' };
+
+  $rootScope.payment = {
+    id: $rootScope.Order.id,
+    gateway: '',
+    first_name: $rootScope.checkout.billing.first_name,
+    last_name: $rootScope.checkout.billing.last_name,
+    number: '',
+    expiry_month: '',
+    expiry_year: '',
+    cvv: ''
+  };
+
+  $scope.$watch('paymentForm.$valid', function (newVal, oldVal) {
+    if ($scope.paymentForm.$valid) {
+      $rootScope.payment_forwardActive = true;
+    } else {
+      $rootScope.payment_forwardActive = false;
+    }
+  }, false);
+
+  $rootScope.checkPayment = function () {
+    if ($rootScope.checkout.gateway == 'stripe') {
+      if ($scope.paymentForm.$valid) {
+        $rootScope.changeOrderGateway();
+      } else {
+        $rootScope.error = { value: true, text: 'data invalid' };
+        setTimeout(function () {
+          $rootScope.error = { value: false, text: 'data invalid' };
+          $rootScope.$apply();
+        }, 2000);
+      }
+    } else {
+      $rootScope.changeOrderGateway();
+    }
+  };
+
+  $rootScope.changeOrderGateway = function () {
+    var orderID = $rootScope.Order.id;
+    if ($rootScope.checkout.gateway == 'stripe') {
+      $rootScope.paymentToProcess();
+    } else if ($rootScope.checkout.gateway == 'paypal-express') {
+      var obj = { gateway: $rootScope.checkout.gateway };
+      $http.post('/order/' + orderID + '/put', obj).then(function (response) {
+        $rootScope.paymentToProcess_paypal();
+      }, function (error) {
+        console.log(error);
+        $rootScope.pageLoading = false;
+      });
+    }
+  };
+
+  $rootScope.paymentToProcess = function () {
+
+    $rootScope.payment.gateway = $rootScope.checkout.gateway;
+    $rootScope.pageLoading = true;
+
+    $http({
+      url: '/orderToPayment',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: $rootScope.payment
+    }).then(function (response) {
+      if (response.data.data.paid) {
+        $rootScope.cartLoading = false;
+        $rootScope.Processed = { value: true, error: false, data: response.data.order };
+        $rootScope.Transaction = response.data.data;
+        $rootScope.pageLoading = false;
+        $location.path('/shop/processed/' + response.data.order.id + '/' + $rootScope.checkout.gateway, true);
+      }
+    }, function (response) {
+      console.log("payment failed!");
+      console.log(response);
+      $rootScope.Processed = { value: true, error: true, data: response.data };
       $rootScope.pageLoading = false;
-      $scope.$apply();
-    }, 1200);
+      $rootScope.cartLoading = false;
+      $location.path('/shop/processed/' + $rootScope.checkout.id + '/' + $rootScope.checkout.gateway + '/canceled', true);
+    });
+  }; //paymentToProcess
+
+  $rootScope.paymentToProcess_paypal = function () {
+
+    $rootScope.payment.gateway = $rootScope.checkout.gateway;
+    $rootScope.pageLoading = true;
+
+    $http({
+      url: '/orderToPayment',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: $rootScope.payment
+    }).then(function (response) {
+
+      window.open(response.data.url, "_self", "", false);
+
+      if (response.data.data.paid) {
+        $rootScope.cartLoading = false;
+        $rootScope.paymentProcessed = true;
+        $rootScope.thankYou = response.data;
+        // $location.path('/shop/processed/'+orderID+'/'+$rootScope.checkout.gateway, true);
+      }
+    }, function (response) {
+      console.log("payment failed!");
+      console.log(response);
+      $rootScope.paymentProcessed = true;
+      $rootScope.pageLoading = false;
+    });
+  }; //paymentToProcess
+
+  $rootScope.backFromPayment = function () {
+    $rootScope.paymentProcessed = false;
+    $rootScope.errorMessage = false;
+    $rootScope.thankYou = false;
+    $rootScope.cartLoading = false;
+  };
+});
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+var Processed = angular.module('myApp');
+
+Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams) {
+
+  //retrieve order data
+  $rootScope.retrieveOrder = function () {
+    var orderID = $routeParams.order;
+    console.log("retrieveOrder");
+    $http({
+      url: '/order/' + orderID + '/get',
+      method: 'GET'
+    }).then(function (response) {
+      if (response.data.status.data.key == 'unpaid') {
+        $rootScope.completePayment_Paypal();
+      } else {
+        $rootScope.Processed = { value: true, error: false, data: response.data };
+      }
+    }, function (error) {
+      console.log(error);
+      $rootScope.Processed = { value: false, error: true, data: error.data };
+    });
   };
 
-  $scope.$on('routeIsForced', function (event, args) {
-    var pathy = $location.path().substr(1, 4);
-    var thisScope = $route.current.scope;
-
-    if (pathy == "fw15") {}
-  });
-
-  //.................................................................................................................support
-
-  $scope.wasMobile = false;
-
-  //..............................................................................resize function
-
-  angular.element(window).on("resize", function () {
-
-    $rootScope.windowWidth = $window.innerWidth;
-    $scope.mobileQuery = window.matchMedia("(max-width: 767px)");
-    $rootScope.isMobile = $scope.mobileQuery.matches;
-
-    if ($rootScope.currentPosition == "fw15") {
-
-      $rootScope.fw15_scroller(navActiveCheck);
-    } else if ($rootScope.currentPosition == "ss16") {
-
-      $rootScope.ss16_scroller(navActiveCheck);
-    } else if ($rootScope.currentPosition == "support") {
-      $rootScope.support_scroller(navActiveCheck);
-    } else if ($rootScope.currentPosition == "social") {
-      //nothing
+  //first process
+  setTimeout(function () {
+    if ($routeParams.method == 'paypal-express') {
+      $rootScope.retrieveOrder();
+    } else if ($routeParams.method == 'stripe') {
+      $rootScope.changeOrderStatus($rootScope.Transaction);
     }
+  }, 600);
 
-    $scope.windowWidth = $window.innerWidth;
+  //paypal complete purchase function
+  $rootScope.completePayment_Paypal = function () {
+    var orderID = $routeParams.order;
+    var obj = { token: $routeParams.token, PayerID: $routeParams.PayerID };
+
+    $http.post('/checkout/payment/complete_purchase/' + orderID, obj).then(function (response) {
+      $rootScope.Processed = { value: true, error: false, data: response.data };
+      console.log(response);
+      if (response.data.result.order.status.data.key == 'paid') {
+        $rootScope.pageLoading = false;
+        console.log("/checkout/payment/complete_purchase/");
+        console.log(response.data);
+        $rootScope.Transaction = { "empty": "" };
+        $rootScope.changeOrderStatus($rootScope.Transaction);
+      }
+
+      $rootScope.loadVideo();
+    }, function (error) {
+      console.log(error);
+      $rootScope.pageLoading = false;
+      $rootScope.Processed = { value: true, error: true, data: error.data };
+    });
+  };
+
+  $rootScope.changeOrderStatus = function (data) {
+    var orderID = $routeParams.order;
+    var obj = {};
+
+    if ($routeParams.method == 'paypal-express') {
+      obj = { payment_number: $routeParams.token };
+      // $scope.eraseCart();
+    } else if ($routeParams.method == 'stripe') {
+        obj = { payment_number: data.id };
+        console.log("stripe payment number:", obj);
+      }
+
+    $http.post('/order/' + orderID + '/put', obj).then(function (response) {
+      console.log("changeOrderStatus");
+      $rootScope.Processed = { value: true, error: false, data: response.data };
+      console.log(response);
+      console.log("response.data.status.value.key");
+      if (response.data.status.data.key != 'paid') {
+        $rootScope.pageLoading = false;
+        console.log("not paid");
+      } else if (response.data.status.data.key == 'paid') {
+        $rootScope.getOrderItems();
+      }
+
+      $rootScope.loadVideo();
+    }, function (error) {
+      console.log(error);
+      $rootScope.pageLoading = false;
+      $rootScope.Processed = { value: true, error: true, data: error.data };
+    });
+  };
+
+  //loading the final video
+  $rootScope.loadVideo = function () {
+    setTimeout(function () {
+      var vid = document.getElementById("processed-video");
+      vid.volume = 0.2;
+      $rootScope.playPause = function () {
+        if (vid.paused) {
+          vid.play();
+        } else {
+          vid.pause();
+        }
+      };
+      $rootScope.$apply();
+    }, 2500);
+  };
+
+  $rootScope.loadVideo();
+
+  $rootScope.getOrderItems = function () {
+    console.log("getOrderItems");
+    var orderID = $routeParams.order;
+    $http({
+      url: '/order/' + orderID + '/items',
+      method: 'GET'
+    }).then(function (response) {
+      console.log(response);
+      $rootScope.Processed.data.items = response.data;
+      $scope.mailOrder($rootScope.Processed.data);
+      if ($routeParams.method == 'paypal-express') {
+        console.log('method:', $routeParams.method);
+
+        if ($rootScope.Product) {
+          $scope.updateStockLevel(response.data.result);
+        } else {
+          $rootScope.$on('productArrived', function () {
+            console.log("productArrived");
+            $scope.updateStockLevel(response.data.result);
+          });
+        }
+      } else {
+        $scope.updateStockLevel(response.data.result);
+      }
+
+      $scope.eraseCart();
+    }, function (error) {
+      console.log(error);
+      $rootScope.Processed = { value: false, error: true, data: error.data };
+    });
+  };
+
+  // update global stock level of the product
+  $scope.updateStockLevel = function (data) {
+    $http.post('/product/update_stock', data).then(function (response) {
+      console.log(response);
+    }, function (error) {
+      console.log(error);
+    });
+  };
+
+  // erase shopping cart
+  $scope.eraseCart = function () {
+    $http.post('/cart/erase').then(function (response) {
+      console.log(response);
+    }, function (error) {
+      console.log(error);
+    });
+  };
+
+  // send order data as email to our team
+  $scope.mailOrder = function (order) {
+    $http.post('/mail/order/' + order.id, order).then(function (response) {
+      console.log("mailOrder");
+      console.log(response);
+    }, function (error) {
+      console.log(error);
+    });
+  };
+});
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+var Shop = angular.module('myApp');
+Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
+  return function (data) {
+
+    if ($rootScope.Product) {
+      var filter = $rootScope.filter;
+      $rootScope.filtered = [];
+
+      if (!filter.collection.selected && !filter.gender.selected) {
+        return data;
+      } else {
+
+        // console.log('category: '+category);
+        for (var i in $rootScope.Product) {
+
+          if (!$rootScope.Product[i].collection) {} else if ($rootScope.Product[i].collection.value) {
+
+            if ($rootScope.filter.collection.selected && $rootScope.filter.gender.selected) {
+
+              for (var c in $rootScope.Product[i].category.data) {
+                if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected && $rootScope.Product[i].collection.data.slug == filter.collection.selected) {
+                  $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+                }
+              }
+            } else if ($rootScope.filter.collection.selected) {
+
+              if ($rootScope.Product[i].collection.data.slug == filter.collection.selected) {
+                $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+              }
+            } else if ($rootScope.filter.gender.selected) {
+              for (var c in $rootScope.Product[i].category.data) {
+                if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) {
+                  $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+                }
+              }
+            }
+          }
+        }
+        return $rootScope.filtered;
+      }
+    }
+  };
+});
+
+Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', '$routeParams', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams) {
+
+  // $scope.filtered = [];
+  $rootScope.page = "product";
+  $rootScope.shopSections = [];
+  $rootScope.Section = {};
+  $rootScope.isGradient = true;
+  $rootScope.filter = {
+    gender: {
+      selected: ''
+    },
+    collection: {
+      selected: ''
+    }
+  };
+
+  //......FILTER
+
+  // if($routeParams.shopcollection){
+  //   $rootScope.filter ={type:'collection', selected: $routeParams.shopcollection};
+  // }else{
+  //   $rootScope.filter ={type:"", selected: ""};
+  // }
+
+  $rootScope.selectFilter = function (thistype, id) {
+    // $rootScope.pageLoading = false;
+
+    if (!id) {
+      $rootScope.filter['collection'].selected = id;
+      $rootScope.filter['gender'].selected = id;
+    } else {
+      $location.search(thistype, id);
+      $rootScope.filter[thistype].selected = id;
+    }
+  };
+
+  //..add product
+
+  $rootScope.addToCart = function (id) {
+
+    $http({
+      url: '/addProduct',
+      method: 'POST',
+      headers: {
+        // 'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: transformRequestAsFormPost,
+      data: {
+        id: id,
+        access_token: "helloooo"
+      }
+    }).then(function (response) {
+      $rootScope.Cart = response;
+      console.log(response);
+      $rootScope.updateCart();
+    });
+  }; //addToCart
+
+  //......VARIATIONS
+
+  $rootScope.addVariation = function () {
+
+    console.log($scope.maxVariation($rootScope.selectedVariation));
+
+    if ($scope.maxVariation($rootScope.selectedVariation) == true) {
+      if ($rootScope.selectedVariation) {
+        $http({
+          url: '/addVariation',
+          method: 'POST',
+          data: $rootScope.selectedVariation
+        }).then(function (response) {
+          $rootScope.Cart = response;
+          console.log(response);
+          $rootScope.updateCart();
+        });
+      } else {
+        $scope.variationErrorMessage = "select a size first";
+        setTimeout(function () {
+          $scope.variationErrorMessage = false;
+          $rootScope.$apply();
+        });
+      }
+    }
+  }; //addToCart
+
+  $scope.maxVariation = function (obj) {
+    for (var m in obj) {
+      var modifierId = obj[m].modifier_id;
+      var variationId = obj[m].variation_id;
+      if ($rootScope.Cart.contents.length == 0) {
+        return true;
+      } else {
+        for (var i in $rootScope.Cart.contents) {
+          if ($rootScope.Cart.contents[i].options[modifierId] == variationId) {
+            if ($rootScope.Cart.contents[i].stock_level > $rootScope.Cart.contents[i].quantity) {
+              return true;
+            } else {
+              $rootScope.error = { value: true, text: "you reached the maximum amount of this variation" };
+              setTimeout(function () {
+                $rootScope.error = { value: false, text: "" };
+                $rootScope.$apply();
+              }, 2000);
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+    }
+  };
+
+  // $rootScope.updateCart = function(){
+  //       $http({
+  //         url: '/getCart',
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/x-www-form-urlencoded'
+  //         },
+  //         transformRequest: transformRequestAsFormPost
+  //       }).then(function(response){
+  //         $rootScope.Cart = response.data;
+  //
+  //         console.log($rootScope.Cart);
+  //         //attaching item id if cart>0
+  //         if(!$rootScope.Cart.total_items==0){
+  //           console.log("cart has some stuff");
+  //           $rootScope.attachItemID($rootScope.Cart.contents);
+  //         }
+  //       });
+  // }//updateCart
+
+  //attaching item function cart
+  $rootScope.attachItemID = function (obj) {
+    Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
+      $rootScope.Cart.contents[val].item = val;
+      // console.log(val + ' -> ' + obj[val]);
+    });
+  };
+
+  $rootScope.thisProduct = function (id) {
+    $rootScope.detailUpdate(id);
+    $location.path('/shop/product/' + id, true);
+  };
+}]); //shop controller
+
+Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routeParams, $route, $http) {
+
+  $rootScope.Detail = {};
+  $rootScope.selectedVariation = {};
+  $rootScope.howManyVAriationsSelected = 0;
+  $rootScope.page = "detail";
+  $rootScope.Variations;
+  $scope.sizeLoading = false;
+  $scope.openSizechart = false;
+
+  $scope.openSizechart_FN = function () {
+    $scope.openSizechart = !$scope.openSizechart;
+  };
+
+  // var sku =$routeParams.detail;
+  // $rootScope.detailUpdate(sku);
+
+  $scope.$watch(function () {
+    return $rootScope.Product;
+  }, function (value) {
+    if (value) {
+      $rootScope.detailUpdate($routeParams.detail);
+    }
+    // if(!$rootScope.Detail.id){
+    //   $rootScope.detailUpdate($routeParams.detail);
+    //   $scope.$apply();
+    //   console.log("I loaded it again");
+    //   console.log($rootScope.Detail);
+    // }else{
+    //   console.log("detail loaded correctly");
+    //   console.log($rootScope.Detail);
+    //   return false
+    // }
+  }, true);
+
+  $scope.getVariationsLevel = function (productId) {
+    $scope.sizeLoading = true;
+    $http({
+      url: '/product/' + productId + '/variations/get',
+      method: 'GET'
+    }).then(function (response) {
+      $rootScope.Variations = response.data.result;
+      $scope.sizeLoading = false;
+      var n = 0;
+      for (var m in $rootScope.Detail.modifiers) {
+
+        $scope.arrFromMyObj = Object.keys($rootScope.Detail.modifiers[m].variations).map(function (key) {
+          return $rootScope.Detail.modifiers[m].variations[key];
+        });
+        $rootScope.Detail.modifiers[m].variations = $scope.arrFromMyObj;
+
+        for (var v in $rootScope.Detail.modifiers[m].variations) {
+
+          for (var t in $rootScope.Variations) {
+            var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+
+            var title = $rootScope.Variations[t].modifiers[key].var_title;
+
+            if (title == $rootScope.Detail.modifiers[m].variations[v].title) {
+              var findCherries = function findCherries(fruit) {
+                return fruit.title === title;
+              };
+
+              $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+
+              var thisObj = $scope.orderSize.find(findCherries);
+              $rootScope.Detail.modifiers[m].variations[v].index = thisObj.index;
+            }
+          }
+        }
+      }
+    }, function (error) {
+      console.log(error);
+      $route.reload();
+    });
+  };
+
+  $rootScope.detailUpdate = function (sku) {
+    $rootScope.selectedVariation = {};
+    $rootScope.howManyVAriationsSelected = 0;
+    $rootScope.Detail.total_variations = 0;
+
+    for (var i in $rootScope.Product) {
+      if ($rootScope.Product[i].sku == sku) {
+        $rootScope.Product[i].sku;
+        $rootScope.Detail = $rootScope.Product[i];
+        $rootScope.Detail.total_variations = 0;
+        $rootScope.Detail.has_variation = $rootScope.has_variation;
+        // $rootScope.pageLoading = false;
+        $scope.getVariationsLevel($rootScope.Detail.id);
+
+        var go = true;
+        //has variation
+        for (var m in $rootScope.Detail.modifiers) {
+          $rootScope.Detail.total_variations = $rootScope.Detail.total_variations + 1;
+          // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
+          $rootScope.Detail.has_variation = true;
+          $rootScope.selectedVariation[m] = {
+            open: true
+          };
+          go = false;
+        }
+
+        if (go == true) {
+          //does not have variation
+          $rootScope.Detail.has_variation = false;
+        }
+      }
+    }
+  };
+
+  // $rootScope.detailUpdate($routeParams.detail);
+
+  $rootScope.showSelection = function (modifier_id) {
+    $rootScope.selectedVariation[modifier_id].open = !$rootScope.selectedVariation[modifier_id].open;
+  };
+
+  $rootScope.closeSelection = function (modifier_id) {
+    if ($rootScope.selectedVariation[modifier_id].open == false) {
+      $rootScope.selectedVariation[modifier_id].open = true;
+    } else {
+      $rootScope.selectedVariation[modifier_id].open = false;
+    }
+  };
+
+  $rootScope.thisVariation = function (id, modifier_id, modifier_title, variation_id, variation_title) {
+    var i = 0;
+    for (i in $rootScope.Detail.modifiers) {
+      if ($rootScope.Detail.modifiers[i].id == modifier_id) {
+        $rootScope.selectedVariation[i] = {
+          id: id,
+          modifier_id: modifier_id,
+          modifier_title: modifier_title,
+          variation_id: variation_id,
+          variation_title: variation_title
+        };
+        if ($rootScope.howManyVAriationsSelected < $rootScope.Detail.total_variations) {
+          $rootScope.howManyVAriationsSelected = $rootScope.howManyVAriationsSelected + 1;
+        }
+      }
+    }
+  };
+
+  // $scope.orderSize=[
+  //   "25",
+  //   "26",
+  //   "27",
+  //   "28",
+  //   "29",
+  //   "30",
+  //   "31"
+  // ];
+  //
+
+  $scope.orderSize = [{
+    title: "XS",
+    type: 'string',
+    index: 0
+  }, {
+    title: "xs",
+    type: 'string',
+    index: 0
+  }, {
+    title: "S",
+    type: 'string',
+    index: 1
+  }, {
+    title: "s",
+    type: 'string',
+    index: 1
+  }, {
+    title: "M",
+    type: 'string',
+    index: 2
+  }, {
+    title: "m",
+    type: 'string',
+    index: 2
+  }, {
+    title: "L",
+    type: 'string',
+    index: 3
+  }, {
+    title: "l",
+    type: 'string',
+    index: 3
+  }, {
+    title: "XL",
+    type: 'string',
+    index: 4
+  }, {
+    title: "xl",
+    type: 'string',
+    index: 4
+  }, {
+    title: "XXL",
+    type: 'string',
+    index: 5
+  }, {
+    title: "xxl",
+    type: 'string',
+    index: 5
+  }, {
+    title: "23",
+    type: 'string',
+    index: 6
+  }, {
+    title: "24",
+    type: 'string',
+    index: 7
+  }, {
+    title: "25",
+    type: 'string',
+    index: 8
+  }, {
+    title: "26",
+    type: 'string',
+    index: 9
+  }, {
+    title: "27",
+    type: 'string',
+    index: 10
+  }, {
+    title: "28",
+    type: 'string',
+    index: 11
+  }, {
+    title: "29",
+    type: 'string',
+    index: 12
+  }, {
+    title: "30",
+    type: 'string',
+    index: 13
+  }, {
+    title: "31",
+    type: 'string',
+    index: 14
+  }, {
+    title: "32",
+    type: 'string',
+    index: 15
+  }, {
+    title: "33",
+    type: 'string',
+    index: 16
+  }, {
+    title: "34",
+    type: 'string',
+    index: 17
+  }, {
+    title: "35",
+    type: 'string',
+    index: 18
+  }, {
+    title: "36",
+    type: 'string',
+    index: 19
+  }, {
+    title: "37",
+    type: 'string',
+    index: 20
+  }, {
+    title: "38",
+    type: 'string',
+    index: 21
+  }, {
+    title: "39",
+    type: 'string',
+    index: 22
+  }, {
+    title: "40",
+    type: 'string',
+    index: 23
+  }, {
+    title: "41",
+    type: 'string',
+    index: 24
+  }, {
+    title: "42",
+    type: 'string',
+    index: 25
+  }, {
+    title: "43",
+    type: 'string',
+    index: 26
+  }, {
+    title: "44",
+    type: 'string',
+    index: 27
+  }, {
+    title: "45",
+    type: 'string',
+    index: 28
+  }];
+
+  // "S",
+  // "M",
+  // "L",
+  // "XL",
+  // "23",
+  // "24",
+  // "25",
+  // "26",
+  // "27",
+  // "28",
+  // "29",
+  // "30",
+  // "31"
+});
+
+},{}],11:[function(require,module,exports){
+'use strict';
+
+var Social = angular.module('myApp');
+
+Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routeParams', '$http', '$window', '$q', '$location', '$sce', function ($scope, $timeout, $rootScope, $routeParams, $http, $window, $q, $location, $sce) {
+
+  $rootScope.currentPosition = "social";
+  $rootScope.headerSectionName = "social";
+  $rootScope.pageLoading = true;
+
+  $rootScope.$on('$routeChangeSuccess', function () {
+    $rootScope.headerHide = false;
   });
 
-  //..............................................................................mobile
+  //no baility to include routeparams in .config file so doing it here
 
-  //....this is the function that checks the header of the browser and sees what device it is
+  jQuery($window).unbind("scroll.fw_fifteen_scroll");
+  jQuery($window).unbind("scroll.ss_sixteen_scroll");
+  jQuery($window).unbind("scroll.support_scroll");
 
-  $rootScope.checkDevice = {
+  // ... ACCESS TOKEN .....     16826015.d8005a1.de5407c248904cb0b5cd25033ec8f38d
+  // ... USER ID ..........     16826015
+
+  // CLIENT ID	d8005a1c55b74d1ea99f22b3313c1616
+  // CLIENT SECRET	385b69ef5f0c4e48b932d3e6d46d4b2a
+  // WEBSITE URL	http://alyxstudio.com/
+  // REDIRECT URI	http://alyxstudio.com/ http://localhost
+  // SUPPORT EMAIL	cameronfdemarco@gmail.com
+  //..............................................................................initializing some variables
+
+  var maxID_0;
+  var maxID_1;
+  var maxID_2;
+  var maxID_3;
+  var maxID_4;
+  var maxID_5;
+  var maxID_6;
+  var maxID_7;
+  var maxID_8;
+  var maxID_9;
+  var maxID_10;
+  var maxID_11;
+  var maxID_12;
+  var maxID_13;
+  var maxID_14;
+  $rootScope.instaGlobal = [];
+
+  $scope.instaTotal = [];
+  $scope.instapics = [];
+  $scope.instapics1 = [];
+  $scope.instapics2 = [];
+  $scope.instapics3 = [];
+  $scope.instapics4 = [];
+  $scope.urlFound = [];
+
+  $scope.mainSocialImage = "";
+  $scope.mainSocialDescription = "";
+  $scope.mainLink = "";
+  $scope.thisNumber = 0;
+  $scope.burgerColor = "#000000";
+  $scope.isVideo;
+  $scope.mainSocialVideo = "";
+
+  //changing MAIN image
+  var numberOne;
+  $scope.thisSocialImage = function (number) {
+
+    numberOne = number - 1;
+    $scope.thisNumber = numberOne;
+
+    if (!$scope.instaTotal[numberOne].videos) {
+      $scope.isVideo = false;
+      $scope.mainSocialImage = $scope.instaTotal[numberOne].images.standard_resolution.url;
+    } else if ($scope.instaTotal[numberOne].videos) {
+      $scope.isVideo = true;
+      var riskyVideo = $scope.instaTotal[numberOne].videos.standard_resolution.url;
+      $scope.mainSocialVideo = $sce.trustAsResourceUrl(riskyVideo);
+    }
+    $scope.mainLink = $scope.instaTotal[numberOne].link;
+    $scope.mainSocialDescription = $scope.instaTotal[numberOne].caption.text;
+  };
+
+  //getting the right number
+  $scope.isItem = function (item) {
+    $scope.instaIndex = $scope.instaTotal.indexOf(item, 0);
+    $scope.instaIndex = $scope.instaIndex + 1;
+    return $scope.instaIndex;
+  };
+
+  //..............................................................................check for a device
+
+  $scope.isSocialDevice = {
     Android: function Android() {
       return navigator.userAgent.match(/Android/i);
     },
@@ -2331,832 +2327,261 @@ angular.module('myApp').run(['$anchorScroll', '$route', '$rootScope', '$location
       return navigator.userAgent.match(/IEMobile/i);
     },
     any: function any() {
-      return $rootScope.checkDevice.Android() || $rootScope.checkDevice.BlackBerry() || $rootScope.checkDevice.iOS() || $rootScope.checkDevice.Opera() || $rootScope.checkDevice.Windows();
+      return $scope.isSocialDevice.Android() || $scope.isSocialDevice.BlackBerry() || $scope.isSocialDevice.iOS() || $scope.isSocialDevice.Opera() || $scope.isSocialDevice.Windows();
     }
   };
 
-  //........checks the width
+  // $scope.mobileQuery=window.matchMedia( "(max-width: 767px)");
+  if ($scope.isSocialDevice.any()) {
+    $scope.isSocialDevice = true;
+  } else {
+    $scope.isSocialDevice = false;
+  }
+
+  //.....defining javascript media queries
   $scope.mobileQuery = window.matchMedia("(max-width: 767px)");
-  $rootScope.isMobile = $scope.mobileQuery.matches;
+  $scope.tabletMinQuery = window.matchMedia("(min-width: 768px)");
 
-  //.........returning true if device
+  //....if it is mobile
+  $scope.isSocialMobile = $scope.mobileQuery.matches;
 
-  if ($scope.checkDevice.any()) {
-    $rootScope.isDevice = true;
+  //.....if it is tablet
+  $scope.isSocialTabletMin = $scope.tabletMinQuery.matches;
+  // $scope.isSeasonTabletMax=$scope.tabletMaxQuery.matches;
+
+  if ($scope.isSocialTabletMin) {
+    $scope.isSocialTablet = true;
   } else {
-    $rootScope.isDevice = false;
+    $scope.isSocialTablet = false;
   }
 
-  if ($rootScope.isDevice == true && $scope.isMobile == true) {
-    $rootScope.isMobileDevice = true;
+  //......is this a mobile size and a device?
+  if ($scope.isSocialMobile && $scope.isSocialDevice) {
+    $scope.isSocialMobileDevice = true;
   } else {
-    $rootScope.isMobileDevice = false;
+    $scope.isSocialMobileDevice = false;
   }
 
-  if ($rootScope.isDevice) {
-    $rootScope.mobileLocation = function (url) {
-      $location.path(url).search();
-    };
-    $rootScope.mobileExternalLocation = function (url) {
-      $window.open(url, '_blank');
-    };
-  } else if (!$rootScope.isDevice) {
-    $rootScope.mobileLocation = function (url) {
-      return false;
-    };
-
-    $rootScope.mobileExternalLocation = function (url) {
-      return false;
-    };
+  //......is this a tablet size and a device?
+  if ($scope.isSocialTablet && $scope.isSocialDevice) {
+    $scope.isSocialTabletDevice = true;
+  } else {
+    $scope.isSocialTabletDevice = false;
   }
-}]);
 
-},{}],11:[function(require,module,exports){
-'use strict';
+  //..............................................................................loading new pictures
+  $scope.noMore = false;
 
-/* Services */
+  $scope.globalLoadMore = function (i) {
+    if ($rootScope.totalDisplayed > 0) {} else {
+      //the controller
+      $rootScope.totalDisplayed = i;
+    }
+  };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+  $scope.loadMore = function (i) {
+    $rootScope.totalDisplayed += i;
+    setTimeout(function () {
+      if ($rootScope.totalDisplayed > $scope.filtered.length) {
+        $scope.noMore = true;
+        $scope.$apply();
+      }
+    }, 100);
+  };
 
-var Service = angular.module('myApp');
+  $scope.checkLoadMore = function () {
+    $rootScope.totalDisplayed = 20;
+    $scope.noMore = true;
+    setTimeout(function () {
 
-Service.factory('getService', function ($http, $q, $timeout) {
+      if ($rootScope.totalDisplayed > $scope.filtered.length) {
+        $scope.noMore = true;
+        $scope.$apply();
+      } else if ($rootScope.totalDisplayed <= $scope.filtered.length) {
 
-    return {
-        get: function get(url) {
+        setTimeout(function () {
+          $scope.noMore = false;
+          $scope.$apply();
+        }, 1000);
+      }
+    }, 100);
+  };
 
-            // var dfd = $q.defer();
-            // $timeout(function(){
+  //.......different loaded pictures for every device
+  if ($scope.isSocialMobileDevice) {
 
-            // the $http API is based on the deferred/promise APIs exposed by the $q service
-            // so it returns a promise for us by default
-            return $http.get('/data/' + url + '.json').then(function (response) {
+    $scope.globalLoadMore(11);
+  } else if ($scope.isSocialTabletDevice) {
 
-                if (_typeof(response.data) === 'object') {
-                    return response.data;
-                } else {
-                    // invalid response
-                    console.log('rejected');
-                    return $q.reject(response.data);
-                }
+    $scope.globalLoadMore(14);
+  } else {
 
-                // dfd.resolve(response);
-            }, function (response) {
-                // something went wrong
-                return $q.reject(response.data);
-            });
+    $scope.globalLoadMore(11);
+  }
 
-            // },2000);
-            // return dfd.promise;
-        }
+  $scope.hideLoadMore = true;
+
+  $scope.filterRemovesLoadMore = function () {
+    $scope.hideLoadMore = true;
+  };
+
+  $scope.filterAllLoadMore = function () {
+    $scope.hideLoadMore = false;
+  };
+
+  //..............................................................................the GET request
+
+  var endpoint = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=16826015.d8005a1.744387638806403c90dfcc2a747fa970&callback=JSON_CALLBACK";
+  $http({ url: endpoint, method: 'JSONP', cache: true, isArray: true }).success(function (response) {
+    $scope.instaTotal = response.data;
+    setTimeout(function () {
+      $scope.thisSocialImage(1);
+      $rootScope.pageLoading = false;
+      $rootScope.$apply();
+    }, 900);
+  }); //0
+
+  $scope.socialMobileLocation = function (url) {
+    $location.path(url).search();
+  };
+
+  $scope.socialMobileOutsideViewOnInstagram = function () {
+    $window.open($scope.instaTotal[$scope.realNumber].link, '_blank');
+  };
+
+  $scope.socialMobileOutsideReadFullStory = function () {
+    $window.open($scope.urlFound[$scope.realNumber][0], '_blank');
+  };
+
+  //............................................................. filters ..........................................................................................
+  // $scope.query ={};
+  // $scope.query.tags= "alyxgirls";
+
+  $scope.clearFilter = function () {
+    $scope.query = {};
+  };
+
+  // $scope.span=0;
+
+  // $scope.mobileFilterChange= function(){
+  //
+  //      if ($scope.query.tags === "All"){
+  //       //  alert('clear');
+  //       $scope.hideLoadMore = false;
+  //         $scope.query={};
+  //
+  //      }else{
+  //       $scope.hideLoadMore = true;
+  //
+  //      }
+  //
+  // }
+
+  //.............................................................instgram detail
+
+  $scope.firstNumber = 1;
+  $rootScope.number = $routeParams.number;
+  // $scope.nextNumber = parseInt($routeParams.number)+1;
+  // $scope.prevNumber = parseInt($routeParams.number)-1;
+  // $scope.realNumber = parseInt($routeParams.number) -1;
+
+  $scope.$root = {
+    initializing: {
+      status: 'Complete!'
+    }
+  };
+
+  //Share Slider function
+  $rootScope.instaShareSlide = function () {
+    $scope.instaShareHide = !$scope.instaShareHide;
+    event.preventDefault();
+  };
+
+  //...............................................................................mobile gestures
+  if ($scope.isSocialDevice) {
+    $scope.socialMobileViewAll = function () {
+      $location.path('/collections' + '/' + $routeParams.collection + '/' + $routeParams.season).search();
     };
-
-    // return $resource('/data/'+url+'.json',{},{get:{method:'GET'}})
-});
-
-Service.service('preload', function () {
-    return {
-        images: function images(arrayOfImages) {
-
-            function preload(arrayOfImages) {
-                jQuery(arrayOfImages).each(function () {
-                    var image = jQuery('<img/>')[0].src = this;
-
-                    jQuery('body').append(image).css("visibility", "hidden");
-                    // Alternatively you could use:
-                    // (new Image()).src = this;
-                });
-            }
-
-            // Usage:
-
-            // preload([
-            //     'img/imageName.jpg',
-            //     'img/anotherOne.jpg',
-            //     'img/blahblahblah.jpg'
-            // ]);
-
-            // return property;
-        }
-    };
-});
-
-//
-// Service.service('sharedProperties', function () {
-//       var property = '#FFFFFF';
-//
-//       return {
-//           getProperty: function () {
-//               return property;
-//           },
-//           setProperty: function(value) {
-//               property = value;
-//           }
-//       };
-//   });
-
-},{}],12:[function(require,module,exports){
-'use strict';
-
-var Social = angular.module('myApp');
-
-Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routeParams', '$http', '$window', '$q', '$location', '$sce', function ($scope, $timeout, $rootScope, $routeParams, $http, $window, $q, $location, $sce) {
-
-       $rootScope.currentPosition = "social";
-       $rootScope.headerSectionName = "social";
-
-       setTimeout(function () {
-              $rootScope.endLoader();
-       }, 600);
-
-       $rootScope.$on('$routeChangeSuccess', function () {
-              $rootScope.headerHide = false;
-       });
-
-       //no baility to include routeparams in .config file so doing it here
-
-       jQuery($window).unbind("scroll.fw_fifteen_scroll");
-       jQuery($window).unbind("scroll.ss_sixteen_scroll");
-       jQuery($window).unbind("scroll.support_scroll");
-
-       // ... ACCESS TOKEN .....     16826015.d8005a1.de5407c248904cb0b5cd25033ec8f38d
-       // ... USER ID ..........     16826015
-
-       // CLIENT ID	d8005a1c55b74d1ea99f22b3313c1616
-       // CLIENT SECRET	385b69ef5f0c4e48b932d3e6d46d4b2a
-       // WEBSITE URL	http://alyxstudio.com/
-       // REDIRECT URI	http://alyxstudio.com/ http://localhost
-       // SUPPORT EMAIL	cameronfdemarco@gmail.com
-       //..............................................................................initializing some variables
-
-       var maxID_0;
-       var maxID_1;
-       var maxID_2;
-       var maxID_3;
-       var maxID_4;
-       var maxID_5;
-       var maxID_6;
-       var maxID_7;
-       var maxID_8;
-       var maxID_9;
-       var maxID_10;
-       var maxID_11;
-       var maxID_12;
-       var maxID_13;
-       var maxID_14;
-       $rootScope.instaGlobal = [];
-
-       $scope.instaTotal = [];
-       $scope.instapics = [];
-       $scope.instapics1 = [];
-       $scope.instapics2 = [];
-       $scope.instapics3 = [];
-       $scope.instapics4 = [];
-       $scope.urlFound = [];
-
-       $scope.mainSocialImage = "";
-       $scope.mainSocialDescription = "";
-       $scope.mainLink = "";
-
-       $scope.thisNumber = 0;
-
-       $scope.burgerColor = "#000000";
-
-       $scope.isVideo;
-       $scope.mainSocialVideo = "";
-
-       //changing MAIN image
-       var numberOne;
-       $scope.thisSocialImage = function (number) {
-
-              numberOne = number - 1;
-              $scope.thisNumber = numberOne;
-
-              if (!$scope.instaTotal[numberOne].videos) {
-                     $scope.isVideo = false;
-                     $scope.mainSocialImage = $scope.instaTotal[numberOne].images.standard_resolution.url;
-
-                     console.log("first:" + $scope.instaTotal[numberOne].images.standard_resolution.url);
-              } else if ($scope.instaTotal[numberOne].videos) {
-                     $scope.isVideo = true;
-                     var riskyVideo = $scope.instaTotal[numberOne].videos.standard_resolution.url;
-                     $scope.mainSocialVideo = $sce.trustAsResourceUrl(riskyVideo);
-                     console.log("first:" + $scope.mainSocialVideo);
-              }
-              $scope.mainLink = $scope.instaTotal[numberOne].link;
-              $scope.mainSocialDescription = $scope.instaTotal[numberOne].caption.text;
-       };
-
-       //getting the right number
-       $scope.isItem = function (item) {
-              $scope.instaIndex = $scope.instaTotal.indexOf(item, 0);
-              $scope.instaIndex = $scope.instaIndex + 1;
-              return $scope.instaIndex;
-       };
-
-       //..............................................................................check for a device
-
-       $scope.isSocialDevice = {
-              Android: function Android() {
-                     return navigator.userAgent.match(/Android/i);
-              },
-              BlackBerry: function BlackBerry() {
-                     return navigator.userAgent.match(/BlackBerry/i);
-              },
-              iOS: function iOS() {
-                     return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-              },
-              Opera: function Opera() {
-                     return navigator.userAgent.match(/Opera Mini/i);
-              },
-              Windows: function Windows() {
-                     return navigator.userAgent.match(/IEMobile/i);
-              },
-              any: function any() {
-                     return $scope.isSocialDevice.Android() || $scope.isSocialDevice.BlackBerry() || $scope.isSocialDevice.iOS() || $scope.isSocialDevice.Opera() || $scope.isSocialDevice.Windows();
-              }
-       };
-
-       // $scope.mobileQuery=window.matchMedia( "(max-width: 767px)");
-       if ($scope.isSocialDevice.any()) {
-              $scope.isSocialDevice = true;
-       } else {
-              $scope.isSocialDevice = false;
-       }
-
-       //.....defining javascript media queries
-       $scope.mobileQuery = window.matchMedia("(max-width: 767px)");
-       $scope.tabletMinQuery = window.matchMedia("(min-width: 768px)");
-
-       //....if it is mobile
-       $scope.isSocialMobile = $scope.mobileQuery.matches;
-
-       //.....if it is tablet
-       $scope.isSocialTabletMin = $scope.tabletMinQuery.matches;
-       // $scope.isSeasonTabletMax=$scope.tabletMaxQuery.matches;
-
-       if ($scope.isSocialTabletMin) {
-              $scope.isSocialTablet = true;
-       } else {
-              $scope.isSocialTablet = false;
-       }
-
-       //......is this a mobile size and a device?
-       if ($scope.isSocialMobile && $scope.isSocialDevice) {
-              $scope.isSocialMobileDevice = true;
-       } else {
-              $scope.isSocialMobileDevice = false;
-       }
-
-       //......is this a tablet size and a device?
-       if ($scope.isSocialTablet && $scope.isSocialDevice) {
-              $scope.isSocialTabletDevice = true;
-       } else {
-              $scope.isSocialTabletDevice = false;
-       }
-
-       //..............................................................................loading new pictures
-       $scope.noMore = false;
-
-       $scope.globalLoadMore = function (i) {
-              if ($rootScope.totalDisplayed > 0) {} else {
-                     //the controller
-                     $rootScope.totalDisplayed = i;
-              }
-       };
-
-       $scope.loadMore = function (i) {
-              $rootScope.totalDisplayed += i;
-              setTimeout(function () {
-                     if ($rootScope.totalDisplayed > $scope.filtered.length) {
-                            $scope.noMore = true;
-                            $scope.$apply();
-                     }
-              }, 100);
-       };
-
-       $scope.checkLoadMore = function () {
-              $rootScope.totalDisplayed = 20;
-              $scope.noMore = true;
-              setTimeout(function () {
-
-                     if ($rootScope.totalDisplayed > $scope.filtered.length) {
-                            $scope.noMore = true;
-                            $scope.$apply();
-                     } else if ($rootScope.totalDisplayed <= $scope.filtered.length) {
-
-                            setTimeout(function () {
-                                   $scope.noMore = false;
-                                   $scope.$apply();
-                            }, 1000);
-                     }
-              }, 100);
-       };
-
-       //.......different loaded pictures for every device
-       if ($scope.isSocialMobileDevice) {
-
-              $scope.globalLoadMore(11);
-       } else if ($scope.isSocialTabletDevice) {
-
-              $scope.globalLoadMore(14);
-       } else {
-
-              $scope.globalLoadMore(11);
-       }
-
-       $scope.hideLoadMore = true;
-
-       $scope.filterRemovesLoadMore = function () {
-              $scope.hideLoadMore = true;
-       };
-
-       $scope.filterAllLoadMore = function () {
-              $scope.hideLoadMore = false;
-       };
-
-       //..............................................................................the GET request
-
-       var endpoint = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=16826015.d8005a1.744387638806403c90dfcc2a747fa970&callback=JSON_CALLBACK";
-       $http({ url: endpoint, method: 'JSONP', cache: true, isArray: true }).success(function (response) {
-              // callback(response);
-
-              console.log(response);
-
-              $scope.instaTotal = response.data;
-              setTimeout(function () {
-                     $scope.thisSocialImage(1);
-              }, 900);
-
-              // maxID_0 = response.pagination.next_max_id;
-
-              // $scope.mainSocialImage = $scope.instaTotal[0].images.standard_resolution.url;
-              // $scope.mainSocialDescription = $scope.instaTotal[0].caption.text;
-              // $scope.mainLink =$scope.instaTotal[0].link;
-
-              //
-              // var endpoint1 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_0 + "&callback=JSON_CALLBACK";
-              //
-              //         $http({url: endpoint1, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 							$scope.instapics1 = response.data;
-              //
-              // 							$scope.instaTotal = $scope.instaTotal.concat($scope.instapics1);
-              //
-              // 							maxID_1 = response.pagination.next_max_id;
-              //
-              //
-              //               //secondm is loaded so the load more can now be shown
-              //               $scope.hideLoadMore = false;
-              //
-              //
-              // 							var endpoint2 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_1 + "&callback=JSON_CALLBACK";
-              //
-              // 											$http({url: endpoint2, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 														$scope.instapics2 = response.data;
-              //
-              // 														$scope.instaTotal = $scope.instaTotal.concat($scope.instapics2);
-              //
-              // 														maxID_2 = response.pagination.next_max_id;
-              //
-              //
-              // 											var endpoint3 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_2 + "&callback=JSON_CALLBACK";
-              //
-              // 															$http({url: endpoint3, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																		$scope.instapics3 = response.data;
-              //
-              // 																		$scope.instaTotal = $scope.instaTotal.concat($scope.instapics3);
-              //
-              // 																		maxID_3 = response.pagination.next_max_id;
-              //
-              //
-              // 																		var endpoint4 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_3 + "&callback=JSON_CALLBACK";
-              //
-              // 																						$http({url: endpoint4, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																									$scope.instapics4 = response.data;
-              //
-              // 																									$scope.instaTotal = $scope.instaTotal.concat($scope.instapics4);
-              //
-              // 																									maxID_4 = response.pagination.next_max_id;
-              //
-              //
-              //
-              // 																									var endpoint5 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_4 + "&callback=JSON_CALLBACK";
-              //
-              // 																													$http({url: endpoint5, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																$scope.instapics5 = response.data;
-              //
-              //
-              //
-              // 																																$scope.instaTotal = $scope.instaTotal.concat($scope.instapics5);
-              //
-              // 																																maxID_5 = response.pagination.next_max_id;
-              //
-              //
-              //
-              //
-              // 																																var endpoint6 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_5 + "&callback=JSON_CALLBACK";
-              //
-              // 																																				$http({url: endpoint6, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																							$scope.instapics6 = response.data;
-              //
-              //
-              // 																																							$scope.instaTotal = $scope.instaTotal.concat($scope.instapics6);
-              //
-              // 																																							maxID_6 = response.pagination.next_max_id;
-              //
-              //
-              //
-              // 																																							var endpoint7 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_6 + "&callback=JSON_CALLBACK";
-              //
-              // 																																											$http({url: endpoint7, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																														$scope.instapics7 = response.data;
-              //
-              //
-              //
-              // 																																														$scope.instaTotal = $scope.instaTotal.concat($scope.instapics7);
-              //
-              // 																																														maxID_7 = response.pagination.next_max_id;
-              //
-              //
-              //
-              // 																																														var endpoint8 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_7 + "&callback=JSON_CALLBACK";
-              //
-              // 																																																		$http({url: endpoint8, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																																					$scope.instapics8 = response.data;
-              //
-              //
-              //
-              // 																																																					$scope.instaTotal = $scope.instaTotal.concat($scope.instapics8);
-              //
-              // 																																																					maxID_8 = response.pagination.next_max_id;
-              //
-              //
-              // 																																																					var endpoint9 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_8 + "&callback=JSON_CALLBACK";
-              //
-              // 																																																									$http({url: endpoint9, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																																												$scope.instapics9 = response.data;
-              //
-              //
-              // 																																																												$scope.instaTotal = $scope.instaTotal.concat($scope.instapics9);
-              //
-              // 																																																												maxID_9 = response.pagination.next_max_id;
-              //
-              //
-              //
-              // 																																																												var endpoint10 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_9 + "&callback=JSON_CALLBACK";
-              //
-              // 																																																																$http({url: endpoint10, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																																																			$scope.instapics10 = response.data;
-              //
-              //
-              // 																																																																			$scope.instaTotal = $scope.instaTotal.concat($scope.instapics10);
-              //
-              // 																																																																			maxID_10 = response.pagination.next_max_id;
-              //
-              //
-              // 																																																																			var endpoint11 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_10 + "&callback=JSON_CALLBACK";
-              //
-              // 																																																																							$http({url: endpoint11, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																																																										$scope.instapics11 = response.data;
-              //
-              //
-              // 																																																																										$scope.instaTotal = $scope.instaTotal.concat($scope.instapics11);
-              //
-              // 																																																																										maxID_11 = response.pagination.next_max_id;
-              //
-              // 																																																																										var endpoint12 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_11 + "&callback=JSON_CALLBACK";
-              //
-              // 																																																																														$http({url: endpoint12, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																																																																	$scope.instapics12 = response.data;
-              //
-              //
-              // 																																																																																	$scope.instaTotal = $scope.instaTotal.concat($scope.instapics12);
-              //
-              // 																																																																																	maxID_12 = response.pagination.next_max_id;
-              //
-              // 																																																																																	var endpoint13 = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=20694160.d8005a1.be40ac40e20643f79f018984d073de78&max_id=" + maxID_12 + "&callback=JSON_CALLBACK";
-              //
-              // 																																																																																					$http({url: endpoint13, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-              //
-              // 																																																																																								$scope.instapics13 = response.data;
-              //
-              //
-              // 																																																																																								$scope.instaTotal = $scope.instaTotal.concat($scope.instapics13);
-              //
-              //
-              // 																																																																																								maxID_13 = response.pagination.next_max_id;
-              //
-              //
-              //
-              //
-              // 																																																																																								$scope.instaTotalLength= $scope.instaTotal.length;
-              //
-              //                                                                                                                                                                                 	$scope.lastNumber = $scope.instaTotalLength;
-              //
-              //
-              //
-              //
-              // 																																																																																								//  $scope.$watch('[totalDisplayed, instaTotalLength]', function(newValues, oldValues) {
-              //                                                                                                                                                                                  //
-              //                                                                                                                                                                                  //
-              //                                                                                                                                                                                 //    console.log("$scope.filtered.length: "+$scope.filtered.length);
-              //                                                                                                                                                                                  //
-              //                                                                                                                                                                                  //
-              //                                                                                                                                                                                  //
-              // 																																																																																								// 			if ($rootScope.totalDisplayed > $scope.filtered.length){
-              // 																																																																																								// 				 $scope.noMore = true;
-              //                                                                                                                                                                                  //
-              //                                                                                                                                                                                 //          console.log("$scope.noMore: "+$scope.noMore);
-              //                                                                                                                                                                                  //
-              //                                                                                                                                                                                  //
-              // 																																																																																								// 			}
-              // 																																																																																								//  });
-              //
-              //
-              //
-              //                                                                                                                                                                                  //......getting a link out of the instagram bio
-              //
-              //                                                                                                                                                                                  		for ( var i = 0, len = $scope.instaTotal.length; i < len; i++){
-              //
-              //
-              //                                                                                                                                                                                  			var cop = $scope.instaTotal[i].caption.text;
-              //                                                                                                                                                                                  		//
-              //                                                                                                                                                                                  		//
-              //                                                                                                                                                                                  		// 	var freak = $scope.instaTotal[i].caption.text
-              //                                                                                                                                                                                  		// replaceURLWithHTMLLinks(freak);
-              //
-              //                                                                                                                                                                                  			var re = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
-              //                                                                                                                                                                                  			$scope.urlFound[i] = cop.match(re);
-              //
-              //                                                                                                                                                                                  		}
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              // 																																																																																					}); //13
-              //
-              //
-              // 																																																																														}); //12
-              //
-              //
-              // 																																																																							}); //11
-              //
-              //
-              // 																																																																}); //10
-              //
-              //
-              // 																																																									}); //9
-              //
-              //
-              //
-              // 																																																		}); //8
-              //
-              //
-              // 																																											}); //7
-              //
-              //
-              // 																																				}); //6
-              //
-              // 																													}); //5
-              //
-              // 																						}); //4
-              //
-              // 															});//3
-              // 								}); //2
-              //
-              //         }); //1
-       }); //0
-
-       $scope.socialMobileLocation = function (url) {
-              $location.path(url).search();
-       };
-
-       $scope.socialMobileOutsideViewOnInstagram = function () {
-              $window.open($scope.instaTotal[$scope.realNumber].link, '_blank');
-       };
-
-       $scope.socialMobileOutsideReadFullStory = function () {
-              $window.open($scope.urlFound[$scope.realNumber][0], '_blank');
-       };
-
-       //............................................................. filters ..........................................................................................
-       // $scope.query ={};
-       // $scope.query.tags= "alyxgirls";
-
-       $scope.clearFilter = function () {
-              $scope.query = {};
-       };
-
-       // $scope.span=0;
-
-       // $scope.mobileFilterChange= function(){
-       //
-       //      if ($scope.query.tags === "All"){
-       //       //  alert('clear');
-       //       $scope.hideLoadMore = false;
-       //         $scope.query={};
-       //
-       //      }else{
-       //       $scope.hideLoadMore = true;
-       //
-       //      }
-       //
-       // }
-
-       //.............................................................instgram detail
-
-       $scope.firstNumber = 1;
-       $rootScope.number = $routeParams.number;
-       // $scope.nextNumber = parseInt($routeParams.number)+1;
-       // $scope.prevNumber = parseInt($routeParams.number)-1;
-       // $scope.realNumber = parseInt($routeParams.number) -1;
-
-       $scope.$root = {
-              initializing: {
-                     status: 'Complete!'
-              }
-       };
-
-       //Share Slider function
-       $rootScope.instaShareSlide = function () {
-              $scope.instaShareHide = !$scope.instaShareHide;
-              event.preventDefault();
-       };
-
-       //...............................................................................mobile gestures
-       if ($scope.isSocialDevice) {
-
-              //preventing scroll down if select box open
-              // $scope.preventScroll = function(event){
-              // alert('prevented');
-              // event.preventDefault();
-
-              //       alert('preventeddddd');
-              // jQuery('.mobile-filter-select').on('touchmove', function (event) {
-              //   event.preventDefault();
-              //   alert('preventeddddd');
-              // }, false);
-              // }
-
-              // $scope.socialSwipeRight = function(){
-              //
-              //  if ($scope.prevNumber > 0) {
-              // 	 // go left
-              // 		return $location.path('social/'+$scope.prevNumber).search();
-              //
-              //  } else if ($scope.prevNumber < 1) {
-              // 	 // go right
-              // 		 return $location.path('social/'+$scope.instaTotal.length).search();
-              //  }
-              //
-              // }
-              //
-              // $scope.SocialSwipeLeft = function(){
-              // if($scope.nextNumber < ($scope.instaTotal.length)){
-              //
-              // 		return $location.path('social/'+$scope.nextNumber).search();
-              //
-              //
-              // }else if($scope.nextNumber >= ($scope.instaTotal.length)){
-              //
-              // 		return $location.path('social/1').search();
-              //
-              // 	}
-              // }
-
-              $scope.socialMobileViewAll = function () {
-                     $location.path('/collections' + '/' + $routeParams.collection + '/' + $routeParams.season).search();
-              };
-       } //end if mobile
+  } //end if mobile
 }]);
-
-// Social.directive('instaimageclickDirective', function(){
-// 	return {
-// 		restrict: 'A',
-// 		link: function(scope, element, attrs){
-// 			setTimeout(function(){
-// 			jQuery('.instagram-image').click(function(){
-// 				jQuery('.insta-li').removeClass('no-hover-transition');
-// 				jQuery('.instagram-image').css('opacity','1');
-// 				jQuery('.instagram-click-overlay').removeClass('instagram-overlay-active');
-// 				jQuery(this).siblings('.instagram-click-overlay').addClass('instagram-overlay-active');
-// 				jQuery(this).css('opacity','.08');
-// 				jQuery(this).parent('.insta-li').addClass('no-hover-transition');
-// 			});
-// 		},800);
-// 		}
-// 	}
-// });
 
 Social.directive('instaHoverDirective', function ($location, $routeParams) {
-       return {
-              restrict: "A",
-              link: function link(scope, element, attrs) {
+  return {
+    restrict: "A",
+    link: function link(scope, element, attrs) {
 
-                     if ($location.path() == '/social/' + $routeParams.number) {
+      if ($location.path() == '/social/' + $routeParams.number) {
 
-                            jQuery(document.documentElement).keyup(function (event) {
-                                   // handle cursor keys
-                                   if (event.keyCode == 37 && scope.prevNumber > 0) {
-                                          // go left
-                                          return $location.path('social/' + scope.prevNumber).search();
+        jQuery(document.documentElement).keyup(function (event) {
+          // handle cursor keys
+          if (event.keyCode == 37 && scope.prevNumber > 0) {
+            // go left
+            return $location.path('social/' + scope.prevNumber).search();
 
-                                          // $location.go("social/{{prevNumber}}");
-                                   } else if (event.keyCode == 39 && scope.nextNumber < scope.instaTotal.length - 1) {
+            // $location.go("social/{{prevNumber}}");
+          } else if (event.keyCode == 39 && scope.nextNumber < scope.instaTotal.length - 1) {
 
-                                          // go right
-                                          return $location.path('social/' + scope.nextNumber).search();
-                                          // $location.go("social/{{nextNumber}}");
-                                   } else if (event.keyCode == 39 && scope.nextNumber >= scope.instaTotal.length) {
+              // go right
+              return $location.path('social/' + scope.nextNumber).search();
+              // $location.go("social/{{nextNumber}}");
+            } else if (event.keyCode == 39 && scope.nextNumber >= scope.instaTotal.length) {
 
-                                          return $location.path('social/1').search();
-                                   } else if (event.keyCode == 37 && scope.prevNumber == 0) {
+                return $location.path('social/1').search();
+              } else if (event.keyCode == 37 && scope.prevNumber == 0) {
 
-                                          return $location.path('social/' + scope.instaTotal.length).search();
-                                   }
-                            });
-                     }
-
-                     jQuery('.insta-hover-right').mouseenter(function () {
-                            jQuery('.insta-detail-next').css('opacity', '1');
-                     });
-                     jQuery('.insta-hover-right').mouseleave(function () {
-                            jQuery('.insta-detail-next').css('opacity', '0');
-                     });
-
-                     jQuery('.insta-detail-next').mouseenter(function () {
-                            jQuery('.insta-detail-next').css('opacity', '1');
-                     });
-                     jQuery('.insta-detail-next').mouseleave(function () {
-                            jQuery('.insta-detail-next').css('opacity', '0');
-                     });
-
-                     jQuery('.insta-hover-left').mouseenter(function () {
-                            jQuery('.insta-detail-prev').css('opacity', '1');
-                     });
-                     jQuery('.insta-hover-left').mouseleave(function () {
-                            jQuery('.insta-detail-prev').css('opacity', '0');
-                     });
-
-                     jQuery('.insta-detail-prev').mouseenter(function () {
-                            jQuery('.insta-detail-prev').css('opacity', '1');
-                     });
-                     jQuery('.insta-detail-prev').mouseleave(function () {
-                            jQuery('.insta-detail-prev').css('opacity', '0');
-                     });
-
-                     scope.goSocialPrevious = function () {
-
-                            if (scope.prevNumber > 0) {
-                                   // go left
-                                   return $location.path('social/' + scope.prevNumber).search();
-                            } else if (scope.prevNumber == 0) {
-
-                                   return $location.path('social/' + scope.instaTotal.length).search();
-                            }
-                     };
-
-                     scope.goSocialNext = function () {
-                            if (scope.nextNumber >= scope.instaTotal.length - 1) {
-                                   return $location.path('social/1').search();
-                            } else if (scope.nextNumber < scope.instaTotal.length - 1) {
-                                   return $location.path('social/' + scope.nextNumber).search();
-                            }
-                     };
+                return $location.path('social/' + scope.instaTotal.length).search();
               }
-       };
+        });
+      }
+
+      jQuery('.insta-hover-right').mouseenter(function () {
+        jQuery('.insta-detail-next').css('opacity', '1');
+      });
+      jQuery('.insta-hover-right').mouseleave(function () {
+        jQuery('.insta-detail-next').css('opacity', '0');
+      });
+
+      jQuery('.insta-detail-next').mouseenter(function () {
+        jQuery('.insta-detail-next').css('opacity', '1');
+      });
+      jQuery('.insta-detail-next').mouseleave(function () {
+        jQuery('.insta-detail-next').css('opacity', '0');
+      });
+
+      jQuery('.insta-hover-left').mouseenter(function () {
+        jQuery('.insta-detail-prev').css('opacity', '1');
+      });
+      jQuery('.insta-hover-left').mouseleave(function () {
+        jQuery('.insta-detail-prev').css('opacity', '0');
+      });
+
+      jQuery('.insta-detail-prev').mouseenter(function () {
+        jQuery('.insta-detail-prev').css('opacity', '1');
+      });
+      jQuery('.insta-detail-prev').mouseleave(function () {
+        jQuery('.insta-detail-prev').css('opacity', '0');
+      });
+
+      scope.goSocialPrevious = function () {
+
+        if (scope.prevNumber > 0) {
+          // go left
+          return $location.path('social/' + scope.prevNumber).search();
+        } else if (scope.prevNumber == 0) {
+
+          return $location.path('social/' + scope.instaTotal.length).search();
+        }
+      };
+
+      scope.goSocialNext = function () {
+        if (scope.nextNumber >= scope.instaTotal.length - 1) {
+          return $location.path('social/1').search();
+        } else if (scope.nextNumber < scope.instaTotal.length - 1) {
+          return $location.path('social/' + scope.nextNumber).search();
+        }
+      };
+    }
+  };
 });
 
 // //close button | product detail
@@ -3176,187 +2601,227 @@ Social.directive('instaHoverDirective', function ($location, $routeParams) {
 //   });
 
 Social.directive('instaShareDirective', function ($routeParams) {
-       return {
-              restrict: "E",
-              replace: true,
-              templateUrl: 'social/insta-share.html',
-              link: function link(scope, element, attrs) {
+  return {
+    restrict: "E",
+    replace: true,
+    templateUrl: 'social/insta-share.html',
+    link: function link(scope, element, attrs) {
 
-                     scope.instaCloseShare = function () {
-                            scope.instaShareHide = false;
-                     };
+      scope.instaCloseShare = function () {
+        scope.instaShareHide = false;
+      };
 
-                     //creting a dynamic link to share
-                     scope.instaShareUrl = 'social/' + $routeParams.number;
-              }
-       };
+      //creting a dynamic link to share
+      scope.instaShareUrl = 'social/' + $routeParams.number;
+    }
+  };
 });
 
 Social.directive('onFinishRender', function ($timeout) {
-       return {
-              restrict: 'A',
-              link: function link(scope, element, attr) {
-                     if (scope.$last === true) {
-                            $timeout(function () {
-                                   scope.$emit('ngRepeatFinished');
-                            });
-                     }
-              }
-       };
+  return {
+    restrict: 'A',
+    link: function link(scope, element, attr) {
+      if (scope.$last === true) {
+        $timeout(function () {
+          scope.$emit('ngRepeatFinished');
+        });
+      }
+    }
+  };
 });
 
 Social.directive('filterActiveDirective', function ($timeout) {
-       return {
-              restrict: 'A',
-              link: function link(scope, element, attr) {
+  return {
+    restrict: 'A',
+    link: function link(scope, element, attr) {
 
-                     scope.filterState = 2;
-                     // scope.filterActive = function(n){
-                     // 	scope.filterNumber = n;
-                     // 	return scope.filterNumber;
-                     // }
+      scope.filterState = 2;
+      // scope.filterActive = function(n){
+      // 	scope.filterNumber = n;
+      // 	return scope.filterNumber;
+      // }
 
-                     scope.filterActive = function (i) {
-                            scope.filterState = i;
-                     };
-                     // 	scope.filterState = function(i){
-                     // 		scope.
-                     //
-                     // }
-              }
-       };
+      scope.filterActive = function (i) {
+        scope.filterState = i;
+      };
+      // 	scope.filterState = function(i){
+      // 		scope.
+      //
+      // }
+    }
+  };
 });
 
 Social.directive('socialStyleParent', function () {
-       return {
-              restrict: 'A',
-              link: function link(scope, elem, attr) {
+  return {
+    restrict: 'A',
+    link: function link(scope, elem, attr) {
 
-                     var socialUnbindWatcher = scope.$watch(function () {
+      var socialUnbindWatcher = scope.$watch(function () {
 
-                            scope.socialNewHeight = elem.height();
+        scope.socialNewHeight = elem.height();
 
-                            if (scope.socialNewHeight == 0) {
+        if (scope.socialNewHeight == 0) {
 
-                                   return scope.socialLoading = true;
-                            } else if (scope.socialNewHeight > 0) {
-                                   socialUnbindWatcher();
-                                   return scope.socialLoading = false;
-                            }
+          return scope.socialLoading = true;
+        } else if (scope.socialNewHeight > 0) {
+          socialUnbindWatcher();
+          return scope.socialLoading = false;
+        }
 
-                            //check width and height and apply styling to parent here.
-                     });
-              }
-       };
+        //check width and height and apply styling to parent here.
+      });
+    }
+  };
 });
 
 Social.directive('socialDetailStyleParent', function () {
-       return {
-              restrict: 'A',
-              link: function link(scope, elem, attr) {
+  return {
+    restrict: 'A',
+    link: function link(scope, elem, attr) {
 
-                     var unbindWatcher = scope.$watch(function () {
+      var unbindWatcher = scope.$watch(function () {
 
-                            scope.imageWidth = elem.width();
+        scope.imageWidth = elem.width();
 
-                            if (scope.imageWidth <= 5) {
+        if (scope.imageWidth <= 5) {
 
-                                   jQuery(".social-loader").fadeIn('10', function () {});
-                                   return scope.socialDetailLoading = true;
-                            } else {
-                                   unbindWatcher();
+          jQuery(".social-loader").fadeIn('10', function () {});
+          return scope.socialDetailLoading = true;
+        } else {
+          unbindWatcher();
 
-                                   return scope.socialDetailLoading = false;
-                            }
-                     });
-              }
-       };
+          return scope.socialDetailLoading = false;
+        }
+      });
+    }
+  };
 });
 
 Social.directive("imageChange", function ($timeout) {
-       return {
-              restrict: "A",
-              scope: {},
-              link: function link(scope, element, attrs) {
-                     element.on("load", function () {
-                            setTimeout(function () {
-                                   element.removeClass("ng-hide-fade");
-                                   element.addClass("ng-show");
-                            }, 500);
-                     });
-                     attrs.$observe("ngSrc", function () {
-                            element.removeClass("ng-show");
-                            element.addClass("ng-hide-fade");
-                     });
-              }
-       };
+  return {
+    restrict: "A",
+    scope: {},
+    link: function link(scope, element, attrs) {
+      element.on("load", function () {
+        setTimeout(function () {
+          element.removeClass("ng-hide-fade");
+          element.addClass("ng-show");
+        }, 500);
+      });
+      attrs.$observe("ngSrc", function () {
+        element.removeClass("ng-show");
+        element.addClass("ng-hide-fade");
+      });
+    }
+  };
 });
 
-//
-// Social.directive('fadeIn', function($timeout){
-//     return {
-//         restrict: 'A',
-//         link: function($scope, $element, attrs){
-//
-//           $element.on('load', function() {
-//
-//               $element.removeClass("ng-hide-remove");
-//               $element.removeClass("ng-hide-remove-active");
-//               $element.addClass("ng-hide-add");
-//               $element.addClass("ng-hide-add-active");
-//
-//               $element.addClass("ng-hide");
-//
-//               setTimeout(function(){
-//                 $element.removeClass("ng-hide-add");
-//                 $element.removeClass("ng-hide-add-active");
-//                 $element.removeClass("ng-hide");
-//                 $element.addClass("ng-hide-remove");
-//                 $element.addClass("ng-hide-remove-active");
-//                 $element.removeClass("ng-hide");
-//               },700);
-//
-//
-//               setTimeout(function(){
-//                 $element.removeClass("ng-hide-remove");
-//                 $element.removeClass("ng-hide-remove-active");
-//
-//             },900);
-//           //
-//           //   setTimeout(function(){
-//           //
-//           //   $element.addClass("ng-hide-remove");
-//           //   $element.addClass("ng-hide-remove-active");
-//           //   $element.removeClass("ng-hide-add");
-//           //   $element.removeClass("ng-hide");
-//           // },800);
-//
-//             });
-//         }
-//     }
-// })
-
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
-var Stockists = angular.module('myApp');
-Stockists.controller('stockistsCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, getService, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
+var Support = angular.module('myApp');
+Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
 
-	$scope.stockists = {};
-	$scope.$on("supportDataArrived", function (event) {
-		$scope.stockists = $rootScope.stockistsData;
+	$scope.contact = [];
+	$scope.about;
+	$rootScope.support = [];
+	$rootScope.aboutData = {};
+	$rootScope.contactData = {};
+	$rootScope.stockistData = {};
+	$rootScope.stockistFilterShow = false;
+	// This service's function returns a promise, but we'll deal with that shortly
+
+	$http.get('/data/support')
+	// then() called when son gets back
+	.then(function (response) {
+		var data = response.data;
+		$rootScope.support = data;
+		$rootScope.aboutData = data[0];
+		$rootScope.contactData = data[1];
+		$scope.$broadcast("supportDataArrived");
+	}, function (error) {
+		// promise rejected, could log the error with: console.log('error', error);
+		console.log('error', error);
 	});
+
+	$rootScope.supportScrollTo = function () {
+		if ($location.path() == '/about' || $location.path() == '/contact' || $location.path() == '/stockists') {
+			var path = $location.path();
+			path = path.replace(/\//g, '');
+			var anchor = path + "Hash";
+			anchorSmoothScroll.scrollTo(anchor);
+		}
+	};
+
+	$scope.$on("supportDataArrived", function (event) {
+		$scope.contact = $rootScope.contactData.contact;
+		$scope.about = $rootScope.aboutData;
+
+		$rootScope.supportScrollTo();
+	});
+
+	$scope.supportHashFn = function (x) {
+		var newHash = x;
+
+		if ($location.path() !== x) {
+			if (x === "intro") {
+				$location.path("/", false);
+			} else {
+				// set the $location.hash to `newHash` and
+				// $anchorScroll will automatically scroll to it
+				$location.path(x, false);
+				// anchorSmoothScroll.scrollTo(newHash);
+			}
+		} else {
+				$anchorScroll();
+			}
+	};
+
+	setTimeout(function () {
+		var stockistsOffset = jQuery('#stockistsHash').offset().top;
+		var aboutOffset = jQuery('#aboutHash').offset().top;
+		var contactOffset = jQuery('#contactHash').offset().top;
+
+		jQuery($window).bind("scroll.support", function (event) {
+			scroll = jQuery($window).scrollTop();
+			if (scroll >= aboutOffset && scroll < contactOffset) {
+				$rootScope.stockistFilterShow = false;
+			} else if (scroll >= contactOffset && scroll < stockistsOffset) {
+				$rootScope.stockistFilterShow = false;
+			} else if (scroll >= stockistsOffset) {
+				$rootScope.stockistFilterShow = true;
+			}
+			$rootScope.$apply();
+		});
+	}, 600);
 });
 
-Stockists.directive('stockistsDirective', function ($rootScope, $location) {
+Support.directive('aboutDirective', function ($rootScope, $location) {
 	return {
 		restrict: 'E',
-		templateUrl: 'views/stockists.html',
+		templateUrl: 'views/support/about.html',
 		replace: true
 	};
 });
 
-},{}],14:[function(require,module,exports){
+Support.directive('contactDirective', function ($rootScope, $location) {
+	return {
+		restrict: 'E',
+		templateUrl: 'views/support/contact.html',
+		replace: true
+	};
+});
+
+Support.directive('stockistDirective', function ($rootScope, $location) {
+	return {
+		restrict: 'E',
+		templateUrl: 'views/support/stockist.html',
+		replace: true
+	};
+});
+
+},{}],13:[function(require,module,exports){
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -3939,7 +3404,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       r = "ui-effects-animated",
       l = t;t.effects = { effect: {} }, function (t, e) {
     function i(t, e, i) {
-      var s = u[e.type] || {};return null == t ? i || !e.def ? null : e.def : (t = s.floor ? ~~t : parseFloat(t), isNaN(t) ? e.def : s.mod ? (t + s.mod) % s.mod : 0 > t ? 0 : t > s.max ? s.max : t);
+      var s = u[e.type] || {};return null == t ? i || !e.def ? null : e.def : (t = s.floor ? ~ ~t : parseFloat(t), isNaN(t) ? e.def : s.mod ? (t + s.mod) % s.mod : 0 > t ? 0 : t > s.max ? s.max : t);
     }function s(i) {
       var s = h(),
           n = s._rgba = [];return i = i.toLowerCase(), f(l, function (t, o) {
@@ -4031,7 +3496,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         });return 1 === i[3] && (i.pop(), e = "hsl("), e + i.join() + ")";
       }, toHexString: function toHexString(e) {
         var i = this._rgba.slice(),
-            s = i.pop();return e && i.push(~~(255 * s)), "#" + t.map(i, function (t) {
+            s = i.pop();return e && i.push(~ ~(255 * s)), "#" + t.map(i, function (t) {
           return t = (t || 0).toString(16), 1 === t.length ? "0" + t : t;
         }).join("");
       }, toString: function toString() {
@@ -4488,7 +3953,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }));
 });
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.7
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -8636,13 +8101,13 @@ angular.module('ngAnimate', [])
 
 })(window, window.angular);
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 require('./angular-animate');
 module.exports = 'ngAnimate';
 
-},{"./angular-animate":15}],17:[function(require,module,exports){
+},{"./angular-animate":14}],16:[function(require,module,exports){
 /**
- * @license AngularJS v1.5.7
+ * @license AngularJS v1.5.6
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -8704,21 +8169,7 @@ function shallowClearAndCopy(src, dst) {
  *
  * <div doc-module-components="ngResource"></div>
  *
- * See {@link ngResource.$resourceProvider} and {@link ngResource.$resource} for usage.
- */
-
-/**
- * @ngdoc provider
- * @name $resourceProvider
- *
- * @description
- *
- * Use `$resourceProvider` to change the default behavior of the {@link ngResource.$resource}
- * service.
- *
- * ## Dependencies
- * Requires the {@link ngResource } module to be installed.
- *
+ * See {@link ngResource.$resource `$resource`} for usage.
  */
 
 /**
@@ -8913,14 +8364,6 @@ function shallowClearAndCopy(src, dst) {
  *   - `$cancelRequest`: If there is a cancellable, pending request related to the instance or
  *      collection, calling this method will abort the request.
  *
- *   The Resource instances have these additional methods:
- *
- *   - `toJSON`: It returns a simple object without any of the extra properties added as part of
- *     the Resource API. This object can be serialized through {@link angular.toJson} safely
- *     without attaching Angular-specific fields. Notice that `JSON.stringify` (and
- *     `angular.toJson`) automatically use this method when serializing a Resource instance
- *     (see [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior)).
- *
  * @example
  *
  * # Credit card resource
@@ -9072,77 +8515,9 @@ angular.module('ngResource', ['ng']).
     var PROTOCOL_AND_DOMAIN_REGEX = /^https?:\/\/[^\/]*/;
     var provider = this;
 
-    /**
-     * @ngdoc property
-     * @name $resourceProvider#defaults
-     * @description
-     * Object containing default options used when creating `$resource` instances.
-     *
-     * The default values satisfy a wide range of usecases, but you may choose to overwrite any of
-     * them to further customize your instances. The available properties are:
-     *
-     * - **stripTrailingSlashes** – `{boolean}` – If true, then the trailing slashes from any
-     *   calculated URL will be stripped.<br />
-     *   (Defaults to true.)
-     * - **cancellable** – `{boolean}` – If true, the request made by a "non-instance" call will be
-     *   cancelled (if not already completed) by calling `$cancelRequest()` on the call's return
-     *   value. For more details, see {@link ngResource.$resource}. This can be overwritten per
-     *   resource class or action.<br />
-     *   (Defaults to false.)
-     * - **actions** - `{Object.<Object>}` - A hash with default actions declarations. Actions are
-     *   high-level methods corresponding to RESTful actions/methods on resources. An action may
-     *   specify what HTTP method to use, what URL to hit, if the return value will be a single
-     *   object or a collection (array) of objects etc. For more details, see
-     *   {@link ngResource.$resource}. The actions can also be enhanced or overwritten per resource
-     *   class.<br />
-     *   The default actions are:
-     *   ```js
-     *   {
-     *     get: {method: 'GET'},
-     *     save: {method: 'POST'},
-     *     query: {method: 'GET', isArray: true},
-     *     remove: {method: 'DELETE'},
-     *     delete: {method: 'DELETE'}
-     *   }
-     *   ```
-     *
-     * #### Example
-     *
-     * For example, you can specify a new `update` action that uses the `PUT` HTTP verb:
-     *
-     * ```js
-     *   angular.
-     *     module('myApp').
-     *     config(['resourceProvider', function ($resourceProvider) {
-     *       $resourceProvider.defaults.actions.update = {
-     *         method: 'PUT'
-     *       };
-     *     });
-     * ```
-     *
-     * Or you can even overwrite the whole `actions` list and specify your own:
-     *
-     * ```js
-     *   angular.
-     *     module('myApp').
-     *     config(['resourceProvider', function ($resourceProvider) {
-     *       $resourceProvider.defaults.actions = {
-     *         create: {method: 'POST'}
-     *         get:    {method: 'GET'},
-     *         getAll: {method: 'GET', isArray:true},
-     *         update: {method: 'PUT'},
-     *         delete: {method: 'DELETE'}
-     *       };
-     *     });
-     * ```
-     *
-     */
     this.defaults = {
       // Strip slashes by default
       stripTrailingSlashes: true,
-
-      // Make non-instance requests cancellable (via `$cancelRequest()`)
-      cancellable: false,
 
       // Default actions configuration
       actions: {
@@ -9500,11 +8875,11 @@ angular.module('ngResource', ['ng']).
 
 })(window, window.angular);
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 require('./angular-resource');
 module.exports = 'ngResource';
 
-},{"./angular-resource":17}],19:[function(require,module,exports){
+},{"./angular-resource":16}],18:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.7
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -10571,754 +9946,13 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":19}],21:[function(require,module,exports){
+},{"./angular-route":18}],20:[function(require,module,exports){
 /**
- * @license AngularJS v1.5.8
- * (c) 2010-2016 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular) {'use strict';
-
-/* global ngTouchClickDirectiveFactory: false,
- */
-
-/**
- * @ngdoc module
- * @name ngTouch
- * @description
- *
- * # ngTouch
- *
- * The `ngTouch` module provides touch events and other helpers for touch-enabled devices.
- * The implementation is based on jQuery Mobile touch event handling
- * ([jquerymobile.com](http://jquerymobile.com/)).
- *
- *
- * See {@link ngTouch.$swipe `$swipe`} for usage.
- *
- * <div doc-module-components="ngTouch"></div>
- *
- */
-
-// define ngTouch module
-/* global -ngTouch */
-var ngTouch = angular.module('ngTouch', []);
-
-ngTouch.provider('$touch', $TouchProvider);
-
-function nodeName_(element) {
-  return angular.lowercase(element.nodeName || (element[0] && element[0].nodeName));
-}
-
-/**
- * @ngdoc provider
- * @name $touchProvider
- *
- * @description
- * The `$touchProvider` allows enabling / disabling {@link ngTouch.ngClick ngTouch's ngClick directive}.
- */
-$TouchProvider.$inject = ['$provide', '$compileProvider'];
-function $TouchProvider($provide, $compileProvider) {
-
-  /**
-   * @ngdoc method
-   * @name  $touchProvider#ngClickOverrideEnabled
-   *
-   * @param {boolean=} enabled update the ngClickOverrideEnabled state if provided, otherwise just return the
-   * current ngClickOverrideEnabled state
-   * @returns {*} current value if used as getter or itself (chaining) if used as setter
-   *
-   * @kind function
-   *
-   * @description
-   * Call this method to enable/disable {@link ngTouch.ngClick ngTouch's ngClick directive}. If enabled,
-   * the default ngClick directive will be replaced by a version that eliminates the 300ms delay for
-   * click events on browser for touch-devices.
-   *
-   * The default is `false`.
-   *
-   */
-  var ngClickOverrideEnabled = false;
-  var ngClickDirectiveAdded = false;
-  this.ngClickOverrideEnabled = function(enabled) {
-    if (angular.isDefined(enabled)) {
-
-      if (enabled && !ngClickDirectiveAdded) {
-        ngClickDirectiveAdded = true;
-
-        // Use this to identify the correct directive in the delegate
-        ngTouchClickDirectiveFactory.$$moduleName = 'ngTouch';
-        $compileProvider.directive('ngClick', ngTouchClickDirectiveFactory);
-
-        $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
-          if (ngClickOverrideEnabled) {
-            // drop the default ngClick directive
-            $delegate.shift();
-          } else {
-            // drop the ngTouch ngClick directive if the override has been re-disabled (because
-            // we cannot de-register added directives)
-            var i = $delegate.length - 1;
-            while (i >= 0) {
-              if ($delegate[i].$$moduleName === 'ngTouch') {
-                $delegate.splice(i, 1);
-                break;
-              }
-              i--;
-            }
-          }
-
-          return $delegate;
-        }]);
-      }
-
-      ngClickOverrideEnabled = enabled;
-      return this;
-    }
-
-    return ngClickOverrideEnabled;
-  };
-
-  /**
-  * @ngdoc service
-  * @name $touch
-  * @kind object
-  *
-  * @description
-  * Provides the {@link ngTouch.$touch#ngClickOverrideEnabled `ngClickOverrideEnabled`} method.
-  *
-  */
-  this.$get = function() {
-    return {
-      /**
-       * @ngdoc method
-       * @name  $touch#ngClickOverrideEnabled
-       *
-       * @returns {*} current value of `ngClickOverrideEnabled` set in the {@link ngTouch.$touchProvider $touchProvider},
-       * i.e. if {@link ngTouch.ngClick ngTouch's ngClick} directive is enabled.
-       *
-       * @kind function
-       */
-      ngClickOverrideEnabled: function() {
-        return ngClickOverrideEnabled;
-      }
-    };
-  };
-
-}
-
-/* global ngTouch: false */
-
-    /**
-     * @ngdoc service
-     * @name $swipe
-     *
-     * @description
-     * The `$swipe` service is a service that abstracts the messier details of hold-and-drag swipe
-     * behavior, to make implementing swipe-related directives more convenient.
-     *
-     * Requires the {@link ngTouch `ngTouch`} module to be installed.
-     *
-     * `$swipe` is used by the `ngSwipeLeft` and `ngSwipeRight` directives in `ngTouch`.
-     *
-     * # Usage
-     * The `$swipe` service is an object with a single method: `bind`. `bind` takes an element
-     * which is to be watched for swipes, and an object with four handler functions. See the
-     * documentation for `bind` below.
-     */
-
-ngTouch.factory('$swipe', [function() {
-  // The total distance in any direction before we make the call on swipe vs. scroll.
-  var MOVE_BUFFER_RADIUS = 10;
-
-  var POINTER_EVENTS = {
-    'mouse': {
-      start: 'mousedown',
-      move: 'mousemove',
-      end: 'mouseup'
-    },
-    'touch': {
-      start: 'touchstart',
-      move: 'touchmove',
-      end: 'touchend',
-      cancel: 'touchcancel'
-    },
-    'pointer': {
-      start: 'pointerdown',
-      move: 'pointermove',
-      end: 'pointerup',
-      cancel: 'pointercancel'
-    }
-  };
-
-  function getCoordinates(event) {
-    var originalEvent = event.originalEvent || event;
-    var touches = originalEvent.touches && originalEvent.touches.length ? originalEvent.touches : [originalEvent];
-    var e = (originalEvent.changedTouches && originalEvent.changedTouches[0]) || touches[0];
-
-    return {
-      x: e.clientX,
-      y: e.clientY
-    };
-  }
-
-  function getEvents(pointerTypes, eventType) {
-    var res = [];
-    angular.forEach(pointerTypes, function(pointerType) {
-      var eventName = POINTER_EVENTS[pointerType][eventType];
-      if (eventName) {
-        res.push(eventName);
-      }
-    });
-    return res.join(' ');
-  }
-
-  return {
-    /**
-     * @ngdoc method
-     * @name $swipe#bind
-     *
-     * @description
-     * The main method of `$swipe`. It takes an element to be watched for swipe motions, and an
-     * object containing event handlers.
-     * The pointer types that should be used can be specified via the optional
-     * third argument, which is an array of strings `'mouse'`, `'touch'` and `'pointer'`. By default,
-     * `$swipe` will listen for `mouse`, `touch` and `pointer` events.
-     *
-     * The four events are `start`, `move`, `end`, and `cancel`. `start`, `move`, and `end`
-     * receive as a parameter a coordinates object of the form `{ x: 150, y: 310 }` and the raw
-     * `event`. `cancel` receives the raw `event` as its single parameter.
-     *
-     * `start` is called on either `mousedown`, `touchstart` or `pointerdown`. After this event, `$swipe` is
-     * watching for `touchmove`, `mousemove` or `pointermove` events. These events are ignored until the total
-     * distance moved in either dimension exceeds a small threshold.
-     *
-     * Once this threshold is exceeded, either the horizontal or vertical delta is greater.
-     * - If the horizontal distance is greater, this is a swipe and `move` and `end` events follow.
-     * - If the vertical distance is greater, this is a scroll, and we let the browser take over.
-     *   A `cancel` event is sent.
-     *
-     * `move` is called on `mousemove`, `touchmove` and `pointermove` after the above logic has determined that
-     * a swipe is in progress.
-     *
-     * `end` is called when a swipe is successfully completed with a `touchend`, `mouseup` or `pointerup`.
-     *
-     * `cancel` is called either on a `touchcancel` or `pointercancel`  from the browser, or when we begin scrolling
-     * as described above.
-     *
-     */
-    bind: function(element, eventHandlers, pointerTypes) {
-      // Absolute total movement, used to control swipe vs. scroll.
-      var totalX, totalY;
-      // Coordinates of the start position.
-      var startCoords;
-      // Last event's position.
-      var lastPos;
-      // Whether a swipe is active.
-      var active = false;
-
-      pointerTypes = pointerTypes || ['mouse', 'touch', 'pointer'];
-      element.on(getEvents(pointerTypes, 'start'), function(event) {
-        startCoords = getCoordinates(event);
-        active = true;
-        totalX = 0;
-        totalY = 0;
-        lastPos = startCoords;
-        eventHandlers['start'] && eventHandlers['start'](startCoords, event);
-      });
-      var events = getEvents(pointerTypes, 'cancel');
-      if (events) {
-        element.on(events, function(event) {
-          active = false;
-          eventHandlers['cancel'] && eventHandlers['cancel'](event);
-        });
-      }
-
-      element.on(getEvents(pointerTypes, 'move'), function(event) {
-        if (!active) return;
-
-        // Android will send a touchcancel if it thinks we're starting to scroll.
-        // So when the total distance (+ or - or both) exceeds 10px in either direction,
-        // we either:
-        // - On totalX > totalY, we send preventDefault() and treat this as a swipe.
-        // - On totalY > totalX, we let the browser handle it as a scroll.
-
-        if (!startCoords) return;
-        var coords = getCoordinates(event);
-
-        totalX += Math.abs(coords.x - lastPos.x);
-        totalY += Math.abs(coords.y - lastPos.y);
-
-        lastPos = coords;
-
-        if (totalX < MOVE_BUFFER_RADIUS && totalY < MOVE_BUFFER_RADIUS) {
-          return;
-        }
-
-        // One of totalX or totalY has exceeded the buffer, so decide on swipe vs. scroll.
-        if (totalY > totalX) {
-          // Allow native scrolling to take over.
-          active = false;
-          eventHandlers['cancel'] && eventHandlers['cancel'](event);
-          return;
-        } else {
-          // Prevent the browser from scrolling.
-          event.preventDefault();
-          eventHandlers['move'] && eventHandlers['move'](coords, event);
-        }
-      });
-
-      element.on(getEvents(pointerTypes, 'end'), function(event) {
-        if (!active) return;
-        active = false;
-        eventHandlers['end'] && eventHandlers['end'](getCoordinates(event), event);
-      });
-    }
-  };
-}]);
-
-/* global ngTouch: false,
-  nodeName_: false
-*/
-
-/**
- * @ngdoc directive
- * @name ngClick
- * @deprecated
- *
- * @description
- * <div class="alert alert-danger">
- * **DEPRECATION NOTICE**: Beginning with Angular 1.5, this directive is deprecated and by default **disabled**.
- * The directive will receive no further support and might be removed from future releases.
- * If you need the directive, you can enable it with the {@link ngTouch.$touchProvider $touchProvider#ngClickOverrideEnabled}
- * function. We also recommend that you migrate to [FastClick](https://github.com/ftlabs/fastclick).
- * To learn more about the 300ms delay, this [Telerik article](http://developer.telerik.com/featured/300-ms-click-delay-ios-8/)
- * gives a good overview.
- * </div>
- * A more powerful replacement for the default ngClick designed to be used on touchscreen
- * devices. Most mobile browsers wait about 300ms after a tap-and-release before sending
- * the click event. This version handles them immediately, and then prevents the
- * following click event from propagating.
- *
- * Requires the {@link ngTouch `ngTouch`} module to be installed.
- *
- * This directive can fall back to using an ordinary click event, and so works on desktop
- * browsers as well as mobile.
- *
- * This directive also sets the CSS class `ng-click-active` while the element is being held
- * down (by a mouse click or touch) so you can restyle the depressed element if you wish.
- *
- * @element ANY
- * @param {expression} ngClick {@link guide/expression Expression} to evaluate
- * upon tap. (Event object is available as `$event`)
- *
- * @example
-    <example module="ngClickExample" deps="angular-touch.js">
-      <file name="index.html">
-        <button ng-click="count = count + 1" ng-init="count=0">
-          Increment
-        </button>
-        count: {{ count }}
-      </file>
-      <file name="script.js">
-        angular.module('ngClickExample', ['ngTouch']);
-      </file>
-    </example>
- */
-
-var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
-    function($parse, $timeout, $rootElement) {
-  var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
-  var MOVE_TOLERANCE = 12; // 12px seems to work in most mobile browsers.
-  var PREVENT_DURATION = 2500; // 2.5 seconds maximum from preventGhostClick call to click
-  var CLICKBUSTER_THRESHOLD = 25; // 25 pixels in any dimension is the limit for busting clicks.
-
-  var ACTIVE_CLASS_NAME = 'ng-click-active';
-  var lastPreventedTime;
-  var touchCoordinates;
-  var lastLabelClickCoordinates;
-
-
-  // TAP EVENTS AND GHOST CLICKS
-  //
-  // Why tap events?
-  // Mobile browsers detect a tap, then wait a moment (usually ~300ms) to see if you're
-  // double-tapping, and then fire a click event.
-  //
-  // This delay sucks and makes mobile apps feel unresponsive.
-  // So we detect touchstart, touchcancel and touchend ourselves and determine when
-  // the user has tapped on something.
-  //
-  // What happens when the browser then generates a click event?
-  // The browser, of course, also detects the tap and fires a click after a delay. This results in
-  // tapping/clicking twice. We do "clickbusting" to prevent it.
-  //
-  // How does it work?
-  // We attach global touchstart and click handlers, that run during the capture (early) phase.
-  // So the sequence for a tap is:
-  // - global touchstart: Sets an "allowable region" at the point touched.
-  // - element's touchstart: Starts a touch
-  // (- touchcancel ends the touch, no click follows)
-  // - element's touchend: Determines if the tap is valid (didn't move too far away, didn't hold
-  //   too long) and fires the user's tap handler. The touchend also calls preventGhostClick().
-  // - preventGhostClick() removes the allowable region the global touchstart created.
-  // - The browser generates a click event.
-  // - The global click handler catches the click, and checks whether it was in an allowable region.
-  //     - If preventGhostClick was called, the region will have been removed, the click is busted.
-  //     - If the region is still there, the click proceeds normally. Therefore clicks on links and
-  //       other elements without ngTap on them work normally.
-  //
-  // This is an ugly, terrible hack!
-  // Yeah, tell me about it. The alternatives are using the slow click events, or making our users
-  // deal with the ghost clicks, so I consider this the least of evils. Fortunately Angular
-  // encapsulates this ugly logic away from the user.
-  //
-  // Why not just put click handlers on the element?
-  // We do that too, just to be sure. If the tap event caused the DOM to change,
-  // it is possible another element is now in that position. To take account for these possibly
-  // distinct elements, the handlers are global and care only about coordinates.
-
-  // Checks if the coordinates are close enough to be within the region.
-  function hit(x1, y1, x2, y2) {
-    return Math.abs(x1 - x2) < CLICKBUSTER_THRESHOLD && Math.abs(y1 - y2) < CLICKBUSTER_THRESHOLD;
-  }
-
-  // Checks a list of allowable regions against a click location.
-  // Returns true if the click should be allowed.
-  // Splices out the allowable region from the list after it has been used.
-  function checkAllowableRegions(touchCoordinates, x, y) {
-    for (var i = 0; i < touchCoordinates.length; i += 2) {
-      if (hit(touchCoordinates[i], touchCoordinates[i + 1], x, y)) {
-        touchCoordinates.splice(i, i + 2);
-        return true; // allowable region
-      }
-    }
-    return false; // No allowable region; bust it.
-  }
-
-  // Global click handler that prevents the click if it's in a bustable zone and preventGhostClick
-  // was called recently.
-  function onClick(event) {
-    if (Date.now() - lastPreventedTime > PREVENT_DURATION) {
-      return; // Too old.
-    }
-
-    var touches = event.touches && event.touches.length ? event.touches : [event];
-    var x = touches[0].clientX;
-    var y = touches[0].clientY;
-    // Work around desktop Webkit quirk where clicking a label will fire two clicks (on the label
-    // and on the input element). Depending on the exact browser, this second click we don't want
-    // to bust has either (0,0), negative coordinates, or coordinates equal to triggering label
-    // click event
-    if (x < 1 && y < 1) {
-      return; // offscreen
-    }
-    if (lastLabelClickCoordinates &&
-        lastLabelClickCoordinates[0] === x && lastLabelClickCoordinates[1] === y) {
-      return; // input click triggered by label click
-    }
-    // reset label click coordinates on first subsequent click
-    if (lastLabelClickCoordinates) {
-      lastLabelClickCoordinates = null;
-    }
-    // remember label click coordinates to prevent click busting of trigger click event on input
-    if (nodeName_(event.target) === 'label') {
-      lastLabelClickCoordinates = [x, y];
-    }
-
-    // Look for an allowable region containing this click.
-    // If we find one, that means it was created by touchstart and not removed by
-    // preventGhostClick, so we don't bust it.
-    if (checkAllowableRegions(touchCoordinates, x, y)) {
-      return;
-    }
-
-    // If we didn't find an allowable region, bust the click.
-    event.stopPropagation();
-    event.preventDefault();
-
-    // Blur focused form elements
-    event.target && event.target.blur && event.target.blur();
-  }
-
-
-  // Global touchstart handler that creates an allowable region for a click event.
-  // This allowable region can be removed by preventGhostClick if we want to bust it.
-  function onTouchStart(event) {
-    var touches = event.touches && event.touches.length ? event.touches : [event];
-    var x = touches[0].clientX;
-    var y = touches[0].clientY;
-    touchCoordinates.push(x, y);
-
-    $timeout(function() {
-      // Remove the allowable region.
-      for (var i = 0; i < touchCoordinates.length; i += 2) {
-        if (touchCoordinates[i] == x && touchCoordinates[i + 1] == y) {
-          touchCoordinates.splice(i, i + 2);
-          return;
-        }
-      }
-    }, PREVENT_DURATION, false);
-  }
-
-  // On the first call, attaches some event handlers. Then whenever it gets called, it creates a
-  // zone around the touchstart where clicks will get busted.
-  function preventGhostClick(x, y) {
-    if (!touchCoordinates) {
-      $rootElement[0].addEventListener('click', onClick, true);
-      $rootElement[0].addEventListener('touchstart', onTouchStart, true);
-      touchCoordinates = [];
-    }
-
-    lastPreventedTime = Date.now();
-
-    checkAllowableRegions(touchCoordinates, x, y);
-  }
-
-  // Actual linking function.
-  return function(scope, element, attr) {
-    var clickHandler = $parse(attr.ngClick),
-        tapping = false,
-        tapElement,  // Used to blur the element after a tap.
-        startTime,   // Used to check if the tap was held too long.
-        touchStartX,
-        touchStartY;
-
-    function resetState() {
-      tapping = false;
-      element.removeClass(ACTIVE_CLASS_NAME);
-    }
-
-    element.on('touchstart', function(event) {
-      tapping = true;
-      tapElement = event.target ? event.target : event.srcElement; // IE uses srcElement.
-      // Hack for Safari, which can target text nodes instead of containers.
-      if (tapElement.nodeType == 3) {
-        tapElement = tapElement.parentNode;
-      }
-
-      element.addClass(ACTIVE_CLASS_NAME);
-
-      startTime = Date.now();
-
-      // Use jQuery originalEvent
-      var originalEvent = event.originalEvent || event;
-      var touches = originalEvent.touches && originalEvent.touches.length ? originalEvent.touches : [originalEvent];
-      var e = touches[0];
-      touchStartX = e.clientX;
-      touchStartY = e.clientY;
-    });
-
-    element.on('touchcancel', function(event) {
-      resetState();
-    });
-
-    element.on('touchend', function(event) {
-      var diff = Date.now() - startTime;
-
-      // Use jQuery originalEvent
-      var originalEvent = event.originalEvent || event;
-      var touches = (originalEvent.changedTouches && originalEvent.changedTouches.length) ?
-          originalEvent.changedTouches :
-          ((originalEvent.touches && originalEvent.touches.length) ? originalEvent.touches : [originalEvent]);
-      var e = touches[0];
-      var x = e.clientX;
-      var y = e.clientY;
-      var dist = Math.sqrt(Math.pow(x - touchStartX, 2) + Math.pow(y - touchStartY, 2));
-
-      if (tapping && diff < TAP_DURATION && dist < MOVE_TOLERANCE) {
-        // Call preventGhostClick so the clickbuster will catch the corresponding click.
-        preventGhostClick(x, y);
-
-        // Blur the focused element (the button, probably) before firing the callback.
-        // This doesn't work perfectly on Android Chrome, but seems to work elsewhere.
-        // I couldn't get anything to work reliably on Android Chrome.
-        if (tapElement) {
-          tapElement.blur();
-        }
-
-        if (!angular.isDefined(attr.disabled) || attr.disabled === false) {
-          element.triggerHandler('click', [event]);
-        }
-      }
-
-      resetState();
-    });
-
-    // Hack for iOS Safari's benefit. It goes searching for onclick handlers and is liable to click
-    // something else nearby.
-    element.onclick = function(event) { };
-
-    // Actual click handler.
-    // There are three different kinds of clicks, only two of which reach this point.
-    // - On desktop browsers without touch events, their clicks will always come here.
-    // - On mobile browsers, the simulated "fast" click will call this.
-    // - But the browser's follow-up slow click will be "busted" before it reaches this handler.
-    // Therefore it's safe to use this directive on both mobile and desktop.
-    element.on('click', function(event, touchend) {
-      scope.$apply(function() {
-        clickHandler(scope, {$event: (touchend || event)});
-      });
-    });
-
-    element.on('mousedown', function(event) {
-      element.addClass(ACTIVE_CLASS_NAME);
-    });
-
-    element.on('mousemove mouseup', function(event) {
-      element.removeClass(ACTIVE_CLASS_NAME);
-    });
-
-  };
-}];
-
-/* global ngTouch: false */
-
-/**
- * @ngdoc directive
- * @name ngSwipeLeft
- *
- * @description
- * Specify custom behavior when an element is swiped to the left on a touchscreen device.
- * A leftward swipe is a quick, right-to-left slide of the finger.
- * Though ngSwipeLeft is designed for touch-based devices, it will work with a mouse click and drag
- * too.
- *
- * To disable the mouse click and drag functionality, add `ng-swipe-disable-mouse` to
- * the `ng-swipe-left` or `ng-swipe-right` DOM Element.
- *
- * Requires the {@link ngTouch `ngTouch`} module to be installed.
- *
- * @element ANY
- * @param {expression} ngSwipeLeft {@link guide/expression Expression} to evaluate
- * upon left swipe. (Event object is available as `$event`)
- *
- * @example
-    <example module="ngSwipeLeftExample" deps="angular-touch.js">
-      <file name="index.html">
-        <div ng-show="!showActions" ng-swipe-left="showActions = true">
-          Some list content, like an email in the inbox
-        </div>
-        <div ng-show="showActions" ng-swipe-right="showActions = false">
-          <button ng-click="reply()">Reply</button>
-          <button ng-click="delete()">Delete</button>
-        </div>
-      </file>
-      <file name="script.js">
-        angular.module('ngSwipeLeftExample', ['ngTouch']);
-      </file>
-    </example>
- */
-
-/**
- * @ngdoc directive
- * @name ngSwipeRight
- *
- * @description
- * Specify custom behavior when an element is swiped to the right on a touchscreen device.
- * A rightward swipe is a quick, left-to-right slide of the finger.
- * Though ngSwipeRight is designed for touch-based devices, it will work with a mouse click and drag
- * too.
- *
- * Requires the {@link ngTouch `ngTouch`} module to be installed.
- *
- * @element ANY
- * @param {expression} ngSwipeRight {@link guide/expression Expression} to evaluate
- * upon right swipe. (Event object is available as `$event`)
- *
- * @example
-    <example module="ngSwipeRightExample" deps="angular-touch.js">
-      <file name="index.html">
-        <div ng-show="!showActions" ng-swipe-left="showActions = true">
-          Some list content, like an email in the inbox
-        </div>
-        <div ng-show="showActions" ng-swipe-right="showActions = false">
-          <button ng-click="reply()">Reply</button>
-          <button ng-click="delete()">Delete</button>
-        </div>
-      </file>
-      <file name="script.js">
-        angular.module('ngSwipeRightExample', ['ngTouch']);
-      </file>
-    </example>
- */
-
-function makeSwipeDirective(directiveName, direction, eventName) {
-  ngTouch.directive(directiveName, ['$parse', '$swipe', function($parse, $swipe) {
-    // The maximum vertical delta for a swipe should be less than 75px.
-    var MAX_VERTICAL_DISTANCE = 75;
-    // Vertical distance should not be more than a fraction of the horizontal distance.
-    var MAX_VERTICAL_RATIO = 0.3;
-    // At least a 30px lateral motion is necessary for a swipe.
-    var MIN_HORIZONTAL_DISTANCE = 30;
-
-    return function(scope, element, attr) {
-      var swipeHandler = $parse(attr[directiveName]);
-
-      var startCoords, valid;
-
-      function validSwipe(coords) {
-        // Check that it's within the coordinates.
-        // Absolute vertical distance must be within tolerances.
-        // Horizontal distance, we take the current X - the starting X.
-        // This is negative for leftward swipes and positive for rightward swipes.
-        // After multiplying by the direction (-1 for left, +1 for right), legal swipes
-        // (ie. same direction as the directive wants) will have a positive delta and
-        // illegal ones a negative delta.
-        // Therefore this delta must be positive, and larger than the minimum.
-        if (!startCoords) return false;
-        var deltaY = Math.abs(coords.y - startCoords.y);
-        var deltaX = (coords.x - startCoords.x) * direction;
-        return valid && // Short circuit for already-invalidated swipes.
-            deltaY < MAX_VERTICAL_DISTANCE &&
-            deltaX > 0 &&
-            deltaX > MIN_HORIZONTAL_DISTANCE &&
-            deltaY / deltaX < MAX_VERTICAL_RATIO;
-      }
-
-      var pointerTypes = ['touch'];
-      if (!angular.isDefined(attr['ngSwipeDisableMouse'])) {
-        pointerTypes.push('mouse');
-      }
-      $swipe.bind(element, {
-        'start': function(coords, event) {
-          startCoords = coords;
-          valid = true;
-        },
-        'cancel': function(event) {
-          valid = false;
-        },
-        'end': function(coords, event) {
-          if (validSwipe(coords)) {
-            scope.$apply(function() {
-              element.triggerHandler(eventName);
-              swipeHandler(scope, {$event: event});
-            });
-          }
-        }
-      }, pointerTypes);
-    };
-  }]);
-}
-
-// Left is negative X-coordinate, right is positive.
-makeSwipeDirective('ngSwipeLeft', -1, 'swipeleft');
-makeSwipeDirective('ngSwipeRight', 1, 'swiperight');
-
-
-
-})(window, window.angular);
-
-},{}],22:[function(require,module,exports){
-require('./angular-touch');
-module.exports = 'ngTouch';
-
-},{"./angular-touch":21}],23:[function(require,module,exports){
-/**
- * @license AngularJS v1.5.7
+ * @license AngularJS v1.5.6
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -11376,7 +10010,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-    message += '\nhttp://errors.angularjs.org/1.5.7/' +
+    message += '\nhttp://errors.angularjs.org/1.5.6/' +
       (module ? module + '/' : '') + code;
 
     for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -11445,6 +10079,7 @@ function minErr(module, ErrorConstructor) {
   includes: true,
   arrayRemove: true,
   copy: true,
+  shallowCopy: true,
   equals: true,
   csp: true,
   jq: true,
@@ -12320,6 +10955,31 @@ function copy(source, destination) {
       return source.cloneNode(true);
     }
   }
+}
+
+/**
+ * Creates a shallow copy of an object, an array or a primitive.
+ *
+ * Assumes that there are no proto properties for objects.
+ */
+function shallowCopy(src, dst) {
+  if (isArray(src)) {
+    dst = dst || [];
+
+    for (var i = 0, ii = src.length; i < ii; i++) {
+      dst[i] = src[i];
+    }
+  } else if (isObject(src)) {
+    dst = dst || {};
+
+    for (var key in src) {
+      if (!(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+        dst[key] = src[key];
+      }
+    }
+  }
+
+  return dst || src;
 }
 
 
@@ -13662,34 +12322,7 @@ function setupModuleLoader(window) {
 
 }
 
-/* global shallowCopy: true */
-
-/**
- * Creates a shallow copy of an object, an array or a primitive.
- *
- * Assumes that there are no proto properties for objects.
- */
-function shallowCopy(src, dst) {
-  if (isArray(src)) {
-    dst = dst || [];
-
-    for (var i = 0, ii = src.length; i < ii; i++) {
-      dst[i] = src[i];
-    }
-  } else if (isObject(src)) {
-    dst = dst || {};
-
-    for (var key in src) {
-      if (!(key.charAt(0) === '$' && key.charAt(1) === '$')) {
-        dst[key] = src[key];
-      }
-    }
-  }
-
-  return dst || src;
-}
-
-/* global toDebugString: true */
+/* global: toDebugString: true */
 
 function serializeObject(obj) {
   var seen = [];
@@ -13830,11 +12463,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.5.7',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.5.6',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 5,
-  dot: 7,
-  codeName: 'hexagonal-circumvolution'
+  dot: 6,
+  codeName: 'arrow-stringification'
 };
 
 
@@ -14030,7 +12663,7 @@ function publishExternalAPI(angular) {
  * ## Angular's jqLite
  * jqLite provides only the following jQuery methods:
  *
- * - [`addClass()`](http://api.jquery.com/addClass/) - Does not support a function as first argument
+ * - [`addClass()`](http://api.jquery.com/addClass/)
  * - [`after()`](http://api.jquery.com/after/)
  * - [`append()`](http://api.jquery.com/append/)
  * - [`attr()`](http://api.jquery.com/attr/) - Does not support functions as parameters
@@ -14057,7 +12690,7 @@ function publishExternalAPI(angular) {
  * - [`ready()`](http://api.jquery.com/ready/)
  * - [`remove()`](http://api.jquery.com/remove/)
  * - [`removeAttr()`](http://api.jquery.com/removeAttr/)
- * - [`removeClass()`](http://api.jquery.com/removeClass/) - Does not support a function as first argument
+ * - [`removeClass()`](http://api.jquery.com/removeClass/)
  * - [`removeData()`](http://api.jquery.com/removeData/)
  * - [`replaceWith()`](http://api.jquery.com/replaceWith/)
  * - [`text()`](http://api.jquery.com/text/)
@@ -16749,13 +15382,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} parent the parent element which will append the element as
        *   a child (so long as the after element is not present)
        * @param {DOMElement=} after the sibling element after which the element will be appended
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -16781,13 +15408,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} parent the parent element which will append the element as
        *   a child (so long as the after element is not present)
        * @param {DOMElement=} after the sibling element after which the element will be appended
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -16808,13 +15429,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * digest once the animation has completed.
        *
        * @param {DOMElement} element the element which will be removed from the DOM
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -16838,13 +15453,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        *
        * @param {DOMElement} element the element which the CSS classes will be applied to
        * @param {string} className the CSS class(es) that will be added (multiple classes are separated via spaces)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -16868,13 +15477,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        *
        * @param {DOMElement} element the element which the CSS classes will be applied to
        * @param {string} className the CSS class(es) that will be removed (multiple classes are separated via spaces)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -16899,13 +15502,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} element the element which the CSS classes will be applied to
        * @param {string} add the CSS class(es) that will be added (multiple classes are separated via spaces)
        * @param {string} remove the CSS class(es) that will be removed (multiple classes are separated via spaces)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -16946,13 +15543,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {string=} className an optional CSS class that will be applied to the element for the duration of the animation. If
        *    this value is left as empty then a CSS class of `ng-inline-animate` will be applied to the element.
        *    (Note that if no animation is detected then this value will not be applied to the element.)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -19299,19 +17890,11 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         }
         // We must run this hook in an apply since the $$postDigest runs outside apply
         $rootScope.$apply(function() {
-          var errors = [];
           for (var i = 0, ii = onChangesQueue.length; i < ii; ++i) {
-            try {
-              onChangesQueue[i]();
-            } catch (e) {
-              errors.push(e);
-            }
+            onChangesQueue[i]();
           }
           // Reset the queue to trigger a new schedule next time there is a change
           onChangesQueue = undefined;
-          if (errors.length) {
-            throw errors;
-          }
         });
       } finally {
         onChangesTtl++;
@@ -20487,18 +19070,10 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         forEach(elementControllers, function(controller) {
           var controllerInstance = controller.instance;
           if (isFunction(controllerInstance.$onChanges)) {
-            try {
-              controllerInstance.$onChanges(controller.bindingInfo.initialChanges);
-            } catch (e) {
-              $exceptionHandler(e);
-            }
+            controllerInstance.$onChanges(controller.bindingInfo.initialChanges);
           }
           if (isFunction(controllerInstance.$onInit)) {
-            try {
-              controllerInstance.$onInit();
-            } catch (e) {
-              $exceptionHandler(e);
-            }
+            controllerInstance.$onInit();
           }
           if (isFunction(controllerInstance.$onDestroy)) {
             controllerScope.$on('$destroy', function callOnDestroyHook() {
@@ -20762,16 +19337,18 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
       // copy the new attributes on the old attrs object
       forEach(src, function(value, key) {
-        // Check if we already set this attribute in the loop above.
-        // `dst` will never contain hasOwnProperty as DOM parser won't let it.
-        // You will get an "InvalidCharacterError: DOM Exception 5" error if you
-        // have an attribute like "has-own-property" or "data-has-own-property", etc.
-        if (!dst.hasOwnProperty(key) && key.charAt(0) !== '$') {
+        if (key == 'class') {
+          safeAddClass($element, value);
+          dst['class'] = (dst['class'] ? dst['class'] + ' ' : '') + value;
+        } else if (key == 'style') {
+          $element.attr('style', $element.attr('style') + ';' + value);
+          dst['style'] = (dst['style'] ? dst['style'] + ';' : '') + value;
+          // `dst` will never contain hasOwnProperty as DOM parser won't let it.
+          // You will get an "InvalidCharacterError: DOM Exception 5" error if you
+          // have an attribute like "has-own-property" or "data-has-own-property", etc.
+        } else if (key.charAt(0) != '$' && !dst.hasOwnProperty(key)) {
           dst[key] = value;
-
-          if (key !== 'class' && key !== 'style') {
-            dstAttr[key] = srcAttr[key];
-          }
+          dstAttr[key] = srcAttr[key];
         }
       });
     }
@@ -21632,20 +20209,17 @@ function $DocumentProvider() {
  *
  * ## Example:
  *
- * The example below will overwrite the default `$exceptionHandler` in order to (a) log uncaught
- * errors to the backend for later inspection by the developers and (b) to use `$log.warn()` instead
- * of `$log.error()`.
- *
  * ```js
- *   angular.
- *     module('exceptionOverwrite', []).
- *     factory('$exceptionHandler', ['$log', 'logErrorsToBackend', function($log, logErrorsToBackend) {
- *       return function myExceptionHandler(exception, cause) {
- *         logErrorsToBackend(exception, cause);
- *         $log.warn(exception, cause);
- *       };
- *     });
+ *   angular.module('exceptionOverride', []).factory('$exceptionHandler', function() {
+ *     return function(exception, cause) {
+ *       exception.message += ' (caused by "' + cause + '")';
+ *       throw exception;
+ *     };
+ *   });
  * ```
+ *
+ * This example will override the normal action of `$exceptionHandler`, to make angular
+ * exceptions fail hard when they happen, instead of just logging to the console.
  *
  * <hr />
  * Note, that code executed in event-listeners (even those registered using jqLite's `on`/`bind`
@@ -21656,7 +20230,7 @@ function $DocumentProvider() {
  * `try { ... } catch(e) { $exceptionHandler(e); }`
  *
  * @param {Error} exception Exception associated with the error.
- * @param {string=} cause Optional information about the context in which
+ * @param {string=} cause optional information about the context in which
  *       the error was thrown.
  *
  */
@@ -24204,12 +22778,6 @@ function LocationHashbangInHtml5Url(appBase, appBaseNoFile, hashPrefix) {
 var locationPrototype = {
 
   /**
-   * Ensure absolute url is initialized.
-   * @private
-   */
-  $$absUrl:'',
-
-  /**
    * Are we in html5 mode?
    * @private
    */
@@ -25582,7 +24150,7 @@ AST.prototype = {
     var args = [];
     if (this.peekToken().text !== ')') {
       do {
-        args.push(this.filterChain());
+        args.push(this.expression());
       } while (this.expect(','));
     }
     return args;
@@ -32065,22 +30633,21 @@ var uppercaseFilter = valueFn(uppercase);
  * @kind function
  *
  * @description
- * Creates a new array or string containing only a specified number of elements. The elements are
- * taken from either the beginning or the end of the source array, string or number, as specified by
- * the value and sign (positive or negative) of `limit`. Other array-like objects are also supported
- * (e.g. array subclasses, NodeLists, jqLite/jQuery collections etc). If a number is used as input,
- * it is converted to a string.
+ * Creates a new array or string containing only a specified number of elements. The elements
+ * are taken from either the beginning or the end of the source array, string or number, as specified by
+ * the value and sign (positive or negative) of `limit`. If a number is used as input, it is
+ * converted to a string.
  *
- * @param {Array|ArrayLike|string|number} input - Array/array-like, string or number to be limited.
- * @param {string|number} limit - The length of the returned array or string. If the `limit` number
+ * @param {Array|string|number} input Source array, string or number to be limited.
+ * @param {string|number} limit The length of the returned array or string. If the `limit` number
  *     is positive, `limit` number of items from the beginning of the source array/string are copied.
  *     If the number is negative, `limit` number  of items from the end of the source array/string
  *     are copied. The `limit` will be trimmed if it exceeds `array.length`. If `limit` is undefined,
  *     the input will be returned unchanged.
- * @param {(string|number)=} begin - Index at which to begin limitation. As a negative index,
- *     `begin` indicates an offset from the end of `input`. Defaults to `0`.
- * @returns {Array|string} A new sub-array or substring of length `limit` or less if the input had
- *     less than `limit` elements.
+ * @param {(string|number)=} begin Index at which to begin limitation. As a negative index, `begin`
+ *     indicates an offset from the end of `input`. Defaults to `0`.
+ * @returns {Array|string} A new sub-array or substring of length `limit` or less if input array
+ *     had less than `limit` elements.
  *
  * @example
    <example module="limitToExample">
@@ -32168,27 +30735,21 @@ function limitToFilter() {
     if (isNaN(limit)) return input;
 
     if (isNumber(input)) input = input.toString();
-    if (!isArrayLike(input)) return input;
+    if (!isArray(input) && !isString(input)) return input;
 
     begin = (!begin || isNaN(begin)) ? 0 : toInt(begin);
     begin = (begin < 0) ? Math.max(0, input.length + begin) : begin;
 
     if (limit >= 0) {
-      return sliceFn(input, begin, begin + limit);
+      return input.slice(begin, begin + limit);
     } else {
       if (begin === 0) {
-        return sliceFn(input, limit, input.length);
+        return input.slice(limit, input.length);
       } else {
-        return sliceFn(input, Math.max(0, begin + limit), begin);
+        return input.slice(Math.max(0, begin + limit), begin);
       }
     }
   };
-}
-
-function sliceFn(input, begin, end) {
-  if (isString(input)) return input.slice(begin, end);
-
-  return slice.call(input, begin, end);
 }
 
 /**
@@ -32197,128 +30758,44 @@ function sliceFn(input, begin, end) {
  * @kind function
  *
  * @description
- * Returns an array containing the items from the specified `collection`, ordered by a `comparator`
- * function based on the values computed using the `expression` predicate.
+ * Orders a specified `array` by the `expression` predicate. It is ordered alphabetically
+ * for strings and numerically for numbers. Note: if you notice numbers are not being sorted
+ * as expected, make sure they are actually being saved as numbers and not strings.
+ * Array-like values (e.g. NodeLists, jQuery objects, TypedArrays, Strings, etc) are also supported.
  *
- * For example, `[{id: 'foo'}, {id: 'bar'}] | orderBy:'id'` would result in
- * `[{id: 'bar'}, {id: 'foo'}]`.
- *
- * The `collection` can be an Array or array-like object (e.g. NodeList, jQuery object, TypedArray,
- * String, etc).
- *
- * The `expression` can be a single predicate, or a list of predicates each serving as a tie-breaker
- * for the preceeding one. The `expression` is evaluated against each item and the output is used
- * for comparing with other items.
- *
- * You can change the sorting order by setting `reverse` to `true`. By default, items are sorted in
- * ascending order.
- *
- * The comparison is done using the `comparator` function. If none is specified, a default, built-in
- * comparator is used (see below for details - in a nutshell, it compares numbers numerically and
- * strings alphabetically).
- *
- * ### Under the hood
- *
- * Ordering the specified `collection` happens in two phases:
- *
- * 1. All items are passed through the predicate (or predicates), and the returned values are saved
- *    along with their type (`string`, `number` etc). For example, an item `{label: 'foo'}`, passed
- *    through a predicate that extracts the value of the `label` property, would be transformed to:
- *    ```
- *    {
- *      value: 'foo',
- *      type: 'string',
- *      index: ...
- *    }
- *    ```
- * 2. The comparator function is used to sort the items, based on the derived values, types and
- *    indices.
- *
- * If you use a custom comparator, it will be called with pairs of objects of the form
- * `{value: ..., type: '...', index: ...}` and is expected to return `0` if the objects are equal
- * (as far as the comparator is concerned), `-1` if the 1st one should be ranked higher than the
- * second, or `1` otherwise.
- *
- * In order to ensure that the sorting will be deterministic across platforms, if none of the
- * specified predicates can distinguish between two items, `orderBy` will automatically introduce a
- * dummy predicate that returns the item's index as `value`.
- * (If you are using a custom comparator, make sure it can handle this predicate as well.)
- *
- * Finally, in an attempt to simplify things, if a predicate returns an object as the extracted
- * value for an item, `orderBy` will try to convert that object to a primitive value, before passing
- * it to the comparator. The following rules govern the conversion:
- *
- * 1. If the object has a `valueOf()` method that returns a primitive, its return value will be
- *    used instead.<br />
- *    (If the object has a `valueOf()` method that returns another object, then the returned object
- *    will be used in subsequent steps.)
- * 2. If the object has a custom `toString()` method (i.e. not the one inherited from `Object`) that
- *    returns a primitive, its return value will be used instead.<br />
- *    (If the object has a `toString()` method that returns another object, then the returned object
- *    will be used in subsequent steps.)
- * 3. No conversion; the object itself is used.
- *
- * ### The default comparator
- *
- * The default, built-in comparator should be sufficient for most usecases. In short, it compares
- * numbers numerically, strings alphabetically (and case-insensitively), for objects falls back to
- * using their index in the original collection, and sorts values of different types by type.
- *
- * More specifically, it follows these steps to determine the relative order of items:
- *
- * 1. If the compared values are of different types, compare the types themselves alphabetically.
- * 2. If both values are of type `string`, compare them alphabetically in a case- and
- *    locale-insensitive way.
- * 3. If both values are objects, compare their indices instead.
- * 4. Otherwise, return:
- *    -  `0`, if the values are equal (by strict equality comparison, i.e. using `===`).
- *    - `-1`, if the 1st value is "less than" the 2nd value (compared using the `<` operator).
- *    -  `1`, otherwise.
- *
- * **Note:** If you notice numbers not being sorted as expected, make sure they are actually being
- *           saved as numbers and not strings.
- *
- * @param {Array|ArrayLike} collection - The collection (array or array-like object) to sort.
- * @param {(Function|string|Array.<Function|string>)=} expression - A predicate (or list of
- *    predicates) to be used by the comparator to determine the order of elements.
+ * @param {Array} array The array (or array-like object) to sort.
+ * @param {function(*)|string|Array.<(function(*)|string)>=} expression A predicate to be
+ *    used by the comparator to determine the order of elements.
  *
  *    Can be one of:
  *
- *    - `Function`: A getter function. This function will be called with each item as argument and
- *      the return value will be used for sorting.
- *    - `string`: An Angular expression. This expression will be evaluated against each item and the
- *      result will be used for sorting. For example, use `'label'` to sort by a property called
- *      `label` or `'label.substring(0, 3)'` to sort by the first 3 characters of the `label`
- *      property.<br />
- *      (The result of a constant expression is interpreted as a property name to be used for
- *      comparison. For example, use `'"special name"'` (note the extra pair of quotes) to sort by a
- *      property called `special name`.)<br />
- *      An expression can be optionally prefixed with `+` or `-` to control the sorting direction,
- *      ascending or descending. For example, `'+label'` or `'-label'`. If no property is provided,
- *      (e.g. `'+'` or `'-'`), the collection element itself is used in comparisons.
- *    - `Array`: An array of function and/or string predicates. If a predicate cannot determine the
- *      relative order of two items, the next predicate is used as a tie-breaker.
+ *    - `function`: Getter function. The result of this function will be sorted using the
+ *      `<`, `===`, `>` operator.
+ *    - `string`: An Angular expression. The result of this expression is used to compare elements
+ *      (for example `name` to sort by a property called `name` or `name.substr(0, 3)` to sort by
+ *      3 first characters of a property called `name`). The result of a constant expression
+ *      is interpreted as a property name to be used in comparisons (for example `"special name"`
+ *      to sort object by the value of their `special name` property). An expression can be
+ *      optionally prefixed with `+` or `-` to control ascending or descending sort order
+ *      (for example, `+name` or `-name`). If no property is provided, (e.g. `'+'`) then the array
+ *      element itself is used to compare where sorting.
+ *    - `Array`: An array of function or string predicates. The first predicate in the array
+ *      is used for sorting, but when two items are equivalent, the next predicate is used.
  *
- * **Note:** If the predicate is missing or empty then it defaults to `'+'`.
+ *    If the predicate is missing or empty then it defaults to `'+'`.
  *
- * @param {boolean=} reverse - If `true`, reverse the sorting order.
- * @param {(Function)=} comparator - The comparator function used to determine the relative order of
- *    value pairs. If omitted, the built-in comparator will be used.
- *
- * @returns {Array} - The sorted array.
+ * @param {boolean=} reverse Reverse the order of the array.
+ * @returns {Array} Sorted copy of the source array.
  *
  *
  * @example
- * ### Ordering a table with `ngRepeat`
- *
- * The example below demonstrates a simple {@link ngRepeat ngRepeat}, where the data is sorted by
- * age in descending order (expression is set to `'-age'`). The `comparator` is not set, which means
- * it defaults to the built-in comparator.
- *
-   <example name="orderBy-static" module="orderByExample1">
+ * The example below demonstrates a simple ngRepeat, where the data is sorted
+ * by age in descending order (predicate is set to `'-age'`).
+ * `reverse` is not set, which means it defaults to `false`.
+   <example module="orderByExample">
      <file name="index.html">
        <div ng-controller="ExampleController">
-         <table class="friends">
+         <table class="friend">
            <tr>
              <th>Name</th>
              <th>Phone Number</th>
@@ -32333,77 +30810,43 @@ function sliceFn(input, begin, end) {
        </div>
      </file>
      <file name="script.js">
-       angular.module('orderByExample1', [])
+       angular.module('orderByExample', [])
          .controller('ExampleController', ['$scope', function($scope) {
-           $scope.friends = [
-             {name: 'John',   phone: '555-1212',  age: 10},
-             {name: 'Mary',   phone: '555-9876',  age: 19},
-             {name: 'Mike',   phone: '555-4321',  age: 21},
-             {name: 'Adam',   phone: '555-5678',  age: 35},
-             {name: 'Julie',  phone: '555-8765',  age: 29}
-           ];
+           $scope.friends =
+               [{name:'John', phone:'555-1212', age:10},
+                {name:'Mary', phone:'555-9876', age:19},
+                {name:'Mike', phone:'555-4321', age:21},
+                {name:'Adam', phone:'555-5678', age:35},
+                {name:'Julie', phone:'555-8765', age:29}];
          }]);
      </file>
-     <file name="style.css">
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var names = element.all(by.repeater('friends').column('friend.name'));
-
-       it('should sort friends by age in reverse order', function() {
-         expect(names.get(0).getText()).toBe('Adam');
-         expect(names.get(1).getText()).toBe('Julie');
-         expect(names.get(2).getText()).toBe('Mike');
-         expect(names.get(3).getText()).toBe('Mary');
-         expect(names.get(4).getText()).toBe('John');
-       });
-     </file>
    </example>
- * <hr />
  *
+ * The predicate and reverse parameters can be controlled dynamically through scope properties,
+ * as shown in the next example.
  * @example
- * ### Changing parameters dynamically
- *
- * All parameters can be changed dynamically. The next example shows how you can make the columns of
- * a table sortable, by binding the `expression` and `reverse` parameters to scope properties.
- *
-   <example name="orderBy-dynamic" module="orderByExample2">
+   <example module="orderByExample">
      <file name="index.html">
        <div ng-controller="ExampleController">
-         <pre>Sort by = {{propertyName}}; reverse = {{reverse}}</pre>
+         <pre>Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>
          <hr/>
-         <button ng-click="propertyName = null; reverse = false">Set to unsorted</button>
-         <hr/>
-         <table class="friends">
+         <button ng-click="predicate=''">Set to unsorted</button>
+         <table class="friend">
            <tr>
-             <th>
-               <button ng-click="sortBy('name')">Name</button>
-               <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('phone')">Phone Number</button>
-               <span class="sortorder" ng-show="propertyName === 'phone'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('age')">Age</button>
-               <span class="sortorder" ng-show="propertyName === 'age'" ng-class="{reverse: reverse}"></span>
-             </th>
+            <th>
+                <button ng-click="order('name')">Name</button>
+                <span class="sortorder" ng-show="predicate === 'name'" ng-class="{reverse:reverse}"></span>
+            </th>
+            <th>
+                <button ng-click="order('phone')">Phone Number</button>
+                <span class="sortorder" ng-show="predicate === 'phone'" ng-class="{reverse:reverse}"></span>
+            </th>
+            <th>
+                <button ng-click="order('age')">Age</button>
+                <span class="sortorder" ng-show="predicate === 'age'" ng-class="{reverse:reverse}"></span>
+            </th>
            </tr>
-           <tr ng-repeat="friend in friends | orderBy:propertyName:reverse">
+           <tr ng-repeat="friend in friends | orderBy:predicate:reverse">
              <td>{{friend.name}}</td>
              <td>{{friend.phone}}</td>
              <td>{{friend.age}}</td>
@@ -32412,335 +30855,100 @@ function sliceFn(input, begin, end) {
        </div>
      </file>
      <file name="script.js">
-       angular.module('orderByExample2', [])
+       angular.module('orderByExample', [])
          .controller('ExampleController', ['$scope', function($scope) {
-           var friends = [
-             {name: 'John',   phone: '555-1212',  age: 10},
-             {name: 'Mary',   phone: '555-9876',  age: 19},
-             {name: 'Mike',   phone: '555-4321',  age: 21},
-             {name: 'Adam',   phone: '555-5678',  age: 35},
-             {name: 'Julie',  phone: '555-8765',  age: 29}
-           ];
-
-           $scope.propertyName = 'age';
+           $scope.friends =
+               [{name:'John', phone:'555-1212', age:10},
+                {name:'Mary', phone:'555-9876', age:19},
+                {name:'Mike', phone:'555-4321', age:21},
+                {name:'Adam', phone:'555-5678', age:35},
+                {name:'Julie', phone:'555-8765', age:29}];
+           $scope.predicate = 'age';
            $scope.reverse = true;
-           $scope.friends = friends;
-
-           $scope.sortBy = function(propertyName) {
-             $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-             $scope.propertyName = propertyName;
+           $scope.order = function(predicate) {
+             $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+             $scope.predicate = predicate;
            };
          }]);
-     </file>
+      </file>
      <file name="style.css">
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-
        .sortorder:after {
-         content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+         content: '\25b2';
        }
        .sortorder.reverse:after {
-         content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+         content: '\25bc';
        }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var unsortButton = element(by.partialButtonText('unsorted'));
-       var nameHeader = element(by.partialButtonText('Name'));
-       var phoneHeader = element(by.partialButtonText('Phone'));
-       var ageHeader = element(by.partialButtonText('Age'));
-       var firstName = element(by.repeater('friends').column('friend.name').row(0));
-       var lastName = element(by.repeater('friends').column('friend.name').row(4));
-
-       it('should sort friends by some property, when clicking on the column header', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         phoneHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Mary');
-
-         nameHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('Mike');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-       });
-
-       it('should sort friends in reverse order, when clicking on the same column', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-       });
-
-       it('should restore the original order, when clicking "Set to unsorted"', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         unsortButton.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Julie');
-       });
      </file>
    </example>
- * <hr />
+ *
+ * It's also possible to call the orderBy filter manually, by injecting `$filter`, retrieving the
+ * filter routine with `$filter('orderBy')`, and calling the returned filter routine with the
+ * desired parameters.
+ *
+ * Example:
  *
  * @example
- * ### Using `orderBy` inside a controller
- *
- * It is also possible to call the `orderBy` filter manually, by injecting `orderByFilter`, and
- * calling it with the desired parameters. (Alternatively, you could inject the `$filter` factory
- * and retrieve the `orderBy` filter with `$filter('orderBy')`.)
- *
-   <example name="orderBy-call-manually" module="orderByExample3">
-     <file name="index.html">
-       <div ng-controller="ExampleController">
-         <pre>Sort by = {{propertyName}}; reverse = {{reverse}}</pre>
-         <hr/>
-         <button ng-click="sortBy(null)">Set to unsorted</button>
-         <hr/>
-         <table class="friends">
-           <tr>
-             <th>
-               <button ng-click="sortBy('name')">Name</button>
-               <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('phone')">Phone Number</button>
-               <span class="sortorder" ng-show="propertyName === 'phone'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('age')">Age</button>
-               <span class="sortorder" ng-show="propertyName === 'age'" ng-class="{reverse: reverse}"></span>
-             </th>
-           </tr>
-           <tr ng-repeat="friend in friends">
-             <td>{{friend.name}}</td>
-             <td>{{friend.phone}}</td>
-             <td>{{friend.age}}</td>
-           </tr>
-         </table>
-       </div>
-     </file>
-     <file name="script.js">
-       angular.module('orderByExample3', [])
-         .controller('ExampleController', ['$scope', 'orderByFilter', function($scope, orderBy) {
-           var friends = [
-             {name: 'John',   phone: '555-1212',  age: 10},
-             {name: 'Mary',   phone: '555-9876',  age: 19},
-             {name: 'Mike',   phone: '555-4321',  age: 21},
-             {name: 'Adam',   phone: '555-5678',  age: 35},
-             {name: 'Julie',  phone: '555-8765',  age: 29}
-           ];
+  <example module="orderByExample">
+    <file name="index.html">
+    <div ng-controller="ExampleController">
+      <pre>Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>
+      <table class="friend">
+        <tr>
+          <th>
+              <button ng-click="order('name')">Name</button>
+              <span class="sortorder" ng-show="predicate === 'name'" ng-class="{reverse:reverse}"></span>
+          </th>
+          <th>
+              <button ng-click="order('phone')">Phone Number</button>
+              <span class="sortorder" ng-show="predicate === 'phone'" ng-class="{reverse:reverse}"></span>
+          </th>
+          <th>
+              <button ng-click="order('age')">Age</button>
+              <span class="sortorder" ng-show="predicate === 'age'" ng-class="{reverse:reverse}"></span>
+          </th>
+        </tr>
+        <tr ng-repeat="friend in friends">
+          <td>{{friend.name}}</td>
+          <td>{{friend.phone}}</td>
+          <td>{{friend.age}}</td>
+        </tr>
+      </table>
+    </div>
+    </file>
 
-           $scope.propertyName = 'age';
-           $scope.reverse = true;
-           $scope.friends = orderBy(friends, $scope.propertyName, $scope.reverse);
+    <file name="script.js">
+      angular.module('orderByExample', [])
+        .controller('ExampleController', ['$scope', '$filter', function($scope, $filter) {
+          var orderBy = $filter('orderBy');
+          $scope.friends = [
+            { name: 'John',    phone: '555-1212',    age: 10 },
+            { name: 'Mary',    phone: '555-9876',    age: 19 },
+            { name: 'Mike',    phone: '555-4321',    age: 21 },
+            { name: 'Adam',    phone: '555-5678',    age: 35 },
+            { name: 'Julie',   phone: '555-8765',    age: 29 }
+          ];
+          $scope.order = function(predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.friends = orderBy($scope.friends, predicate, $scope.reverse);
+          };
+          $scope.order('age', true);
+        }]);
+    </file>
 
-           $scope.sortBy = function(propertyName) {
-             $scope.reverse = (propertyName !== null && $scope.propertyName === propertyName)
-                 ? !$scope.reverse : false;
-             $scope.propertyName = propertyName;
-             $scope.friends = orderBy(friends, $scope.propertyName, $scope.reverse);
-           };
-         }]);
-     </file>
-     <file name="style.css">
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-
+    <file name="style.css">
        .sortorder:after {
-         content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+         content: '\25b2';
        }
        .sortorder.reverse:after {
-         content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+         content: '\25bc';
        }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var unsortButton = element(by.partialButtonText('unsorted'));
-       var nameHeader = element(by.partialButtonText('Name'));
-       var phoneHeader = element(by.partialButtonText('Phone'));
-       var ageHeader = element(by.partialButtonText('Age'));
-       var firstName = element(by.repeater('friends').column('friend.name').row(0));
-       var lastName = element(by.repeater('friends').column('friend.name').row(4));
-
-       it('should sort friends by some property, when clicking on the column header', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         phoneHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Mary');
-
-         nameHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('Mike');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-       });
-
-       it('should sort friends in reverse order, when clicking on the same column', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-       });
-
-       it('should restore the original order, when clicking "Set to unsorted"', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         unsortButton.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Julie');
-       });
-     </file>
-   </example>
- * <hr />
- *
- * @example
- * ### Using a custom comparator
- *
- * If you have very specific requirements about the way items are sorted, you can pass your own
- * comparator function. For example, you might need to compare some strings in a locale-sensitive
- * way. (When specifying a custom comparator, you also need to pass a value for the `reverse`
- * argument - passing `false` retains the default sorting order, i.e. ascending.)
- *
-   <example name="orderBy-custom-comparator" module="orderByExample4">
-     <file name="index.html">
-       <div ng-controller="ExampleController">
-         <div class="friends-container custom-comparator">
-           <h3>Locale-sensitive Comparator</h3>
-           <table class="friends">
-             <tr>
-               <th>Name</th>
-               <th>Favorite Letter</th>
-             </tr>
-             <tr ng-repeat="friend in friends | orderBy:'favoriteLetter':false:localeSensitiveComparator">
-               <td>{{friend.name}}</td>
-               <td>{{friend.favoriteLetter}}</td>
-             </tr>
-           </table>
-         </div>
-         <div class="friends-container default-comparator">
-           <h3>Default Comparator</h3>
-           <table class="friends">
-             <tr>
-               <th>Name</th>
-               <th>Favorite Letter</th>
-             </tr>
-             <tr ng-repeat="friend in friends | orderBy:'favoriteLetter'">
-               <td>{{friend.name}}</td>
-               <td>{{friend.favoriteLetter}}</td>
-             </tr>
-           </table>
-         </div>
-       </div>
-     </file>
-     <file name="script.js">
-       angular.module('orderByExample4', [])
-         .controller('ExampleController', ['$scope', function($scope) {
-           $scope.friends = [
-             {name: 'John',   favoriteLetter: 'Ä'},
-             {name: 'Mary',   favoriteLetter: 'Ü'},
-             {name: 'Mike',   favoriteLetter: 'Ö'},
-             {name: 'Adam',   favoriteLetter: 'H'},
-             {name: 'Julie',  favoriteLetter: 'Z'}
-           ];
-
-           $scope.localeSensitiveComparator = function(v1, v2) {
-             // If we don't get strings, just compare by index
-             if (v1.type !== 'string' || v2.type !== 'string') {
-               return (v1.index < v2.index) ? -1 : 1;
-             }
-
-             // Compare strings alphabetically, taking locale into account
-             return v1.value.localeCompare(v2.value);
-           };
-         }]);
-     </file>
-     <file name="style.css">
-       .friends-container {
-         display: inline-block;
-         margin: 0 30px;
-       }
-
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var container = element(by.css('.custom-comparator'));
-       var names = container.all(by.repeater('friends').column('friend.name'));
-
-       it('should sort friends by favorite letter (in correct alphabetical order)', function() {
-         expect(names.get(0).getText()).toBe('John');
-         expect(names.get(1).getText()).toBe('Adam');
-         expect(names.get(2).getText()).toBe('Mike');
-         expect(names.get(3).getText()).toBe('Mary');
-         expect(names.get(4).getText()).toBe('Julie');
-       });
-     </file>
-   </example>
- *
+    </file>
+</example>
  */
 orderByFilter.$inject = ['$parse'];
 function orderByFilter($parse) {
-  return function(array, sortPredicate, reverseOrder, compareFn) {
+  return function(array, sortPredicate, reverseOrder) {
 
     if (array == null) return array;
     if (!isArrayLike(array)) {
@@ -32750,12 +30958,11 @@ function orderByFilter($parse) {
     if (!isArray(sortPredicate)) { sortPredicate = [sortPredicate]; }
     if (sortPredicate.length === 0) { sortPredicate = ['+']; }
 
-    var predicates = processPredicates(sortPredicate);
-
-    var descending = reverseOrder ? -1 : 1;
-
-    // Define the `compare()` function. Use a default comparator if none is specified.
-    var compare = isFunction(compareFn) ? compareFn : defaultCompare;
+    var predicates = processPredicates(sortPredicate, reverseOrder);
+    // Add a predicate at the end that evaluates to the element index. This makes the
+    // sort stable as it works as a tie-breaker when all the input predicates cannot
+    // distinguish between two elements.
+    predicates.push({ get: function() { return {}; }, descending: reverseOrder ? -1 : 1});
 
     // The next three lines are a version of a Swartzian Transform idiom from Perl
     // (sometimes called the Decorate-Sort-Undecorate idiom)
@@ -32767,12 +30974,8 @@ function orderByFilter($parse) {
     return array;
 
     function getComparisonObject(value, index) {
-      // NOTE: We are adding an extra `tieBreaker` value based on the element's index.
-      // This will be used to keep the sort stable when none of the input predicates can
-      // distinguish between two elements.
       return {
         value: value,
-        tieBreaker: {value: index, type: 'number', index: index},
         predicateValues: predicates.map(function(predicate) {
           return getPredicateValue(predicate.get(value), index);
         })
@@ -32780,19 +30983,18 @@ function orderByFilter($parse) {
     }
 
     function doComparison(v1, v2) {
-      for (var i = 0, ii = predicates.length; i < ii; i++) {
-        var result = compare(v1.predicateValues[i], v2.predicateValues[i]);
-        if (result) {
-          return result * predicates[i].descending * descending;
-        }
+      var result = 0;
+      for (var index=0, length = predicates.length; index < length; ++index) {
+        result = compare(v1.predicateValues[index], v2.predicateValues[index]) * predicates[index].descending;
+        if (result) break;
       }
-
-      return compare(v1.tieBreaker, v2.tieBreaker) * descending;
+      return result;
     }
   };
 
-  function processPredicates(sortPredicates) {
-    return sortPredicates.map(function(predicate) {
+  function processPredicates(sortPredicate, reverseOrder) {
+    reverseOrder = reverseOrder ? -1 : 1;
+    return sortPredicate.map(function(predicate) {
       var descending = 1, get = identity;
 
       if (isFunction(predicate)) {
@@ -32810,7 +31012,7 @@ function orderByFilter($parse) {
           }
         }
       }
-      return {get: get, descending: descending};
+      return { get: get, descending: descending * reverseOrder };
     });
   }
 
@@ -32825,9 +31027,9 @@ function orderByFilter($parse) {
     }
   }
 
-  function objectValue(value) {
+  function objectValue(value, index) {
     // If `valueOf` is a valid function use that
-    if (isFunction(value.valueOf)) {
+    if (typeof value.valueOf === 'function') {
       value = value.valueOf();
       if (isPrimitive(value)) return value;
     }
@@ -32836,8 +31038,8 @@ function orderByFilter($parse) {
       value = value.toString();
       if (isPrimitive(value)) return value;
     }
-
-    return value;
+    // We have a basic object so we use the position of the object in the collection
+    return index;
   }
 
   function getPredicateValue(value, index) {
@@ -32845,39 +31047,23 @@ function orderByFilter($parse) {
     if (value === null) {
       type = 'string';
       value = 'null';
+    } else if (type === 'string') {
+      value = value.toLowerCase();
     } else if (type === 'object') {
-      value = objectValue(value);
+      value = objectValue(value, index);
     }
-    return {value: value, type: type, index: index};
+    return { value: value, type: type };
   }
 
-  function defaultCompare(v1, v2) {
+  function compare(v1, v2) {
     var result = 0;
-    var type1 = v1.type;
-    var type2 = v2.type;
-
-    if (type1 === type2) {
-      var value1 = v1.value;
-      var value2 = v2.value;
-
-      if (type1 === 'string') {
-        // Compare strings case-insensitively
-        value1 = value1.toLowerCase();
-        value2 = value2.toLowerCase();
-      } else if (type1 === 'object') {
-        // For basic objects, use the position of the object
-        // in the collection instead of the value
-        if (isObject(value1)) value1 = v1.index;
-        if (isObject(value2)) value2 = v2.index;
-      }
-
-      if (value1 !== value2) {
-        result = value1 < value2 ? -1 : 1;
+    if (v1.type === v2.type) {
+      if (v1.value !== v2.value) {
+        result = v1.value < v2.value ? -1 : 1;
       }
     } else {
-      result = type1 < type2 ? -1 : 1;
+      result = v1.type < v2.type ? -1 : 1;
     }
-
     return result;
   }
 }
@@ -33922,9 +32108,7 @@ var ISO_DATE_REGEXP = /^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+(?:[+-
 //   9. Fragment
 //                 1111111111111111 222   333333    44444        555555555555555555555555    666     77777777     8888888     999
 var URL_REGEXP = /^[a-z][a-z\d.+-]*:\/*(?:[^:@]+(?::[^@]+)?@)?(?:[^\s:/?#]+|\[[a-f\d:]+\])(?::\d+)?(?:\/[^?#]*)?(?:\?[^#]*)?(?:#.*)?$/i;
-/* jshint maxlen:220 */
-var EMAIL_REGEXP = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+\/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+\/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
-/* jshint maxlen:200 */
+var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 var NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;
 var DATE_REGEXP = /^(\d{4,})-(\d{2})-(\d{2})$/;
 var DATETIMELOCAL_REGEXP = /^(\d{4,})-(\d\d)-(\d\d)T(\d\d):(\d\d)(?::(\d\d)(\.\d{1,3})?)?$/;
@@ -40445,7 +38629,7 @@ var ngPluralizeDirective = ['$locale', '$interpolate', '$log', function($locale,
  *   it's a prefix used by Angular for public (`$`) and private (`$$`) properties.
  *
  * - The built-in filters {@link ng.orderBy orderBy} and {@link ng.filter filter} do not work with
- *   objects, and will throw an error if used with one.
+ *   objects, and will throw if used with one.
  *
  * If you are hitting any of these limitations, the recommended workaround is to convert your object into an array
  * that is sorted into the order that you prefer before providing it to `ngRepeat`. You could
@@ -42790,11 +40974,11 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],24:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":23}],25:[function(require,module,exports){
+},{"./angular":20}],22:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -42920,9 +41104,9 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],26:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 
-},{}],27:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -43034,7 +41218,7 @@ exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"buffer":28}],28:[function(require,module,exports){
+},{"buffer":25}],25:[function(require,module,exports){
 (function (global){
 /*!
  * The buffer module from node.js, for the browser.
@@ -44586,7 +42770,14 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":25,"ieee754":33,"isarray":36}],29:[function(require,module,exports){
+},{"base64-js":22,"ieee754":31,"isarray":26}],26:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+},{}],27:[function(require,module,exports){
 module.exports = {
   "100": "Continue",
   "101": "Switching Protocols",
@@ -44651,7 +42842,7 @@ module.exports = {
   "511": "Network Authentication Required"
 }
 
-},{}],30:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -44762,7 +42953,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":35}],31:[function(require,module,exports){
+},{"../../is-buffer/index.js":33}],29:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -44822,12 +43013,8 @@ EventEmitter.prototype.emit = function(type) {
       er = arguments[1];
       if (er instanceof Error) {
         throw er; // Unhandled 'error' event
-      } else {
-        // At least give some kind of context to the user
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-        err.context = er;
-        throw err;
       }
+      throw TypeError('Uncaught, unspecified "error" event.');
     }
   }
 
@@ -45066,7 +43253,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],32:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var http = require('http');
 
 var https = module.exports;
@@ -45082,7 +43269,7 @@ https.request = function (params, cb) {
     return http.request.call(this, params, cb);
 }
 
-},{"http":54}],33:[function(require,module,exports){
+},{"http":58}],31:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -45168,7 +43355,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],34:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -45193,7 +43380,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],35:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /**
  * Determine if an object is Buffer
  *
@@ -45212,14 +43399,7 @@ module.exports = function (obj) {
     ))
 }
 
-},{}],36:[function(require,module,exports){
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
-
-},{}],37:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.0.0
  * https://jquery.com/
@@ -55258,7 +53438,7 @@ if ( !noGlobal ) {
 return jQuery;
 } ) );
 
-},{}],38:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -55552,10 +53732,9 @@ Api.prototype = {
    */
   getByID: function(id, options, callback) {
     return this.query(Predicates.at('document.id', id), options, function(err, response) {
-      if (response && response.results.length > 0) {
-        callback(err, response.results[0]);
-      } else {
-        callback(err, null);
+      if (callback) {
+        var result = response.results.length > 0 ? response.results[0] : null;
+        callback(err, result);
       }
     }).then(function(response){
       return response && response.results && response.results[0];
@@ -55581,12 +53760,11 @@ Api.prototype = {
    */
   getByUID: function(type, uid, options, callback) {
     return this.query(Predicates.at('my.'+type+'.uid', uid), options, function(err, response) {
-      if (response && response.results.length > 0) {
-        callback(err, response.results[0]);
-      } else {
-        callback(err, null);
+      if (callback) {
+        var result = response.results.length > 0 ? response.results[0] : null;
+        callback(err, result);
       }
-    }).then(function(response){
+    }).then(function(response) {
       return response && response.results && response.results[0];
     });
   },
@@ -55672,7 +53850,7 @@ Api.prototype = {
     var cache = this.apiCache;
     cache.get(cacheKey, function (err, value) {
       if (err || value) {
-        callback(err, value);
+        callback(err, api.response(value));
         return;
       }
       api.requestHandler(url, function (err, documents, xhr, ttl) {
@@ -55680,25 +53858,32 @@ Api.prototype = {
           callback(err, null, xhr);
           return;
         }
-        var results = documents.results.map(parseDoc);
-        var response = new Response(
-          documents.page,
-          documents.results_per_page,
-          documents.results_size,
-          documents.total_results_size,
-          documents.total_pages,
-          documents.next_page,
-          documents.prev_page,
-          results || []);
+
         if (ttl) {
-          cache.set(cacheKey, response, ttl, function (err) {
-            callback(err, response);
+          cache.set(cacheKey, documents, ttl, function (err) {
+            callback(err, api.response(documents));
           });
         } else {
-          callback(null, response);
+          callback(null, api.response(documents));
         }
       });
     });
+  },
+
+  /**
+   * JSON documents to Response object
+   */
+  response: function(documents){
+    var results = documents.results.map(parseDoc);
+    return new Response(
+      documents.page,
+      documents.results_per_page,
+      documents.results_size,
+      documents.total_results_size,
+      documents.total_pages,
+      documents.next_page,
+      documents.prev_page,
+      results || []);
   }
 
 };
@@ -55827,25 +54012,7 @@ SearchForm.prototype = {
       }
       var stringQueries = [];
       predicates.forEach(function (predicate) {
-        var firstArg = (predicate[1].indexOf("my.") === 0 || predicate[1].indexOf("document") === 0) ? predicate[1]
-              : '"' + predicate[1] + '"';
-        stringQueries.push("[:d = " + predicate[0] + "(" + firstArg +
-                           (predicate.length > 2 ? ", " : "") +
-                           (function() {
-                             return predicate.slice(2).map(function(p) {
-                               if (typeof p === 'string') {
-                                 return '"' + p + '"';
-                               } else if (Array.isArray(p)) {
-                                 return "[" + p.map(function (e) {
-                                   return '"' + e + '"';
-                                 }).join(',') + "]";
-                               } else if (p instanceof Date) {
-                                 return p.getTime();
-                               } else {
-                                 return p;
-                               }
-                             }).join(',');
-                           })() + ")]");
+        stringQueries.push(Predicates.toQuery(predicate));
       });
       return this.query("[" + stringQueries.join("") + "]");
     }
@@ -56059,7 +54226,7 @@ module.exports = {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./cache":39,"./documents":40,"./experiments":41,"./predicates":44,"./requests":46}],39:[function(require,module,exports){
+},{"./cache":36,"./documents":37,"./experiments":38,"./predicates":41,"./requests":43}],36:[function(require,module,exports){
 
 "use strict";
 
@@ -56114,7 +54281,7 @@ ApiCache.prototype = {
 
 module.exports = ApiCache;
 
-},{"./lru":43}],40:[function(require,module,exports){
+},{"./lru":40}],37:[function(require,module,exports){
 "use strict";
 
 /**
@@ -56286,6 +54453,7 @@ WithFragments.prototype = {
     if (fragment instanceof Fragments.Timestamp) {
       return fragment.value;
     }
+    return null;
   },
 
   /**
@@ -56303,6 +54471,7 @@ WithFragments.prototype = {
     if (fragment instanceof Fragments.Date) {
       return fragment.value;
     }
+    return null;
   },
 
   /**
@@ -56335,9 +54504,10 @@ WithFragments.prototype = {
 
     if (fragment instanceof Fragments.StructuredText) {
       return fragment.blocks.map(function(block) {
-        if(block.text) {
+        if (block.text) {
           return block.text + (after ? after : '');
         }
+        return '';
       }).join('\n');
     }
 
@@ -56364,6 +54534,8 @@ WithFragments.prototype = {
         return fragment.value + (after ? after : '');
       }
     }
+
+    return null;
   },
 
   /**
@@ -56700,7 +54872,7 @@ module.exports = {
   GroupDoc: GroupDoc
 };
 
-},{"./fragments":42}],41:[function(require,module,exports){
+},{"./fragments":39}],38:[function(require,module,exports){
 
 "use strict";
 
@@ -56785,7 +54957,7 @@ module.exports = {
   Variation: Variation
 };
 
-},{}],42:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 var documents = require('./documents');
@@ -57013,7 +55185,7 @@ ImageLink.prototype = {
    * @returns {string} - basic HTML code for the fragment
    */
   asHtml: function () {
-    return "<a href=\""+this.url()+"\"><img src=\""+this.url()+"\" alt=\"" + this.alt + "\"></a>";
+    return "<a href=\"" + this.url() + "\"><img src=\"" + this.url() + "\" alt=\"" + (this.alt || "") + "\"></a>";
   },
   /**
    * Returns the URL of the link.
@@ -57172,7 +55344,11 @@ Num.prototype = {
    * @returns {string} - basic text version of the fragment
    */
   asText: function() {
-    return this.value.toString();
+    if (this.value === null) {
+      return null;
+    } else {
+      return this.value.toString();
+    }
   }
 };
 
@@ -57207,7 +55383,11 @@ DateFragment.prototype = {
    * @returns {string} - basic text version of the fragment
    */
   asText: function() {
-    return this.value.toString();
+    if (this.value === null) {
+      return null;
+    } else {
+      return this.value.toString();
+    }
   }
 };
 
@@ -57244,7 +55424,11 @@ Timestamp.prototype = {
    * @returns {string} - basic text version of the fragment
    */
   asText: function() {
-    return this.value.toString();
+    if (this.value === null) {
+      return null;
+    } else {
+      return this.value.toString();
+    }
   }
 };
 
@@ -57382,7 +55566,7 @@ ImageView.prototype = {
    * @returns {string} - basic HTML code for the fragment
    */
   asHtml: function () {
-    return "<img src=\"" + this.url + "\" width=\"" + this.width + "\" height=\"" + this.height + "\" alt=\"" + this.alt + "\">";
+    return "<img src=\"" + this.url + "\" width=\"" + this.width + "\" height=\"" + this.height + "\" alt=\"" + (this.alt || "") + "\">";
   },
 
   /**
@@ -57990,7 +56174,7 @@ function serialize(element, content, htmlSerializer) {
 
   if (element.type == "image") {
     var label = element.label ? (" " + element.label) : "";
-    var imgTag = '<img src="' + element.url + '" alt="' + element.alt + '">';
+    var imgTag = '<img src="' + element.url + '" alt="' + (element.alt || "") + '">';
     return '<p class="block-img' + label + '">' +
       (element.linkUrl ? ('<a href="' + element.linkUrl + '">' + imgTag + '</a>') : imgTag) +
       '</p>';
@@ -58039,7 +56223,7 @@ module.exports = {
   insertSpans: insertSpans
 };
 
-},{"./documents":40}],43:[function(require,module,exports){
+},{"./documents":37}],40:[function(require,module,exports){
 
 /**
  * A doubly linked list-based Least Recently Used (LRU) cache. Will keep most
@@ -58093,6 +56277,7 @@ LRUCache.prototype.put = function(key, value) {
     // increase the size counter
     this.size++;
   }
+  return null;
 };
 
 /**
@@ -58292,9 +56477,13 @@ LRUCache.prototype.toString = function() {
 
 module.exports = LRUCache;
 
-},{}],44:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 
 "use strict";
+
+function clean(s) {
+  return s.replace(/"/g, "");
+}
 
 /**
  * @global
@@ -58302,6 +56491,33 @@ module.exports = LRUCache;
  * @alias Predicates
  */
 module.exports = {
+
+  /**
+   * Convert a predicate (array of 3 elements) into a query for prismic.io (string)
+   */
+  toQuery: function (predicate) {
+    var pred = clean(predicate[0]);
+    var first = clean(predicate[1]);
+    var firstArg = (first.indexOf("my.") === 0 || first.indexOf("document") === 0) ? first
+                 : '"' + first + '"';
+    return "[:d = " + pred + "(" + firstArg +
+      (predicate.length > 2 ? ", " : "") +
+      (function() {
+        return predicate.slice(2).map(function(p) {
+          if (typeof p === 'string') {
+            return '"' + clean(p) + '"';
+          } else if (Array.isArray(p)) {
+            return "[" + p.map(function (e) {
+              return '"' + clean(e) + '"';
+            }).join(',') + "]";
+          } else if (p instanceof Date) {
+            return p.getTime();
+          } else {
+            return p;
+          }
+        }).join(',');
+      })() + ")]";
+  },
 
   /**
    * Build an "at" predicate: equality of a fragment to a value.
@@ -58574,7 +56790,7 @@ module.exports = {
 
 };
 
-},{}],45:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 
 var experiments = require('./experiments'),
@@ -58652,7 +56868,7 @@ module.exports = {
 
 module.exports.Prismic = module.exports; // Backward compatibility
 
-},{"./api":38,"./documents":40,"./experiments":41,"./fragments":42,"./predicates":44}],46:[function(require,module,exports){
+},{"./api":35,"./documents":37,"./experiments":38,"./fragments":39,"./predicates":41}],43:[function(require,module,exports){
 (function (process){
 
 "use strict";
@@ -58711,6 +56927,7 @@ var ajaxRequest = (function() {
       xhr.send();
     };
   }
+  return null;
 });
 
 var xdomainRequest = (function() {
@@ -58754,6 +56971,7 @@ var xdomainRequest = (function() {
       xdr.send();
     };
   }
+  return null;
 });
 
 
@@ -58791,6 +57009,7 @@ var fetchRequest = (function() {
       });
     };
   }
+  return null;
 });
 
 var nodeJSRequest = (function() {
@@ -58855,6 +57074,7 @@ var nodeJSRequest = (function() {
 
     };
   }
+  return null;
 });
 
 // Number of maximum simultaneous connections to the prismic server
@@ -58893,12 +57113,81 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"../package.json":47,"_process":49,"http":54,"https":32,"url":66}],47:[function(require,module,exports){
+},{"../package.json":44,"_process":46,"http":58,"https":30,"url":64}],44:[function(require,module,exports){
 module.exports={
-  "name": "prismic.io",
+  "_args": [
+    [
+      {
+        "raw": "prismic.io@^2.1.3",
+        "scope": null,
+        "escapedName": "prismic.io",
+        "name": "prismic.io",
+        "rawSpec": "^2.1.3",
+        "spec": ">=2.1.3 <3.0.0",
+        "type": "range"
+      },
+      "/Users/eliafornari/Desktop/web_Q/alyx"
+    ]
+  ],
+  "_from": "prismic.io@>=2.1.3 <3.0.0",
+  "_id": "prismic.io@2.1.6",
+  "_inCache": true,
+  "_location": "/prismic.io",
+  "_nodeVersion": "5.7.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/prismic.io-2.1.6.tgz_1461164364930_0.9591983933933079"
+  },
+  "_npmUser": {
+    "name": "eloisant",
+    "email": "eloisant@gmail.com"
+  },
+  "_npmVersion": "3.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "prismic.io@^2.1.3",
+    "scope": null,
+    "escapedName": "prismic.io",
+    "name": "prismic.io",
+    "rawSpec": "^2.1.3",
+    "spec": ">=2.1.3 <3.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/prismic.io/-/prismic.io-2.1.6.tgz",
+  "_shasum": "f8bca2c9bc7a243dde49fee4b94f43fb211c72a3",
+  "_shrinkwrap": null,
+  "_spec": "prismic.io@^2.1.3",
+  "_where": "/Users/eliafornari/Desktop/web_Q/alyx",
+  "bugs": {
+    "url": "https://github.com/prismicio/javascript-kit/issues"
+  },
+  "dependencies": {},
   "description": "JavaScript development kit for prismic.io",
-  "license": "Apache-2.0",
-  "url": "https://github.com/prismicio/javascript-kit",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "chai": "*",
+    "codeclimate-test-reporter": "~0.0.4",
+    "es6-promise": "^3.0.2",
+    "eslint": "^2.7.0",
+    "gh-pages": "^0.8.0",
+    "jsdoc": "^3.4.0",
+    "mocha": "*",
+    "uglify-js": "^2.6.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "f8bca2c9bc7a243dde49fee4b94f43fb211c72a3",
+    "tarball": "https://registry.npmjs.org/prismic.io/-/prismic.io-2.1.6.tgz"
+  },
+  "gitHead": "649ae7bc41da9b2dc36c0065fd135c68bd2871ba",
+  "homepage": "https://github.com/prismicio/javascript-kit#readme",
   "keywords": [
     "prismic",
     "prismic.io",
@@ -58906,53 +57195,8 @@ module.exports={
     "content",
     "api"
   ],
-  "version": "2.1.3",
-  "devDependencies": {
-    "uglify-js": "^2.6.1",
-    "babel-preset-es2015": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browserify": "^12.0.1",
-    "chai": "*",
-    "codeclimate-test-reporter": "~0.0.4",
-    "es6-promise": "^3.0.2",
-    "eslint": "^1.10.3",
-    "gh-pages": "^0.8.0",
-    "jsdoc": "^3.4.0",
-    "mocha": "*",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/prismicio/javascript-kit.git"
-  },
+  "license": "Apache-2.0",
   "main": "lib/prismic.js",
-  "scripts": {
-    "build": "scripts/browser.js",
-    "uglify": "uglifyjs -c -o=dist/prismic.io.min.js dist/prismic.io.js",
-    "preuglify": "npm run build",
-    "prepublish": "npm run uglify",
-    "lint": "eslint lib",
-    "test": "mocha -t 5000",
-    "posttest": "eslint lib",
-    "builddoc": "jsdoc dist/prismic.io.js README.md",
-    "pushdoc": "scripts/pushdoc.js",
-    "prepushdoc": "npm run builddoc"
-  },
-  "gitHead": "8492b4d57570b56d0f2a23390dd0074f47aca766",
-  "bugs": {
-    "url": "https://github.com/prismicio/javascript-kit/issues"
-  },
-  "homepage": "https://github.com/prismicio/javascript-kit#readme",
-  "_id": "prismic.io@2.1.3",
-  "_shasum": "2caf5db4b576b52e114f6d5f33a55933a9c07cb4",
-  "_from": "prismic.io@*",
-  "_npmVersion": "3.6.0",
-  "_nodeVersion": "5.7.0",
-  "_npmUser": {
-    "name": "eloisant",
-    "email": "eloisant@gmail.com"
-  },
   "maintainers": [
     {
       "name": "dohzya",
@@ -58971,20 +57215,30 @@ module.exports={
       "email": "srenault.contact@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "2caf5db4b576b52e114f6d5f33a55933a9c07cb4",
-    "tarball": "http://registry.npmjs.org/prismic.io/-/prismic.io-2.1.3.tgz"
+  "name": "prismic.io",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/prismicio/javascript-kit.git"
   },
-  "_npmOperationalInternal": {
-    "host": "packages-5-east.internal.npmjs.com",
-    "tmp": "tmp/prismic.io-2.1.3.tgz_1456850708844_0.8965084289666265"
+  "scripts": {
+    "build": "scripts/browser.js",
+    "builddoc": "jsdoc dist/prismic.io.js README.md",
+    "lint": "eslint lib",
+    "posttest": "eslint lib",
+    "prepublish": "npm run uglify",
+    "prepushdoc": "npm run builddoc",
+    "preuglify": "npm run build",
+    "pushdoc": "scripts/pushdoc.js",
+    "test": "mocha -t 5000",
+    "uglify": "uglifyjs -c -o=dist/prismic.io.min.js dist/prismic.io.js"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/prismic.io/-/prismic.io-2.1.3.tgz",
-  "readme": "ERROR: No README data found!"
+  "url": "https://github.com/prismicio/javascript-kit",
+  "version": "2.1.6"
 }
 
-},{}],48:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -59031,35 +57285,10 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 }).call(this,require('_process'))
-},{"_process":49}],49:[function(require,module,exports){
+},{"_process":46}],46:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-(function () {
-  try {
-    cachedSetTimeout = setTimeout;
-  } catch (e) {
-    cachedSetTimeout = function () {
-      throw new Error('setTimeout is not defined');
-    }
-  }
-  try {
-    cachedClearTimeout = clearTimeout;
-  } catch (e) {
-    cachedClearTimeout = function () {
-      throw new Error('clearTimeout is not defined');
-    }
-  }
-} ())
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -59084,7 +57313,7 @@ function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = cachedSetTimeout(cleanUpNextTick);
+    var timeout = setTimeout(cleanUpNextTick);
     draining = true;
 
     var len = queue.length;
@@ -59101,7 +57330,7 @@ function drainQueue() {
     }
     currentQueue = null;
     draining = false;
-    cachedClearTimeout(timeout);
+    clearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
@@ -59113,7 +57342,7 @@ process.nextTick = function (fun) {
     }
     queue.push(new Item(fun, args));
     if (queue.length === 1 && !draining) {
-        cachedSetTimeout(drainQueue, 0);
+        setTimeout(drainQueue, 0);
     }
 };
 
@@ -59152,7 +57381,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],50:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -59689,7 +57918,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],51:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -59775,7 +58004,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],52:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -59862,604 +58091,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],53:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":51,"./encode":52}],54:[function(require,module,exports){
-(function (global){
-var ClientRequest = require('./lib/request')
-var extend = require('xtend')
-var statusCodes = require('builtin-status-codes')
-var url = require('url')
-
-var http = exports
-
-http.request = function (opts, cb) {
-	if (typeof opts === 'string')
-		opts = url.parse(opts)
-	else
-		opts = extend(opts)
-
-	// Normally, the page is loaded from http or https, so not specifying a protocol
-	// will result in a (valid) protocol-relative url. However, this won't work if
-	// the protocol is something else, like 'file:'
-	var defaultProtocol = global.location.protocol.search(/^https?:$/) === -1 ? 'http:' : ''
-
-	var protocol = opts.protocol || defaultProtocol
-	var host = opts.hostname || opts.host
-	var port = opts.port
-	var path = opts.path || '/'
-
-	// Necessary for IPv6 addresses
-	if (host && host.indexOf(':') !== -1)
-		host = '[' + host + ']'
-
-	// This may be a relative url. The browser should always be able to interpret it correctly.
-	opts.url = (host ? (protocol + '//' + host) : '') + (port ? ':' + port : '') + path
-	opts.method = (opts.method || 'GET').toUpperCase()
-	opts.headers = opts.headers || {}
-
-	// Also valid opts.auth, opts.mode
-
-	var req = new ClientRequest(opts)
-	if (cb)
-		req.on('response', cb)
-	return req
-}
-
-http.get = function get (opts, cb) {
-	var req = http.request(opts, cb)
-	req.end()
-	return req
-}
-
-http.Agent = function () {}
-http.Agent.defaultMaxSockets = 4
-
-http.STATUS_CODES = statusCodes
-
-http.METHODS = [
-	'CHECKOUT',
-	'CONNECT',
-	'COPY',
-	'DELETE',
-	'GET',
-	'HEAD',
-	'LOCK',
-	'M-SEARCH',
-	'MERGE',
-	'MKACTIVITY',
-	'MKCOL',
-	'MOVE',
-	'NOTIFY',
-	'OPTIONS',
-	'PATCH',
-	'POST',
-	'PROPFIND',
-	'PROPPATCH',
-	'PURGE',
-	'PUT',
-	'REPORT',
-	'SEARCH',
-	'SUBSCRIBE',
-	'TRACE',
-	'UNLOCK',
-	'UNSUBSCRIBE'
-]
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/request":56,"builtin-status-codes":29,"url":66,"xtend":69}],55:[function(require,module,exports){
-(function (global){
-exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableByteStream)
-
-exports.blobConstructor = false
-try {
-	new Blob([new ArrayBuffer(1)])
-	exports.blobConstructor = true
-} catch (e) {}
-
-var xhr = new global.XMLHttpRequest()
-// If location.host is empty, e.g. if this page/worker was loaded
-// from a Blob, then use example.com to avoid an error
-xhr.open('GET', global.location.host ? '/' : 'https://example.com')
-
-function checkTypeSupport (type) {
-	try {
-		xhr.responseType = type
-		return xhr.responseType === type
-	} catch (e) {}
-	return false
-}
-
-// For some strange reason, Safari 7.0 reports typeof global.ArrayBuffer === 'object'.
-// Safari 7.1 appears to have fixed this bug.
-var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
-var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
-
-exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
-// These next two tests unavoidably show warnings in Chrome. Since fetch will always
-// be used if it's available, just return false for these to avoid the warnings.
-exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
-exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
-	checkTypeSupport('moz-chunked-arraybuffer')
-exports.overrideMimeType = isFunction(xhr.overrideMimeType)
-exports.vbArray = isFunction(global.VBArray)
-
-function isFunction (value) {
-  return typeof value === 'function'
-}
-
-xhr = null // Help gc
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],56:[function(require,module,exports){
-(function (process,global,Buffer){
-var capability = require('./capability')
-var inherits = require('inherits')
-var response = require('./response')
-var stream = require('readable-stream')
-var toArrayBuffer = require('to-arraybuffer')
-
-var IncomingMessage = response.IncomingMessage
-var rStates = response.readyStates
-
-function decideMode (preferBinary) {
-	if (capability.fetch) {
-		return 'fetch'
-	} else if (capability.mozchunkedarraybuffer) {
-		return 'moz-chunked-arraybuffer'
-	} else if (capability.msstream) {
-		return 'ms-stream'
-	} else if (capability.arraybuffer && preferBinary) {
-		return 'arraybuffer'
-	} else if (capability.vbArray && preferBinary) {
-		return 'text:vbarray'
-	} else {
-		return 'text'
-	}
-}
-
-var ClientRequest = module.exports = function (opts) {
-	var self = this
-	stream.Writable.call(self)
-
-	self._opts = opts
-	self._body = []
-	self._headers = {}
-	if (opts.auth)
-		self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64'))
-	Object.keys(opts.headers).forEach(function (name) {
-		self.setHeader(name, opts.headers[name])
-	})
-
-	var preferBinary
-	if (opts.mode === 'prefer-streaming') {
-		// If streaming is a high priority but binary compatibility and
-		// the accuracy of the 'content-type' header aren't
-		preferBinary = false
-	} else if (opts.mode === 'allow-wrong-content-type') {
-		// If streaming is more important than preserving the 'content-type' header
-		preferBinary = !capability.overrideMimeType
-	} else if (!opts.mode || opts.mode === 'default' || opts.mode === 'prefer-fast') {
-		// Use binary if text streaming may corrupt data or the content-type header, or for speed
-		preferBinary = true
-	} else {
-		throw new Error('Invalid value for opts.mode')
-	}
-	self._mode = decideMode(preferBinary)
-
-	self.on('finish', function () {
-		self._onFinish()
-	})
-}
-
-inherits(ClientRequest, stream.Writable)
-
-ClientRequest.prototype.setHeader = function (name, value) {
-	var self = this
-	var lowerName = name.toLowerCase()
-	// This check is not necessary, but it prevents warnings from browsers about setting unsafe
-	// headers. To be honest I'm not entirely sure hiding these warnings is a good thing, but
-	// http-browserify did it, so I will too.
-	if (unsafeHeaders.indexOf(lowerName) !== -1)
-		return
-
-	self._headers[lowerName] = {
-		name: name,
-		value: value
-	}
-}
-
-ClientRequest.prototype.getHeader = function (name) {
-	var self = this
-	return self._headers[name.toLowerCase()].value
-}
-
-ClientRequest.prototype.removeHeader = function (name) {
-	var self = this
-	delete self._headers[name.toLowerCase()]
-}
-
-ClientRequest.prototype._onFinish = function () {
-	var self = this
-
-	if (self._destroyed)
-		return
-	var opts = self._opts
-
-	var headersObj = self._headers
-	var body
-	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH') {
-		if (capability.blobConstructor) {
-			body = new global.Blob(self._body.map(function (buffer) {
-				return toArrayBuffer(buffer)
-			}), {
-				type: (headersObj['content-type'] || {}).value || ''
-			})
-		} else {
-			// get utf8 string
-			body = Buffer.concat(self._body).toString()
-		}
-	}
-
-	if (self._mode === 'fetch') {
-		var headers = Object.keys(headersObj).map(function (name) {
-			return [headersObj[name].name, headersObj[name].value]
-		})
-
-		global.fetch(self._opts.url, {
-			method: self._opts.method,
-			headers: headers,
-			body: body,
-			mode: 'cors',
-			credentials: opts.withCredentials ? 'include' : 'same-origin'
-		}).then(function (response) {
-			self._fetchResponse = response
-			self._connect()
-		}, function (reason) {
-			self.emit('error', reason)
-		})
-	} else {
-		var xhr = self._xhr = new global.XMLHttpRequest()
-		try {
-			xhr.open(self._opts.method, self._opts.url, true)
-		} catch (err) {
-			process.nextTick(function () {
-				self.emit('error', err)
-			})
-			return
-		}
-
-		// Can't set responseType on really old browsers
-		if ('responseType' in xhr)
-			xhr.responseType = self._mode.split(':')[0]
-
-		if ('withCredentials' in xhr)
-			xhr.withCredentials = !!opts.withCredentials
-
-		if (self._mode === 'text' && 'overrideMimeType' in xhr)
-			xhr.overrideMimeType('text/plain; charset=x-user-defined')
-
-		Object.keys(headersObj).forEach(function (name) {
-			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
-		})
-
-		self._response = null
-		xhr.onreadystatechange = function () {
-			switch (xhr.readyState) {
-				case rStates.LOADING:
-				case rStates.DONE:
-					self._onXHRProgress()
-					break
-			}
-		}
-		// Necessary for streaming in Firefox, since xhr.response is ONLY defined
-		// in onprogress, not in onreadystatechange with xhr.readyState = 3
-		if (self._mode === 'moz-chunked-arraybuffer') {
-			xhr.onprogress = function () {
-				self._onXHRProgress()
-			}
-		}
-
-		xhr.onerror = function () {
-			if (self._destroyed)
-				return
-			self.emit('error', new Error('XHR error'))
-		}
-
-		try {
-			xhr.send(body)
-		} catch (err) {
-			process.nextTick(function () {
-				self.emit('error', err)
-			})
-			return
-		}
-	}
-}
-
-/**
- * Checks if xhr.status is readable and non-zero, indicating no error.
- * Even though the spec says it should be available in readyState 3,
- * accessing it throws an exception in IE8
- */
-function statusValid (xhr) {
-	try {
-		var status = xhr.status
-		return (status !== null && status !== 0)
-	} catch (e) {
-		return false
-	}
-}
-
-ClientRequest.prototype._onXHRProgress = function () {
-	var self = this
-
-	if (!statusValid(self._xhr) || self._destroyed)
-		return
-
-	if (!self._response)
-		self._connect()
-
-	self._response._onXHRProgress()
-}
-
-ClientRequest.prototype._connect = function () {
-	var self = this
-
-	if (self._destroyed)
-		return
-
-	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode)
-	self.emit('response', self._response)
-}
-
-ClientRequest.prototype._write = function (chunk, encoding, cb) {
-	var self = this
-
-	self._body.push(chunk)
-	cb()
-}
-
-ClientRequest.prototype.abort = ClientRequest.prototype.destroy = function () {
-	var self = this
-	self._destroyed = true
-	if (self._response)
-		self._response._destroyed = true
-	if (self._xhr)
-		self._xhr.abort()
-	// Currently, there isn't a way to truly abort a fetch.
-	// If you like bikeshedding, see https://github.com/whatwg/fetch/issues/27
-}
-
-ClientRequest.prototype.end = function (data, encoding, cb) {
-	var self = this
-	if (typeof data === 'function') {
-		cb = data
-		data = undefined
-	}
-
-	stream.Writable.prototype.end.call(self, data, encoding, cb)
-}
-
-ClientRequest.prototype.flushHeaders = function () {}
-ClientRequest.prototype.setTimeout = function () {}
-ClientRequest.prototype.setNoDelay = function () {}
-ClientRequest.prototype.setSocketKeepAlive = function () {}
-
-// Taken from http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader%28%29-method
-var unsafeHeaders = [
-	'accept-charset',
-	'accept-encoding',
-	'access-control-request-headers',
-	'access-control-request-method',
-	'connection',
-	'content-length',
-	'cookie',
-	'cookie2',
-	'date',
-	'dnt',
-	'expect',
-	'host',
-	'keep-alive',
-	'origin',
-	'referer',
-	'te',
-	'trailer',
-	'transfer-encoding',
-	'upgrade',
-	'user-agent',
-	'via'
-]
-
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":55,"./response":57,"_process":49,"buffer":28,"inherits":34,"readable-stream":63,"to-arraybuffer":65}],57:[function(require,module,exports){
-(function (process,global,Buffer){
-var capability = require('./capability')
-var inherits = require('inherits')
-var stream = require('readable-stream')
-
-var rStates = exports.readyStates = {
-	UNSENT: 0,
-	OPENED: 1,
-	HEADERS_RECEIVED: 2,
-	LOADING: 3,
-	DONE: 4
-}
-
-var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
-	var self = this
-	stream.Readable.call(self)
-
-	self._mode = mode
-	self.headers = {}
-	self.rawHeaders = []
-	self.trailers = {}
-	self.rawTrailers = []
-
-	// Fake the 'close' event, but only once 'end' fires
-	self.on('end', function () {
-		// The nextTick is necessary to prevent the 'request' module from causing an infinite loop
-		process.nextTick(function () {
-			self.emit('close')
-		})
-	})
-
-	if (mode === 'fetch') {
-		self._fetchResponse = response
-
-		self.url = response.url
-		self.statusCode = response.status
-		self.statusMessage = response.statusText
-		// backwards compatible version of for (<item> of <iterable>):
-		// for (var <item>,_i,_it = <iterable>[Symbol.iterator](); <item> = (_i = _it.next()).value,!_i.done;)
-		for (var header, _i, _it = response.headers[Symbol.iterator](); header = (_i = _it.next()).value, !_i.done;) {
-			self.headers[header[0].toLowerCase()] = header[1]
-			self.rawHeaders.push(header[0], header[1])
-		}
-
-		// TODO: this doesn't respect backpressure. Once WritableStream is available, this can be fixed
-		var reader = response.body.getReader()
-		function read () {
-			reader.read().then(function (result) {
-				if (self._destroyed)
-					return
-				if (result.done) {
-					self.push(null)
-					return
-				}
-				self.push(new Buffer(result.value))
-				read()
-			})
-		}
-		read()
-
-	} else {
-		self._xhr = xhr
-		self._pos = 0
-
-		self.url = xhr.responseURL
-		self.statusCode = xhr.status
-		self.statusMessage = xhr.statusText
-		var headers = xhr.getAllResponseHeaders().split(/\r?\n/)
-		headers.forEach(function (header) {
-			var matches = header.match(/^([^:]+):\s*(.*)/)
-			if (matches) {
-				var key = matches[1].toLowerCase()
-				if (key === 'set-cookie') {
-					if (self.headers[key] === undefined) {
-						self.headers[key] = []
-					}
-					self.headers[key].push(matches[2])
-				} else if (self.headers[key] !== undefined) {
-					self.headers[key] += ', ' + matches[2]
-				} else {
-					self.headers[key] = matches[2]
-				}
-				self.rawHeaders.push(matches[1], matches[2])
-			}
-		})
-
-		self._charset = 'x-user-defined'
-		if (!capability.overrideMimeType) {
-			var mimeType = self.rawHeaders['mime-type']
-			if (mimeType) {
-				var charsetMatch = mimeType.match(/;\s*charset=([^;])(;|$)/)
-				if (charsetMatch) {
-					self._charset = charsetMatch[1].toLowerCase()
-				}
-			}
-			if (!self._charset)
-				self._charset = 'utf-8' // best guess
-		}
-	}
-}
-
-inherits(IncomingMessage, stream.Readable)
-
-IncomingMessage.prototype._read = function () {}
-
-IncomingMessage.prototype._onXHRProgress = function () {
-	var self = this
-
-	var xhr = self._xhr
-
-	var response = null
-	switch (self._mode) {
-		case 'text:vbarray': // For IE9
-			if (xhr.readyState !== rStates.DONE)
-				break
-			try {
-				// This fails in IE8
-				response = new global.VBArray(xhr.responseBody).toArray()
-			} catch (e) {}
-			if (response !== null) {
-				self.push(new Buffer(response))
-				break
-			}
-			// Falls through in IE8	
-		case 'text':
-			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
-				response = xhr.responseText
-			} catch (e) {
-				self._mode = 'text:vbarray'
-				break
-			}
-			if (response.length > self._pos) {
-				var newData = response.substr(self._pos)
-				if (self._charset === 'x-user-defined') {
-					var buffer = new Buffer(newData.length)
-					for (var i = 0; i < newData.length; i++)
-						buffer[i] = newData.charCodeAt(i) & 0xff
-
-					self.push(buffer)
-				} else {
-					self.push(newData, self._charset)
-				}
-				self._pos = response.length
-			}
-			break
-		case 'arraybuffer':
-			if (xhr.readyState !== rStates.DONE)
-				break
-			response = xhr.response
-			self.push(new Buffer(new Uint8Array(response)))
-			break
-		case 'moz-chunked-arraybuffer': // take whole
-			response = xhr.response
-			if (xhr.readyState !== rStates.LOADING || !response)
-				break
-			self.push(new Buffer(new Uint8Array(response)))
-			break
-		case 'ms-stream':
-			response = xhr.response
-			if (xhr.readyState !== rStates.LOADING)
-				break
-			var reader = new global.MSStreamReader()
-			reader.onprogress = function () {
-				if (reader.result.byteLength > self._pos) {
-					self.push(new Buffer(new Uint8Array(reader.result.slice(self._pos))))
-					self._pos = reader.result.byteLength
-				}
-			}
-			reader.onload = function () {
-				self.push(null)
-			}
-			// reader.onerror = ??? // TODO: this
-			reader.readAsArrayBuffer(response)
-			break
-	}
-
-	// The ms-stream case handles end separately in reader.onload()
-	if (self._xhr.readyState === rStates.DONE && self._mode !== 'ms-stream') {
-		self.push(null)
-	}
-}
-
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":55,"_process":49,"buffer":28,"inherits":34,"readable-stream":63}],58:[function(require,module,exports){
+},{"./decode":48,"./encode":49}],51:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -60535,7 +58173,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":60,"./_stream_writable":62,"core-util-is":30,"inherits":34,"process-nextick-args":48}],59:[function(require,module,exports){
+},{"./_stream_readable":53,"./_stream_writable":55,"core-util-is":28,"inherits":32,"process-nextick-args":45}],52:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -60562,7 +58200,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":61,"core-util-is":30,"inherits":34}],60:[function(require,module,exports){
+},{"./_stream_transform":54,"core-util-is":28,"inherits":32}],53:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -61458,7 +59096,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":58,"_process":49,"buffer":28,"buffer-shims":27,"core-util-is":30,"events":31,"inherits":34,"isarray":36,"process-nextick-args":48,"string_decoder/":64,"util":26}],61:[function(require,module,exports){
+},{"./_stream_duplex":51,"_process":46,"buffer":25,"buffer-shims":24,"core-util-is":28,"events":29,"inherits":32,"isarray":56,"process-nextick-args":45,"string_decoder/":62,"util":23}],54:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -61639,7 +59277,7 @@ function done(stream, er) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":58,"core-util-is":30,"inherits":34}],62:[function(require,module,exports){
+},{"./_stream_duplex":51,"core-util-is":28,"inherits":32}],55:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -62168,7 +59806,9 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":58,"_process":49,"buffer":28,"buffer-shims":27,"core-util-is":30,"events":31,"inherits":34,"process-nextick-args":48,"util-deprecate":68}],63:[function(require,module,exports){
+},{"./_stream_duplex":51,"_process":46,"buffer":25,"buffer-shims":24,"core-util-is":28,"events":29,"inherits":32,"process-nextick-args":45,"util-deprecate":66}],56:[function(require,module,exports){
+arguments[4][26][0].apply(exports,arguments)
+},{"dup":26}],57:[function(require,module,exports){
 (function (process){
 var Stream = (function (){
   try {
@@ -62188,7 +59828,598 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 }
 
 }).call(this,require('_process'))
-},{"./lib/_stream_duplex.js":58,"./lib/_stream_passthrough.js":59,"./lib/_stream_readable.js":60,"./lib/_stream_transform.js":61,"./lib/_stream_writable.js":62,"_process":49}],64:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":51,"./lib/_stream_passthrough.js":52,"./lib/_stream_readable.js":53,"./lib/_stream_transform.js":54,"./lib/_stream_writable.js":55,"_process":46}],58:[function(require,module,exports){
+(function (global){
+var ClientRequest = require('./lib/request')
+var extend = require('xtend')
+var statusCodes = require('builtin-status-codes')
+var url = require('url')
+
+var http = exports
+
+http.request = function (opts, cb) {
+	if (typeof opts === 'string')
+		opts = url.parse(opts)
+	else
+		opts = extend(opts)
+
+	// Normally, the page is loaded from http or https, so not specifying a protocol
+	// will result in a (valid) protocol-relative url. However, this won't work if
+	// the protocol is something else, like 'file:'
+	var defaultProtocol = global.location.protocol.search(/^https?:$/) === -1 ? 'http:' : ''
+
+	var protocol = opts.protocol || defaultProtocol
+	var host = opts.hostname || opts.host
+	var port = opts.port
+	var path = opts.path || '/'
+
+	// Necessary for IPv6 addresses
+	if (host && host.indexOf(':') !== -1)
+		host = '[' + host + ']'
+
+	// This may be a relative url. The browser should always be able to interpret it correctly.
+	opts.url = (host ? (protocol + '//' + host) : '') + (port ? ':' + port : '') + path
+	opts.method = (opts.method || 'GET').toUpperCase()
+	opts.headers = opts.headers || {}
+
+	// Also valid opts.auth, opts.mode
+
+	var req = new ClientRequest(opts)
+	if (cb)
+		req.on('response', cb)
+	return req
+}
+
+http.get = function get (opts, cb) {
+	var req = http.request(opts, cb)
+	req.end()
+	return req
+}
+
+http.Agent = function () {}
+http.Agent.defaultMaxSockets = 4
+
+http.STATUS_CODES = statusCodes
+
+http.METHODS = [
+	'CHECKOUT',
+	'CONNECT',
+	'COPY',
+	'DELETE',
+	'GET',
+	'HEAD',
+	'LOCK',
+	'M-SEARCH',
+	'MERGE',
+	'MKACTIVITY',
+	'MKCOL',
+	'MOVE',
+	'NOTIFY',
+	'OPTIONS',
+	'PATCH',
+	'POST',
+	'PROPFIND',
+	'PROPPATCH',
+	'PURGE',
+	'PUT',
+	'REPORT',
+	'SEARCH',
+	'SUBSCRIBE',
+	'TRACE',
+	'UNLOCK',
+	'UNSUBSCRIBE'
+]
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./lib/request":60,"builtin-status-codes":27,"url":64,"xtend":67}],59:[function(require,module,exports){
+(function (global){
+exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableByteStream)
+
+exports.blobConstructor = false
+try {
+	new Blob([new ArrayBuffer(1)])
+	exports.blobConstructor = true
+} catch (e) {}
+
+var xhr = new global.XMLHttpRequest()
+// If location.host is empty, e.g. if this page/worker was loaded
+// from a Blob, then use example.com to avoid an error
+xhr.open('GET', global.location.host ? '/' : 'https://example.com')
+
+function checkTypeSupport (type) {
+	try {
+		xhr.responseType = type
+		return xhr.responseType === type
+	} catch (e) {}
+	return false
+}
+
+// For some strange reason, Safari 7.0 reports typeof global.ArrayBuffer === 'object'.
+// Safari 7.1 appears to have fixed this bug.
+var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
+var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
+
+exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
+// These next two tests unavoidably show warnings in Chrome. Since fetch will always
+// be used if it's available, just return false for these to avoid the warnings.
+exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
+exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
+	checkTypeSupport('moz-chunked-arraybuffer')
+exports.overrideMimeType = isFunction(xhr.overrideMimeType)
+exports.vbArray = isFunction(global.VBArray)
+
+function isFunction (value) {
+  return typeof value === 'function'
+}
+
+xhr = null // Help gc
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],60:[function(require,module,exports){
+(function (process,global,Buffer){
+var capability = require('./capability')
+var inherits = require('inherits')
+var response = require('./response')
+var stream = require('readable-stream')
+var toArrayBuffer = require('to-arraybuffer')
+
+var IncomingMessage = response.IncomingMessage
+var rStates = response.readyStates
+
+function decideMode (preferBinary) {
+	if (capability.fetch) {
+		return 'fetch'
+	} else if (capability.mozchunkedarraybuffer) {
+		return 'moz-chunked-arraybuffer'
+	} else if (capability.msstream) {
+		return 'ms-stream'
+	} else if (capability.arraybuffer && preferBinary) {
+		return 'arraybuffer'
+	} else if (capability.vbArray && preferBinary) {
+		return 'text:vbarray'
+	} else {
+		return 'text'
+	}
+}
+
+var ClientRequest = module.exports = function (opts) {
+	var self = this
+	stream.Writable.call(self)
+
+	self._opts = opts
+	self._body = []
+	self._headers = {}
+	if (opts.auth)
+		self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64'))
+	Object.keys(opts.headers).forEach(function (name) {
+		self.setHeader(name, opts.headers[name])
+	})
+
+	var preferBinary
+	if (opts.mode === 'prefer-streaming') {
+		// If streaming is a high priority but binary compatibility and
+		// the accuracy of the 'content-type' header aren't
+		preferBinary = false
+	} else if (opts.mode === 'allow-wrong-content-type') {
+		// If streaming is more important than preserving the 'content-type' header
+		preferBinary = !capability.overrideMimeType
+	} else if (!opts.mode || opts.mode === 'default' || opts.mode === 'prefer-fast') {
+		// Use binary if text streaming may corrupt data or the content-type header, or for speed
+		preferBinary = true
+	} else {
+		throw new Error('Invalid value for opts.mode')
+	}
+	self._mode = decideMode(preferBinary)
+
+	self.on('finish', function () {
+		self._onFinish()
+	})
+}
+
+inherits(ClientRequest, stream.Writable)
+
+ClientRequest.prototype.setHeader = function (name, value) {
+	var self = this
+	var lowerName = name.toLowerCase()
+	// This check is not necessary, but it prevents warnings from browsers about setting unsafe
+	// headers. To be honest I'm not entirely sure hiding these warnings is a good thing, but
+	// http-browserify did it, so I will too.
+	if (unsafeHeaders.indexOf(lowerName) !== -1)
+		return
+
+	self._headers[lowerName] = {
+		name: name,
+		value: value
+	}
+}
+
+ClientRequest.prototype.getHeader = function (name) {
+	var self = this
+	return self._headers[name.toLowerCase()].value
+}
+
+ClientRequest.prototype.removeHeader = function (name) {
+	var self = this
+	delete self._headers[name.toLowerCase()]
+}
+
+ClientRequest.prototype._onFinish = function () {
+	var self = this
+
+	if (self._destroyed)
+		return
+	var opts = self._opts
+
+	var headersObj = self._headers
+	var body
+	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH') {
+		if (capability.blobConstructor) {
+			body = new global.Blob(self._body.map(function (buffer) {
+				return toArrayBuffer(buffer)
+			}), {
+				type: (headersObj['content-type'] || {}).value || ''
+			})
+		} else {
+			// get utf8 string
+			body = Buffer.concat(self._body).toString()
+		}
+	}
+
+	if (self._mode === 'fetch') {
+		var headers = Object.keys(headersObj).map(function (name) {
+			return [headersObj[name].name, headersObj[name].value]
+		})
+
+		global.fetch(self._opts.url, {
+			method: self._opts.method,
+			headers: headers,
+			body: body,
+			mode: 'cors',
+			credentials: opts.withCredentials ? 'include' : 'same-origin'
+		}).then(function (response) {
+			self._fetchResponse = response
+			self._connect()
+		}, function (reason) {
+			self.emit('error', reason)
+		})
+	} else {
+		var xhr = self._xhr = new global.XMLHttpRequest()
+		try {
+			xhr.open(self._opts.method, self._opts.url, true)
+		} catch (err) {
+			process.nextTick(function () {
+				self.emit('error', err)
+			})
+			return
+		}
+
+		// Can't set responseType on really old browsers
+		if ('responseType' in xhr)
+			xhr.responseType = self._mode.split(':')[0]
+
+		if ('withCredentials' in xhr)
+			xhr.withCredentials = !!opts.withCredentials
+
+		if (self._mode === 'text' && 'overrideMimeType' in xhr)
+			xhr.overrideMimeType('text/plain; charset=x-user-defined')
+
+		Object.keys(headersObj).forEach(function (name) {
+			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
+		})
+
+		self._response = null
+		xhr.onreadystatechange = function () {
+			switch (xhr.readyState) {
+				case rStates.LOADING:
+				case rStates.DONE:
+					self._onXHRProgress()
+					break
+			}
+		}
+		// Necessary for streaming in Firefox, since xhr.response is ONLY defined
+		// in onprogress, not in onreadystatechange with xhr.readyState = 3
+		if (self._mode === 'moz-chunked-arraybuffer') {
+			xhr.onprogress = function () {
+				self._onXHRProgress()
+			}
+		}
+
+		xhr.onerror = function () {
+			if (self._destroyed)
+				return
+			self.emit('error', new Error('XHR error'))
+		}
+
+		try {
+			xhr.send(body)
+		} catch (err) {
+			process.nextTick(function () {
+				self.emit('error', err)
+			})
+			return
+		}
+	}
+}
+
+/**
+ * Checks if xhr.status is readable and non-zero, indicating no error.
+ * Even though the spec says it should be available in readyState 3,
+ * accessing it throws an exception in IE8
+ */
+function statusValid (xhr) {
+	try {
+		var status = xhr.status
+		return (status !== null && status !== 0)
+	} catch (e) {
+		return false
+	}
+}
+
+ClientRequest.prototype._onXHRProgress = function () {
+	var self = this
+
+	if (!statusValid(self._xhr) || self._destroyed)
+		return
+
+	if (!self._response)
+		self._connect()
+
+	self._response._onXHRProgress()
+}
+
+ClientRequest.prototype._connect = function () {
+	var self = this
+
+	if (self._destroyed)
+		return
+
+	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode)
+	self.emit('response', self._response)
+}
+
+ClientRequest.prototype._write = function (chunk, encoding, cb) {
+	var self = this
+
+	self._body.push(chunk)
+	cb()
+}
+
+ClientRequest.prototype.abort = ClientRequest.prototype.destroy = function () {
+	var self = this
+	self._destroyed = true
+	if (self._response)
+		self._response._destroyed = true
+	if (self._xhr)
+		self._xhr.abort()
+	// Currently, there isn't a way to truly abort a fetch.
+	// If you like bikeshedding, see https://github.com/whatwg/fetch/issues/27
+}
+
+ClientRequest.prototype.end = function (data, encoding, cb) {
+	var self = this
+	if (typeof data === 'function') {
+		cb = data
+		data = undefined
+	}
+
+	stream.Writable.prototype.end.call(self, data, encoding, cb)
+}
+
+ClientRequest.prototype.flushHeaders = function () {}
+ClientRequest.prototype.setTimeout = function () {}
+ClientRequest.prototype.setNoDelay = function () {}
+ClientRequest.prototype.setSocketKeepAlive = function () {}
+
+// Taken from http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader%28%29-method
+var unsafeHeaders = [
+	'accept-charset',
+	'accept-encoding',
+	'access-control-request-headers',
+	'access-control-request-method',
+	'connection',
+	'content-length',
+	'cookie',
+	'cookie2',
+	'date',
+	'dnt',
+	'expect',
+	'host',
+	'keep-alive',
+	'origin',
+	'referer',
+	'te',
+	'trailer',
+	'transfer-encoding',
+	'upgrade',
+	'user-agent',
+	'via'
+]
+
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+},{"./capability":59,"./response":61,"_process":46,"buffer":25,"inherits":32,"readable-stream":57,"to-arraybuffer":63}],61:[function(require,module,exports){
+(function (process,global,Buffer){
+var capability = require('./capability')
+var inherits = require('inherits')
+var stream = require('readable-stream')
+
+var rStates = exports.readyStates = {
+	UNSENT: 0,
+	OPENED: 1,
+	HEADERS_RECEIVED: 2,
+	LOADING: 3,
+	DONE: 4
+}
+
+var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
+	var self = this
+	stream.Readable.call(self)
+
+	self._mode = mode
+	self.headers = {}
+	self.rawHeaders = []
+	self.trailers = {}
+	self.rawTrailers = []
+
+	// Fake the 'close' event, but only once 'end' fires
+	self.on('end', function () {
+		// The nextTick is necessary to prevent the 'request' module from causing an infinite loop
+		process.nextTick(function () {
+			self.emit('close')
+		})
+	})
+
+	if (mode === 'fetch') {
+		self._fetchResponse = response
+
+		self.url = response.url
+		self.statusCode = response.status
+		self.statusMessage = response.statusText
+		// backwards compatible version of for (<item> of <iterable>):
+		// for (var <item>,_i,_it = <iterable>[Symbol.iterator](); <item> = (_i = _it.next()).value,!_i.done;)
+		for (var header, _i, _it = response.headers[Symbol.iterator](); header = (_i = _it.next()).value, !_i.done;) {
+			self.headers[header[0].toLowerCase()] = header[1]
+			self.rawHeaders.push(header[0], header[1])
+		}
+
+		// TODO: this doesn't respect backpressure. Once WritableStream is available, this can be fixed
+		var reader = response.body.getReader()
+		function read () {
+			reader.read().then(function (result) {
+				if (self._destroyed)
+					return
+				if (result.done) {
+					self.push(null)
+					return
+				}
+				self.push(new Buffer(result.value))
+				read()
+			})
+		}
+		read()
+
+	} else {
+		self._xhr = xhr
+		self._pos = 0
+
+		self.url = xhr.responseURL
+		self.statusCode = xhr.status
+		self.statusMessage = xhr.statusText
+		var headers = xhr.getAllResponseHeaders().split(/\r?\n/)
+		headers.forEach(function (header) {
+			var matches = header.match(/^([^:]+):\s*(.*)/)
+			if (matches) {
+				var key = matches[1].toLowerCase()
+				if (key === 'set-cookie') {
+					if (self.headers[key] === undefined) {
+						self.headers[key] = []
+					}
+					self.headers[key].push(matches[2])
+				} else if (self.headers[key] !== undefined) {
+					self.headers[key] += ', ' + matches[2]
+				} else {
+					self.headers[key] = matches[2]
+				}
+				self.rawHeaders.push(matches[1], matches[2])
+			}
+		})
+
+		self._charset = 'x-user-defined'
+		if (!capability.overrideMimeType) {
+			var mimeType = self.rawHeaders['mime-type']
+			if (mimeType) {
+				var charsetMatch = mimeType.match(/;\s*charset=([^;])(;|$)/)
+				if (charsetMatch) {
+					self._charset = charsetMatch[1].toLowerCase()
+				}
+			}
+			if (!self._charset)
+				self._charset = 'utf-8' // best guess
+		}
+	}
+}
+
+inherits(IncomingMessage, stream.Readable)
+
+IncomingMessage.prototype._read = function () {}
+
+IncomingMessage.prototype._onXHRProgress = function () {
+	var self = this
+
+	var xhr = self._xhr
+
+	var response = null
+	switch (self._mode) {
+		case 'text:vbarray': // For IE9
+			if (xhr.readyState !== rStates.DONE)
+				break
+			try {
+				// This fails in IE8
+				response = new global.VBArray(xhr.responseBody).toArray()
+			} catch (e) {}
+			if (response !== null) {
+				self.push(new Buffer(response))
+				break
+			}
+			// Falls through in IE8	
+		case 'text':
+			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
+				response = xhr.responseText
+			} catch (e) {
+				self._mode = 'text:vbarray'
+				break
+			}
+			if (response.length > self._pos) {
+				var newData = response.substr(self._pos)
+				if (self._charset === 'x-user-defined') {
+					var buffer = new Buffer(newData.length)
+					for (var i = 0; i < newData.length; i++)
+						buffer[i] = newData.charCodeAt(i) & 0xff
+
+					self.push(buffer)
+				} else {
+					self.push(newData, self._charset)
+				}
+				self._pos = response.length
+			}
+			break
+		case 'arraybuffer':
+			if (xhr.readyState !== rStates.DONE)
+				break
+			response = xhr.response
+			self.push(new Buffer(new Uint8Array(response)))
+			break
+		case 'moz-chunked-arraybuffer': // take whole
+			response = xhr.response
+			if (xhr.readyState !== rStates.LOADING || !response)
+				break
+			self.push(new Buffer(new Uint8Array(response)))
+			break
+		case 'ms-stream':
+			response = xhr.response
+			if (xhr.readyState !== rStates.LOADING)
+				break
+			var reader = new global.MSStreamReader()
+			reader.onprogress = function () {
+				if (reader.result.byteLength > self._pos) {
+					self.push(new Buffer(new Uint8Array(reader.result.slice(self._pos))))
+					self._pos = reader.result.byteLength
+				}
+			}
+			reader.onload = function () {
+				self.push(null)
+			}
+			// reader.onerror = ??? // TODO: this
+			reader.readAsArrayBuffer(response)
+			break
+	}
+
+	// The ms-stream case handles end separately in reader.onload()
+	if (self._xhr.readyState === rStates.DONE && self._mode !== 'ms-stream') {
+		self.push(null)
+	}
+}
+
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+},{"./capability":59,"_process":46,"buffer":25,"inherits":32,"readable-stream":57}],62:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -62411,7 +60642,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":28}],65:[function(require,module,exports){
+},{"buffer":25}],63:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 
 module.exports = function (buf) {
@@ -62440,7 +60671,7 @@ module.exports = function (buf) {
 	}
 }
 
-},{"buffer":28}],66:[function(require,module,exports){
+},{"buffer":25}],64:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -63174,7 +61405,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":67,"punycode":50,"querystring":53}],67:[function(require,module,exports){
+},{"./util":65,"punycode":47,"querystring":50}],65:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -63192,7 +61423,7 @@ module.exports = {
   }
 };
 
-},{}],68:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (global){
 
 /**
@@ -63263,7 +61494,7 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],69:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -63284,4 +61515,4 @@ function extend() {
     return target
 }
 
-},{}]},{},[2]);
+},{}]},{},[1]);

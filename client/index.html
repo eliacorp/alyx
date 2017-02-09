@@ -1,122 +1,121 @@
 <!DOCTYPE html>
+<html ng-app="myApp" ng-controller="appCtrl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <meta name=“author” title=“Elia Fornari | Qual Agency”>
+    <meta name="description" content="Meet ALYX: a foundation built on the undercurrent.">
+    <meta name="keywords" content="Alyx,Matthew Williams,alyx studio,rollercoaster, nick knight">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <title>ALYX</title>
 
-<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js" ng-controller="routeCtrl"> <!--<![endif]-->
+    
+    <!--
+    =======================================================================
 
+      Chapter | 2016
 
+      Designed and developed by Elia Fornari | ELIA LLC
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1" >
-  <title>ALYX</title>
-  <meta name="description" content="Meet ALYX: a foundation built on the undercurrent.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-
-  <base href="/">
-
-  <script src="https://use.typekit.net/voa8dnc.js"></script>
-  <script>try{Typekit.load({ async: true });}catch(e){}</script>
-
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-68513539-8', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-
-
-  <!-- <script>
-   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-   ga('create', 'UA-59194007-1', 'auto');
-   ga('send', 'pageview');
-
-
-
-
-  </script> -->
+    =======================================================================
+    -->
 
 
 
 
 
+    <script async>
+      (function(d) {
+        var config = {
+          kitId: 'voa8dnc',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+    </script>
 
 
-</head>
 
-<!-- .................................. Body ...............................-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico" >
 
-
-<body ng-cloak class="body" ng-controller="appCtrl" page-loader>
-
-  <!-- <div class="landscape-view-wrapper" ng-show="landscapeView">
-
-    <div class="landscape-view-div"><p class="landscape-view-p">please rotate the device for the best website experience</p></div>
-      <div class = "logo-landscape" ng-click="gotoAnchor('issueHash')">
-      <logo-directive></logo-directive>
-      </div>
-  </div> -->
-
-
-  <!-- .................................. NAV ...............................-->
-  <pop-directive ng-if="!isMobile"></pop-directive>
-
-
-  <!-- .................................. MAIN ...............................-->
-
-<div  class="page-loader-div" ng-show="pageLoading">
-
-   <div class="page-loader-wrapper">
-    <h1 class="page-loader-content blink-infinite">
-      <a class="page-loader-a"><logo-directive></logo-directive></a>
-    </h1>
-  </div>
-
-</div>
+    <!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
 
 
 
 
-<!-- ng-hide="pageLoading"  -->
- <main class="main" class="page {{ pageClass }}" ng-view="" autoscroll="true" ng-class="{'pageInvisible': pageLoading}" ng-cloak>
- </main>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-68513539-8', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 
 
 
- <nav class="mobile-nav" ng-controller="navCtrl" ng-class="{'shift-pop': navActive}" ng-if="isMobile">
-   <div class="mobile-header-wrapper" ng-cloak ng-click="beNavActive();">
-     <div class="mobile-header-A-logo" ng-click="beNavActive();">
-       <logo-pop-directive></logo-pop-directive>
-     </div>
-   <div class="mobile-header-section-status" ng-hide="navActive">
-     <p class="mobile-header-section-status-p" style="color: #000000">{{headerSectionName}}</p>
-   </div>
-
-   </div>
-    <pop-directive></pop-directive>
- </nav>
+    <link rel="stylesheet" type="text/css" href="/dist/style.css">
+    <base href="/">
+  </head>
 
 
 
+  <body>
+
+
+    <!-- <p ng-if="Auth.access_token">{{Auth.access_token}}</p>
+    <p ng-if="Auth.token">{{Auth.token}}</p>
+    <p>{{Auth.cart}}</p> -->
+
+
+    <div class="landscape-view-wrapper" ng-class="{'show-landscape': landscapeView && isMobileDevice}">
+      <table>
+        <tr>
+          <td>
+            <div class="landscape-view-div">
+              <p class="landscape-view-p">please rotate the device for the best website experience</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+        <!-- <div class = "logo-landscape">
+        <logo-directive></logo-directive>
+        </div> -->
+    </div>
+
+
+    <div class="clickOut" ng-click="closeCart()" ng-show="showCart" ng-cloak>
+    </div>
+
+    <div class="logo" ng-class="{'logo-left': logoLeft, 'blink-infinite': pageLoading}" ng-controller="navCtrl">
+      <a ng-click="openNav()">
+         <!-- ng-click="goHorizontal('products', 0);" -->
+        <logo-directive></logo-directive>
+        <img src="assets/collaboration/fragment-design.svg" alt="collaboration" ng-show="!pageLoading && filter.collection.selected == 'fragment-design'" ng-cloak/>
+      </a>
+    </div>
+
+  <shop-directive></shop-directive>
+
+    <nav-directive></nav-directive>
 
 
 
-</body>
-  <link rel="stylesheet" type="text/css" href="./dist/style.css">
-  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-  <script type="text/javascript" src="dist/bundle.js"></script>
+    <main ng-view class='main page page-{{page}}' autoscroll="">
+    </main>
+
+     <!-- ng-hide="pageLoading" -->
+
+    <script src="dist/bundle.js"></script>
+
+  </body>
+
 </html>

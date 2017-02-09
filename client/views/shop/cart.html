@@ -1,0 +1,42 @@
+<div class="cart" ng-controller="cartCtrl" id="cart"> <!-- 1 -->
+
+  <div class="cart-content">
+
+      <ul class="cart-ul">
+        <h1 class="form-title">CART</h1>
+        <li ng-repeat="c in Cart.contents track by $index" class="cart-li">
+          <img class="cart-li-img" src="{{c.images[0].url.https}}" alt="{{c.slug}}" />
+          <div class="cart-li-info">
+            <table>
+              <tr>
+                <td>
+                  <p class="cart-li-p">{{c.quantity}} {{c.name}}</p>
+                  <p class="cart-li-p">{{c.sku}}</p>
+                  <p class="cart-li-price">{{c.pricing.formatted.without_tax}}</p>
+                  <span class="cart-li-remove" ng-click="removeItem(c.item)">x</span>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+        </li>
+      </ul>
+
+
+      <div class="cart-total" ng-hide="Cart.total_items==0">
+        <p class="cart-total-amount">TOTAL <span class="cart-total-value">{{Cart.totals.pre_discount.formatted.without_tax}}</span></p>
+      </div>
+
+
+      <div class="cart-error" ng-show="Cart.total_items==0">
+        <p>no products in your cart</p>
+      </div>
+
+      <div class="cart-error" ng-show="noProductsError">
+        <p>add products before proceeding to shipment</p>
+      </div>
+
+      <!-- <button type="submit" class="checkout-button hvr-sweep-to-right" ng-click="cartToShipment()">CHECKOUT</button> -->
+  </div>
+
+</div>

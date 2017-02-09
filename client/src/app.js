@@ -1,679 +1,442 @@
-'use strict';
-// import videojs from 'video.js';
-import 'angular'
+'use strict'
+
+
+import angular from 'angular'
 import 'angular-route'
 import 'angular-animate'
 import 'angular-resource'
-import 'angular-touch'
 import Prismic from 'prismic.io'
-import jQuery from "jquery"
 
-
-var Application  = angular.module('myApp', ['ngRoute', 'ngAnimate', 'ngResource',
-  'ngTouch'
-])
-
-
-Application.controller('appCtrl', function(getService, $scope, $rootScope, $routeParams){
-
-
-
-            //............................................................GET requests.........................................................
-
-            $rootScope.addShift = function(){
-            	// jQuery('.navigation-header-content').addClass('blink');
-              	setTimeout(function(){
-              		jQuery('.navigation-header-wrapper').addClass('shift');
-              		jQuery('.navigation-table').css("display","table");
-              	},1000);
-            };
-
-
-            $rootScope.addBlink = function(){
-              jQuery('.navigation-header-content').addClass('blink');
-            };
-
-            $rootScope.removeBlink = function(){
-              jQuery('.navigation-header-content').removeClass('blink');
-            };
-
-
-
-
-            $rootScope.hideNavFN = function(){
-              $scope.navHide = true;
-            }
-
-            $rootScope.hideNavOneFN = function(){
-              $scope.navHideOne = true;
-            }
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//.............................................................. FW15............................................................................
-
-
-Application.controller('fwfifteenCtrl', function($anchorScroll, $location, $scope, anchorSmoothScroll,$window, $route,getService, $rootScope, $routeParams){
-
-  // $scope.firstScroll();
-  $scope.hasBlinkOnce = false;
-  $rootScope.addShift();
-  $rootScope.addBlink();
-  $scope.mainLookShow=false;
-  $rootScope.headerSectionName = "";
-  $rootScope.catalogueSection=0;
-  $rootScope.heroesSection=0;
-  $rootScope.isHeroes=false;
-  $rootScope.isCatalogue=false;
-  $rootScope.hideArrow;
-  $rootScope.hideReadInterview = false;
-  $scope.scrollBackHappened=0;
-  if(!$rootScope.isMobile){
-    $scope.lookbookVH="3609px;";
-  }
-
-  //...........................initializing season variables
-  $rootScope.currentPosition = "fw15";
-  $rootScope.seasonData = [];
-  $rootScope.film = {};
-  $rootScope.catalogue = {};
-  $rootScope.heroes = {};
-  $rootScope.lookbook = {};
-
-//initializing the variable that stop the scroll of the sections
-  $scope.enableHeroesScroll = false;
-  $scope.enableLookbookScroll = false;
-  $scope.burgerColor = "#FFFFFF";
-  var navActiveCheck = false;
-
-
-
-  $rootScope.resetLookbook=function(){
-    $scope.mainLookShow=false;
-    $rootScope.readScrollDisable();
-  }
-
-    // This service's function returns a promise, but we'll deal with that shortly
-
-    getService.get("fw15")
-      // getService.get('fw15')
-    // then() called when son gets back
-    .then(function(data) {
-        $rootScope.seasonData = data;
-        $rootScope.metaData = data[0];
-        $rootScope.film = data[1];
-        $rootScope.catalogue = data[2];
-        $rootScope.heroes = data[3];
-        $rootScope.lookbook = data[4];
-
-        $scope.$broadcast("myEvent");
-        $scope.$broadcast("content_loaded_fw15");
-    }, function(error) {
-        // promise rejected, could log the error with: console.log('error', error);
-        console.log('error', error);
-    });
-    // .then(function(){
-    //   setTimeout(function(){
-    //     $rootScope.endLoader();
-    //   }, 600);
-    //
-    // });
-
-
-
-
-
-
-
-$rootScope.headerHide = true;
-
-$scope.headerHideOn = function(){
-
-  if ($scope.headerHide == false){
-    $rootScope.headerHide = true;
-  }
-
-}
-
-
-
-$scope.headerHideOff = function(){
-
-  if ($scope.headerHide == true){
-    $rootScope.headerHide = false;
-  }
-}
-
-
-
-
-
-
-    $scope.fw_hashFn = function(x){
-              var newHash = x;
-            if ($location.path() !== x) {
-
-              if (x === "intro"){
-                $location.path("", false);
-
-              }else {
-              // set the $location.hash to `newHash` and
-              // $anchorScroll will automatically scroll to it
-                $location.path("fw15/"+x, false);
-              }
-
-
-            } else {
-              // call $anchorScroll() explicitly,
-              // since $location.hash hasn't changed
-
-              // $anchorScroll();
-            }
-    }
-
-
-
-
-
-
-
-
-    //..................................................changing anchor link on scroll
-
-
-    // setTimeout(function(){
-
-
-
-          // $scope.burgerColorOffset = jQuery('#issueHash').offset().top -1;
-
-            // $scope.navigationLinks = [];
-            //
-            // for (i = 1; i < $rootScope.seasonData.length; i++){
-            //   $scope.paths = $rootScope.seasonData[i].navigation;
-            //   $scope.navigationLinks = $scope.navigationLinks.concat($scope.paths);
-            //
-            // }
-
-
-
-    //function that defines the offset of each anchor, hence where the path should change
-
-    $rootScope.fw15_scroller = function(navState){
-
-            // $scope.burgerColorOffset = jQuery('#issueHash').offset().top -1;
-
-              $scope.navigationLinks = [];
-
-              for ( var i = 1; i < $rootScope.seasonData.length; i++){
-                $scope.paths = $rootScope.seasonData[i].navigation;
-                $scope.navigationLinks = $scope.navigationLinks.concat($scope.paths);
-
-              }
-
-            //initializing
-            $scope.navHideOne = true;
-            $scope.navFadeOne = 0;
-
-            jQuery($window).unbind("scroll.fw_fifteen_scroll");
-            jQuery($window).unbind("scroll.ss_sixteen_scroll");
-            jQuery($window).unbind("scroll.support_scroll");
-
-            var scroll = 0;
-            $scope.offset =[]
-
-            for (i in  $scope.navigationLinks){
-
-                $scope.thisoffset = jQuery('#'+$scope.navigationLinks[i]+'Hash').offset().top -1;
-                $scope.offset = $scope.offset.concat($scope.thisoffset);
-
-              }
-
-
-
-            //....nav-one offset
-
-              if(!$rootScope.isMobile){
-                $scope.navOffset = jQuery('#fw15-navHash').offset().top -1;
-              }
-
-
-            //....height of a window
-            $scope.windowHeight = $window.innerHeight;
-            $scope.lookbookOffset = jQuery('#lookbookHash').offset().top-1;
-
-
-
-              /*catalog
-              1  //bianco
-              2  //nero  //bianco
-              3  //nero
-              4  //bianco
-              5  //bianco
-              6  //bianco
-              7  //bianco
-
-              //heroes
-              8  //bianco
-              9  //nero //bianco //nero //transparent //nero
-              10  //bianco
-              11  //nero
-              12  //nero
-
-
-              //lookbook
-              13  //nero
-
-              //nav
-              14  //transparent
-
-              */
-
-
-
-              // $scope.burgerDistance = $scope.offset[0] - 144;
-              $scope.catalogOneDistance = $scope.offset[1]+$scope.windowHeight;
-              $scope.catalogTwoDistance = $scope.offset[1]+($scope.windowHeight*2);
-              $scope.catalogThreeDistance = $scope.offset[1]+($scope.windowHeight*3);
-              $scope.catalogFourDistance = $scope.offset[1]+($scope.windowHeight*4)
-              $scope.catalogFiveDistance = $scope.offset[1]+($scope.windowHeight*5);
-              $scope.catalogSixDistance = $scope.offset[1]+($scope.windowHeight*6);
-              $scope.catalogSevenDistance = $scope.offset[2];
-              $scope.heroesOneDistance = $scope.offset[2]+($scope.windowHeight); //first heroes
-              $scope.heroesTwoDistance = $scope.offset[2]+($scope.windowHeight*2);//second heroes
-              // $scope.heroesThreeDistance = $scope.offset[2]+($scope.windowHeight*3);//third heroes
-              // $scope.heroesFourDistance = $scope.offset[2]+($scope.windowHeight*4);//four heroes
-              $scope.heroesThreeDistance =$scope.lookbookOffset;//fifth heroes
-
-              $scope.lookbookDistance = $scope.navOffset;//one lookbook
-              $scope.navOneDistance = $scope.navOffset+$scope.windowHeight;//one nav
-
-              $scope.burgerOffset = [
-                // $scope.burgerDistance,
-                $scope.catalogOneDistance, //0
-                $scope.catalogTwoDistance, //1
-                $scope.catalogThreeDistance, //2
-                $scope.catalogFourDistance, //3
-                $scope.catalogFiveDistance, //4
-                $scope.catalogSixDistance, //5
-                $scope.catalogSevenDistance, //6
-                $scope.heroesOneDistance, //7
-                $scope.heroesTwoDistance, //8
-                $scope.heroesThreeDistance, //9
-                $scope.lookbookDistance, //10
-                $scope.navOneDistance//11
-
-              ]
-              // $scope.heroesFourDistance, //10
-              // $scope.heroesFiveDistance, //11
-
-
-
-
-
-      jQuery($window).bind("scroll.fw_fifteen_scroll", function(event) {
-
-            scroll =  jQuery($window).scrollTop();
-
-
-            if(!$rootScope.isMobile){
-              // nav fade out
-              if (scroll < 200) {
-                $scope.navFade = ((scroll-200)*(-1))/200;
-                $scope.navHide = false;
-              }
-              //..............................................................................fading in second nav
-              // nav ONE fade in
-              else if ((scroll >= 200)&&(scroll < ($scope.navOffset-$scope.windowHeight))) {
-
-                $scope.navHideOne = true;
-                $rootScope.hideArrow = true;
-                $scope.supportFade =0;
-                $scope.navFade = 0;
-                $scope.navHide = true;
-                $rootScope.removeBlink();
-
-                jQuery(".lookbook-ul").css({"position": "absolute"});
-                jQuery(".lookbook-ul").css({"top": "0"});
-
-              }else if ((scroll > ($scope.navOffset-$scope.windowHeight)) && (scroll < ($scope.navOffset+$scope.windowHeight))) {
-
-                jQuery(".lookbook-ul").css({"position": "fixed"});
-                jQuery(".lookbook-ul").css({"top": "-2830px"});
-
-                $scope.navFadeOne = (((($scope.navOffset-$scope.windowHeight)-scroll))*(-1))/200;
-                $scope.navHideOne = false;
-              }
-            }
-
-
-
-
-
-
-
-      if ((scroll > $scope.burgerOffset[7])&& (scroll <= $scope.burgerOffset[8])) {
-        $scope.mainLookShow=false;
-      }else if ((scroll > $scope.burgerOffset[8])&& (scroll <= $scope.burgerOffset[9])) {
-        $scope.mainLookShow=false;
-        $scope.enableHeroesScroll = true;
-        $scope.mainLookShow=false;
-
-      }else if ((scroll > $scope.burgerOffset[9])&&(scroll <= ($scope.burgerOffset[10]))){
-          $rootScope.shiftImage_heroes = false;
-          $scope.lookbookMainMargin = (1)*(($scope.burgerOffset[11]+48)-scroll);
-          if(scroll >= ($scope.burgerOffset[10]+400)){
-            $scope.looksStagger = true;
-          }
-          $scope.mainLookShow=true;
-
-
-          if($rootScope.isMobile){
-            $scope.mainLookShow=false;
-          }
-
-      }else if ((scroll > $scope.burgerOffset[10])&&(scroll <= ($scope.burgerOffset[11]))){
-          $scope.mainLookShow=false;
-      }else if ((scroll > ($scope.burgerOffset[11]))&&(scroll <= $scope.burgerOffset[12])){
-
-
-
-        }else if ((scroll > $scope.burgerOffset[12]) && (scroll <= $scope.burgerOffset[13])) {
-
-
-
+ // /*global $ */
+
+angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
+.run(['$rootScope', '$location','$route','$templateCache','$http', ($rootScope, $location, $route,$templateCache, $http)=>{
+  $rootScope.pageLoading = true;
+
+    var original = $location.path;
+    $location.path = function (path, reload) {
+        if (reload === false) {
+            var lastRoute = $route.current;
+            var un = $rootScope.$on('$locationChangeSuccess', function () {
+                $route.current = lastRoute;
+                un();
+            });
         }
+        else if (reload === true){
 
+          var currentPageTemplate = $route.current.templateUrl;
+            $templateCache.remove(currentPageTemplate);
 
+        var un = $rootScope.$on('$locationChangeSuccess', function () {
+              // $route.current = 'worldoftheblonds/'+$routeParams.category+'/'+$routeParams.event;
+              un();
+              $route.reload();
+          });
+        }
+        return original.apply($location, [path]);
+    };
 
 
-    //..................................................................burger scroll function
 
 
-          if ((scroll<$scope.offset[0])&&(navState === false)) {
-            $scope.burgerColor = "#FFFFFF";
-            $scope.headerHideOn();
 
 
-            }else  if (((scroll>=$scope.offset[0])&&(scroll< $scope.offset[1]))&&(navState === false)) {
 
-                $scope.burgerColor = "#FFFFFF";
-                $scope.headerHideOff();
-                $scope.isHeroes=false;
-                $scope.isCatalogue=false;
 
-                if (scroll<=($scope.offset[0]+500)){
-                  $scope.showSound = true;
-                }else if(scroll>=($scope.offset[0]+500)){
-                  $scope.showSound = false;
-                }
 
-            }
-           else if (((scroll>=$scope.offset[1])&&(scroll< $scope.burgerOffset[0]))&&(navState === false)) {
-               $scope.burgerColor = "#FFFFFF";
-               $scope.headerHideOff();
-               $scope.showSound = false;
+}])
 
-               $rootScope.catalogueSection=0;
-               $rootScope.heroesSection=0;
-               $rootScope.isHeroes=false;
-               $rootScope.isCatalogue=true;
 
 
-           }else if (((scroll>=$scope.burgerOffset[0])&&(scroll< $scope.burgerOffset[1]))&&(navState === false)) {
-                  $scope.burgerColor = "#000000";
-                  $scope.headerHideOff();
+.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
 
-                  $rootScope.catalogueSection=1;
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=true;
+  // $anchorScrollProvider.disableAutoScrolling();
 
-           }else if (((scroll>=$scope.burgerOffset[1])&&(scroll< $scope.burgerOffset[2]))&&(navState === false)) {
-                  $scope.burgerColor = "#000000";
-                  $scope.headerHideOff();
+  // use the HTML5 History API
+  $locationProvider.html5Mode(true);
+  $routeProvider
 
-                  $rootScope.catalogueSection=2;
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=true;
 
-           }else if (((scroll>=$scope.burgerOffset[2])&&(scroll< $scope.burgerOffset[3]))&&(navState === false)) {
-                  $scope.burgerColor = "#000000";
-                  $scope.headerHideOff();
 
-                  $rootScope.catalogueSection=3;
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=true;
+    .when('/googledf3523ad2411ec20.html', {
+      templateUrl: '/googledf3523ad2411ec20.html',
+      reloadOnSearch: false
+    })
 
-          }else if (((scroll>=$scope.burgerOffset[3])&&(scroll< $scope.burgerOffset[4]))&&(navState === false)) {
-                  $scope.burgerColor = "#FFFFFF";
-                  $scope.headerHideOff();
+    .when('/shop/product/:detail', {
+      templateUrl: 'views/shop/product-detail.html',
+      controller: 'detailCtrl',
+      reloadOnSearch: false
+    })
 
-                  $rootScope.catalogueSection=4;
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=true;
 
-          }else if (((scroll>=$scope.burgerOffset[4])&&(scroll< $scope.burgerOffset[5]))&&(navState === false)) {
-                  $scope.burgerColor = "#FFFFFF";
-                  $scope.headerHideOff();
+    .when('/shop/collection', {
+      templateUrl: 'views/shop/product.html',
+      reloadOnSearch: false
+    })
 
-                  $rootScope.catalogueSection=5;
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=true;
 
-          }else if (((scroll>=$scope.burgerOffset[5])&&(scroll< $scope.burgerOffset[6]))&&(navState === false)) {
-                  $scope.burgerColor = "#FFFFFF";
-                  $scope.headerHideOff();
+    .when('/shop/cart', {
+      templateUrl: 'views/shop/cart.html',
+      controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
-                  $rootScope.catalogueSection=6;
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=true;
+    .when('/shop/shipment', {
+      templateUrl: 'views/shop/shipment.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
+    .when('/shop/shipment/terms', {
+      templateUrl: 'views/shop/shipment.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
-          }else if (((scroll>=$scope.burgerOffset[6])&&(scroll< $scope.burgerOffset[7]))&&(navState === false)) {
-                  $scope.burgerColor = "#FFFFFF";
-                  $scope.headerHideOff();
+    .when('/shop/choice', {
+      templateUrl: 'views/shop/choice.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
-                  $rootScope.heroesSection=0;
-                  $rootScope.isHeroes=true;
-                  $rootScope.isCatalogue=false;
+    .when('/shop/payment', {
+      templateUrl: 'views/shop/payment.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
-                  if ((scroll > ($scope.burgerOffset[6]))&& (scroll <= ($scope.burgerOffset[6]+300))) {
-                    $rootScope.heroesReadInterview(false);
-                  }
+    .when('/shop/processed/:order/:method', {
+      templateUrl: 'views/shop/processed.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
+    .when('/shop/processed/:order/:method/canceled', {
+      templateUrl: 'views/shop/processed-canceled.html',
+      // controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
 
-          }else if (((scroll>=$scope.burgerOffset[7])&&(scroll< $scope.burgerOffset[8]))&&(navState === false)) {
-                  $scope.burgerColor = "#000000";
-                  $scope.headerHideOff();
 
-                  $rootScope.heroesSection=1;
-                  $rootScope.isHeroes=true;
-                  $rootScope.isCatalogue=false;
+    .when('/shop/privacy', {
+      templateUrl: 'views/shop/privacy.html',
+      controller: 'privacyCtrl',
+      reloadOnSearch: true
+    })
+
+    .when('/collection/:collection', {
+      templateUrl: 'views/collection/collection.html',
+      controller: 'collectionCtrl',
+      reloadOnSearch: true
+    })
+
+
+    .when('/about', {
+      templateUrl: 'views/support/support.html',
+      controller: 'supportCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/contact', {
+      templateUrl: 'views/support/support.html',
+      controller: 'supportCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/stockists', {
+      templateUrl: 'views/support/support.html',
+      controller: 'supportCtrl',
+      reloadOnSearch: false
+    })
+
+    .when('/social', {
+      templateUrl: 'views/social/social.html',
+      controller: 'socialCtrl',
+      reloadOnSearch: false
+    })
+
+    /*............................. Take-all routing ........................*/
+
+
+    .when('/shop', {
+      templateUrl: 'views/shop/product.html',
+      controller: 'shopCtrl',
+      reloadOnSearch: false
+    })
+
+
+    // put your least specific route at the bottom
+    .otherwise({redirectTo: '/shop'})
+
+
+
+}]) //config
+
+
+.filter('trustUrl', function ($sce) {
+  return function(url) {
+    // if (url){
+      var trusted = $sce.trustAsResourceUrl(url);
+      return trusted;
+    // }
+  };
+})
+
+.controller('appCtrl', ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll)=>{
+  $rootScope.pageLoading = true;
+  $rootScope.token;
+  $rootScope.Collection_shop;
+
+
+
+  $rootScope.noRefresh = function(url){
+    var str = url;
+    str = str.substring(1, str.length);
+        if ($location.path() != url) {
+          anchorSmoothScroll.scrollTo(str);
+          $location.path(url, false);
+        } else {
+          // $anchorScroll();
+        }
+  }
+
+
+
+
+// $rootScope.Auth;
+//
+//   $rootScope.authentication = function(){
+//
+//         // Simple GET request example:
+//         $http({
+//           method: 'GET',
+//           url: '/authenticate'
+//         }).then(function successCallback(response) {
+//
+//           if(response.data.access_token || response.data.token){
+//               // this callback will be called asynchronously
+//               // when the response is available
+//               console.log(response.data);
+//               var expires = response.data.expires;
+//               var identifier = response.data.identifier;
+//               var expires_in = response.data.expires_in;
+//               var access_token = response.data.access_token;
+//               var type = response.data.token_type;
+//
+//               $rootScope.Auth =response.data;
+//
+//               $rootScope.getProductsFN();
+//               $rootScope.getCollections();
+//
+//               // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
+//
+//           }
+//
+//           }, function errorCallback(response) {
+//             // called asynchronously if an error occurs
+//             // or server returns response with an error status.
+//           });
+//
+//   }//addToCart
+//
+//   $rootScope.authentication();
 
 
-                  if (scroll<=($scope.burgerOffset[8]-200)){
-                    $rootScope.hideReadInterview = false;
-                  }else if(scroll>=($scope.burgerOffset[8]-200)){
-                    $rootScope.hideReadInterview = true;
-                  }
 
-                  console.log("this heroessss");
 
 
-          }else if (((scroll>=$scope.burgerOffset[8])&&(scroll< $scope.burgerOffset[9]))&&(navState === false)) {
-                  $scope.burgerColor = "#FFFFFF";
-                  $scope.headerHideOff();
+// function eraseCookie(name) {
+//   $rootScope.createCookie(name,"",-1);
+// }
+//
+// function deleteAllCookies() {
+//   var cookies = document.cookie.split(";");
+//   for (var i = 0; i < cookies.length; i++)
+//     eraseCookie(cookies[i].split("=")[0]);
+// }
+//
+// // deleteAllCookies();
+// $rootScope.createCookie = function(name,value,time) {
+// 	var expires = "; expires="+time;
+// 	document.cookie = name+"="+value+expires+";";
+// }
+//
+// $rootScope.readCookie = function(name) {
+// 	var nameEQ = name + "=";
+// 	var ca = document.cookie.split(';');
+// 	for(var i=0;i < ca.length;i++) {
+// 		var c = ca[i];
+// 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+//       if (c.indexOf(nameEQ) == 0){
+//         return c.substring(nameEQ.length,c.length);
+//       }
+// 	}
+// 	// return null;
+// }
 
-                  $rootScope.heroesSection=2;
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=false;
-                  $rootScope.isLookbook=true;
 
-                  if ((scroll > ($scope.burgerOffset[9]-300))&& (scroll <= $scope.burgerOffset[9])) {
-                    $rootScope.heroesReadInterview(false);
-                  }
 
-                  $rootScope.hideReadInterview = true;
 
 
 
-          }else if (((scroll>=$scope.burgerOffset[9])&&(scroll< $scope.burgerOffset[10]))&&(navState === false)) {
-                  $scope.burgerColor = "#000000";
-                  $scope.headerHideOff();
 
-                  $rootScope.isHeroes=false;
-                  $rootScope.isCatalogue=false;
 
-                  $rootScope.isLookbook=true;
+//get products
+$rootScope.Product;
 
+$rootScope.getProductsFN=function(){
+  $http({method: 'GET', url: '/getProducts'}).then(function(response){
+    $rootScope.Product = response.data;
+    console.log(response.data);
+    // for (var i in $rootScope.Product){
+    //   $rootScope.detailUpdate($rootScope.Product[i].sku);
+    //   return false;
+    // }
+    $rootScope.$broadcast("productArrived");
+    $rootScope.pageLoading = false;
 
-          }else if (((scroll>=$scope.burgerOffset[10])&&(scroll< $scope.burgerOffset[11]))&&(navState === false)) {
-            $scope.burgerColor = "#000000";
-            $scope.headerHideOff();
+  }, function(error){
+    console.log(error);
+    console.log("products status 400");
+      // $rootScope.getProductsFN();
+  });
+}
 
-            $rootScope.isLookbook=true;
+$rootScope.getProductsFN();
 
-          }else if (((scroll>=$scope.burgerOffset[11])&&(scroll< $scope.burgerOffset[12]))&&(navState === false)) {
-            $scope.burgerColor = "#000000";
-            $scope.headerHideOn();
 
 
-          }else if (((scroll>=$scope.burgerOffset[12])&&(scroll< $scope.burgerOffset[13]))&&(navState === false)) {
 
 
-          }
 
 
 
 
 
 
-    //................................scroll back _ catalogue
 
+//get shop collections
+  $rootScope.getCollections = function(){
 
-            if ((scroll >= ($scope.burgerOffset[0] - 200))&&(scroll < $scope.burgerOffset[1])){
+        // Simple GET request example:
+        $http({
+          method: 'GET',
+          url: '/getCollections'
+        }).then(function (response) {
+              $rootScope.Collection_shop=response.data;
+          }, function (response) {
+            console.log(response);
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
 
-              if ($scope.scrollBackHappened != 1){
-                $rootScope.scrollBack(1);
-                $scope.scrollBackHappened = 1;
-              }
+  }//getCollections
 
+$rootScope.getCollections();
 
-            }else if((scroll >= ($scope.burgerOffset[5] -200))&&(scroll < $scope.burgerOffset[6])){
 
-              if ($scope.scrollBackHappened != 2){
-                $rootScope.scrollBack(6);
-              }
-              $scope.scrollBackHappened = 2;
 
+$rootScope.setPage = (page)=>{
+  $rootScope.page = page;
+}
 
-            }
 
 
-    //................................scroll back _ heroes
 
-                if (scroll >= ($scope.burgerOffset[6] -200)){
-                  if ($scope.heroes_scrollBackHappened != 1){
-                    $rootScope.heroes_scrollBack(0);
-                  }
-                  $scope.heroes_scrollBackHappened = 1;
-                }
 
 
 
-    // ................................url
+  $rootScope.countries = [];
 
-                      if  (scroll < $scope.offset[0]) {
+  $rootScope.getCountries = function(){
+    $http({
+      method: 'GET',
+      url: 'assets/countries.json'
+    }).then(function(response) {
+      $rootScope.countries = response.data;
+    }, function(response) {
 
-                        $scope.fw_hashFn("intro");
-                        $rootScope.headerSectionName = "";
+      $scope.error = {value: true, text:'countries not available, this page will be reloaded'};
+      $route.reload();
 
-                      } else if  ((scroll >= $scope.offset[0])&&(scroll < $scope.offset[1])) {
+    });
+  };
+  $rootScope.getCountries();
 
-                        //film
-                            $scope.fw_hashFn($scope.navigationLinks[0]);
-                              $rootScope.headerSectionName = $scope.navigationLinks[0];
 
-                       } else if ((scroll >= $scope.offset[1])&&(scroll < $scope.offset[2])){
 
-                       //catalogue
-                         $scope.fw_hashFn($scope.navigationLinks[1]);
-                         $rootScope.headerSectionName = $scope.navigationLinks[1];
 
-                       } else if ((scroll >= $scope.offset[2])&&(scroll < $scope.offset[3])){
 
-                        //heroes
-                          $scope.fw_hashFn($scope.navigationLinks[2]);
-                          $rootScope.headerSectionName = $scope.navigationLinks[2];
 
 
 
-                        } else if ((scroll >= $scope.offset[3])&&(scroll < $scope.navOffset)){
+var stockistRan = false;
+var collectionRan = false;
 
-                          //lookbook
-                          $scope.fw_hashFn($scope.navigationLinks[3]);
-                          $rootScope.headerSectionName = $scope.navigationLinks[3];
 
 
-                        } else if ((scroll >= $scope.navOffset)&& (!$rootScope.isMobile)){
+$rootScope.Stockist;
 
-                          // $routeParams.section = "intro";
-                            $rootScope.headerSectionName = "";
+  $rootScope.getContentType = function(type, orderField){
 
-                          //lookbook
-                          $scope.fw_hashFn("intro");
+        Prismic.Api('https://alyx.cdn.prismic.io/api', function (err, Api) {
+            Api.form('everything')
+                .ref(Api.master())
+                .query(Prismic.Predicates.at("document.type", type))
+                .orderings('['+orderField+']')
+                .pageSize(100)
+                .submit(function (err, response) {
 
 
+
+                    var Data = response;
+
+                    if (type =='collection'){
+                      $rootScope.collections = response.results;
+                      $rootScope.chooseCollection();
+                      if(collectionRan == false){
+                        collectionRan = true;
+                        // setTimeout(function(){
+                          $rootScope.$broadcast('collectionReady');
+                        // }, 900);
+                        }
+                      }else if(type =='stockist'){
+                        stockistRan = true;
+                        $rootScope.Stockist = response.results;
+                        if(stockistRan == false){
+                          stockistRan = true;
+                          // setTimeout(function(){
+                            $rootScope.$broadcast('stockistReady');
+                          // }, 900);
                         }
 
+                      }else{ return false; }
+                      $rootScope.$apply();
 
-                      $scope.$apply();
 
-                  });//..end of scroll
 
-                  $scope.$broadcast("content_loaded_fw15");
+                    // The documents object contains a Response object with all documents of type "product".
+                    var page = response.page; // The current page number, the first one being 1
+                    var results = response.results; // An array containing the results of the current page;
+                    // you may need to retrieve more pages to get all results
+                    var prev_page = response.prev_page; // the URL of the previous page (may be null)
+                    var next_page = response.next_page; // the URL of the next page (may be null)
+                    var results_per_page = response.results_per_page; // max number of results per page
+                    var results_size = response.results_size; // the size of the current page
+                    var total_pages = response.total_pages; // the number of pages
+                    var total_results_size = response.total_results_size; // the total size of results across all pages
+                    return results;
 
+                });
+          });
 
-            }//end of the scroller function
 
+  };//get content type
 
 
 
+	$rootScope.getContentType('stockist', 'my.stockist.date desc');
 
 
 
@@ -682,739 +445,274 @@ $scope.headerHideOff = function(){
 
 
 
-    // }, 5000);  // end timeout
 
-    $scope.$on('$viewContentLoaded', function(){
-      setTimeout(function(){
-        $rootScope.fw15_scroller(navActiveCheck);
-      },600);
-    });
 
 
 
-}); //..end of controller
 
+  $rootScope.showCart = false;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//.............................................................. SS16............................................................................
-
-
-
-Application.controller('sssixteenCtrl', function($anchorScroll, $location, $scope, anchorSmoothScroll,$window, $route,getService, $rootScope, $routeParams){
-
-  //
-  // $scope.firstScroll();
-  $scope.hasBlinkOnce = false;
-  $rootScope.addBlink();
-  $rootScope.addShift();
-  $scope.mainLookShow=false;
-  $rootScope.headerSectionName = "";
-  $rootScope.isLookbook=true;
-  if(!$rootScope.isMobile){
-    $scope.lookbookVH = "4509px;";
+  $rootScope.retrieveElement = function(id){
+    var element = angular.element(document.querySelectorAll("#"+id)[0]);
+    return element
   }
 
 
-  //...........................initializing season variables
-  $rootScope.currentPosition = "ss16";
-  $rootScope.seasonData = [];
-
-  $rootScope.film = {};
-  $rootScope.catalogue = {};
-  $rootScope.heroes = {};
-  $rootScope.lookbook = {};
-  $rootScope.headerHide = true;
-  $scope.enableLookbookScroll=false;
-  var navActiveCheck = false;
-
-      // This service's function returns a promise, but we'll deal with that shortly
-
-      getService.get("ss16")
-        // getService.get('fw15')
-      // then() called when son gets back
-      .then(function(data) {
-
-          $rootScope.seasonData = data;
-          $rootScope.metaData = data[0];
-          $rootScope.lookbook = data[1];
-          $scope.$broadcast("myEvent");
-          return $rootScope.ss16_scroller(navActiveCheck);
-
-      }, function(error) {
-          // promise rejected, could log the error with: console.log('error', error);
-          console.log('error', error);
-
-      });
 
 
 
 
-      $scope.ss_hashFn = function(x){
-                var newHash = x;
-              if ($location.path() !== x) {
 
 
-                if (x === "intro"){
-                  $location.path("", false);
 
-                }else {
-                // set the $location.hash to `newHash` and
-                // $anchorScroll will automatically scroll to it
-                  $location.path("ss16/"+x, false);
+  //MOBILE
+
+
+  $rootScope.windowHeight= $window.innerHeight;
+  $rootScope.half_windowHeight = $window.innerHeight/2;
+    jQuery($window).resize(function(){
+      $rootScope.windowHeight = $window.innerHeight;
+      $rootScope.half_windowHeight = $window.innerHeight/2;
+      $rootScope.checkSize();
+      $scope.landscapeFunction();
+
+      // $rootScope.checkSize();
+        $rootScope.$apply();
+    });
+
+
+  //remove logo on scroll
+  $rootScope.logoCorner=false;
+  $rootScope.showDetail=false;
+
+
+      //....this is the function that checks the header of the browser and sees what device it is
+      $rootScope.isMobile, $rootScope.isDevice, $rootScope.isMobileDevice;
+      $rootScope.checkSize = function(){
+          $rootScope.checkDevice = {
+                Android: function() {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                BlackBerry: function() {
+                    return navigator.userAgent.match(/BlackBerry/i);
+                },
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                },
+                Opera: function() {
+                    return navigator.userAgent.match(/Opera Mini/i);
+                },
+                Windows: function() {
+                    return navigator.userAgent.match(/IEMobile/i);
+                },
+                any: function() {
+                    return ($rootScope.checkDevice.Android() || $rootScope.checkDevice.BlackBerry() || $rootScope.checkDevice.iOS() || $rootScope.checkDevice.Opera() || $rootScope.checkDevice.Windows());
                 }
+            };
+
+          //........checks the width
+            $scope.mobileQuery=window.matchMedia( "(max-width: 767px)" );
+            $rootScope.isMobile=$scope.mobileQuery.matches;
+
+          //.........returning true if device
+            if ($scope.checkDevice.any()){
+              $rootScope.isDevice= true;
+            }else{
+                $rootScope.isDevice=false;
+            }
+
+            if (($rootScope.isDevice==true)&&($scope.isMobile==true)){
+              $rootScope.isMobileDevice= true;
+            }else{
+                $rootScope.isMobileDevice=false;
+            }
 
 
-              } else {
-                // call $anchorScroll() explicitly,
-                // since $location.hash hasn't changed
-                $anchorScroll();
+
+
+              if ($rootScope.isDevice){
+                  $rootScope.mobileLocation = function(url){
+                    $location.path(url).search();
+                  }
+                  $rootScope.mobileExternalLocation = function(url){
+                    $window.open(url, '_blank');
+                  }
+              } else if (!$rootScope.isDevice){
+                  $rootScope.mobileLocation = function(url){
+                    return false;
+                  }
+                  $rootScope.mobileExternalLocation = function(url){
+                    return false;
+                  }
               }
-      }
 
+        }//checkSize
+        $rootScope.checkSize();
+        $rootScope.landscapeView = false;
 
+       //function removing website if landscape
 
+        $scope.landscapeFunction = function(){
 
-
-
-
-
-      $rootScope.headerHide = true;
-
-      $scope.headerHideOn = function(){
-        if ($rootScope.headerHide == false){
-          $rootScope.headerHide = true;
-        }
-      }
-
-
-      $scope.headerHideOff = function(){
-
-        if ($rootScope.headerHide == true){
-
-          $rootScope.headerHide = false;
-
-        }
-      }
-
-
-
-
-
-
-
-
-$rootScope.ss16_scroller = function(navState){
-
-  jQuery($window).unbind("scroll.fw_fifteen_scroll");
-    jQuery($window).unbind("scroll.ss_sixteen_scroll");
-    jQuery($window).unbind("scroll.support_scroll");
-
-  setTimeout(function(){
-
-
-        $scope.navigationLinks = [];
-
-        for (var i = 1; i < $rootScope.seasonData.length; i++){
-          $scope.paths = $rootScope.seasonData[i].navigation;
-          $scope.navigationLinks = $scope.navigationLinks.concat($scope.paths);
-        }
-
-
-
-        //initializing
-        var scroll = 0;
-        $scope.offset =[]
-        $scope.navHideOne = true;
-        $scope.navFadeOne = 0;
-        $scope.enableLookbookScroll = false;
-
-
-        if(!$rootScope.isMobile){
-          $scope.navOffset = jQuery('#ss16-navHash').offset().top -1;
-        }
-
-
-        //....lookbook offset
-        $scope.lookbookOffset = jQuery('#lookbookHash').offset().top -1;
-        //....height of a window
-        $scope.windowHeight = $window.innerHeight;
-
-
-
-
-        for (i in  $scope.navigationLinks){
-            $scope.thisoffset = jQuery('#'+$scope.navigationLinks[i]+'Hash').offset().top -1;
-            $scope.offset = $scope.offset.concat($scope.thisoffset);
+          if ($rootScope.isMobile==true){
+              if(window.innerHeight < window.innerWidth){
+                $rootScope.landscapeView = true;
+                $rootScope.pageLoading = true;
+              //   $(".landscape-view-wrapper").css({
+              //     "width":"100vw",
+              //     "height": "100vh",
+              //     "display": "block"
+              // });
+              }else{
+                $rootScope.landscapeView = false;
+                $rootScope.pageLoading = false;
+              }
           }
+        }
 
+      $scope.landscapeFunction();
 
 
 
-//........SCROLL
 
 
-      jQuery($window).bind("scroll.ss_sixteen_scroll", function(event) {
 
-                    scroll =  jQuery($window).scrollTop();
-                    // var scroll =  angular.element($window).yOffset;
 
-                    // nav fade out
-                    if (scroll < 200) {
-                      $scope.navFade = ((scroll-200)*(-1))/200;
-                      $scope.navHide = false;
-                    }
 
+})// end of appCtrl
 
 
-                    //..............................................................................fading in second nav
 
-                    // nav ONE fade in
+.directive('logoDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/components/logo.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
 
-                    else if ((scroll >= 200)&&(scroll < ($scope.navOffset-$scope.windowHeight))) {
-
-                      $scope.navHideOne = true;
-                      $scope.supportFade =0;
-
-                      $scope.navFade = 0;
-                      $scope.navHide = true;
-                      $rootScope.removeBlink();
-
-
-
-                      jQuery(".lookbook-ul").css({"position": "absolute"});
-                      jQuery(".lookbook-ul").css({"top": "0"});
-
-
-                    }else if ((scroll > ($scope.navOffset-$scope.windowHeight)) && (scroll < ($scope.navOffset+$scope.windowHeight))) {
-
-
-                      jQuery(".lookbook-ul").css({"position": "fixed"});
-                      jQuery(".lookbook-ul").css({"top": "-3730px"});
-
-
-
-                                  if ((scroll > ($scope.navOffset-$scope.windowHeight))&&(scroll <= ($scope.navOffset))){
-
-
-                                    if ($scope.hasBlinkOnce == true){
-
-                                      jQuery('.navigation-one').addClass('blink-once');
-
-                                    $scope.hasBlinkOnce = false;
-                                    }
-
-
-
-                                  }else if(scroll > ($scope.navOffset)){
-
-                                    $scope.hasBlinkOnce = true;
-                                      jQuery('.navigation-one').removeClass('blink-once');
-
-                                  }
-
-
-
-
-                        $scope.navFadeOne = (((($scope.navOffset-$scope.windowHeight)-scroll))*(-1))/200;
-                        $scope.navHideOne = false;
-
-
-                      }
-
-
-
-
-
-
-
-
-              //..................................................................burger scroll function
-
-
-                    if ((scroll<$scope.offset[0])&&(navState === false)) {
-                      $scope.burgerColor = "#FFFFFF";
-                      $scope.headerHideOn();
-
-                      $scope.ss_hashFn("intro");
-                      $rootScope.headerSectionName = "";
-                      $scope.mainLookShow=false;
-                      }else  if (((scroll>=$scope.offset[0])&&(scroll < $scope.navOffset))&&(navState === false)) {
-                          $scope.burgerColor = "#000000";
-                          $scope.headerHideOff();
-
-                          $scope.ss_hashFn($scope.navigationLinks[0]);
-                          $rootScope.headerSectionName = $scope.navigationLinks[0];
-                      $scope.mainLookShow=true;
-
-                      }else  if ((scroll >= $scope.navOffset)&&(navState === false)) {
-                          $scope.burgerColor = "#FFFFFF";
-                          $scope.headerHideOn();
-                          $scope.ss_hashFn("intro");
-                          $rootScope.headerSectionName = "";
-                          $scope.mainLookShow=true;
-                      }
-
-
-
-
-
-
-
-
-
-                $scope.$apply();
-
-            });
-
-
-
-      }, 600);
-      $scope.$broadcast("content_loaded_ss16");
-    };//SS scroller function
-
-
-
-});//end of ss16
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//............................................................. SUPPORT............................................................................
-
-
-Application.controller('supportCtrl', function($anchorScroll, $location, $scope, anchorSmoothScroll,$window, $route,getService, $rootScope, $routeParams){
-
-
-
-
-  $scope.burgerColor = "#000000";
-  $scope.hasBlinkOnce = false;
-  $rootScope.addBlink();
-  $rootScope.addShift();
-  $rootScope.currentPosition = "support";
-  var navActiveCheck = false;
-  $rootScope.headerSectionName = "";
-
-
-
-    $rootScope.support = [];
-    $rootScope.aboutData ={};
-    $rootScope.contactData ={};
-    $rootScope.stockistsData ={};
-      // This service's function returns a promise, but we'll deal with that shortly
-
-      getService.get("support")
-      // then() called when son gets back
-      .then(function(data) {
-
-        $rootScope.support = data;
-    		$rootScope.aboutData = data[0];
-    		$rootScope.contactData = data[1];
-    		$rootScope.stockistsData = data[2];
-        $scope.$broadcast("supportDataArrived");
-
-
-      }, function(error) {
-          // promise rejected, could log the error with: console.log('error', error);
-          console.log('error', error);
-      });
-      // .then(function(){
-      //   setTimeout(function(){
-      //     $rootScope.endLoader();
-      //   }, 600);
-      // });
-
-
-
-
-
-            $scope.supportHashFn = function(x){
-                var newHash = x;
-
-                    if ($location.path() !== x) {
-
-                      if (x === "intro"){
-                        $location.path("/", false);
-
-                      }else {
-                      // set the $location.hash to `newHash` and
-                      // $anchorScroll will automatically scroll to it
-                        $location.path(x, false);
-                      }
-
-                    }else {
-                      $anchorScroll();
-                    }
-            }
-
-
-
-
-
-
-
-            $rootScope.headerHide = true;
-
-            $scope.support_headerHideOn = function(){
-
-              if ($rootScope.headerHide == false){
-
-                $rootScope.headerHide = true;
-
-              }
-
-            }
-
-
-            $scope.support_headerHideOff = function(){
-
-              if ($rootScope.headerHide == true){
-
-                $rootScope.headerHide = false;
-
-              }
-            }
-
-
-
-
-
-
-
-
-
-
-
-$rootScope.support_scroller = function(navState){
-
-
-
-
-    jQuery($window).unbind("scroll.fw_fifteen_scroll");
-      jQuery($window).unbind("scroll.ss_sixteen_scroll");
-      jQuery($window).unbind("scroll.support_scroll");
-
-
-            //initializing
-            // $scope.headerHide = true;
-            $scope.navHideOne = true;
-            $scope.navFadeOne = 0;
-            var support_scroll = 0;
-
-
-
-            //...about offset
-            $scope.aboutOffset = jQuery('#aboutHash').offset().top -1;
-            //...contact offset
-            $scope.contactOffset = jQuery('#contactHash').offset().top -1;
-            //...stocklists offset
-            $scope.stockistsOffset = jQuery('#stockistsHash').offset().top -1;
-
-            //....height of a window
-            $scope.windowHeight = $window.innerHeight;
-
-
-
-
-            //....nav-one offset
-            // $scope.navOffset = jQuery('#ss116-navHash').offset().top -1;
-
-          // angular.element(document.getElementById('#lookbook-image-28')).ready(function () {
-            // setTimeout(function(){
-              $scope.navSupportOffset = jQuery('#support-navHash').offset().top -1;
-            // }, 3000);
-          //  });
-
-
-
-
-
-
-
-
-
-      jQuery($window).bind("scroll.support_scroll", function(event) {
-
-              support_scroll = jQuery($window).scrollTop();
-
-            if (support_scroll < $scope.aboutOffset ){
-
-              $scope.supportHashFn('intro');
-              $rootScope.headerSectionName = "";
-
-
-            }else if ((support_scroll >= $scope.aboutOffset )&&(support_scroll < $scope.contactOffset )){
-
-                $scope.supportHashFn('about');
-                // $routeParams.section = 'about';
-                $rootScope.headerSectionName = "about";
-
-             }else if ((support_scroll >= $scope.contactOffset )&&(support_scroll < $scope.stockistsOffset )){
-
-               $scope.supportHashFn('contact');
-              //  $routeParams.section = 'contact';
-              $rootScope.headerSectionName = "contact";
-
-            }else if ((support_scroll > $scope.stockistsOffset)&&(support_scroll < $scope.navSupportOffset)){
-
-              $scope.supportHashFn('stockists');
-              // $routeParams.section = 'stockists';
-              $rootScope.headerSectionName = "stockists";
-
-            }else if(support_scroll >= $scope.navSupportOffset){
-              $scope.supportHashFn('intro');
-              $rootScope.headerSectionName = "";
-            }
-
-
-
-
-             // nav fade out
-             if (support_scroll < 200) {
-               $scope.navFade = ((support_scroll-200)*(-1))/200;
-               $scope.navHide = false;
-             }
-             else if(support_scroll >= 200){
-
-               $scope.navFade = 0;
-               $scope.navHide = true;
-               $rootScope.removeBlink();
-             }
-
-             //..............................................................................fading in second nav
-
-             // nav ONE fade in
-
-             if (support_scroll < ($scope.navSupportOffset-200)) {
-               $scope.navHideOne = true;
-               $scope.supportFade =0;
-             }else if ((support_scroll > ($scope.navSupportOffset-200)) && (support_scroll < ($scope.navSupportOffset+$scope.windowHeight))) {
-
-                           if ((support_scroll > ($scope.navSupportOffset-200))&&(support_scroll <= ($scope.navSupportOffset))){
-
-
-                             if ($scope.hasBlinkOnce == true){
-                               jQuery('.navigation-one').addClass('blink-once');
-                             $scope.hasBlinkOnce = false;
-                             }
-
-
-                           }else if(support_scroll > ($scope.navSupportOffset)){
-
-                             $scope.hasBlinkOnce = true;
-
-                               jQuery('.navigation-one').removeClass('blink-once');
-
-                           }
-
-               $scope.navFadeOne = (((($scope.navSupportOffset-200)-support_scroll))*(-1))/200;
-               $scope.navHideOne = false;
-             }
-
-
-
-
-
-       //..................................................................burger scroll function
-
-
-             if ((support_scroll<$scope.aboutOffset)&&(navState === false)) {
-               $scope.burgerColor = "#FFFFFF";
-               $scope.support_headerHideOn();
-
-
-             }else  if (((support_scroll>=$scope.aboutOffset)&&(support_scroll < $scope.navSupportOffset))&&(navState === false)) {
-                   $scope.burgerColor = "#000000";
-                   $scope.support_headerHideOff();
-
-               }else  if ((support_scroll >= $scope.navSupportOffset)&&(navState === false)) {
-                   $scope.burgerColor = "#FFFFFF";
-                   $scope.support_headerHideOn();
-               }
-
-
-
-
-            $scope.$apply();
-
-            });
-
-            $scope.$broadcast("content_loaded_support");
-          };
-
-
-
-
-setTimeout(function(){
-
-    $rootScope.support_scroller(navActiveCheck);
-  }, 600);
-
-
-
-
-
-
-
-
-});// end of the support controller
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Application.directive('imageFadeDirective', function($rootScope, $location, $timeout, $window){
-	return{
-		restrict:'A',
-    link: function(scope, elem, attr){
-
-      if(!$rootScope.isMobile){
-        $timeout(function() {
-            var windowHeight = $window.innerHeight;
-            scope.imageWidth = elem[0].offsetHeight;
-            var imageScroll = elem[0].offsetTop;
-            scope.thisElement = elem;
-            scope.child = elem.children();
-            scope.thisID = scope.child.attr("id");
-            var thisChild = angular.element( document.querySelector( '#'+scope.thisID ) )
-            jQuery($window).bind("scroll.image_fade_scroll", function(event) {
-              var scrolled = false;
-              var window_scroll = jQuery($window).scrollTop();
-              if ((window_scroll > (imageScroll - (windowHeight/1.7)))&&(scrolled==false)){
-                  scope.thisElement.addClass("fadeScroll");
-                  thisChild.addClass("fadeUp");
-                  var scrolled = true;
-              }
-            });
-        }, 600);
-      }
     }
-	}
+  };
+})
+
+.directive('shopDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+
+.directive('productDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/product.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+
+.directive('detailDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/product-detail.html',
+    controller: 'detailCtrl',
+    replace: true,
+    link: function(scope, elem, attrs) {
+    }
+  };
+})
+
+
+
+
+.directive('cartDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/cart.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+.directive('shipmentDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/shipment.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+
+.directive('choiceDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/choice.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+.directive('paymentDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/payment.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+.directive('termsDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/terms.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
+
+.directive('processedDirective', function($rootScope, $location, $window, $timeout) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/processed.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
 });
 
 var jqueryUI = require('./vendor/jquery-ui.min.js');
-var services = require("./services.js");
-var routes = require("./routes.js");
-var about = require("./logo.js");
-var about = require("./about.js");
-var catalogue = require("./catalogue.js");
-var contact = require("./contact.js");
-var film = require("./film.js");
-var heroes = require("./heroes.js");
-var lookbook = require("./lookbook.js");
-
-var social = require("./social.js");
-var stockists = require("./stockists.js");
+var jQuery = require('jquery');
 var nav = require("./nav.js");
+var shop = require("./shop/shop.js");
+var cart = require("./shop/cart.js");
+var checkout = require("./shop/checkout.js");
+var payment = require("./shop/payment.js");
+var processed = require("./shop/processed.js")
+var service = require('./service.js');
+var collection = require('./collection/collection.js');
+var lookbook = require('./collection/lookbook.js');
+var support = require('./support/support.js');
+var social = require('./social/social.js');
+
+
+
+//
