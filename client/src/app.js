@@ -204,45 +204,6 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-// $rootScope.Auth;
-//
-//   $rootScope.authentication = function(){
-//
-//         // Simple GET request example:
-//         $http({
-//           method: 'GET',
-//           url: '/authenticate'
-//         }).then(function successCallback(response) {
-//
-//           if(response.data.access_token || response.data.token){
-//               // this callback will be called asynchronously
-//               // when the response is available
-//               console.log(response.data);
-//               var expires = response.data.expires;
-//               var identifier = response.data.identifier;
-//               var expires_in = response.data.expires_in;
-//               var access_token = response.data.access_token;
-//               var type = response.data.token_type;
-//
-//               $rootScope.Auth =response.data;
-//
-//               $rootScope.getProductsFN();
-//               $rootScope.getCollections();
-//
-//               // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-//
-//           }
-//
-//           }, function errorCallback(response) {
-//             // called asynchronously if an error occurs
-//             // or server returns response with an error status.
-//           });
-//
-//   }//addToCart
-//
-//   $rootScope.authentication();
-
-
 
 
 
@@ -283,27 +244,54 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 //get products
-$rootScope.Product;
+$rootScope.Pagination;
+$rootScope.Product=[];
+$rootScope.paginationInProcess=false;
 
-$rootScope.getProductsFN=function(){
-  $http({method: 'GET', url: '/getProducts'}).then(function(response){
-    $rootScope.Product = response.data;
+$rootScope.getProductsFN=function(offset){
+  $rootScope.paginationInProcess=true;
+  $http({method: 'GET', url: '/product/list?offset='+offset}).then(function(response){
+    $rootScope.Product = $rootScope.Product.concat(response.data.result);
+    $rootScope.Pagination = response.data.pagination;
     console.log(response.data);
-    // for (var i in $rootScope.Product){
-    //   $rootScope.detailUpdate($rootScope.Product[i].sku);
-    //   return false;
-    // }
     $rootScope.$broadcast("productArrived");
     $rootScope.pageLoading = false;
+    $rootScope.paginationInProcess=false;
+
+    for (var i in $rootScope.Product){
+      console.log($rootScope.Product[i].status.data.key);
+    }
 
   }, function(error){
     console.log(error);
     console.log("products status 400");
-      // $rootScope.getProductsFN();
   });
 }
 
-$rootScope.getProductsFN();
+$rootScope.getProductsFN(0);
+
+
+
+
+
+
+setTimeout(function(){
+  angular.element($window).bind("scroll", function() {
+      var windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+      var body = document.body, html = document.documentElement;
+      var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+      var windowBottom = windowHeight + window.pageYOffset;
+
+      if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
+          // alert('bottom reached');
+          if($rootScope.Pagination.offsets.next){
+            $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
+          }
+
+      }
+  });
+}, 600);
+
 
 
 

@@ -86,17 +86,13 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
 
 $rootScope.selectFilter=(thistype, id)=>{
   // $rootScope.pageLoading = false;
-
   if(!id){
     $rootScope.filter['collection'].selected = id;
     $rootScope.filter['gender'].selected = id;
-
   }else{
     $location.search(thistype, id);
     $rootScope.filter[thistype].selected = id;
   }
-
-
 }
 
 
@@ -346,43 +342,59 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
 
-  $rootScope.detailUpdate = (sku) => {
+  $rootScope.detailUpdate = (id) => {
     $rootScope.selectedVariation={};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations=0;
 
-    for (var i in $rootScope.Product){
-      if ($rootScope.Product[i].sku == sku){
-        $rootScope.Product[i].sku
-        $rootScope.Detail=$rootScope.Product[i];
-        $rootScope.Detail.total_variations=0;
-        $rootScope.Detail.has_variation = $rootScope.has_variation;
-        // $rootScope.pageLoading = false;
-        $scope.getVariationsLevel($rootScope.Detail.id);
+    if(!$rootScope.Product){
+      $rootScope.getDetail(id);
+    }else{
+      for (var i in $rootScope.Product){
+        if ($rootScope.Product[i].id == id){
+          $rootScope.Product[i].id
+          $rootScope.Detail=$rootScope.Product[i];
+          $rootScope.Detail.total_variations=0;
+          $rootScope.Detail.has_variation = $rootScope.has_variation;
+          // $rootScope.pageLoading = false;
+          $scope.getVariationsLevel($rootScope.Detail.id);
 
-        var go = true;
-        //has variation
-        for (var m in $rootScope.Detail.modifiers){
-          $rootScope.Detail.total_variations =$rootScope.Detail.total_variations+1;
-          // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
-          $rootScope.Detail.has_variation = true;
-          $rootScope.selectedVariation[m] =
-            {
-              open: true
-            }
+          var go = true;
+          //has variation
+          for (var m in $rootScope.Detail.modifiers){
+            $rootScope.Detail.total_variations =$rootScope.Detail.total_variations+1;
+            // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
+            $rootScope.Detail.has_variation = true;
+            $rootScope.selectedVariation[m] = {open: true}
             go = false;
+          }
 
+          if(go==true){
+            //does not have variation
+            $rootScope.Detail.has_variation = false;
+          }
         }
-
-        if(go==true){
-          //does not have variation
-          $rootScope.Detail.has_variation = false;
-        }
-
       }
     }
+
+
   }
 
+
+
+
+$rootScope.getDetail = (id)=>{
+  //no detail yet let's pull it
+  $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
+    console.log(response);
+    $rootScope.Detail = response.data;
+    $scope.getVariationsLevel($rootScope.Detail.id);
+
+  }, function(error){
+    console.log(error);
+    console.log("products status 400");
+  });
+}
 
 
   // $rootScope.detailUpdate($routeParams.detail);

@@ -148,44 +148,6 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     }
   };
 
-  // $rootScope.Auth;
-  //
-  //   $rootScope.authentication = function(){
-  //
-  //         // Simple GET request example:
-  //         $http({
-  //           method: 'GET',
-  //           url: '/authenticate'
-  //         }).then(function successCallback(response) {
-  //
-  //           if(response.data.access_token || response.data.token){
-  //               // this callback will be called asynchronously
-  //               // when the response is available
-  //               console.log(response.data);
-  //               var expires = response.data.expires;
-  //               var identifier = response.data.identifier;
-  //               var expires_in = response.data.expires_in;
-  //               var access_token = response.data.access_token;
-  //               var type = response.data.token_type;
-  //
-  //               $rootScope.Auth =response.data;
-  //
-  //               $rootScope.getProductsFN();
-  //               $rootScope.getCollections();
-  //
-  //               // $rootScope.createCookie( "access_token", response.data.access_token , response.data.expires_in);
-  //
-  //           }
-  //
-  //           }, function errorCallback(response) {
-  //             // called asynchronously if an error occurs
-  //             // or server returns response with an error status.
-  //           });
-  //
-  //   }//addToCart
-  //
-  //   $rootScope.authentication();
-
   // function eraseCookie(name) {
   //   $rootScope.createCookie(name,"",-1);
   // }
@@ -216,26 +178,47 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   // }
 
   //get products
-  $rootScope.Product;
+  $rootScope.Pagination;
+  $rootScope.Product = [];
+  $rootScope.paginationInProcess = false;
 
-  $rootScope.getProductsFN = function () {
-    $http({ method: 'GET', url: '/getProducts' }).then(function (response) {
-      $rootScope.Product = response.data;
+  $rootScope.getProductsFN = function (offset) {
+    $rootScope.paginationInProcess = true;
+    $http({ method: 'GET', url: '/product/list?offset=' + offset }).then(function (response) {
+      $rootScope.Product = $rootScope.Product.concat(response.data.result);
+      $rootScope.Pagination = response.data.pagination;
       console.log(response.data);
-      // for (var i in $rootScope.Product){
-      //   $rootScope.detailUpdate($rootScope.Product[i].sku);
-      //   return false;
-      // }
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
+      $rootScope.paginationInProcess = false;
+
+      for (var i in $rootScope.Product) {
+        console.log($rootScope.Product[i].status.data.key);
+      }
     }, function (error) {
       console.log(error);
       console.log("products status 400");
-      // $rootScope.getProductsFN();
     });
   };
 
-  $rootScope.getProductsFN();
+  $rootScope.getProductsFN(0);
+
+  setTimeout(function () {
+    _angular2.default.element($window).bind("scroll", function () {
+      var windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+      var body = document.body,
+          html = document.documentElement;
+      var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      var windowBottom = windowHeight + window.pageYOffset;
+
+      if (windowBottom >= docHeight && $rootScope.paginationInProcess == false) {
+        // alert('bottom reached');
+        if ($rootScope.Pagination.offsets.next) {
+          $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
+        }
+      }
+    });
+  }, 600);
 
   //get shop collections
   $rootScope.getCollections = function () {
@@ -1787,7 +1770,6 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
 
   $rootScope.selectFilter = function (thistype, id) {
     // $rootScope.pageLoading = false;
-
     if (!id) {
       $rootScope.filter['collection'].selected = id;
       $rootScope.filter['gender'].selected = id;
@@ -1984,38 +1966,52 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
     });
   };
 
-  $rootScope.detailUpdate = function (sku) {
+  $rootScope.detailUpdate = function (id) {
     $rootScope.selectedVariation = {};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations = 0;
 
-    for (var i in $rootScope.Product) {
-      if ($rootScope.Product[i].sku == sku) {
-        $rootScope.Product[i].sku;
-        $rootScope.Detail = $rootScope.Product[i];
-        $rootScope.Detail.total_variations = 0;
-        $rootScope.Detail.has_variation = $rootScope.has_variation;
-        // $rootScope.pageLoading = false;
-        $scope.getVariationsLevel($rootScope.Detail.id);
+    if (!$rootScope.Product) {
+      $rootScope.getDetail(id);
+    } else {
+      for (var i in $rootScope.Product) {
+        if ($rootScope.Product[i].id == id) {
+          $rootScope.Product[i].id;
+          $rootScope.Detail = $rootScope.Product[i];
+          $rootScope.Detail.total_variations = 0;
+          $rootScope.Detail.has_variation = $rootScope.has_variation;
+          // $rootScope.pageLoading = false;
+          $scope.getVariationsLevel($rootScope.Detail.id);
 
-        var go = true;
-        //has variation
-        for (var m in $rootScope.Detail.modifiers) {
-          $rootScope.Detail.total_variations = $rootScope.Detail.total_variations + 1;
-          // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
-          $rootScope.Detail.has_variation = true;
-          $rootScope.selectedVariation[m] = {
-            open: true
-          };
-          go = false;
-        }
+          var go = true;
+          //has variation
+          for (var m in $rootScope.Detail.modifiers) {
+            $rootScope.Detail.total_variations = $rootScope.Detail.total_variations + 1;
+            // if($rootScope.Detail.modifiers[i].id){$rootScope.has_variation=true;}else{$rootScope.has_variation=false;}
+            $rootScope.Detail.has_variation = true;
+            $rootScope.selectedVariation[m] = { open: true };
+            go = false;
+          }
 
-        if (go == true) {
-          //does not have variation
-          $rootScope.Detail.has_variation = false;
+          if (go == true) {
+            //does not have variation
+            $rootScope.Detail.has_variation = false;
+          }
         }
       }
     }
+  };
+
+  $rootScope.getDetail = function (id) {
+    //no detail yet let's pull it
+    $http({ method: 'GET', url: '/product/' + id + '/get' }).then(function (response) {
+      console.log(response);
+      $rootScope.Detail = response.data;
+      $scope.getVariationsLevel($rootScope.Detail.id);
+    }, function (error) {
+      console.log(error);
+      console.log("products status 400");
+    });
   };
 
   // $rootScope.detailUpdate($routeParams.detail);

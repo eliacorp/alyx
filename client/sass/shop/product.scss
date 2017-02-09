@@ -36,6 +36,8 @@
     margin-bottom: 20vh;
     margin-right:17%;
     float:left;
+    background-color: $black;
+    position: relative;
     @include respond-to(phone){
       width:100%;
       margin-right:0%;
@@ -51,6 +53,14 @@
         margin-right:0%;
       }
     }
+    .product-li-placeholder{
+      display: block;
+      width: auto;
+      background-color: $black;
+      position: absolute;
+      top:0;
+      left: 0;
+    }
 
     a{
       display:block;
@@ -62,6 +72,7 @@
         width: 100%;
         height: auto;
         transform-origin: center;
+        display: block;
         &:nth-child(1){
           margin-left:0;
         }
