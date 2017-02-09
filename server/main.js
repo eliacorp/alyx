@@ -291,7 +291,7 @@ function setToHappen(d){
     });
 
 
-    app.post('/product/:id/stock_level/:quantity', function(req, res){
+    app.post('/product/update_stock', function(req, res){
       updateProductStock(req, res);
     });
 
@@ -546,43 +546,35 @@ function setToHappen(d){
 
 
 
-    // curl -X GET https://api.molt.in/v1/products/1379862576992617248/variations -H "Authorization: Bearer ea9f070f4f093161bf344bd8fc120a2f6574a042"
-    // curl -X GET https://api.molt.in/v1/products/1019656230785778497/variations /
-function getVariationsLevel(req, res){
-  var id = req.params.id.toString();
-  var url = 'https://api.molt.in/v1/products/'+id+'/variations';
-  var access_token = req.mySession.access_token;
-  var options = {
-    url: url,
-    headers: {
-      'Authorization': 'Bearer '+access_token
-    }
-  };
+  // curl -X GET https://api.molt.in/v1/products/1379862576992617248/variations -H "Authorization: Bearer ea9f070f4f093161bf344bd8fc120a2f6574a042"
+  // curl -X GET https://api.molt.in/v1/products/1019656230785778497/variations /
+  function getVariationsLevel(req, res){
+    var id = req.params.id.toString();
+    var url = 'https://api.molt.in/v1/products/'+id+'/variations';
+    var access_token = req.mySession.access_token;
+    var options = {
+      url: url,
+      headers: {
+        'Authorization': 'Bearer '+access_token
+      }
+    };
 
-  function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var info = JSON.parse(body);
-      res.status(response.statusCode).json(info);
-    }else{
-      var info = JSON.parse(body);
-      res.status(response.statusCode).json(info);
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var info = JSON.parse(body);
+        res.status(response.statusCode).json(info);
+      }else{
+        var info = JSON.parse(body);
+        res.status(response.statusCode).json(info);
+      }
     }
+    request(options, callback);
   }
-  request(options, callback);
-
-}
 
 
 
 
     function getCollections(req, res){
-      // moltin.Collection.List(null, function(data) {
-      //     res.status(200).json(data);
-      // }, function(error) {
-      //   res.status(400).json(error);
-      //     // Something went wrong...
-      // });
-
 
       var url = 'https://api.molt.in/v1/collections';
       var access_token = req.mySession.access_token;
@@ -615,6 +607,9 @@ function getVariationsLevel(req, res){
 
 
 
+
+
+
     function getOrderByID(req, res){
       var orderID = req.params.order;
       moltin.Order.Get(orderID, function(order) {
@@ -624,6 +619,9 @@ function getVariationsLevel(req, res){
           // Something went wrong...
       });
     };
+
+
+
 
 
 
@@ -679,29 +677,71 @@ function getOrderItems(req, res){
 
 
 
+
+
+
+//update stock when buy a variation
+
 function updateProductStock(req, res){
+  var contents = req.body;
+  var x = 0;
+  var loopArray = function(arr) {
+      httpCall(arr[x],function(){
+        // set x to next item
+        x++;
+        // any more items in array? continue loop
+        if(x < arr.length) {
+            loopArray(arr);
+        }else{
+          console.log("done updating products level");
+          req.mySession.updated_stock = true;
+          res.status(200).json(arr);
+        }
+      });
+  }
 
-  var id = req.params.id;
-  var quantity = req.params.quantity;
-  console.log("updateProductStock");
-  console.log("id: "+id);
-  console.log("quantity: "+quantity);
+  function httpCall(content,callback) {
+      // code to show your custom alert
+      if(content.product.data.modifiers.length!=0){
+        var key = Object.keys(content.product.data.modifiers)[0];
+        var thisProduct = content.product.data.modifiers[key].data.product;
+        var quantity = content.quantity;
+        updateStockMoltin(thisProduct, quantity, callback);
+      }else{
+        callback();
+      }
+  }
 
-    moltin.Product.Update(id, {
-        stock_level:  quantity
-    }, function(product) {
-        req.mySession.updated_stock = true;
-        res.status(200).json(product);
+
+  function updateStockMoltin(id, quantity, callback){
+    var new_stock_level;
+    moltin.Product.Get(id, function(product) {
+      new_stock_level = product.stock_level-quantity;
+      console.log("new_stock_level: "+new_stock_level);
+      moltin.Product.Update(id, {
+          stock_level:  new_stock_level
+      }, function(product) {
+          callback();
+      }, function(error, response, c) {
+        console.log("stock level update failed!");
+        console.log("c: "+c);
+        console.log("error: "+error);
+        res.status(c).json(response);
+          // Something went wrong...
+      });
 
     }, function(error, response, c) {
-      console.log("stock level update failed!");
-      console.log("c: "+c);
-      console.log("error: "+error);
-      res.status(c).json(response);
-        // Something went wrong...
+      res.status(c).json(error);
     });
 
+  }
+
+
+  loopArray(contents);
+
 }
+
+
 
 
 

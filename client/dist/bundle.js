@@ -1669,15 +1669,15 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
         console.log('method:', $routeParams.method);
 
         if ($rootScope.Product) {
-          $scope.searchProduct(response.data.result);
+          $scope.updateStockLevel(response.data.result);
         } else {
           $rootScope.$on('productArrived', function () {
             console.log("productArrived");
-            $scope.searchProduct(response.data.result);
+            $scope.updateStockLevel(response.data.result);
           });
         }
       } else {
-        $scope.searchProduct(response.data.result);
+        $scope.updateStockLevel(response.data.result);
       }
 
       $scope.eraseCart();
@@ -1687,105 +1687,9 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
     });
   };
 
-  $scope.searchProduct = function (data) {
-    console.log("searchProduct");
-    var contents = data;
-
-    for (var i in contents) {
-
-      if (contents[i].product.data.modifiers.length != 0) {
-        console.log("has modifiers");
-        var key = Object.keys(contents[i].product.data.modifiers)[0];
-        var thisProduct = contents[i].product.data.modifiers[key].data.product;
-
-        for (var p in $rootScope.Product) {
-          if ($rootScope.Product[p].id == thisProduct) {
-            console.log("this product id");
-            console.log(thisProduct);
-            // var thisProduct = $rootScope.Product[p].id;
-            var quantity = contents[i].quantity;
-            console.log("quantity", quantity);
-            console.log($rootScope.Product[p].stock_level);
-            var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
-            $scope.updateStockLevel(thisProduct, stock);
-          }
-        }
-
-        // if($routeParams.method=='paypal-express'){
-        //   $http({
-        //     url: '/product/'+thisProduct+'/variations/get',
-        //     method: 'GET',
-        //   }).then(function(response){
-        //     console.log("get variations");
-        //
-        //     for (var p in $rootScope.Product){
-        //       if($rootScope.Product[p].id==thisProduct){
-        //         console.log("this product id");
-        //         console.log(thisProduct);
-        //
-        //         $rootScope.Variations=response.data.result;
-        //         $scope.sizeLoading = false;
-        //
-        //         for (var m in $rootScope.Product[p].modifiers){
-        //           for (var v in $rootScope.Product[p].modifiers[m].variations){
-        //
-        //             for (var t in $rootScope.Variations){
-        //               var key = Object.keys($rootScope.Variations[t].modifiers)[0];
-        //               var title = $rootScope.Variations[t].modifiers[key].var_title;
-        //
-        //               if(title==$rootScope.Product[p].modifiers[m].variations[v].title){
-        //                 $rootScope.Product[p].modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
-        //                 console.log("$rootScope.Product[p].modifiers[m].variations[v].stock_level",$rootScope.Product[p].modifiers[m].variations[v].stock_level);
-        //
-        //                 if(contents[i].product.data.modifiers[key].var_title == $rootScope.Variations[t].modifiers[key].var_title){
-        //                   var v_thisProduct = contents[i].product.data.id;
-        //                   var v_quantity = contents[i].quantity;
-        //                   var v_stock = $rootScope.Product[p].modifiers[m].variations[v].stock_level - contents[i].quantity;
-        //                   console.log("v_thisProduct", v_thisProduct);
-        //                   console.log("v_quantity", v_quantity);
-        //                   console.log("v_stock", v_stock);
-        //                   $scope.updateStockLevel(v_thisProduct, v_stock);
-        //                 }
-        //               }
-        //             }
-        //           }
-        //         }
-        //       }
-        //     }
-        //
-        //   },function(error){
-        //     console.log(error);
-        //       $route.reload();
-        //
-        //   });
-        // }
-      }
-      // else if((contents[i].product.data.modifiers.length==0) && ($routeParams.method=='paypal-express')){
-      //   //temporary paypal fix for items with no variation
-      //   console.log("temporary paypal fix for items with no variation");
-      //     //if the item has no vaiation
-      //     var thisProduct = contents[i].product.data.id;
-      //     console.log("contents[i].product.data.id",contents[i].product.data.id);
-      //     // $scope.updateStockLevel(thisProduct, stock);
-      //
-      //     for (var p in $rootScope.Product){
-      //       if($rootScope.Product[p].id==thisProduct){
-      //         // var thisProduct = $rootScope.Product[p].id;
-      //         var quantity = contents[i].quantity;
-      //         var stock = $rootScope.Product[p].stock_level - contents[i].quantity;
-      //         console.log("quantity", quantity);
-      //         console.log("stock", stock);
-      //         $scope.updateStockLevel(thisProduct, stock);
-      //       }
-      //     }
-      //
-      // }
-    } //for loop
-  };
-
   // update global stock level of the product
-  $scope.updateStockLevel = function (thisProduct, stock) {
-    $http.post('/product/' + thisProduct + '/stock_level/' + stock).then(function (response) {
+  $scope.updateStockLevel = function (data) {
+    $http.post('/product/update_stock', data).then(function (response) {
       console.log(response);
     }, function (error) {
       console.log(error);
