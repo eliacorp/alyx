@@ -28,13 +28,13 @@ let moltin = require('moltin')({
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else
-        next();
-});
+// app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//         res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else
+//         next();
+// });
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -65,16 +65,11 @@ return crypto_token;
 
 app.use(function(req, res, next) {
     if(!req.mySession.cartID){
-      // var token = generateCrypto();
       crypto.randomBytes(18, function(err, buffer) {
         req.mySession.cartID = buffer.toString('hex');
-        // console.log("crypto_token: "+req.mySession.cartID );
       });
-      // console.log("token: "+req.mySession.cartID );
       moltin.Cart.Identifier(true, req.mySession.cartID);
-
     }else{
-      // console.log("req.mySession.cartID"+req.mySession.cartID);
       moltin.Cart.Identifier(true, req.mySession.cartID);
     }
 
@@ -329,11 +324,9 @@ function setToHappen(d){
     }, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var info = JSON.parse(body);
-        console.log(info);
         res.status(response.statusCode).json(info);
       }else{
         var info = JSON.parse(body);
-        console.log(info);
         res.status(response.statusCode).json(info);
       }
     });
@@ -461,7 +454,6 @@ function setToHappen(d){
     function orderToPayment(req, res, order){
 
       if(order.gateway == 'paypal-express'){
-        console.log("order id",order.id);
         var obj={};
         obj={
             data: {
@@ -473,10 +465,7 @@ function setToHappen(d){
 
 
         moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
-            console.log("payment successful");
-            console.log(payment);
             res.status(200).json(payment);
-
         }, function(error, response, c) {
           console.log("payment failed!");
           console.log("c: "+c);
@@ -488,12 +477,10 @@ function setToHappen(d){
 
 
       }else if(order.gateway == 'stripe'){
-        console.log(order.gateway);
         var card_number = order.number.toString();
         var expiry_month = order.expiry_month;
         var expiry_year = order.expiry_year;
         var cvv = order.cvv;
-        console.log("order.id: "+order.id);
         var obj={};
         obj = {
                 data: {
@@ -508,10 +495,6 @@ function setToHappen(d){
 
             moltin.Checkout.Payment('purchase', order.id, obj, function(payment, error, status) {
 
-                console.log("payment successful");
-                console.log(payment);
-                console.log(error);
-                console.log(status);
                 res.status(200).json(payment);
 
             }, function(error, response, c) {

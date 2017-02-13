@@ -535,10 +535,10 @@ h3 {
       bottom: auto;
       margin: auto; } }
   .logo img {
-    left: 33px;
-    bottom: 19px;
-    width: 33px;
-    height: 33px;
+    left: 100%;
+    bottom: 5px;
+    width: 100%;
+    height: 100%;
     position: absolute; }
 
 .logo.logo-left {
