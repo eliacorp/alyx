@@ -28,13 +28,13 @@ let moltin = require('moltin')({
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-// app.use(function(req, res, next) {
-//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-//         res.redirect('https://' + req.get('Host') + req.url);
-//     }
-//     else
-//         next();
-// });
+app.use(function(req, res, next) {
+    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+        res.redirect('https://' + req.get('Host') + req.url);
+    }
+    else
+        next();
+});
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -304,15 +304,28 @@ function setToHappen(d){
 
   var Product=[];
   function getProduct(req, res){
-    var url;
+    var base='https://api.molt.in/v1/products/?status=1';
+    var url=base;
     var page = req.params.page;
     var offset = req.query.offset;
+    var collection;
+
+
+
+    if(req.query.collection){
+      url = url+'&collection='+req.query.collection;
+    }
 
     if(page==1){
-      url = 'https://api.molt.in/v1/products/search?status=1&limit=9&order=date';
+      url = url+'&limit=9';
     }else{
-      url = 'https://api.molt.in/v1/products/search?status=1&limit=9&offset='+offset+'&order=date';
+      url = url+'&limit=9&offset='+offset;
     }
+
+
+    url = url+'&order=date';
+
+
 
     var access_token = req.mySession.access_token;
 
@@ -327,6 +340,8 @@ function setToHappen(d){
         res.status(response.statusCode).json(info);
       }else{
         var info = JSON.parse(body);
+        console.log("error");
+        console.log(response);
         res.status(response.statusCode).json(info);
       }
     });

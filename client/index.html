@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     <title>ALYX</title>
 
-    
+
     <!--
     =======================================================================
 
@@ -99,7 +99,7 @@
       <a ng-click="openNav()">
          <!-- ng-click="goHorizontal('products', 0);" -->
         <logo-directive></logo-directive>
-        <img src="assets/collaboration/fragment-design.svg" alt="collaboration" ng-show="!pageLoading && filter.collection.selected == 'fragment-design'" ng-cloak/>
+        <img src="assets/collaboration/fragment-design.svg" alt="collaboration" ng-show="!pageLoading && (filter.collection.selected == 'fragment-design') && (!getSecondPath())" ng-cloak/>
       </a>
     </div>
 

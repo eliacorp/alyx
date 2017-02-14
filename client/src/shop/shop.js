@@ -1,7 +1,7 @@
 'use strict'
 
 var Shop = angular.module('myApp');
-Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
+Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope, $location) {
   return function(data) {
 
     if($rootScope.Product){
@@ -10,6 +10,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
 
 
                 if(!filter.collection.selected && !filter.gender.selected){
+                  $location.search('');
                   return data;
                 }else{
 
@@ -51,13 +52,145 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope) {
   };
 });
 
-Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams){
+Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window){
 
   // $scope.filtered = [];
   $rootScope.page = "product";
   $rootScope.shopSections= [];
   $rootScope.Section= {};
   $rootScope.isGradient = true;
+
+
+
+
+  $scope.$on('$routeUpdate', function(){
+    console.log("new query");
+    $rootScope.Product=[];
+    $rootScope.Pagination={}
+    $rootScope.getProductsFN(0);
+    // $scope.sort = $location.search().sort;
+
+  });
+
+
+
+
+$scope.findCollection=(slug)=>{
+
+  for (var collection of $rootScope.Collection_shop){
+      if(collection.slug==slug){
+        return collection.id;
+      }
+  }
+
+}
+
+
+
+
+
+
+
+
+  //get products
+  $rootScope.Pagination;
+
+  $rootScope.paginationInProcess=false;
+
+  $rootScope.getProductsFN=function(offset){
+    $rootScope.paginationInProcess=true;
+    var url = '/product/list?offset='+offset;
+    if($routeParams.collection){
+
+      var collection_id = $scope.findCollection($routeParams.collection);
+
+      url=url+'&collection='+collection_id;
+      console.log(url);
+    }
+
+
+    $http({method: 'GET', url: url}).then(function(response){
+      $rootScope.Product = $rootScope.Product.concat(response.data.result);
+      $rootScope.Pagination = response.data.pagination;
+      console.log(response.data);
+      $rootScope.$broadcast("productArrived");
+      $rootScope.pageLoading = false;
+      $rootScope.paginationInProcess=false;
+
+      for (var i in $rootScope.Product){
+        console.log($rootScope.Product[i].status.data.key);
+      }
+
+    }, function(error){
+      console.log(error);
+      console.log("products status 400");
+    });
+  }
+
+
+  if($rootScope.Pagination){
+    // $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
+  }else{
+    $rootScope.getProductsFN(0);
+  }
+
+
+
+
+
+
+
+
+  setTimeout(function(){
+    angular.element($window).bind("scroll", function() {
+        var windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+        var body = document.body, html = document.documentElement;
+        var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+        var windowBottom = windowHeight + window.pageYOffset;
+
+        if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
+            // alert('bottom reached');
+            if($rootScope.Pagination.offsets.next){
+              $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
+            }
+
+        }
+    });
+  }, 600);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   $rootScope.filter={
     gender:{
       selected:''
@@ -66,9 +199,6 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
       selected:''
     }
   };
-
-
-
 
 
 
@@ -263,26 +393,27 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
 
 
 
+
   // var sku =$routeParams.detail;
   // $rootScope.detailUpdate(sku);
-
-  $scope.$watch(function() {
-    return $rootScope.Product;
-  }, function(value) {
-    if(value){
-      $rootScope.detailUpdate($routeParams.detail);
-    }
-    // if(!$rootScope.Detail.id){
-    //   $rootScope.detailUpdate($routeParams.detail);
-    //   $scope.$apply();
-    //   console.log("I loaded it again");
-    //   console.log($rootScope.Detail);
-    // }else{
-    //   console.log("detail loaded correctly");
-    //   console.log($rootScope.Detail);
-    //   return false
-    // }
-  }, true);
+  //
+  // $scope.$watch(function() {
+  //   return $rootScope.Product;
+  // }, function(value) {
+  //   if(value){
+  //     $rootScope.detailUpdate($routeParams.detail);
+  //   }
+  //   // if(!$rootScope.Detail.id){
+  //   //   $rootScope.detailUpdate($routeParams.detail);
+  //   //   $scope.$apply();
+  //   //   console.log("I loaded it again");
+  //   //   console.log($rootScope.Detail);
+  //   // }else{
+  //   //   console.log("detail loaded correctly");
+  //   //   console.log($rootScope.Detail);
+  //   //   return false
+  //   // }
+  // }, true);
 
 
 
@@ -321,35 +452,56 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
               $rootScope.Detail.modifiers[m].variations[v].index = thisObj.index;
             }
           }
-
-
-
-
-
         }
-
       }
-
-
-
 
     },function(error){
       console.log(error);
-        $route.reload();
-
+      $route.reload();
     });
   }
 
 
 
+
+
+
+
+
+
+
+
+
+
+  $rootScope.getDetail = (id)=>{
+    console.log("getDetail");
+    //no detail yet let's pull it
+    $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
+      console.log(response);
+      $rootScope.Detail = response.data;
+      $scope.getVariationsLevel($rootScope.Detail.id);
+
+    }, function(error){
+      console.log(error);
+      console.log("products status 400");
+    });
+  }
+
+
+
+
   $rootScope.detailUpdate = (id) => {
+    console.log("detailUpdate");
     $rootScope.selectedVariation={};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations=0;
 
-    if(!$rootScope.Product){
+    if(!$rootScope.Product||$rootScope.Product.length==0){
       $rootScope.getDetail(id);
     }else{
+      console.log("product is here already");
+      console.log("product:"+$rootScope.Product);
+
       for (var i in $rootScope.Product){
         if ($rootScope.Product[i].id == id){
           $rootScope.Product[i].id
@@ -381,20 +533,9 @@ Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routePara
   }
 
 
+  $rootScope.detailUpdate($routeParams.detail);
 
 
-$rootScope.getDetail = (id)=>{
-  //no detail yet let's pull it
-  $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
-    console.log(response);
-    $rootScope.Detail = response.data;
-    $scope.getVariationsLevel($rootScope.Detail.id);
-
-  }, function(error){
-    console.log(error);
-    console.log("products status 400");
-  });
-}
 
 
   // $rootScope.detailUpdate($routeParams.detail);

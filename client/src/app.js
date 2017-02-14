@@ -183,11 +183,11 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   };
 })
 
-.controller('appCtrl', ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll)=>{
+.controller('appCtrl', ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams)=>{
   $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
-
+  $rootScope.Product=[];
 
 
   $rootScope.noRefresh = function(url){
@@ -243,62 +243,6 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-//get products
-$rootScope.Pagination;
-$rootScope.Product=[];
-$rootScope.paginationInProcess=false;
-
-$rootScope.getProductsFN=function(offset){
-  $rootScope.paginationInProcess=true;
-  $http({method: 'GET', url: '/product/list?offset='+offset}).then(function(response){
-    $rootScope.Product = $rootScope.Product.concat(response.data.result);
-    $rootScope.Pagination = response.data.pagination;
-    console.log(response.data);
-    $rootScope.$broadcast("productArrived");
-    $rootScope.pageLoading = false;
-    $rootScope.paginationInProcess=false;
-
-    for (var i in $rootScope.Product){
-      console.log($rootScope.Product[i].status.data.key);
-    }
-
-  }, function(error){
-    console.log(error);
-    console.log("products status 400");
-  });
-}
-
-$rootScope.getProductsFN(0);
-
-
-
-
-
-
-setTimeout(function(){
-  angular.element($window).bind("scroll", function() {
-      var windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-      var body = document.body, html = document.documentElement;
-      var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
-      var windowBottom = windowHeight + window.pageYOffset;
-
-      if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
-          // alert('bottom reached');
-          if($rootScope.Pagination.offsets.next){
-            $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
-          }
-
-      }
-  });
-}, 600);
-
-
-
-
-
-
-
-
 
 
 
@@ -313,6 +257,7 @@ setTimeout(function(){
           url: '/getCollections'
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
+              console.log($rootScope.Collection_shop);
           }, function (response) {
             console.log(response);
             // called asynchronously if an error occurs
