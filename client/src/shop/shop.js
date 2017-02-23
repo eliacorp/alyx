@@ -64,7 +64,6 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
 
 
   $scope.$on('$routeUpdate', function(){
-    console.log("new query");
     $rootScope.Product=[];
     $rootScope.Pagination={}
     $rootScope.getProductsFN(0);
@@ -101,18 +100,14 @@ $scope.findCollection=(slug)=>{
     $rootScope.paginationInProcess=true;
     var url = '/product/list?offset='+offset;
     if($routeParams.collection){
-
       var collection_id = $scope.findCollection($routeParams.collection);
-
       url=url+'&collection='+collection_id;
-      console.log(url);
     }
 
 
     $http({method: 'GET', url: url}).then(function(response){
       $rootScope.Product = $rootScope.Product.concat(response.data.result);
       $rootScope.Pagination = response.data.pagination;
-      console.log(response.data);
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
       $rootScope.paginationInProcess=false;
@@ -250,7 +245,6 @@ $rootScope.addToCart = function(id){
               }
       }).then(function(response){
         $rootScope.Cart = response;
-        console.log(response);
         $rootScope.updateCart();
       });
 }//addToCart
@@ -474,10 +468,8 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
 
   $rootScope.getDetail = (id)=>{
-    console.log("getDetail");
     //no detail yet let's pull it
     $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
-      console.log(response);
       $rootScope.Detail = response.data;
       $scope.getVariationsLevel($rootScope.Detail.id);
 
@@ -491,7 +483,6 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
 
   $rootScope.detailUpdate = (id) => {
-    console.log("detailUpdate");
     $rootScope.selectedVariation={};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations=0;
@@ -499,8 +490,6 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
     if(!$rootScope.Product||$rootScope.Product.length==0){
       $rootScope.getDetail(id);
     }else{
-      console.log("product is here already");
-      console.log("product:"+$rootScope.Product);
 
       for (var i in $rootScope.Product){
         if ($rootScope.Product[i].id == id){
@@ -762,6 +751,21 @@ $scope.orderSize=[
   },
   {
     title:"45",
+    type: 'string',
+    index:28
+  },
+  {
+    title:"46",
+    type: 'string',
+    index:28
+  },
+  {
+    title:"47",
+    type: 'string',
+    index:28
+  },
+  {
+    title:"48",
     type: 'string',
     index:28
   }
