@@ -378,7 +378,7 @@ $scope.$root = {
 
 
 
-Social.directive('instaHoverDirective', function($location, $routeParams){
+Social.directive('instaHoverDirective',['$location', '$routeParams', function($location, $routeParams){
   return{
     restrict: "A",
     link: function(scope, element, attrs){
@@ -476,7 +476,7 @@ if ($location.path()== '/social/'+$routeParams.number){
     }
   }
 
-});
+}]);
 
 
 
@@ -497,7 +497,7 @@ if ($location.path()== '/social/'+$routeParams.number){
 //   });
 
 
-Social.directive('instaShareDirective', function($routeParams){
+Social.directive('instaShareDirective',['$routeParams', function($routeParams){
 	  return{
 	    restrict: "E",
 	    replace: true,
@@ -515,9 +515,9 @@ Social.directive('instaShareDirective', function($routeParams){
 	    }
 	  }
 
-	});
+	}]);
 
-Social.directive('onFinishRender', function ($timeout) {
+Social.directive('onFinishRender', ['$timeout', function ($timeout) {
 	return {
 	    restrict: 'A',
 	    link: function (scope, element, attr) {
@@ -528,10 +528,10 @@ Social.directive('onFinishRender', function ($timeout) {
 	        }
 	    }
 	}
-	});
+}]);
 
 
-Social.directive('filterActiveDirective', function ($timeout) {
+Social.directive('filterActiveDirective', ['$timeout', function ($timeout) {
 			return {
 			    restrict: 'A',
 			    link: function (scope, element, attr) {
@@ -551,7 +551,7 @@ scope.filterState = 2;
 			    // }
 			}
 			}
-});
+}]);
 
 Social.directive('socialStyleParent', function(){
    return {
@@ -613,7 +613,7 @@ Social.directive('socialDetailStyleParent', function(){
    };
 });
 
-Social.directive("imageChange", function ($timeout) {
+Social.directive("imageChange", ['$timeout', function ($timeout) {
     return {
         restrict: "A",
         scope: {},
@@ -630,4 +630,4 @@ Social.directive("imageChange", function ($timeout) {
             });
         }
     }
-});
+}]);

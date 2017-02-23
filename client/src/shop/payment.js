@@ -2,7 +2,7 @@
 
 var Payment = angular.module('myApp');
 
-Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll){
+Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'anchorSmoothScroll', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll){
  $rootScope.payment;
  $rootScope.Transaction;
   $rootScope.Processed={value: false, error:false, data:''};
@@ -159,4 +159,4 @@ Payment.controller('paymentCtrl', function($scope, $location, $rootScope, $timeo
 
 
 
-});
+}]);

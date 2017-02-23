@@ -2,7 +2,7 @@
 
 var Collection = angular.module('myApp');
 
-Collection.controller('collectionCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams){
+Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', '$routeParams', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams){
 
 
 	$rootScope.collections = [];
@@ -27,9 +27,9 @@ Collection.controller('collectionCtrl', function($scope, $location, $rootScope, 
   	$rootScope.getContentType('collection', 'my.collection.date desc');
 
 
-})
+}])
 
-.directive('lookbookDirective', function($rootScope, $location){
+.directive('lookbookDirective', function(){
 	return{
 		restrict:'E',
 		templateUrl: 'views/collection/lookbook.html',

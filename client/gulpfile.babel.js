@@ -2,7 +2,10 @@ import gulp from "gulp";
 import browserify from "browserify";
 import source from "vinyl-source-stream";
 import sass from "gulp-ruby-sass";
-import connect from "gulp-connect";
+import buffer from 'vinyl-buffer';
+import uglify from 'gulp-uglify';
+import cleanCSS from 'gulp-clean-css';
+import concat from 'gulp-concat';
 
 
 gulp.task('connect', function () {
@@ -24,15 +27,18 @@ gulp.task("transpile", () => {
       console.error( "\nError: ", error.message, "\n");
       this.emit("end");
     })
-    .pipe(source("bundle.js"))
+    .pipe(source("bundle.min.js"))
+		.pipe(buffer())
+		.pipe(uglify())
     .pipe(gulp.dest("dist"));
 
 });
 
 gulp.task("sass", function() {
 	return sass('sass/*.scss')
+	.pipe(cleanCSS({compatibility: 'ie8'}))
+	.pipe(concat('style.min.css')) // this is what was missing
   .pipe(gulp.dest('dist'))
-
 })
 
 

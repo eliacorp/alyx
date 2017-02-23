@@ -60,7 +60,7 @@ Service.factory("transformRequestAsFormPost", () => {
 
 
 
-Service.service('anchorSmoothScroll', function($location, $rootScope){
+Service.service('anchorSmoothScroll', ['$location', '$rootScope', function($location, $rootScope){
 
     this.scrollToJavascript = function(eID) {
 
@@ -234,10 +234,10 @@ Service.service('anchorSmoothScroll', function($location, $rootScope){
 
 
 
-});
+}]);
 
 
-Service.service('mailchimp', function($location, $rootScope, $resource){
+Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($location, $rootScope, $resource){
 
     this.register = function(checkout) {
 
@@ -348,4 +348,4 @@ Service.service('mailchimp', function($location, $rootScope, $resource){
     };
 
 
-}); //mailchimp service module
+}]); //mailchimp service module

@@ -2,7 +2,7 @@
 
 var Cart = angular.module('myApp');
 
-Cart.controller('cartCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost){
+Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost){
   $rootScope.Cart;
   $rootScope.showCart = false;
   $rootScope.cartChanged = false;
@@ -96,4 +96,4 @@ $rootScope.removeItem = function(id){
 
 
 
-});
+}]);

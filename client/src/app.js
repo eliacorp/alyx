@@ -37,13 +37,6 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     };
 
 
-
-
-
-
-
-
-
 }])
 
 
@@ -174,16 +167,16 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 }]) //config
 
 
-.filter('trustUrl', function ($sce) {
+.filter('trustUrl', ['$sce',function ($sce) {
   return function(url) {
     // if (url){
       var trusted = $sce.trustAsResourceUrl(url);
       return trusted;
     // }
   };
-})
+}])
 
-.controller('appCtrl', ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams)=>{
+.controller('appCtrl', [ '$rootScope', '$location', '$window', '$timeout', '$http', 'anchorSmoothScroll', '$scope', '$anchorScroll', '$routeParams', function($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams){
   $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
@@ -257,7 +250,6 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
           url: '/getCollections'
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
-              console.log($rootScope.Collection_shop);
           }, function (response) {
             console.log(response);
             // called asynchronously if an error occurs
@@ -512,11 +504,11 @@ $rootScope.Stockist;
 
 
 
-})// end of appCtrl
+}])// end of appCtrl
 
 
 
-.directive('logoDirective', function($rootScope, $location, $window, $timeout) {
+.directive('logoDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/components/logo.html',
@@ -527,7 +519,7 @@ $rootScope.Stockist;
   };
 })
 
-.directive('shopDirective', function($rootScope, $location, $window, $timeout) {
+.directive('shopDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/shop.html',
@@ -539,7 +531,7 @@ $rootScope.Stockist;
 })
 
 
-.directive('productDirective', function($rootScope, $location, $window, $timeout) {
+.directive('productDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/product.html',
@@ -551,7 +543,7 @@ $rootScope.Stockist;
 })
 
 
-.directive('detailDirective', function($rootScope, $location, $window, $timeout) {
+.directive('detailDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/product-detail.html',
@@ -565,7 +557,7 @@ $rootScope.Stockist;
 
 
 
-.directive('cartDirective', function($rootScope, $location, $window, $timeout) {
+.directive('cartDirective', function(){
   return {
     restrict: 'E',
     templateUrl: 'views/shop/cart.html',
@@ -576,7 +568,7 @@ $rootScope.Stockist;
   };
 })
 
-.directive('shipmentDirective', function($rootScope, $location, $window, $timeout) {
+.directive('shipmentDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/shipment.html',
@@ -588,7 +580,7 @@ $rootScope.Stockist;
 })
 
 
-.directive('choiceDirective', function($rootScope, $location, $window, $timeout) {
+.directive('choiceDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/choice.html',
@@ -599,7 +591,7 @@ $rootScope.Stockist;
   };
 })
 
-.directive('paymentDirective', function($rootScope, $location, $window, $timeout) {
+.directive('paymentDirective', function(){
   return {
     restrict: 'E',
     templateUrl: 'views/shop/payment.html',
@@ -610,7 +602,7 @@ $rootScope.Stockist;
   };
 })
 
-.directive('termsDirective', function($rootScope, $location, $window, $timeout) {
+.directive('termsDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/terms.html',
@@ -621,7 +613,7 @@ $rootScope.Stockist;
   };
 })
 
-.directive('processedDirective', function($rootScope, $location, $window, $timeout) {
+.directive('processedDirective', function(){
   return {
     restrict: 'E',
     templateUrl: 'views/shop/processed.html',

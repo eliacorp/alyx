@@ -2,7 +2,7 @@
 
 var Processed = angular.module('myApp');
 
-Processed.controller('processedCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams){
+Processed.controller('processedCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'anchorSmoothScroll','$routeParams', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams){
 
 
 
@@ -224,4 +224,4 @@ $scope.mailOrder=(order)=>{
 
 
 
-});
+}]);

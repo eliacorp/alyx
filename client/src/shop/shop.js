@@ -1,7 +1,7 @@
 'use strict'
 
 var Shop = angular.module('myApp');
-Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope, $location) {
+Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', function ($sce, $routeParams, $rootScope, $location) {
   return function(data) {
 
     if($rootScope.Product){
@@ -50,7 +50,7 @@ Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope, $location) {
     }
 
   };
-});
+}]);
 
 Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window){
 
@@ -376,7 +376,7 @@ $rootScope.addToCart = function(id){
 
 
 
-Shop.controller('detailCtrl', function($rootScope, $scope, $location, $routeParams, $route, $http){
+Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams', '$route', '$http', function($rootScope, $scope, $location, $routeParams, $route, $http){
 
 
   $rootScope.Detail={};
@@ -787,4 +787,4 @@ $scope.orderSize=[
 
 
 
-});
+}]);

@@ -1,6 +1,6 @@
 'use strict';
 var Lookbook = angular.module('myApp');
-Lookbook.controller('lookbookCtrl', function($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache){
+Lookbook.controller('lookbookCtrl', ['$scope', '$anchorScroll', '$http', '$rootScope', '$location', '$routeParams', '$window', '$document', 'anchorSmoothScroll', function($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll){
 
 
 
@@ -276,4 +276,4 @@ var newMain;
 
 
 
-});
+}]);

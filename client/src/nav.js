@@ -2,7 +2,7 @@
 
 var Nav = angular.module('myApp');
 
-Nav.controller('navCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams){
+Nav.controller('navCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams){
 
 $rootScope.firstBase;
 $rootScope.Location;
@@ -114,9 +114,9 @@ $scope.$on('$routeChangeSuccess', function(){
 })
 
 
-})
+}])
 
-.directive('navDirective', function($rootScope, $location, $window, $timeout) {
+.directive('navDirective', function() {
   return {
     restrict: 'E',
     templateUrl: 'views/components/nav.html',

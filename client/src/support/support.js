@@ -1,7 +1,7 @@
 'use strict';
 
 var Support = angular.module('myApp');
-Support.controller('supportCtrl', function($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache){
+Support.controller('supportCtrl', ['$scope', '$anchorScroll', '$http', '$rootScope', '$location', '$routeParams', '$window', '$document', 'anchorSmoothScroll', '$route', '$templateCache', function($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache){
 
 
   $scope.contact = [];
@@ -98,31 +98,31 @@ setTimeout(function(){
 
 
 
-});
+}]);
 
 
 
 
-Support.directive('aboutDirective', function($rootScope, $location){
+Support.directive('aboutDirective', ['$rootScope', '$location', function($rootScope, $location){
 	return{
 		restrict:'E',
 		templateUrl: 'views/support/about.html',
     replace: true
 	}
-});
+}]);
 
-Support.directive('contactDirective', function($rootScope, $location){
+Support.directive('contactDirective', ['$rootScope', '$location', function($rootScope, $location){
 	return{
 		restrict:'E',
 		templateUrl: 'views/support/contact.html',
     replace: true
 	}
-});
+}]);
 
-Support.directive('stockistDirective', function($rootScope, $location){
+Support.directive('stockistDirective', ['$rootScope', '$location', function($rootScope, $location){
 	return{
 		restrict:'E',
 		templateUrl: 'views/support/stockist.html',
     replace: true
 	}
-});
+}]);

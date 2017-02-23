@@ -2,7 +2,7 @@
 
 var Checkout = angular.module('myApp');
 
-Checkout.controller('checkoutCtrl', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp){
+Checkout.controller('checkoutCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'mailchimp', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp){
 
 
 $rootScope.Order;
@@ -163,4 +163,4 @@ $scope.$watch('checkout', function(value){
 
 
 
-});
+}]);

@@ -42,9 +42,13 @@
     "browserify": "^12.0.2",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^3.0.3",
+    "gulp-concat": "^2.6.1",
     "gulp-connect": "^4.0.0",
     "gulp-es6-transpiler": "^1.0.1",
     "gulp-ruby-sass": "^2.0.6",
+    "gulp-uglify": "^2.0.1",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
 }
