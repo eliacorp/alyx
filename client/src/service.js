@@ -243,10 +243,10 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
 
 
         var data = {
-          'u':'1e9ad6956936b430ff4152132',
-          'id':'f74ac40f8c',
-          'dc': 'us14',
-          'username': 'eliafornari',
+          'u':'61fd935403c1053312ebed13a',
+          'id':'e920e15af7',
+          'dc': 'us15',
+          'username': 'alyxstudio',
           'ADDRESS':{
               'addr1':checkout.shipment.address_1,
               'city':checkout.shipment.city,
