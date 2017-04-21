@@ -1,5 +1,9 @@
 "use strict"
 
+process.env.mode = 'dev';
+process.env.public_key= 'e9580785-c9ae-4998-ba4f-acd6ed30f1ea';
+process.env.secret_key= 'RU08VVbG83bzsZfUzgFDM8Gpm3SwyekByIutJzK5hjM=';
+
 
 let https = require("https");
 let fs = require('fs');
@@ -7,20 +11,33 @@ let express = require("express");
 let bodyParser = require('body-parser');
 let routes  = require('./routes');
 let path = require('path');
-var util = require('util');
+let util = require('util');
 let ejs = require('ejs');
 let sessions = require('client-sessions');
 let request = require('request');
 let crypto = require('crypto');
-let order  = require('./order/order.js');
 let app = express();
+let Marketcloud = require('marketcloud-node');
+let Product = require('./api/product');
+let Cart = require('./api/cart');
+let Order = require('./api/order');
+let superagent = require('superagent');
+let mail = require('./mail');
 
 
-let moltin = require('moltin')({
-  publicId: 'aRfWbMWHHHluwvHks6WJdcvqAnpSUqoejRoepXPaL9',
-  secretKey: 'xurGyrYMpKCgMIzNs4ZeCugHfMfOeJEDxXeBuxTs2K'
-});
+// let moltin = require('moltin')({
+//   publicId: process.env.publicId;
+//   secretKey: process.env.secretKey;
+// });
 
+
+
+let marketcloud = new Marketcloud.Client({
+                      public_key : process.env.public_key,
+                      secret_key : process.env.secret_key
+                  })
+
+exports.marketcloud = marketcloud;
 
 
 app.engine('html', ejs.renderFile);
@@ -41,50 +58,51 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.use(sessions({
   cookieName: 'mySession', // cookie name dictates the key name added to the request object
-  secret:'jfadjhwnbsjdhmaevnbdkshnbeahsdh', // should be a large unguessable string
+  secret:'jfadjhwnbsjaasedhmaevnbdkshnbeahsdh', // should be a large unguessable string
   duration: 3600 * 1000, // how long the session will stay valid in ms
   activeDuration: 3600 * 1000 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
 }));
 
 
-function generateCrypto(){
-  var crypto_token;
- crypto.randomBytes(18, function(err, buffer) {
-  crypto_token = buffer.toString('hex');
-  //  console.log("crypto_token: "+crypto_token);
+// function generateCrypto(){
+//   var crypto_token;
+//  crypto.randomBytes(18, function(err, buffer) {
+//   crypto_token = buffer.toString('hex');
+//   //  console.log("crypto_token: "+crypto_token);
+//  });
+// return crypto_token;
+// }
 
- });
 
-return crypto_token;
-}
+
+
 
 
 
 app.use(function(req, res, next) {
-    if(!req.mySession.cartID){
-      crypto.randomBytes(18, function(err, buffer) {
-        req.mySession.cartID = buffer.toString('hex');
-      });
-      moltin.Cart.Identifier(true, req.mySession.cartID);
-    }else{
-      moltin.Cart.Identifier(true, req.mySession.cartID);
-    }
+    // if(!req.mySession.cartID){
+    //   crypto.randomBytes(18, function(err, buffer) {
+    //     req.mySession.cartID = buffer.toString('hex');
+    //   });
+    //   moltin.Cart.Identifier(true, req.mySession.cartID);
+    // }else{
+    //   moltin.Cart.Identifier(true, req.mySession.cartID);
+    // }
 
 
 
-    if (!req.mySession.access_token || !req.mySession.expires) {
+    if (!req.mySession.access_token || !req.mySession.expire) {
       res.setHeader('X-Seen-You', 'false');
-      authMoltin(req, res, next);
+        console.log("req.mySession.access_token",req.mySession.access_token);
+      console.log("no token, authMarketCloud is called");
+      authMarketCloud(req, res, next);
 
     }else{
-      var timeLeft = setToHappen(req.mySession.expires);
-
+      var timeLeft = setToHappen(req.mySession.expire);
+      console.log("timeLeft", timeLeft);
       if(timeLeft<1000){
-        authMoltin(req, res, next);
+        authMarketCloud(req, res, next);
       }else{
-        // authMoltin(req, res, next);
-        moltin.Authenticate(function(data) {
-        });
         next();
       }
     }
@@ -94,44 +112,35 @@ app.use(function(req, res, next) {
 
 
 
-function authMoltin(req, res, next){
-  moltin.Authenticate(function(data) {
+function authMarketCloud(req, res, next){
+  var current_time = Date.now(),
+      public_key = process.env.public_key,
+      secret_key = process.env.secret_key,
+      hash = crypto.createHash('sha256')
+            .update(secret_key+current_time)
+            .digest('base64');
 
-    if(data){
-
-      if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
-        console.log("1 runs");
-        data.cart=req.mySession.cartID;
-        console.log(data);
-        //     console.log(data);
-        // res.status(200).json(data);
-
-      }else if(data.token){
-        console.log("2 runs");
-        // console.log(data);
-        req.mySession.access_token = data.token;
-
-        data.cart=req.mySession.cartID;
-        console.log(data);
-        // res.status(200).json(data);
-      }else{
-        console.log("3 runs");
-        req.mySession.access_token = data.access_token;
-        // console.log(req.mySession.access_token);
-        data.cart=req.mySession.cartID;
-        console.log(data);
-        // res.status(200).json(data);
-      }
+      superagent
+        .post('http://api.marketcloud.it/v0/tokens')
+        .send({
+            'publicKey' : public_key,
+            'secretKey' : hash,
+            'timestamp' : current_time
+        })
+        .set('Accept', 'application/json')
+        .end(function(err,response){
+          console.log(err);
+          // var parsed=JSON.parse(response);
+          var token = response.body.token;
+          console.log(token);
+            req.mySession.access_token = process.env.public_key+':'+token;
+            //response.token has your token
+            console.log("access_token", req.mySession.access_token);
+            req.mySession.expire = response.body.data.expire;
+            next();
+        })
 
 
-      req.mySession.expires = data.expires;
-      next();
-
-    }else{
-      res.status(500);
-    }
-
-  });
 }
 
 
@@ -165,92 +174,67 @@ function setToHappen(d){
     });
   });
 
+  app.post('/cart/create', function(req, res){
+    Cart.create(req, res);
+  })
+
+  app.post('/cart/:id/add/variation', function(req, res){
+    Cart.update(req, res);
+  })
 
 
 
 
-  app.post('/addVariation', function(req, res){
-    // console.log('request =' + JSON.stringify(req.body))
-    var variationArray = req.body;
-    for (var i in variationArray){
-      var id = variationArray[i].id;
-      var modifier = variationArray[i].modifier_id
-      var variation = variationArray[i].variation_id
-      var obj={};
-      var objArray = [];
-      obj[modifier] = variation
-      objArray.push(obj);
-    }
-
-    // res.setHeader("Authorization", "Bearer "+token);
-    moltin.Cart.Insert(id, 1, obj, function(cart) {
-      // console.log(cart);
-      res.json(cart);
-    }, function(error, response, c) {
-      console.log(error);
-      console.log(c);
-      res.json(error);
-        // Something went wrong...
-    });
-
-  });
 
 
-
-
-    app.post('/removeProduct', function(req, res){
-      var id = req.body.id;
-      moltin.Cart.Remove(id, function(items) {
-          // Everything is awesome...
-          res.status(200);
-          res.json(items);
-      }, function(error, response, c) {
-          // Something went wrong...
-          console.log(response);
-      });
+    app.post('/cart/:id/remove/items', function(req, res){
+      Cart.removeItem(req, res);
     })
 
     app.get('/product/list', function(req, res){
-       getProduct(req, res);
+       Product.list(req, res);
      });
 
     app.get('/getCollections', function(req, res){
       getCollections(req, res);
     });
 
-    app.get('/cart/get', function(req, res){
-      getCart(req, res);
+    app.get('/cart/get/:id', function(req, res){
+      Cart.get(req, res);
     });
 
-    app.post('/cartToOrder', function(req, res){
-      var data = req.body;
-      cartToOrder(req, res, data);
-    });
-
-
-    app.post('/orderToPayment', function(req, res){
-      var order = req.body;
-      orderToPayment(req, res, order);
+    app.post('/api/order/create', function(req, res){
+      Order.create(req, res);
     });
 
 
-    app.get('/order/:order/get', function(req, res){
-      getOrderByID(req, res);
-    });
-
-    app.get('/order/:order/items', function(req, res){
-      getOrderItems(req, res);
+    app.post('/api/order/payment/stripe', function(req, res){
+      Order.payment_stripe(req, res);
     });
 
 
-    app.post('/order/:order/put', function(req, res){
-      putOrder(req, res);
+    app.post('/webhook/mail/order', function(req, res){
+      mail.orderPaid(req, res);
     });
+
+
+    // app.get('/order/:order/get', function(req, res){
+    //   getOrderByID(req, res);
+    // });
+    //
+    // app.get('/order/:order/items', function(req, res){
+    //   getOrderItems(req, res);
+    // });
+
+
+    // app.post('/order/:order/put', function(req, res){
+    //   putOrder(req, res);
+    // });
 
 
 
     app.get('/product/:id/get', function(req, res){
-      getProductDetail(req, res);
+      Product.detail(req, res);
     });
 
     app.get('/product/:id/variations/get', function(req, res){
@@ -266,28 +250,13 @@ function setToHappen(d){
       eraseCart(req, res);
     });
 
-    app.post('/checkout/payment/complete_purchase/:order', function(req, res){
-      completePurchase_Paypal(req, res);
-    });
-
-    app.post('/mail/order/:order', function(req, res){
-      order.mail(req, res);
-    });
-
-
-
-
-    function getCart(req, res){
-      moltin.Cart.Contents(function(items) {
-        // res.writeHead(200, {'Content-Type': 'application/json'});
-        res.json(items);
-        // res.end(items);
-          // Update the cart display
-      }, function(error, response, c){
-            console.log(error);
-            console.log(c);
-      });
-    }
+    // app.post('/checkout/payment/complete_purchase/:order', function(req, res){
+    //   completePurchase_Paypal(req, res);
+    // });
+    //
+    // app.post('/mail/order/:order', function(req, res){
+    //   order.mail(req, res);
+    // });
 
 
 
@@ -299,51 +268,8 @@ function setToHappen(d){
 
 
 
-  var Product=[];
-  function getProduct(req, res){
-    var base='https://api.molt.in/v1/products/?status=1';
-    var url=base;
-    var page = req.params.page;
-    var offset = req.query.offset;
-    var collection;
 
 
-
-    if(req.query.collection){
-      url = url+'&collection='+req.query.collection;
-    }
-
-    if(page==1){
-      url = url+'&limit=9';
-    }else{
-      url = url+'&limit=9&offset='+offset;
-    }
-
-
-    url = url+'&order=date';
-
-
-
-    var access_token = req.mySession.access_token;
-
-    request({
-      url: url,
-      headers: {
-        'Authorization': 'Bearer '+access_token
-      }
-    }, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var info = JSON.parse(body);
-        res.status(response.statusCode).json(info);
-      }else{
-        var info = JSON.parse(body);
-        console.log("error");
-        console.log(response);
-        res.status(response.statusCode).json(info);
-      }
-    });
-
-  }
 
 
 
@@ -526,31 +452,6 @@ function setToHappen(d){
 
 
 
-
-  // curl -X GET https://api.molt.in/v1/products/1379862576992617248/variations -H "Authorization: Bearer ea9f070f4f093161bf344bd8fc120a2f6574a042"
-  // curl -X GET https://api.molt.in/v1/products/1019656230785778497/variations /
-  function getVariationsLevel(req, res){
-    var id = req.params.id.toString();
-    var url = 'https://api.molt.in/v1/products/'+id+'/variations';
-    var access_token = req.mySession.access_token;
-    var options = {
-      url: url,
-      headers: {
-        'Authorization': 'Bearer '+access_token
-      }
-    };
-
-    function callback(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var info = JSON.parse(body);
-        res.status(response.statusCode).json(info);
-      }else{
-        var info = JSON.parse(body);
-        res.status(response.statusCode).json(info);
-      }
-    }
-    request(options, callback);
-  }
 
 
 
@@ -775,15 +676,6 @@ function updateProductStock(req, res){
 
 
 
-//GET detail of a product
-  function getProductDetail(req, res){
-    var id = req.params.id;
-    moltin.Product.Get(id, function(product) {
-      res.status(200).json(product);
-    }, function(error, response, c) {
-      res.status(400).json(error);
-    });
-  };
 
 
 

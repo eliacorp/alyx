@@ -16,11 +16,11 @@
         <a href="/shop/cart" class="shop-button-entry-a"><span>CART</span></a>
       </div>
 
-      <div class="shop-button-entry shop-right-button-payment" ng-show="shopLocation == 'payment' || shopLocation == 'choice'">
+      <div class="shop-button-entry shop-right-button-payment" ng-show="checkoutLocation == 'payment' || shopLocation == 'choice'">
         <a href="/shop/shipment" class="shop-button-entry-a"><span>SHIPMENT</span></a>
       </div>
 
-      <div class="shop-button-entry shop-button-entry-processed" ng-show="shopLocation == 'processed'">
+      <div class="shop-button-entry shop-button-entry-processed" ng-show="checkoutLocation == 'processed'">
         <a href="/shop" class="shop-button-entry-a">
           <span>BACK</span>
         </a>
@@ -42,13 +42,13 @@
 
 
 
-  <div class="shop-right" ng-show="shopLocation != 'processed'" ng-class="{'whiteBar': Section.name == 'products', 'cart-full-mobile': isMobile && !shopLocation}" >
+  <div class="shop-right" ng-show="checkoutLocation != 'processed'" ng-class="{'whiteBar': Section.name == 'products', 'cart-full-mobile': isMobile && !shopLocation}" >
     <div class="shop-button">
 
       <div class="shop-button-entry shop-right-button-cart" ng-show="Location =='/shop' || shopLocation == 'product'" ng-controller="cartCtrl">
         <a class="shop-button-entry-a" ng-click="openCart()">
           <span>CART</span>
-          <p class="dollar-contents" ng-class="{'blink': cartChanged}" ng-cloak>{{Cart.totals.post_discount.rounded.without_tax}} €</p>
+          <p class="dollar-contents" ng-class="{'blink': cartChanged}" ng-cloak>{{Cart.items_total}} €</p>
         </a>
       </div>
 
@@ -65,7 +65,7 @@
         <a ng-class="{'blink-infinite': shipment_forwardActive}" class="shop-button-entry-a"><span>PAYMENT</span></a>
       </div>
 
-      <div class="shop-button-entry shop-right-button-processed" ng-show="shopLocation =='payment'" ng-click="checkPayment()">
+      <div class="shop-button-entry shop-right-button-processed" ng-show="checkoutLocation =='payment'" ng-click="checkPayment()">
         <a class="shop-button-entry-a" ng-class="{'blink-infinite': payment_forwardActive && checkout.gateway=='stripe'}"> <span>PAY</span></a>
       </div>
 

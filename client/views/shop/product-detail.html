@@ -4,7 +4,7 @@
 
       <!-- left -->
       <div class="detail-left" ng-class="{'zoom-detail':zoomDetail}" ng-click="zoomDetail=!zoomDetail">
-        <img class="detail-image" ng-class="{'zoom-detail':zoomDetail}" src="{{i.url.https}}" alt="{{Detail.description}}" ng-repeat="i in Detail.images"/>
+        <img class="detail-image" ng-class="{'zoom-detail':zoomDetail}" src="{{i}}" alt="{{Detail.description}}" ng-repeat="i in Detail.images"/>
       </div>
 
 
@@ -26,7 +26,7 @@
 
 
         <div class="detail-text">
-          <h1>{{Detail.title}}</h1>
+          <h1>{{Detail.name}}</h1>
           <p class="detail-text-sku">{{Detail.sku}}</p>
           <p>{{Detail.description}}</p>
           <p class="detail-text-color" ng-if="Detail.color.data.value">color: {{Detail.color.data.value}}</p>
@@ -40,14 +40,21 @@
 
 
         <div class="detail-modifiers">
-          <ul class="detail-modifiers-ul" ng-repeat="m in Detail.modifiers">
+          <ul class="detail-modifiers-ul" >
+            <!-- ng-repeat="m in Detail.modifiers" -->
 
             <div class="detail-modifiers-variations" ng-if="!sizeLoading">
 
-              <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations | orderBy: 'index'" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
+              <li class="detail-modifiers-variations-li" ng-repeat="v in Detail.variants | orderBy: $index" ng-click="thisVariation(Detail.id, 'size', v.variant_id);"
+              ng-class="{'activeVariant': selectedVariation['size'].variant_id==v.variant_id}" ng-if="v.stock_level>0" >
+               <!-- closeSelection('size') -->
+                <a>{{v.size}}</a>
+              </li>
+
+              <!-- <li class="detail-modifiers-variations-li" ng-repeat="v in m.variations | orderBy: 'index'" ng-click="thisVariation(Detail.id , m.id, m.title, v.id, v.title); closeSelection(m.id)"
               ng-class="{'activeVariant': selectedVariation[m.id].variation_title==v.title}" ng-if="v.stock_level>0" >
                 <a>{{v.title}}</a>
-              </li>
+              </li> -->
             </div>
             <p class="detail-modifiers-ul-placeholder blink-infinite" ng-click="showSelection(m.id)" ng-show="sizeLoading">{{m.title}} </p>
 
@@ -62,11 +69,13 @@
 
 
         <!-- <p class="detail-error" ng-show="variationErrorMessage">{{variationErrorMessage}}</p> -->
-
+        <!-- <div class="detail-add" ng-click="addVariation()">
+          <p class="detail-add-plus-variation hvr-bob" >ADD TO CART</p>
+        </div> -->
 
         <div class="detail-add" ng-cloak>
-          <p class="hvr-bob" ng-show="!Detail.has_variation" ng-click="addToCart(Detail.id)" ng-cloak>ADD TO CART</p>
-          <p class="detail-add-plus-variation hvr-bob" ng-show="Detail.has_variation" ng-click="addVariation()" ng-class="{'activeAdd': howManyVAriationsSelected>=Detail.total_variations}" ng-cloak>ADD TO CART</p>
+          <p class="hvr-bob" ng-show="Detail.type!='product_with_variants'" ng-click="addToCart(Detail.id)" ng-cloak>ADD TO CART</p>
+          <p class="detail-add-plus-variation hvr-bob" ng-show="Detail.type=='product_with_variants'" ng-click="addVariation()" ng-class="{'activeAdd': howManyVariationsSelected>=1}" ng-cloak>ADD TO CART</p>
         </div>
 
       </div>

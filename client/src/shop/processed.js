@@ -31,7 +31,6 @@ Processed.controller('processedCtrl', ['$scope', '$location', '$rootScope', '$ti
 setTimeout(function(){
   if($routeParams.method == 'paypal-express'){
     $rootScope.retrieveOrder();
-
   }else if($routeParams.method == 'stripe'){
     $rootScope.changeOrderStatus($rootScope.Transaction);
   }
@@ -72,40 +71,44 @@ $rootScope.completePayment_Paypal = ()=>{
 
 
 
+
+
+
 $rootScope.changeOrderStatus =(data)=>{
   var orderID = $routeParams.order;
   var obj = {};
 
   if($routeParams.method == 'paypal-express'){
     obj = {payment_number: $routeParams.token};
+
+    $http.post('/order/'+orderID+'/put', obj)
+    .then( function(response){
+      console.log("changeOrderStatus");
+      $rootScope.Processed = {value: true, error:false, data:response.data};
+      console.log(response);
+      console.log("response.data.status.value.key");
+      if(response.data.status.data.key !='paid'){
+        $rootScope.pageLoading = false;
+        console.log("not paid");
+
+      }else if(response.data.status.data.key =='paid'){
+        $rootScope.getOrderItems();
+      }
+
+      $rootScope.loadVideo();
+    }, function(error){
+      console.log(error);
+      $rootScope.pageLoading = false;
+      $rootScope.Processed = {value: true, error:true, data:error.data};
+    })
+
+
     // $scope.eraseCart();
   }else if($routeParams.method == 'stripe'){
     obj = {payment_number:data.id};
     console.log("stripe payment number:", obj);
-
+    $rootScope.getOrderItems();
   }
-
-
-  $http.post('/order/'+orderID+'/put', obj)
-  .then( function(response){
-    console.log("changeOrderStatus");
-    $rootScope.Processed = {value: true, error:false, data:response.data};
-    console.log(response);
-    console.log("response.data.status.value.key");
-    if(response.data.status.data.key !='paid'){
-      $rootScope.pageLoading = false;
-      console.log("not paid");
-
-    }else if(response.data.status.data.key =='paid'){
-      $rootScope.getOrderItems();
-    }
-
-    $rootScope.loadVideo();
-  }, function(error){
-    console.log(error);
-    $rootScope.pageLoading = false;
-    $rootScope.Processed = {value: true, error:true, data:error.data};
-  })
 
 }
 

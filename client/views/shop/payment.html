@@ -75,18 +75,13 @@
 
     </form>
 
-    <div class="payment-total" ng-if="!Order.totals.formatted">
+    <div class="payment-total">
       <p ng-if="Order.totals.subtotal.formatted">SUBTOTAL <span>{{Order.totals.subtotal.formatted}}</span></p>
-      <p>SHIPPING <span>{{Order.totals.shipping_price.formatted}}</span></p>
-      <p>TOTAL <span>{{Order.totals.total.formatted}}</span></p>
+      <p>SHIPPING <span>{{Order.shipping_total}}</span></p>
+      <p>TAXES <span>{{Order.taxes_total}}</span></p>
+      <p>TOTAL <span>{{Order.total}}</span></p>
     </div>
 
-    <div class="payment-total" ng-if="Order.totals.formatted">
-      <p ng-if="Order.totals.formatted.subtotal">SUBTOTAL <span>{{Order.totals.formatted.subtotal}}</span></p>
-      <p>SHIPPING <span>{{Order.totals.formatted.shipping_price}}</span></p>
-      <p>TAX <span>{{Order.totals.formatted.tax}}</span></p>
-      <p>TOTAL <span>{{Order.totals.formatted.total}}</span></p>
-    </div>
 
   </div>
 

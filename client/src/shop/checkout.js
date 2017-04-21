@@ -9,6 +9,7 @@ $rootScope.Order;
 $rootScope.shipment_forwardActive=false;
 
 $rootScope.checkout = {
+          cart_id:'',
           customer:{
               first_name: '',
               last_name: '',
@@ -45,19 +46,27 @@ $rootScope.checkout = {
 
 //shipment
 
+$scope.inProgress=false;
+
   $rootScope.shipmentToPayment = (event) =>{
-    if($scope.checkoutForm.$valid){
-
-
-
-      $http.post('/cartToOrder', $rootScope.checkout)
+    var cartID = $rootScope.readCookie('cart');
+    if($scope.checkoutForm.$valid && cartID && !$scope.inProgress){
+      $scope.inProgress=true;
+      if(cartID){
+        $rootScope.checkout.cart_id =cartID;
+        console.log("cartID",cartID);
+      }
+      $http.post('/api/order/create', $rootScope.checkout)
 
       .then(function(response) {
-        $rootScope.Order=response.data;
+        $rootScope.Order=response.data.data;
+        $scope.inProgress=false;
+        console.log(response);
         // $rootScope.payment.id = response.data.id;
-        $location.path('/shop/payment', true);
-        mailchimp.register($rootScope.checkout);
+        $location.path('/shop/checkout/'+$rootScope.Order.id+'/payment', true);
+        // mailchimp.register($rootScope.checkout);
       }, function(response) {
+        $scope.inProgress=false;
         $rootScope.error = {value: true, text:response.data};
         // event.preventDefault();
         setTimeout(function(){
@@ -66,9 +75,8 @@ $rootScope.checkout = {
         }, 2000);
           console.error("error in posting");
       });
-
-
     }else{
+      $scope.inProgress=false;
       $rootScope.error = {value: true, text:'fill in the form correctly'};
       // event.preventDefault();
       setTimeout(function(){
@@ -106,10 +114,10 @@ $rootScope.checkout = {
 
 
 
-$scope.phoneRegex = '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$';
+$scope.phoneRegex = '^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$';
 // ^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$
 //
-$scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
+$scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z]\\d[A-Z]\\d$';
 $scope.fiscalRegex = '^([A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1})|([0-9]{11})$';
 
 // ^[A-Z]{6}[A-Z0-9]{2}[A-Z][A-Z0-9]{2}[A-Z][A-Z0-9]{3}[A-Z]$

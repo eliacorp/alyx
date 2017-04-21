@@ -2,20 +2,20 @@
 
 var Payment = angular.module('myApp');
 
-Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'anchorSmoothScroll', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll){
+Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'anchorSmoothScroll','$routeParams', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams){
  $rootScope.payment;
  $rootScope.Transaction;
   $rootScope.Processed={value: false, error:false, data:''};
 
     $rootScope.payment = {
-                            id: $rootScope.Order.id,
+                            order: {},
                             gateway:'',
                             first_name: $rootScope.checkout.billing.first_name,
                             last_name: $rootScope.checkout.billing.last_name,
-                            number: '',
-                            expiry_month: '',
-                            expiry_year:  '',
-                            cvv:  ''
+                            number: '5555555555554444',
+                            expiry_month: '08',
+                            expiry_year:  '2018',
+                            cvv:  '801'
                           };
 
 
@@ -76,33 +76,34 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
     $rootScope.paymentToProcess = function(){
 
       $rootScope.payment.gateway = $rootScope.checkout.gateway;
+      $rootScope.payment.order = $rootScope.Order;
+      console.log("order exists");
+      console.log($rootScope.Order);
       $rootScope.pageLoading = true;
 
-          $http({
-            url: '/orderToPayment',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            transformRequest: transformRequestAsFormPost,
-            data: $rootScope.payment
-          }).then( function(response){
-              if(response.data.data.paid){
-                $rootScope.cartLoading = false;
-                $rootScope.Processed={value: true, error:false, data:response.data.order};
-                $rootScope.Transaction = response.data.data;
-                $rootScope.pageLoading = false;
-                $location.path('/shop/processed/'+response.data.order.id+'/'+$rootScope.checkout.gateway, true);
-              }
-          }, function(response){
-            console.log("payment failed!");
-            console.log(response);
-            $rootScope.Processed={value: true, error:true, data:response.data};
-            $rootScope.pageLoading = false;
-            $rootScope.cartLoading = false;
-            $location.path('/shop/processed/'+$rootScope.checkout.id+'/'+$rootScope.checkout.gateway+'/canceled', true);
-          })
+      $http.post('/api/order/payment/stripe', $rootScope.payment)
+        .then( function(response){
+          console.log(response);
+            if(response.data.data.paid){
+              $rootScope.cartLoading = false;
+              $rootScope.Processed={value: true, error:false, data:response.data.order};
+              $rootScope.Transaction = response.data.data;
+              $rootScope.pageLoading = false;
+              $location.path('/shop/checkout/'+$routeParams.order+'/processed/'+$rootScope.checkout.gateway, true);
+            }
+        }, function(response){
+          console.log("payment failed!");
+          console.log(response);
+          $rootScope.Processed={value: true, error:true, data:response.data};
+          $rootScope.pageLoading = false;
+          $rootScope.cartLoading = false;
+          $location.path('/shop/processed/'+$routeParams.order+'/processed/'+$rootScope.checkout.id+'/'+$rootScope.checkout.gateway+'/canceled', true);
+        })
     }//paymentToProcess
+
+
+
+
 
     $rootScope.paymentToProcess_paypal = function(){
 

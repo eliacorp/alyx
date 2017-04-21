@@ -4,7 +4,7 @@ var Shop = angular.module('myApp');
 Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', function ($sce, $routeParams, $rootScope, $location) {
   return function(data) {
 
-    if($rootScope.Product){
+    if($rootScope.Product.data){
                 var filter = $rootScope.filter;
                 $rootScope.filtered = [];
 
@@ -15,30 +15,30 @@ Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', fu
                 }else{
 
                   // console.log('category: '+category);
-                  for (var i in $rootScope.Product){
+                  for (var i in $rootScope.Product.data){
 
-                    if(!$rootScope.Product[i].collection){
+                    if(!$rootScope.Product.data[i].collection){
 
-                    }else if($rootScope.Product[i].collection.value){
+                    }else if($rootScope.Product.data[i].collection.value){
 
                       if($rootScope.filter.collection.selected && $rootScope.filter.gender.selected){
 
-                        for (var c in $rootScope.Product[i].category.data){
-                          if(($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product[i].collection.data.slug == filter.collection.selected)){
-                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+                        for (var c in $rootScope.Product.data[i].category.data){
+                          if(($rootScope.Product.data[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product.data[i].collection.data.slug == filter.collection.selected)){
+                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
                           }
                         }
 
                       }else if($rootScope.filter.collection.selected){
 
-                        if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
-                          $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+                        if($rootScope.Product.data[i].collection.data.slug == filter.collection.selected){
+                          $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
                         }
 
                       }else if($rootScope.filter.gender.selected){
-                        for (var c in $rootScope.Product[i].category.data){
-                          if($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected){
-                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+                        for (var c in $rootScope.Product.data[i].category.data){
+                          if($rootScope.Product.data[i].category.data[c].slug == $rootScope.filter.gender.selected){
+                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
                           }
                         }
                       }
@@ -64,11 +64,9 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
 
 
   $scope.$on('$routeUpdate', function(){
-    $rootScope.Product=[];
+    $rootScope.Product={data:[]};
     $rootScope.Pagination={}
-    $rootScope.getProductsFN(0);
-    // $scope.sort = $location.search().sort;
-
+    $rootScope.getProductsFN(1);
   });
 
 
@@ -92,13 +90,12 @@ $scope.findCollection=(slug)=>{
 
 
   //get products
-  $rootScope.Pagination;
 
   $rootScope.paginationInProcess=false;
 
-  $rootScope.getProductsFN=function(offset){
+  $rootScope.getProductsFN=function(page){
     $rootScope.paginationInProcess=true;
-    var url = '/product/list?offset='+offset;
+    var url = '/product/list?page='+page;
     if($routeParams.collection){
       var collection_id = $scope.findCollection($routeParams.collection);
       url=url+'&collection='+collection_id;
@@ -106,15 +103,22 @@ $scope.findCollection=(slug)=>{
 
 
     $http({method: 'GET', url: url}).then(function(response){
-      $rootScope.Product = $rootScope.Product.concat(response.data.result);
-      $rootScope.Pagination = response.data.pagination;
+      $rootScope.Product.data = $rootScope.Product.data.concat(response.data.data);
+      // console.log($rootScope.Product);
+      $rootScope.Product.count= response.data.count;
+      $rootScope.Product.page= response.data.page;
+      $rootScope.Product.pages= response.data.pages;
+      $rootScope.Product.status= response.data.status;
+
+      console.log($rootScope.Product);
+
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
       $rootScope.paginationInProcess=false;
 
-      for (var i in $rootScope.Product){
-        console.log($rootScope.Product[i].status.data.key);
-      }
+      // for (var i in $rootScope.Product){
+      //   console.log($rootScope.Product[i].status.data.key);
+      // }
 
     }, function(error){
       console.log(error);
@@ -123,10 +127,10 @@ $scope.findCollection=(slug)=>{
   }
 
 
-  if($rootScope.Pagination){
+  if($rootScope.Product.data.length){
     // $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
   }else{
-    $rootScope.getProductsFN(0);
+    $rootScope.getProductsFN(1);
   }
 
 
@@ -145,8 +149,9 @@ $scope.findCollection=(slug)=>{
 
         if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
             // alert('bottom reached');
-            if($rootScope.Pagination.offsets.next){
-              $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
+            if($rootScope.Pagination.page){
+              var nextPage = $rootScope.Pagination.page + 1;
+              $rootScope.getProductsFN($rootScope.Pagination.page);
             }
 
         }
@@ -224,12 +229,24 @@ $rootScope.selectFilter=(thistype, id)=>{
 
 
 
+$rootScope.createCart=()=>{
+  marketcloud.carts.create({
+        items:[{'product_id':5785,'quantity':2}]
+    })
+  .then(function(data){
+      // Your code here
+    })
+}
+
+
 
 
 //..add product
 
 
 $rootScope.addToCart = function(id){
+
+  console.log("no variant");
 
       $http({
         url: '/addProduct',
@@ -250,36 +267,7 @@ $rootScope.addToCart = function(id){
 }//addToCart
 
 
-//......VARIATIONS
 
-  $rootScope.addVariation = function(){
-
-    console.log($scope.maxVariation($rootScope.selectedVariation));
-
-    if($scope.maxVariation($rootScope.selectedVariation) == true){
-      if($rootScope.selectedVariation){
-        $http({
-          url: '/addVariation',
-          method: 'POST',
-          data: $rootScope.selectedVariation
-        }).then(function(response){
-          $rootScope.Cart = response;
-          console.log(response);
-          $rootScope.updateCart();
-        });
-      }else{
-        $scope.variationErrorMessage = "select a size first";
-        setTimeout(function(){
-          $scope.variationErrorMessage = false;
-          $rootScope.$apply();
-        });
-      }
-    }
-
-
-
-
-  }//addToCart
 
 
 
@@ -312,25 +300,6 @@ $rootScope.addToCart = function(id){
 
 
 
-  // $rootScope.updateCart = function(){
-  //       $http({
-  //         url: '/getCart',
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/x-www-form-urlencoded'
-  //         },
-  //         transformRequest: transformRequestAsFormPost
-  //       }).then(function(response){
-  //         $rootScope.Cart = response.data;
-  //
-  //         console.log($rootScope.Cart);
-  //         //attaching item id if cart>0
-  //         if(!$rootScope.Cart.total_items==0){
-  //           console.log("cart has some stuff");
-  //           $rootScope.attachItemID($rootScope.Cart.contents);
-  //         }
-  //       });
-  // }//updateCart
 
 
 
@@ -375,7 +344,7 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
   $rootScope.Detail={};
   $rootScope.selectedVariation = {};
-  $rootScope.howManyVAriationsSelected = 0;
+  $rootScope.howManyVariationsSelected = 0;
   $rootScope.page = "detail";
   $rootScope.Variations;
   $scope.sizeLoading = false;
@@ -385,7 +354,50 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
     $scope.openSizechart=!$scope.openSizechart;
   }
 
+  //......VARIATIONS
 
+    $rootScope.addVariation=()=>{
+      console.log("add");
+      console.log($rootScope.selectedVariation);
+      var url;
+      var cartID = $rootScope.readCookie('cart');
+      console.log("cartID",cartID);
+      if(cartID){
+        url = '/cart/'+cartID+'/add/variation';
+      }else{
+        url = '/cart/create';
+      }
+
+
+        if($rootScope.selectedVariation){
+          $http({
+            url: url,
+            method: 'POST',
+            data: $rootScope.selectedVariation
+          }).then(function(response){
+            $rootScope.Cart = response.data.data;
+            if($rootScope.readCookie('cart')){
+
+            }else{
+              $rootScope.createCookie('cart', $rootScope.Cart.id, 3)
+            }
+            console.log(response);
+            // $rootScope.updateCart();
+          });
+        }else{
+          $scope.variationErrorMessage = "select a size first";
+          setTimeout(function(){
+            $scope.variationErrorMessage = false;
+            $rootScope.$apply();
+          });
+        }
+
+
+      // if($scope.maxVariation($rootScope.selectedVariation) == true){
+
+      // }
+
+    }//addToCart
 
 
   // var sku =$routeParams.detail;
@@ -413,47 +425,47 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
 
 
-  $scope.getVariationsLevel = (productId)=>{
-    $scope.sizeLoading = true;
-    $http({
-      url: '/product/'+productId+'/variations/get',
-      method: 'GET',
-    }).then(function(response){
-      $rootScope.Variations=response.data.result;
-      $scope.sizeLoading = false;
-      var n = 0;
-      for (var m in $rootScope.Detail.modifiers){
-
-        $scope.arrFromMyObj = Object.keys($rootScope.Detail.modifiers[m].variations).map(function(key) {
-          return $rootScope.Detail.modifiers[m].variations[key];
-        });
-        $rootScope.Detail.modifiers[m].variations=$scope.arrFromMyObj;
-
-        for (var v in $rootScope.Detail.modifiers[m].variations){
-
-          for (var t in $rootScope.Variations){
-            var key = Object.keys($rootScope.Variations[t].modifiers)[0];
-
-            var title = $rootScope.Variations[t].modifiers[key].var_title;
-
-            if(title==$rootScope.Detail.modifiers[m].variations[v].title){
-              $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
-
-              function findCherries(fruit) {
-                return fruit.title === title;
-              }
-              var thisObj = $scope.orderSize.find(findCherries);
-              $rootScope.Detail.modifiers[m].variations[v].index = thisObj.index;
-            }
-          }
-        }
-      }
-
-    },function(error){
-      console.log(error);
-      $route.reload();
-    });
-  }
+  // $scope.getVariationsLevel = (productId)=>{
+  //   $scope.sizeLoading = true;
+  //   $http({
+  //     url: '/product/'+productId+'/variations/get',
+  //     method: 'GET',
+  //   }).then(function(response){
+  //     $rootScope.Variations=response.data.result;
+  //     $scope.sizeLoading = false;
+  //     var n = 0;
+  //     for (var m in $rootScope.Detail.modifiers){
+  //
+  //       $scope.arrFromMyObj = Object.keys($rootScope.Detail.modifiers[m].variations).map(function(key) {
+  //         return $rootScope.Detail.modifiers[m].variations[key];
+  //       });
+  //       $rootScope.Detail.modifiers[m].variations=$scope.arrFromMyObj;
+  //
+  //       for (var v in $rootScope.Detail.modifiers[m].variations){
+  //
+  //         for (var t in $rootScope.Variations){
+  //           var key = Object.keys($rootScope.Variations[t].modifiers)[0];
+  //
+  //           var title = $rootScope.Variations[t].modifiers[key].var_title;
+  //
+  //           if(title==$rootScope.Detail.modifiers[m].variations[v].title){
+  //             $rootScope.Detail.modifiers[m].variations[v].stock_level = $rootScope.Variations[t].stock_level;
+  //
+  //             function findCherries(fruit) {
+  //               return fruit.title === title;
+  //             }
+  //             var thisObj = $scope.orderSize.find(findCherries);
+  //             $rootScope.Detail.modifiers[m].variations[v].index = thisObj.index;
+  //           }
+  //         }
+  //       }
+  //     }
+  //
+  //   },function(error){
+  //     console.log(error);
+  //     $route.reload();
+  //   });
+  // }
 
 
 
@@ -468,10 +480,14 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
 
   $rootScope.getDetail = (id)=>{
+
     //no detail yet let's pull it
     $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
-      $rootScope.Detail = response.data;
-      $scope.getVariationsLevel($rootScope.Detail.id);
+
+      console.log(response);
+
+      $rootScope.Detail = response.data.data;
+      // $scope.getVariationsLevel($rootScope.Detail.id);
 
     }, function(error){
       console.log(error);
@@ -483,22 +499,26 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
 
   $rootScope.detailUpdate = (id) => {
+    console.log("id",id);
     $rootScope.selectedVariation={};
-    $rootScope.howManyVAriationsSelected = 0;
+    $rootScope.howManyVariationsSelected = 0;
     $rootScope.Detail.total_variations=0;
+    console.log($rootScope.Product.data);
 
-    if(!$rootScope.Product||$rootScope.Product.length==0){
+    if(!$rootScope.Product.data||$rootScope.Product.data.length==0){
+      console.log("no product");
       $rootScope.getDetail(id);
     }else{
-
-      for (var i in $rootScope.Product){
-        if ($rootScope.Product[i].id == id){
-          $rootScope.Product[i].id
-          $rootScope.Detail=$rootScope.Product[i];
+      console.log("product");
+      for (var i in $rootScope.Product.data){
+        console.log("i",i);
+        if ($rootScope.Product.data[i].id == id){
+          console.log("$rootScope.Product[i].id", $rootScope.Product.data[i].id);
+          $rootScope.Product.data[i].id
+          $rootScope.Detail=$rootScope.Product.data[i];
           $rootScope.Detail.total_variations=0;
           $rootScope.Detail.has_variation = $rootScope.has_variation;
           // $rootScope.pageLoading = false;
-          $scope.getVariationsLevel($rootScope.Detail.id);
 
           var go = true;
           //has variation
@@ -530,39 +550,50 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
   // $rootScope.detailUpdate($routeParams.detail);
 
 
+  //
+  // $rootScope.showSelection = function(modifier_id){
+  //   $rootScope.selectedVariation[modifier_id].open = !$rootScope.selectedVariation[modifier_id].open;
+  // }
+  //
+  // $rootScope.closeSelection = function(modifier){
+  //   if($rootScope.selectedVariation[modifier].open == false){
+  //     $rootScope.selectedVariation[modifier].open = true;
+  //   }else{
+  //     $rootScope.selectedVariation[modifier].open = false;
+  //   }
+  // }
 
-  $rootScope.showSelection = function(modifier_id){
-    $rootScope.selectedVariation[modifier_id].open = !$rootScope.selectedVariation[modifier_id].open;
-  }
 
-  $rootScope.closeSelection = function(modifier_id){
-    if($rootScope.selectedVariation[modifier_id].open == false){
-      $rootScope.selectedVariation[modifier_id].open = true;
-    }else{
-      $rootScope.selectedVariation[modifier_id].open = false;
+  $rootScope.thisVariation = function(product_id, modifier_id, variant_id){
+
+    $rootScope.selectedVariation[modifier_id] ={
+      product_id: product_id,
+      modifier_id: modifier_id,
+      variant_id: variant_id
+    }
+    console.log($rootScope.selectedVariation);
+    if($rootScope.howManyVariationsSelected<1){
+      $rootScope.howManyVariationsSelected = $rootScope.howManyVariationsSelected+1;
     }
   }
-
-
-
-  $rootScope.thisVariation = function(id, modifier_id, modifier_title, variation_id, variation_title){
-    var i=0;
-    for ( i in $rootScope.Detail.modifiers){
-      if($rootScope.Detail.modifiers[i].id==modifier_id){
-        $rootScope.selectedVariation[i] =
-          {
-            id: id,
-            modifier_id: modifier_id,
-            modifier_title: modifier_title,
-            variation_id: variation_id,
-            variation_title: variation_title
-          }
-          if($rootScope.howManyVAriationsSelected<$rootScope.Detail.total_variations){
-            $rootScope.howManyVAriationsSelected = $rootScope.howManyVAriationsSelected+1;
-          }
-      }
-    }
-  }
+  // $rootScope.thisVariation = function(id, modifier_id, variation_id){
+  //   var i=0;
+  //   for (var i in $rootScope.Detail.modifiers){
+  //     if($rootScope.Detail.modifiers[i].id==modifier_id){
+  //       $rootScope.selectedVariation[i] =
+  //         {
+  //           id: id,
+  //           modifier_id: modifier_id,
+  //           modifier_title: modifier_title,
+  //           variation_id: variation_id,
+  //           variation_title: variation_title
+  //         }
+  //         if($rootScope.howManyVariationsSelected<$rootScope.Detail.total_variations){
+  //           $rootScope.howManyVariationsSelected = $rootScope.howManyVariationsSelected+1;
+  //         }
+  //     }
+  //   }
+  // }
 
 
 

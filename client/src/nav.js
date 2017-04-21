@@ -79,6 +79,17 @@ $scope.getSecondPath=()=>{
 }
 
 
+$scope.getFourthPath=()=>{
+  var first = $location.path();
+  first.indexOf(1);
+  first.toLowerCase();
+
+  first = first.split("/")[4];
+  return first;
+}
+
+
+
 
 if(($scope.getFirstPath() =='shop')){
   $rootScope.logoLeft=false;
@@ -95,6 +106,7 @@ $scope.$on('$routeChangeStart', function(){
 $scope.$on('$routeChangeSuccess', function(){
   $rootScope.Location=$location.path();
   $rootScope.shopLocation=$scope.getSecondPath();
+  $rootScope.checkoutLocation=$scope.getFourthPath();
   $rootScope.firstBase=$scope.getFirstPath();
   $rootScope.pageLoading = true;
   if( $scope.getFirstPath() =='shop'){

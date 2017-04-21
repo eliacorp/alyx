@@ -93,19 +93,19 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/payment', {
+    .when('/shop/checkout/:order/payment', {
       templateUrl: 'views/shop/payment.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
-    .when('/shop/processed/:order/:method', {
+    .when('/shop/checkout/:order/processed/:method', {
       templateUrl: 'views/shop/processed.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
 
-    .when('/shop/processed/:order/:method/canceled', {
+    .when('/shop/checkout/:order/processed/:method/canceled', {
       templateUrl: 'views/shop/processed-canceled.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
@@ -180,7 +180,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
-  $rootScope.Product=[];
+  $rootScope.Product={data:[]};
 
 
   $rootScope.noRefresh = function(url){
@@ -200,34 +200,36 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-// function eraseCookie(name) {
-//   $rootScope.createCookie(name,"",-1);
-// }
-//
-// function deleteAllCookies() {
-//   var cookies = document.cookie.split(";");
-//   for (var i = 0; i < cookies.length; i++)
-//     eraseCookie(cookies[i].split("=")[0]);
-// }
-//
-// // deleteAllCookies();
-// $rootScope.createCookie = function(name,value,time) {
-// 	var expires = "; expires="+time;
-// 	document.cookie = name+"="+value+expires+";";
-// }
-//
-// $rootScope.readCookie = function(name) {
-// 	var nameEQ = name + "=";
-// 	var ca = document.cookie.split(';');
-// 	for(var i=0;i < ca.length;i++) {
-// 		var c = ca[i];
-// 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-//       if (c.indexOf(nameEQ) == 0){
-//         return c.substring(nameEQ.length,c.length);
-//       }
-// 	}
-// 	// return null;
-// }
+$rootScope.eraseCookie = function(name) {
+  $rootScope.createCookie(name,"",-1);
+}
+
+$rootScope.deleteAllCookies =function() {
+  var cookies = document.cookie.split(";");
+  for (var i = 0; i < cookies.length; i++)
+    eraseCookie(cookies[i].split("=")[0]);
+}
+
+// deleteAllCookies();
+$rootScope.createCookie = function(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+$rootScope.readCookie = function(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0){
+        return c.substring(nameEQ.length,c.length);
+      }
+	}
+	// return null;
+}
 
 
 
