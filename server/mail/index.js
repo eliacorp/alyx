@@ -30,6 +30,7 @@ exports.orderPaid=function(req, res){
           console.log("err", err);
           return next(err);
         }
+        console.log(template);
         var compiledTemplate = ejs.render(template, {order : order});
         var mailOptions = {
           from: '"Nerd Overlord" <*******@gmail.com>',
@@ -40,6 +41,7 @@ exports.orderPaid=function(req, res){
         }
        transporter.sendMail(mailOptions, function(error, info) {
             if (error) {
+              console.log(error);
                 return console.log(error);
             }
             console.log('Message %s sent: %s', info.messageId, info.response);
