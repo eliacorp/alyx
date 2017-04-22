@@ -42,13 +42,13 @@ exports.marketcloud = marketcloud;
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else
-        next();
-});
+// app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//         res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else
+//         next();
+// });
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -183,39 +183,35 @@ function setToHappen(d){
   })
 
 
+  app.post('/cart/:id/remove/items', function(req, res){
+    Cart.removeItem(req, res);
+  })
+
+  app.get('/product/list', function(req, res){
+     Product.list(req, res);
+   });
+
+  app.get('/getCollections', function(req, res){
+    getCollections(req, res);
+  });
+
+  app.get('/cart/get/:id', function(req, res){
+    Cart.get(req, res);
+  });
+
+  app.post('/api/order/create', function(req, res){
+    Order.create(req, res);
+  });
 
 
+  app.post('/api/order/payment/stripe', function(req, res){
+    Order.payment_stripe(req, res);
+  });
 
 
-    app.post('/cart/:id/remove/items', function(req, res){
-      Cart.removeItem(req, res);
-    })
-
-    app.get('/product/list', function(req, res){
-       Product.list(req, res);
-     });
-
-    app.get('/getCollections', function(req, res){
-      getCollections(req, res);
-    });
-
-    app.get('/cart/get/:id', function(req, res){
-      Cart.get(req, res);
-    });
-
-    app.post('/api/order/create', function(req, res){
-      Order.create(req, res);
-    });
-
-
-    app.post('/api/order/payment/stripe', function(req, res){
-      Order.payment_stripe(req, res);
-    });
-
-
-    app.post('/webhook/mail/order', function(req, res){
-      mail.orderPaid(req, res);
-    });
+  app.post('/webhook/mail/order', function(req, res){
+    mail.orderPaid(req, res);
+  });
 
 
     // app.get('/order/:order/get', function(req, res){
