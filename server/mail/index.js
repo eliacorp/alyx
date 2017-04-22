@@ -21,7 +21,7 @@ exports.orderPaid=function(req, res){
   console.log("Received a webhook", JSON.stringify(req.body));
   var event = req.body.event;
 
-  if (event === 'payments.create') {
+  if (event === 'orders.create') {
     // Then, an order has been paid.
     // Grabbing the order information from the event
     var order = req.body.data._embedded.order;
