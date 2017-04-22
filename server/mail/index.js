@@ -1,8 +1,13 @@
+"use strict"
 var nodemailer = require('nodemailer');
+let fs = require('fs');
 
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    // service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // use SSL
     auth: {
         user: 'service@alyxstudio.com',
         pass: 'rolls##around^'
@@ -12,8 +17,6 @@ var transporter = nodemailer.createTransport({
 
 
 exports.orderPaid=function(req, res){
-
-
   console.log("Received a webhook", JSON.stringify(req.body));
   var event = req.body.event;
 
@@ -23,6 +26,7 @@ exports.orderPaid=function(req, res){
     var order = req.body.data._embedded.order;
    fs.readFile('./email_order.ejs', 'utf8', function (err, template) {
         if (err) {
+          console.log("err", err);
           return next(err);
         }
         var compiledTemplate = ejs.render(template, {order : order});
@@ -42,8 +46,4 @@ exports.orderPaid=function(req, res){
       res.send({status:true})
     })
   }
-
-
-
-
 }
