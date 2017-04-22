@@ -34,7 +34,7 @@ exports.orderPaid=function(req, res){
         var compiledTemplate = ejs.render(template, {order : order});
         var mailOptions = {
           from: '"Nerd Overlord" <*******@gmail.com>',
-          to: order.billing_address.email,
+          to: req.body.data.billing_address.email,
           subject: 'Thank you for your order ✔',
           text: 'We received your order, we will send you a notification as soon as we ship it!',
          html:compiledTemplate
