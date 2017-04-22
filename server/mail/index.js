@@ -25,7 +25,7 @@ exports.orderPaid=function(req, res){
     // Then, an order has been paid.
     // Grabbing the order information from the event
     var order = req.body.data;
-   fs.readFile('./email_order.ejs', 'utf8', function (err, template) {
+   fs.readFile('server/mail/email_order.ejs', 'utf8', function (err, template) {
         if (err) {
           console.log("err", err);
           return next(err);
