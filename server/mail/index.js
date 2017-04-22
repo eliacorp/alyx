@@ -24,7 +24,7 @@ exports.orderPaid=function(req, res){
   if (event === 'orders.create') {
     // Then, an order has been paid.
     // Grabbing the order information from the event
-    var order = req.body.data._embedded.order;
+    var order = req.body.data;
    fs.readFile('./email_order.ejs', 'utf8', function (err, template) {
         if (err) {
           console.log("err", err);
