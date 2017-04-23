@@ -24,7 +24,7 @@ exports.orderPaid=function(req, res){
   if (event === 'orders.create') {
     // Then, an order has been paid.
     // Grabbing the order information from the event
-    var order = req.body.data;
+    var order = req.body.data.data;
    fs.readFile('server/mail/email_order.ejs', 'utf8', function (err, template) {
         if (err) {
           console.log("err", err);
@@ -34,7 +34,7 @@ exports.orderPaid=function(req, res){
         var compiledTemplate = ejs.render(template, {order : order});
         var mailOptions = {
           from: '"Nerd Overlord" <*******@gmail.com>',
-          to: order.data.billing_address.email,
+          to: order.billing_address.email,
           subject: 'Thank you for your order ✔',
           text: 'We received your order, we will send you a notification as soon as we ship it!',
          html:compiledTemplate
