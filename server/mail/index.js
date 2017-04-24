@@ -33,7 +33,7 @@ exports.orderPaid=function(req, res){
         console.log(template);
         var compiledTemplate = ejs.render(template, {order : order});
         var mailOptions = {
-          from: '"Nerd Overlord" <*******@gmail.com>',
+          from: '"ALYX" <service@alyxstudio.com>',
           to: order.billing_address.email,
           subject: 'Thank you for your order ✔',
           text: 'We received your order, we will send you a notification as soon as we ship it!',

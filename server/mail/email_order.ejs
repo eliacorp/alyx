@@ -14,7 +14,7 @@
     .btn-primary a:hover {
     background-color: #000000 !important;
     border-color: #000000 !important;
-    color:#FFFFFF;
+    color:#FFFFFF!important;
     }
     }
 
@@ -122,49 +122,139 @@
             <!-- START CENTERED WHITE CONTAINER -->
             <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">
 
-
-
             <title>Thank you for your order!</title>
-
-
 
             </span>
             <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #fff; border-radius: 3px;" width="100%">
               <!-- START MAIN CONTENT AREA -->
-              <tr>
-                <td class="wrapper" style="font-family: sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top">
-                  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
-                    <tr>
-                      <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">
-                        <h1 style="font-family: sans-serif; font-size: 24px; font-weight: bold; margin: 0; Margin-bottom: 15px;">
-                        Thank you for your order
-                        </h1>
-                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
-                        We received your order and we will notify you as soon as we process it. As a reminder, the order total is <%= order.total %>.
 
-                        </p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; box-sizing: border-box;" width="100%">
-                          <tbody>
-                            <tr>
-                              <td align="left" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 15px;" valign="top">
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
-                                  <tbody>
-                                    <tr>
-                                      <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #FFFFFF; border-radius: 5px; text-align: center;" valign="top" bgcolor="#FFFFFF" align="center"> <a href="https://alyxstudio.com" target="_blank" style="display: inline-block; color: #000; background-color: #FFFFFF; border: dotted 1px #000000; border-radius: 0px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #000000;">WEB STORE</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
+              <tbody>
+
+
+                <tr>
+              	   <td>
+              	      <p><img src="https://s3-us-west-2.amazonaws.com/asset.alyx/logo/ALYX_TYPE_LOGO_FINAL.svg" style="width: 150px;" alt="ALYX"/></p>
+              	   </td>
+              	   <td style="text-align: right;">
+              	   <p><strong>Order reference: # id }}</strong></p>
+              	   </td>
+              	</tr>
+
+                <tr>
+                  <td class="wrapper" style="font-family: sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top">
+                    <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
+                      <tr>
+                        <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">
+                          <h1 style="font-family: sans-serif; font-size: 24px; font-weight: bold; margin: 0; Margin-bottom: 15px;">
+                          Thank you for your order
+                          </h1>
+                          <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
+                          We received your order and we will notify you as soon as we process it. As a reminder, the order total is <%= order.total %>.
+
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+
+
+              	<tr>
+              	   <td colspan="2">
+              	  	 <br />
+              	      <p>There is a new order. here is the receipt:</p>
+              	      <br />
+              	   </td>
+              	</tr>
+              	<tr>
+
+                  <td>
+                     <p><strong>Customer</strong></p>
+                     <p>
+                       <%= order.billing_address.full_name %><br/>
+                       <%= order.billing_address.email %><br/>
+                       <%= order.billing_address.phone_number<br/>
+                     </p>
+                  </td>
+
+              	   <td>
+              	      <p><strong>Shipping Information</strong></p>
+              	      <p>
+                        <%= order.shipping_address.full_name %><br/>
+                	      <%= order.shipping_address.address1 %><br />
+                	      <%= order.shipping_address.address2 %><br />
+                	      <%= order.shipping_address.city %><br />
+                	      <%= order.shipping_address.state %><br />
+                	      <%= order.shipping_address.postal_code %><br />
+                	      <%= order.shipping_address.country %>
+              	      </p>
+              	   </td>
+
+              	   <td>
+              	      <p><strong>Billing Information:</strong></p>
+              	      <%= order.billing_address.full_name %><br/>
+              	      <%= order.billing_address.address1 %><br />
+              	      <%= order.billing_address.address2 %><br />
+              	      <%= order.billing_address.city %><br />
+              	      <%= order.billing_address.state %><br />
+              	      <%= order.billing_address.postal_code %><br />
+              	      <%= order.billing_address.country %>
+              	   </td>
+              	</tr>
+              	<tr>
+              		<td colspan="2">
+              		<br />
+              		<br />
+              		<table border="0" cellpadding="2" cellspacing="0" style="width: 100%">
+              			<thead>
+              			   <tr style="border-top: 1px solid #ccc">
+              			    <!-- <th></th> -->
+              			   	<th style="font-weight:bold;text-align:left" colspan="3">Product</th>
+              			   	<th style="font-weight:bold;text-align:left" colspan="3">Quantity</th>
+              			   	<th style="font-weight:bold;text-align:left" colspan="3">Price</th>
+              			   </tr>
+              			</thead>
+
+              			<tbody>
+                      <% for(var i=0; i<order.products.length; i++) {%>
+                         <!-- <li><%= supplies[i] %></li> -->
+
+              				<tr style="border-top: 1px solid #ccc">
+              					<td colspan="3">
+                          <%if (order.products[i].images) {%>
+                            <img src="<%= order.products[i].images[0] %>" alt="<%= order.products[i].name %>" style="width: 100px;"/>
+                          <% } %>
+                        </td>
+                        <td align="left" colspan="3"><%= order.products[i].quantity %></td>
+                        <td align="left" colspan="3"><%= order.products[i].price %></td>
+
+              			 	</tr>
+              			<% } %>
+            			</tbody>
+
+
               <!-- END MAIN CONTENT AREA -->
             </table>
+
+            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; box-sizing: border-box;" width="100%">
+              <tbody>
+                <tr>
+                  <td align="left" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 15px;" valign="top">
+                    <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
+                      <tbody>
+                        <tr>
+                          <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #FFFFFF; border-radius: 5px; text-align: center;" valign="top" bgcolor="#FFFFFF" align="center"> <a href="https://alyxstudio.com" target="_blank" style="display: inline-block; color: #000; background-color: #FFFFFF; border: dotted 1px #000000; border-radius: 0px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #000000;">WEB STORE</a> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+
             <!-- START FOOTER -->
             <div class="footer" style="clear: both; padding-top: 10px; text-align: center; width: 100%;">
               <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">

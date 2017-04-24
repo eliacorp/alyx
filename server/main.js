@@ -209,7 +209,7 @@ function setToHappen(d){
   });
 
 
-  app.post('/webhook/mail/order', function(req, res){
+  app.post('/webhook/order/paid', function(req, res){
     mail.orderPaid(req, res);
   });
 
