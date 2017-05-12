@@ -63,6 +63,25 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     })
 
 
+
+    .when('/user/login', {
+      templateUrl: 'views/shop/user/login.html',
+      reloadOnSearch: false
+    })
+
+    .when('/user/register', {
+      templateUrl: 'views/shop/user/login.html',
+      reloadOnSearch: false
+    })
+
+    .when('/user/account/:user', {
+      templateUrl: 'views/shop/user/account.html',
+      controller: 'userCtrl',
+      reloadOnSearch: false
+    })
+
+
+
     .when('/shop/collection', {
       templateUrl: 'views/shop/product.html',
       reloadOnSearch: false
@@ -197,7 +216,12 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-
+  $rootScope.removeError =()=>{
+    setTimeout(function(){
+      $rootScope.message = {value: false, error:false, text:""};
+      $rootScope.$apply();
+    }, 5000);
+  }
 
 
 $rootScope.eraseCookie = function(name) {
@@ -239,7 +263,18 @@ $rootScope.readCookie = function(name) {
 
 
 
+$rootScope.approveCookies=()=>{
+  $rootScope.createCookie('approval', true, 365);
+}
 
+
+$rootScope.isCookiesApproved=()=>{
+  if($rootScope.readCookie('approval')){
+    return true
+  }else{
+    return false
+  }
+}
 
 
 
@@ -249,8 +284,9 @@ $rootScope.readCookie = function(name) {
         // Simple GET request example:
         $http({
           method: 'GET',
-          url: '/getCollections'
+          url: '/api/collection/list'
         }).then(function (response) {
+          console.log(response);
               $rootScope.Collection_shop=response.data;
           }, function (response) {
             console.log(response);
@@ -283,13 +319,60 @@ $rootScope.setPage = (page)=>{
     }).then(function(response) {
       $rootScope.countries = response.data;
     }, function(response) {
-
-      $scope.error = {value: true, text:'countries not available, this page will be reloaded'};
+      $rootScope.message = {value: true, error:true, text:"ountries not available, this page will be reloaded"};
       $route.reload();
-
     });
   };
   $rootScope.getCountries();
+
+
+
+
+
+
+//video functions
+$rootScope.playPause = (id)=> {
+  var vid = document.getElementById(id);
+  if(vid.paused){
+    vid.play();
+  }else{
+    vid.pause();
+  }
+}
+
+
+
+//loading the final video
+$rootScope.loadVideo = (id)=>{
+  setTimeout(function(){
+    var vid = document.getElementById(id);
+    vid.volume = 0.2;
+    $rootScope.$apply();
+  }, 2500);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -608,28 +691,32 @@ $rootScope.Stockist;
   return {
     restrict: 'E',
     templateUrl: 'views/shop/terms.html',
-    replace: true,
-    link: function(scope, elem, attrs) {
-
-    }
+    replace: true
   };
 })
 
-.directive('processedDirective', function(){
+.directive('cookiesDirective', function() {
   return {
     restrict: 'E',
-    templateUrl: 'views/shop/processed.html',
-    replace: true,
-    link: function(scope, elem, attrs) {
+    templateUrl: 'views/cookies.html',
+    replace: true
+  };
+})
 
-    }
+.directive('loginForm', function(){
+  return {
+    restrict: 'E',
+    templateUrl: 'views/shop/user/login-form.html',
+    replace: true
   };
 });
 
 var jqueryUI = require('./vendor/jquery-ui.min.js');
 var jQuery = require('jquery');
 var nav = require("./nav.js");
+var user = require("./user/user.js");
 var shop = require("./shop/shop.js");
+
 var cart = require("./shop/cart.js");
 var checkout = require("./shop/checkout.js");
 var payment = require("./shop/payment.js");

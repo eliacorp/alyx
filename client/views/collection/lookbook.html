@@ -1,8 +1,7 @@
 <div class="lookbook" ng-controller="lookbookCtrl">
 
-<div class="lookbook-title">
+<div class="lookbook-title" ng-show="showLookbook">
   <h1 class="lookbook-title-h1">{{Collection.data['collection.title'].value}}</h1>
-
 </div>
 
 <!-- story -->
@@ -38,7 +37,7 @@
 
 
 <!-- main image -->
-  <div class="lookbook-main">
+  <div class="lookbook-main" ng-show="showLookbook">
     <!-- ng-show="mainLookShow" -->
     <!-- <p class="lookbook-text-p">look {{mainLook}}</p> -->
 

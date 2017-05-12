@@ -70,6 +70,20 @@
   <body>
 
 
+
+    <cookies-directive ng-if="!isCookiesApproved()"></cookies-directive>
+
+
+    <div class="error" ng-show="message.value" ng-cloak>
+      <table>
+        <td>
+          <td>
+            <h2 class="error-text" ng-class="{'error-black': !message.error}">{{message.text}}</h2>
+          </td>
+        </td>
+      </table>
+    </div>
+
     <!-- <p ng-if="Auth.access_token">{{Auth.access_token}}</p>
     <p ng-if="Auth.token">{{Auth.token}}</p>
     <p>{{Auth.cart}}</p> -->

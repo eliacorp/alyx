@@ -1,0 +1,26 @@
+<div class="account">
+
+  <div class="account-logout" ng-click="logout()">
+    <h3>logout</h3>
+  </div>
+
+  <div class="account-content">
+
+    <h1>{{User.name}}</h1>
+
+    <div class="account-info">
+      <customer-form ng-if="User"></customer-form>
+    </div>
+
+
+    <div class="account-shipping">
+      <address-form ng-cloak></address-form>
+    </div>
+
+
+
+
+  </div>
+
+
+</div>

@@ -1,0 +1,33 @@
+
+  <div class="customer">
+    <h2 class="form-sub-title">PERSONAL</h2>
+    <div class="form-entry">
+      <input type="text" name="name_customer" value="name" ng-model="User.name" required placeholder="full name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'full name'">
+        <span class="form-error" ng-show="checkoutForm.name_customer.$error.required && checkoutForm.name_customer.$touched">required</span>
+      </input>
+    </div>
+
+    <div class="form-entry">
+      <input type="email" name="email_customer" value="email" ng-model="User.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+        <span class="form-error" ng-show="checkoutForm.email_customer.$error.required && checkoutForm.email_customer.$touched">required</span>
+        <span class="form-error" ng-show="checkoutForm.email_customer.$error.email && checkoutForm.email_customer.$touched">invalid email</span>
+      </input>
+    </div>
+
+    <div class="form-entry">
+      <input type="password" name="password_customer" value="email" ng-model="User.password" required placeholder="password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'password'">
+        <span class="form-error" ng-show="checkoutForm.password_customer.$error.required && checkoutForm.password_customer.$touched">required</span>
+        <span class="form-error" ng-show="checkoutForm.password_customer.$error.password && checkoutForm.password_customer.$touched">invalid password</span>
+      </input>
+    </div>
+
+    <div class="form-entry" ng-if="checkout.shipment.country=='IT'">
+      <input type="text" name="fiscal_code" value="fiscal code" ng-model="User.fiscal_code" required placeholder="fiscal code" ng-pattern="fiscalRegex" onfocus="this.placeholder = ''" onblur="this.placeholder = 'fiscal code'">
+        <span class="form-error" ng-show="checkoutForm.fiscal_code.$error.required && checkoutForm.fiscal_code.$touched">required</span>
+      </input>
+    </div>
+
+
+    <button type="button" name="button" class="btn" ng-click="saveCustomerInfo(User)">save</button>
+
+  </div>

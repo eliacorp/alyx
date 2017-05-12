@@ -4,9 +4,9 @@
 <div class="product-filter">
 
   <ul class="product-filter-ul">
-    <li class="product-filter-li" ng-repeat="c in Collection_shop | orderBy: 'collection_index'" ng-class="{'filter-selected': c.slug == filter.collection.selected}" ng-if="c.status.data.key==1">
-      <a ng-click="selectFilter('collection', c.slug)">{{c.title}}</a>
-      {{c.collection_index}}
+    <li class="product-filter-li" ng-repeat="c in Collection_shop.data | orderBy: 'collection_index'" ng-class="{'filter-selected': c.id == filter.collection.selected}" ng-if="Collection_shop.data">
+      <a ng-click="selectFilter('collection', c.id)">{{c.name}}</a>
+      <!-- {{c.collection_index}} -->
     </li>
   </ul>
 
@@ -28,7 +28,8 @@
 <!--  -->
 
   <ul class="product-ul" >
-    <li class="product-li" ng-repeat="p in Product.data | shopFilter | orderBy: 'index' track by $index" ng-if="(p.published)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
+    <!-- | shopFilter  -->
+    <li class="product-li" ng-repeat="p in Product.data | orderBy: 'index' track by $index" ng-if="(p.published)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
       <!-- <div class="product-li-placeholder" ng-show="!p.images[0].url.https"></div> -->
 
       <a href="shop/product/{{p.id}}" >

@@ -23,6 +23,7 @@ let Cart = require('./api/cart');
 let Order = require('./api/order');
 let superagent = require('superagent');
 let mail = require('./mail');
+let user = require('./api/user');
 
 
 // let moltin = require('moltin')({
@@ -89,6 +90,8 @@ app.use(function(req, res, next) {
     //   moltin.Cart.Identifier(true, req.mySession.cartID);
     // }
 
+
+console.log(req.mySession.expire);
 
 
     if (!req.mySession.access_token || !req.mySession.expire) {
@@ -191,8 +194,8 @@ function setToHappen(d){
      Product.list(req, res);
    });
 
-  app.get('/getCollections', function(req, res){
-    getCollections(req, res);
+  app.get('/api/collection/list', function(req, res){
+    Product.collection_list(req, res);
   });
 
   app.get('/cart/get/:id', function(req, res){
@@ -201,6 +204,10 @@ function setToHappen(d){
 
   app.post('/api/order/create', function(req, res){
     Order.create(req, res);
+  });
+
+  app.get('/api/order/:id/get', function(req, res){
+    Order.get(req, res);
   });
 
 
@@ -212,6 +219,31 @@ function setToHappen(d){
   app.post('/webhook/order/paid', function(req, res){
     mail.orderPaid(req, res);
   });
+
+
+
+  app.post('/api/user/login', function(req, res){
+    user.login(req, res);
+  });
+
+  app.post('/api/user/register', function(req, res){
+    user.register(req, res);
+  });
+
+  app.get('/api/user/get/:id', function(req, res){
+    user.get(req, res);
+  });
+
+
+  app.post('/api/user/:user/address/:address/update', function(req, res){
+    user.address_update(req, res);
+  });
+
+  app.post('/api/user/:user/info/update', function(req, res){
+    user.info_update(req, res);
+  });
+
+
 
 
     // app.get('/order/:order/get', function(req, res){
@@ -242,8 +274,8 @@ function setToHappen(d){
       updateProductStock(req, res);
     });
 
-    app.post('/cart/erase', function(req, res){
-      eraseCart(req, res);
+    app.post('/api/cart/:id/delete', function(req, res){
+      Cart.delete(req, res);
     });
 
     // app.post('/checkout/payment/complete_purchase/:order', function(req, res){
@@ -452,33 +484,6 @@ function setToHappen(d){
 
 
 
-    function getCollections(req, res){
-      var url = 'https://api.molt.in/v1/collections';
-      var access_token = req.mySession.access_token;
-      var options = {
-        url: url,
-        headers: {
-          'Authorization': 'Bearer '+access_token
-        }
-      };
-
-      function callback(error, response, body) {
-        if (!error && response.statusCode == 200) {
-
-          var info = JSON.parse(body);
-          res.status(response.statusCode).json(info.result);
-        }else{
-          console.log(error);
-            console.log("collections done");
-            console.log(body);
-          var info = JSON.parse(body);
-          // res.status(response.statusCode).json(info);
-
-        }
-      }
-
-      request(options, callback);
-    };
 
 
 

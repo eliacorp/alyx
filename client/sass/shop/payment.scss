@@ -83,7 +83,7 @@
 }
 
 
-.payment-choice{
+.choice{
   width: 400px;
   margin:auto;
   height: auto;
@@ -91,11 +91,11 @@
   @include respond-to(phone){
     width: 100%;
   }
-  .payment-choice-ul{
+  .choice-ul{
     width: 100%;
     height: $line-height-h2;
     display: block;
-    .payment-choice-li{
+    .choice-li{
       display: inline-block;
       width: 50%;
       float: left;
@@ -114,6 +114,20 @@
       }
     }
   }
+  .choice-logged{
+    width: 100%;
+    height: $line-height-h2;
+    display: block;
+    background-color: $black;
+    h2{
+      display: block;
+      @include h2();
+      width: 100%;
+      text-align: center;
+      height: $line-height-h2;
+      color:$white;
+    }
+  }
 }
 
 
@@ -122,7 +136,7 @@
 
 
 
-.payment-choice-li.active{
+.choice-li.active{
   background-color: $black;
   a{
     color: $white !important;

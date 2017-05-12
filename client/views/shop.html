@@ -1,5 +1,18 @@
 <div class="shop" summary="shop alyx products" id="shop" ng-show="firstBase=='shop'">
 
+  <div class="user" ng-controller="userCtrl" ng-cloak>
+
+    <div class="user-logout" ng-show="isUser()">
+      <a href="/user/account/{{User.id}}" >{{User.name}}</a>
+      <!-- <a>logout</a> -->
+    </div>
+
+    <div class="user-login" ng-click="logout()" ng-show="!isUser()">
+      <a href="/user/login">login</a>
+    </div>
+
+  </div>
+
   <!-- ng-controller="shopCtrl" -->
   <div class="shop-left" ng-hide="Location == '/shop' || shopLocation =='collection'" ng-class="{'shop-left-processed': shopLocation == 'processed'}">
     <div class="shop-button">
@@ -29,15 +42,7 @@
   </div>
 
 
-  <div class="error" ng-show="error.value">
-    <table>
-      <td>
-        <td>
-          <h2 class="error-text">{{error.text}}</h2>
-        </td>
-      </td>
-    </table>
-  </div>
+
 
 
 

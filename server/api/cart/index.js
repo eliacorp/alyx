@@ -12,11 +12,9 @@ let marketcloud = main.marketcloud;
 
 exports.get=function(req, res){
   var idParam = req.params.id;
-  console.log("req.mySession.cartID",idParam);
   var id = parseInt(idParam);
   main.marketcloud.carts.getById(idParam)
   .then(function(response){
-    console.log(response);
     res.status(200).json(response);
   }).catch(function(error){
     console.log(error);
@@ -42,10 +40,8 @@ exports.create = function(req, res){
 
       })
       .then(function(response){
-        console.log(response);
         res.status(200).json(response);
         req.mySession.cartID= response.data.id
-        console.log("req.mySession.cartID", req.mySession.cartID);
       }).catch(function(error){
         console.log(error);
         res.status(400).json(error);
@@ -75,7 +71,6 @@ main.marketcloud.carts.add(cart_id,[
         }
       ])
       .then(function(response){
-        console.log(response);
         res.status(200).json(response);
       }).catch(function(error){
         console.log(error);
@@ -87,7 +82,6 @@ main.marketcloud.carts.add(cart_id,[
 exports.removeItem = function (req, res) {
 
   var body = req.body;
-  console.log(body);
   var cart_id = parseInt(req.params.id);
   var product_id = body.product_id;
   var variant_id = body.variant_id;
@@ -99,7 +93,6 @@ exports.removeItem = function (req, res) {
     }
   ])
   .then(function(response){
-    console.log(response);
     res.status(200).json(response);
   }).catch(function(error){
     console.log(error);
@@ -108,3 +101,19 @@ exports.removeItem = function (req, res) {
 
 
 };
+
+
+
+
+
+exports.delete=function(req,res){
+  var cart_id = parseInt(req.params.id);
+  main.marketcloud.carts.delete(cart_id)
+  .then(function(response){
+    res.status(200).json(response);
+  }).catch(function(error){
+    console.log(error);
+    res.status(400).json(error);
+  });
+
+}

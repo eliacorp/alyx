@@ -1,0 +1,23 @@
+.account{
+  width: 100vw;
+  height: auto;
+}
+
+.account-content{
+  width: 400px;
+  margin:auto;
+  height: auto;
+  padding-top:$margin-top;
+  @include respond-to(phone){
+    width: 90%;
+    padding-bottom: 100px;
+  }
+}
+
+
+.account-logout{
+  position: fixed;
+  top: $margin-sides;
+  right: $margin-sides;
+  @include hover-effect-color($black, $light-grey);
+}

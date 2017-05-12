@@ -23,12 +23,12 @@
       </ul>
 
 
-      <div class="cart-total" ng-hide="Cart.total_items==0">
-        <p class="cart-total-amount">TOTAL <span class="cart-total-value">{{Cart.items_total}}</span></p>
+      <div class="cart-total" ng-hide="Cart.items_total==0">
+        <p class="cart-total-amount">TOTAL <span class="cart-total-value">€{{Cart.items_total}}</span></p>
       </div>
 
 
-      <div class="cart-error" ng-show="Cart.total_items==0">
+      <div class="cart-error" ng-show="Cart.items_total==0">
         <p>no products in your cart</p>
       </div>
 

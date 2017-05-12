@@ -1,0 +1,30 @@
+.login{
+  width:calc(100vw - 150px);
+  margin-left:75px;
+  height:100vh;
+  position: relative;
+  // overflow-x:scroll;
+  @include respond-to(phone){
+    width:95%;
+    margin-left: 2.5%;
+  }
+}
+
+
+
+
+.login-form{
+  width: 400px;
+  margin:auto;
+  height: auto;
+  padding-top:$margin-top;
+  @include respond-to(phone){
+    width: 90%;
+    padding-bottom: 100px;
+  }
+}
+
+.login-form-body{
+  width: 100%;
+  margin-top: $margin-top-list;
+}

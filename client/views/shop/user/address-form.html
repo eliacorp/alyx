@@ -1,0 +1,67 @@
+<div class="address">
+
+  <div class="address-repeat" ng-repeat="a in User.address.data">
+
+    <h2 class="form-sub-title">ADDRESS {{$index}}</h2>
+
+    <div class="form-entry">
+      <input  type="text" name="name_shipment" value="name" ng-model="a.full_name" required placeholder="full name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'full name'">
+        <span class="form-error" ng-show="checkoutForm.name_shipment.$error.required && checkoutForm.name_shipment.$touched">required</span>
+      </input>
+    </div>
+
+    <!-- ng-disabled="readCookie('user')" -->
+
+      <div class="form-entry">
+        <input type="text" name="address1_shipment" value="address" ng-model="a.address1" required placeholder="address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'address'">
+          <span class="form-error" ng-show="checkoutForm.address1_shipment.$error.required && checkoutForm.address1_shipment.$touched">required</span>
+        </input>
+      </div>
+
+      <div class="form-entry">
+        <input type="text" name="city_shipment" value="city" ng-model="a.city" required placeholder="city" onfocus="this.placeholder = ''" onblur="this.placeholder = 'city'">
+          <span class="form-error" ng-show="checkoutForm.city_shipment.$error.required && checkoutForm.city_shipment.$touched">required</span>
+        </input>
+      </div>
+
+
+      <div class="form-entry">
+        <input type="text" name="county_shipment" value="state" ng-model="a.state" required placeholder="state" onfocus="this.placeholder = ''" onblur="this.placeholder = 'state'">
+          <span class="form-error" ng-show="checkoutForm.county_shipment.$error.required && checkoutForm.county_shipment.$touched">required</span>
+        </input>
+      </div>
+
+      <div class="form-entry">
+        <select class="select" name="country_shipment" ng-model="a.country" required>
+          <option value="" selected>country</option>
+          <option ng-repeat="country in countries" value="{{country.code}}">{{country.name}}</option>
+          <span class="form-error" ng-show="checkoutForm.country_shipment.$error.required && checkoutForm.country_shipment.$touched">required</span>
+        </select>
+        <!-- <input type="text" name="country_shipment" value="country" ng-model="checkout.shipment.country" required placeholder="country" onfocus="this.placeholder = ''" onblur="this.placeholder = 'country'"> -->
+      </div>
+
+
+      <div class="form-entry">
+        <input type="text" name="postcode_shipment" value="postcode" ng-model="a.postal_code"  required ng-minlength="4" ng-maxlength="8" placeholder="postcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'postcode'" ng-change="formatPostcode()">
+        <span class="form-error" ng-show="checkoutForm.postcode_shipment.$error.required && checkoutForm.postcode_shipment.$touched">required</span>
+<!-- ng-pattern="postcodeRegex" -->
+          <span class="form-error" ng-show="checkoutForm.postcode_shipment.$error.minlength && checkoutForm.postcode_shipment.$touched">Postcode is too short.</span>
+          <span class="form-error" ng-show="checkoutForm.postcode_shipment.$error.pattern && checkoutForm.postcode_shipment.$touched && checkoutForm.postcode_shipment.$error.maxlength && checkoutForm.postcode_shipment.$error.minlength">Postcode is not in the correct format.</span>
+          <span class="form-error" ng-show="checkoutForm.postcode_shipment.$error.maxlength && checkoutForm.postcode_shipment.$touched">Postcode is too long.</span>
+        </input>
+      </div>
+
+      <div class="form-entry">
+         <!-- ng-pattern="phoneRegex" -->
+        <input type="text" name="phone_shipment" ng-model="a.phone_number" required  ng-minlength="10" ng-maxlength="20" placeholder="phone" onfocus="this.placeholder = ''" onblur="this.placeholder = 'phone'">
+          <span class="form-error" ng-show="checkoutForm.phone_shipment.$error.required && checkoutForm.phone_shipment.$touched">required</span>
+          <span class="form-error" ng-show="checkoutForm.phone_shipment.$error.minlength && checkoutForm.phone_shipment.$touched">phone is too short.</span>
+          <span class="form-error" ng-show="checkoutForm.phone_shipment.$error.pattern && checkoutForm.phone_shipment.$touched && checkoutForm.phone_shipment.$error.minlength">phone number is not in the correct format.</span>
+        </input>
+      </div>
+
+
+
+      <button type="button" name="button" class="btn" ng-click="saveAddress(a)">save</button>
+    </div>
+  </div>

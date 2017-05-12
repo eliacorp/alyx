@@ -1,0 +1,16 @@
+
+<div class="login-form-body">
+  <div class="form-entry">
+    <input type="email" name="login_email" value="email" ng-model="login.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+      <span class="form-error" ng-show="loginForm.login_email.$error.required && loginForm.login_email.$touched">required</span>
+      <span class="form-error" ng-show="loginForm.login_email.$error.email && loginForm.login_email.$touched">invalid email</span>
+    </input>
+  </div>
+
+  <div class="form-entry">
+    <input type="text" name="login_password" value="email" ng-model="login.password" required placeholder="password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'password'">
+      <span class="form-error" ng-show="loginForm.login_password.$error.required && loginForm.login_password.$touched">required</span>
+      <span class="form-error" ng-show="loginForm.login_password.$error.password && loginForm.login_password.$touched">invalid password</span>
+    </input>
+  </div>
+</div>

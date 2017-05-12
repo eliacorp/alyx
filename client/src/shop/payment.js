@@ -3,15 +3,40 @@
 var Payment = angular.module('myApp');
 
 Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'anchorSmoothScroll','$routeParams', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams){
- $rootScope.payment;
- $rootScope.Transaction;
+  $rootScope.payment;
+  $rootScope.Transaction;
   $rootScope.Processed={value: false, error:false, data:''};
+
+
+
+
+
+
+//retrieve order data
+  $scope.retrieveOrder = ()=>{
+    var orderID = $routeParams.order;
+    console.log("retrieveOrder");
+    $http({
+      url: '/api/order/'+orderID+'/get',
+      method: 'GET'
+    }).then( function(response){
+      $rootScope.Order=response.data.data;
+      $rootScope.payment.first_name = $rootScope.Order.billing_address.first_name;
+      $rootScope.payment.last_name = $rootScope.Order.billing_address.last_name;
+      console.log($rootScope.Order);
+    }, function(error){
+      console.log(error);
+      // $rootScope.Processed = {value: false, error:true, data:error.data};
+    })
+  }
+
+
+  $scope.retrieveOrder();
+
 
     $rootScope.payment = {
                             order: {},
                             gateway:'',
-                            first_name: $rootScope.checkout.billing.first_name,
-                            last_name: $rootScope.checkout.billing.last_name,
                             number: '5555555555554444',
                             expiry_month: '08',
                             expiry_year:  '2018',
@@ -31,15 +56,12 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
 
 
   $rootScope.checkPayment = ()=>{
-    if($rootScope.checkout.gateway == 'stripe'){
+    if($rootScope.payment.gateway == 'stripe'){
       if($scope.paymentForm.$valid){
         $rootScope.changeOrderGateway();
       }else{
-        $rootScope.error = {value: true, text:'data invalid'};
-        setTimeout(function(){
-          $rootScope.error = {value: false, text:'data invalid'};
-          $rootScope.$apply();
-        }, 2000);
+        $rootScope.message = {value: true, error:true, text:"data invalid"};
+        $rootScope.removeError();
       }
     }else{
       $rootScope.changeOrderGateway();
@@ -134,7 +156,6 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
                 $rootScope.paymentProcessed = true;
                 $rootScope.thankYou = response.data;
                   // $location.path('/shop/processed/'+orderID+'/'+$rootScope.checkout.gateway, true);
-
               }
 
 
@@ -151,9 +172,19 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
     $rootScope.backFromPayment = function(){
       $rootScope.paymentProcessed = false;
       $rootScope.errorMessage = false;
+      $rootScope.message = {value: false, error:false, text:""};
       $rootScope.thankYou = false;
       $rootScope.cartLoading = false;
     }
+
+
+
+
+
+
+
+
+
 
 
 

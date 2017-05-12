@@ -7,7 +7,7 @@
     </div>
 
 
-    <div class="processed-video" ng-if="Processed.value" ng-click="playPause()">
+    <div class="processed-video" ng-if="Processed.value" ng-click="playPause('processed-video')">
       <video src="https://player.vimeo.com/external/190032199.hd.mp4?s=a79117224eaa5b3ec2cd877d791c615e4bdfa47c&profile_id=174" autoplay id="processed-video">
 
       </video>
@@ -26,7 +26,7 @@
           {{Processed.data.ship_to.data.country.value}}
         </span>
         <span class="processed-content-text-span">
-          Your order number is {{Processed.data.id}} if you have any questions regarding your order please contact <a href="mailto:service@alyxstudio.com">service@alyxstudio.com</a>
+          Your order number is {{Processed.data.id}} if you have any questions regarding your order please contact <a href="mailto:service@alyxstudio.com?subject={{Processed.data.id}}|ALYX">service@alyxstudio.com</a>
         </span>
         <span class="processed-content-text-span">
           thank you

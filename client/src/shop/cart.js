@@ -11,7 +11,9 @@ console.log("cartCtrl");
   $rootScope.cartChanged = false;
 
   $rootScope.openCart = function(){
-    $rootScope.updateCart();
+    if($rootScope.readCookie('cart')){
+      $rootScope.updateCart();
+    }
     $location.path('shop/cart', true);
   }
 
@@ -46,6 +48,9 @@ console.log("cartCtrl");
 
         });
   }//updateCart
+
+
+
 
 setTimeout(function(){
   if($rootScope.readCookie('cart')){

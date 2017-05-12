@@ -29,14 +29,14 @@
           <h1>{{Detail.name}}</h1>
           <p class="detail-text-sku">{{Detail.sku}}</p>
           <p>{{Detail.description}}</p>
-          <p class="detail-text-color" ng-if="Detail.color.data.value">color: {{Detail.color.data.value}}</p>
-          <p class="detail-text-fabrics" ng-if="Detail.fabrics">fabrics: {{Detail.fabrics}}</p>
+          <!-- <p class="detail-text-color" ng-if="Detail.color.data.value">color: {{Detail.color.data.value}}</p>
+          <p class="detail-text-fabrics" ng-if="Detail.fabrics">fabrics: {{Detail.fabrics}}</p> -->
           <!-- <p class="detail-text-origin" ng-if="Detail.origin.data.value">made in: {{Detail.origin.data.value}}</p> -->
 
         </div>
 
-        <p class="detail-price">{{Detail.price.data.formatted.without_tax}}</p>
-        <p class="detail-text-tax" ng-if="Detail.price.data.formatted.without_tax">prices do not include taxes</p>
+        <p class="detail-price" ng-show="Detail.price">€{{Detail.price}}</p>
+        <p class="detail-text-tax" ng-if="Detail.price">prices do not include taxes</p>
 
 
         <div class="detail-modifiers">
@@ -73,7 +73,12 @@
           <p class="detail-add-plus-variation hvr-bob" >ADD TO CART</p>
         </div> -->
 
-        <div class="detail-add" ng-cloak>
+        <div class="detail-add" ng-cloak ng-if="Detail.stock_level<=0">
+          <p>OUT OF STOCK</p>
+        </div>
+
+        <div class="detail-add" ng-cloak ng-if="Detail.stock_level>0">
+
           <p class="hvr-bob" ng-show="Detail.type!='product_with_variants'" ng-click="addToCart(Detail.id)" ng-cloak>ADD TO CART</p>
           <p class="detail-add-plus-variation hvr-bob" ng-show="Detail.type=='product_with_variants'" ng-click="addVariation()" ng-class="{'activeAdd': howManyVariationsSelected>=1}" ng-cloak>ADD TO CART</p>
         </div>
