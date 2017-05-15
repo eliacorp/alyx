@@ -4,50 +4,51 @@ var Shop = angular.module('myApp');
 Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', function ($sce, $routeParams, $rootScope, $location) {
   return function(data) {
 
-    if($rootScope.Product){
-                var filter = $rootScope.filter;
-                $rootScope.filtered = [];
+    // if($rootScope.Product){
+    //             var filter = $rootScope.filter;
+    //             $rootScope.filtered = [];
+    //
+    //
+    //             if(!filter.collection.selected && !filter.gender.selected){
+    //               $location.search('');
+    //               return data;
+    //             }else{
+    //
+    //               // console.log('category: '+category);
+    //               for (var i in $rootScope.Product){
+    //
+    //                 if(!$rootScope.Product[i].collection){
+    //
+    //                 }else if($rootScope.Product[i].collection.value){
+    //
+    //                   if($rootScope.filter.collection.selected && $rootScope.filter.gender.selected){
+    //
+    //                     for (var c in $rootScope.Product[i].category.data){
+    //                       if(($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product[i].collection.data.slug == filter.collection.selected)){
+    //                         $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+    //                       }
+    //                     }
+    //
+    //                   }else if($rootScope.filter.collection.selected){
+    //
+    //                     if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
+    //                       $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+    //                     }
+    //
+    //                   }else if($rootScope.filter.gender.selected){
+    //                     for (var c in $rootScope.Product[i].category.data){
+    //                       if($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected){
+    //                         $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+    //                         console.log(true);
+    //                       }
+    //                     }
+    //                   }
+    //                 }
+    //               }
+    //               return $rootScope.filtered;
+    //             }
 
-
-                if(!filter.collection.selected && !filter.gender.selected){
-                  $location.search('');
-                  return data;
-                }else{
-
-                  // console.log('category: '+category);
-                  for (var i in $rootScope.Product){
-
-                    if(!$rootScope.Product[i].collection){
-
-                    }else if($rootScope.Product[i].collection.value){
-
-                      if($rootScope.filter.collection.selected && $rootScope.filter.gender.selected){
-
-                        for (var c in $rootScope.Product[i].category.data){
-                          if(($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product[i].collection.data.slug == filter.collection.selected)){
-                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
-                          }
-                        }
-
-                      }else if($rootScope.filter.collection.selected){
-
-                        if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
-                          $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
-                        }
-
-                      }else if($rootScope.filter.gender.selected){
-                        for (var c in $rootScope.Product[i].category.data){
-                          if($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected){
-                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
-                          }
-                        }
-                      }
-                    }
-                  }
-                  return $rootScope.filtered;
-                }
-
-    }
+    // }
 
   };
 }]);
@@ -59,29 +60,46 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
   $rootScope.shopSections= [];
   $rootScope.Section= {};
   $rootScope.isGradient = true;
+  $rootScope.Category = [
+    {
+      id:'1374914795748196420',
+      slug: 'men'
+    },
+    {
+      id:'1374914959166668869',
+      slug: 'women'
+    }
+  ]
+
 
 
 
 
   $scope.$on('$routeUpdate', function(){
+    console.log("routeUpdate");
     $rootScope.Product=[];
-    $rootScope.Pagination={}
+    $rootScope.Pagination={};
     $rootScope.getProductsFN(0);
     // $scope.sort = $location.search().sort;
-
   });
 
 
 
 
 $scope.findCollection=(slug)=>{
-
-  for (var collection of $rootScope.Collection_shop){
-      if(collection.slug==slug){
-        return collection.id;
-      }
+  for (let i in $rootScope.Collection_shop){
+    if($rootScope.Collection_shop[i].slug==slug){
+      return $rootScope.Collection_shop[i].id;
+    }
   }
+}
 
+$scope.findCategory=(slug)=>{
+  for (var category of $rootScope.Category){
+    if(category.slug==slug){
+      return category.id;
+    }
+  }
 }
 
 
@@ -104,6 +122,12 @@ $scope.findCollection=(slug)=>{
       url=url+'&collection='+collection_id;
     }
 
+    if($routeParams.gender){
+      var category = $scope.findCategory($routeParams.gender);
+      url=url+'&category='+category;
+    }
+
+console.log(url);
 
     $http({method: 'GET', url: url}).then(function(response){
       $rootScope.Product = $rootScope.Product.concat(response.data.result);
@@ -214,7 +238,10 @@ $rootScope.selectFilter=(thistype, id)=>{
   if(!id){
     $rootScope.filter['collection'].selected = id;
     $rootScope.filter['gender'].selected = id;
+    $location.url($location.path())
   }else{
+    $rootScope.Product=[];
+    $rootScope.Pagination={};
     $location.search(thistype, id);
     $rootScope.filter[thistype].selected = id;
   }
@@ -253,8 +280,6 @@ $rootScope.addToCart = function(id){
 //......VARIATIONS
 
   $rootScope.addVariation = function(){
-
-    console.log($scope.maxVariation($rootScope.selectedVariation));
 
     if($scope.maxVariation($rootScope.selectedVariation) == true){
       if($rootScope.selectedVariation){
@@ -579,6 +604,16 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
 
 
 $scope.orderSize=[
+  {
+    title:"O/S",
+    type: 'string',
+    index:0
+  },
+  {
+    title:"o/s",
+    type: 'string',
+    index:0
+  },
   {
     title:"XS",
     type: 'string',

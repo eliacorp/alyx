@@ -24,7 +24,24 @@ $scope.navCollections = [
 ];
 
 
+$scope.isCollection=(slug)=>{
+  if($location.search().collection == slug){return true}else{return false}
+}
 
+$scope.isGender=(slug)=>{
+  if($location.search().gender==slug){return true}else{return false}
+}
+
+$scope.isQuery=(key)=>{
+  var obj={};
+  obj = $location.search();
+
+  if(obj.hasOwnProperty(key)){
+    return true
+  }else{
+    return false
+  }
+}
 
 
 $rootScope.isNavOpen = false;

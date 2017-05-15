@@ -4,30 +4,34 @@
 <div class="product-filter">
 
   <ul class="product-filter-ul">
-    <li class="product-filter-li" ng-repeat="c in Collection_shop | orderBy: 'collection_index'" ng-class="{'filter-selected': c.slug == filter.collection.selected}" ng-if="c.status.data.key==1">
+    <li class="product-filter-li" ng-repeat="c in Collection_shop | orderBy: 'collection_index'" ng-class="{'filter-selected': isCollection(c.slug)}" ng-if="c.status.data.key==1">
       <a ng-click="selectFilter('collection', c.slug)">{{c.title}}</a>
     </li>
   </ul>
 
   <ul class="product-filter-ul">
-    <li class="product-filter-li" ng-class="{'filter-selected': 'women' == filter.gender.selected}">
+    <li class="product-filter-li" ng-class="{'filter-selected': isGender('women')}">
       <a ng-click="selectFilter('gender', 'women')" >women</a>
     </li>
-    <li class="product-filter-li" ng-class="{'filter-selected': 'men' == filter.gender.selected}">
+    <li class="product-filter-li" ng-class="{'filter-selected': isGender('men')}">
       <a ng-click="selectFilter('gender', 'men')" >men</a>
     </li>
-    <li class="product-filter-li product-filter-li-clear" ng-show="filter.collection.selected || filter.gender.selected">
+    <li class="product-filter-li product-filter-li-clear" ng-show="isQuery('collection') || isQuery('gender')">
       <a ng-click="selectFilter('', '')">clear</a>
     </li>
   </ul>
 
+
+
+
 </div>
 
 
-<!--  -->
+
 
   <ul class="product-ul" >
-    <li class="product-li" ng-repeat="p in Product | shopFilter | orderBy: '-date' track by $index" ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
+    <!-- shopFilter -->
+    <li class="product-li" ng-repeat="p in Product | orderBy: '-date' track by $index" ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
       <!-- <div class="product-li-placeholder" ng-show="!p.images[0].url.https"></div> -->
 
       <a href="shop/product/{{p.id}}" >

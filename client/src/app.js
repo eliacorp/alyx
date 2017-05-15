@@ -249,6 +249,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
           method: 'GET',
           url: '/getCollections'
         }).then(function (response) {
+          console.log(response.data);
               $rootScope.Collection_shop=response.data;
           }, function (response) {
             console.log(response);

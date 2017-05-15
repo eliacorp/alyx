@@ -307,10 +307,12 @@ function setToHappen(d){
     var offset = req.query.offset;
     var collection;
 
-
-
     if(req.query.collection){
       url = url+'&collection='+req.query.collection;
+    }
+
+    if(req.query.category){
+      url = url+'&category='+req.query.category;
     }
 
     if(page==1){
@@ -326,6 +328,8 @@ function setToHappen(d){
 
     var access_token = req.mySession.access_token;
 
+    console.log(url);
+
     request({
       url: url,
       headers: {
@@ -334,6 +338,8 @@ function setToHappen(d){
     }, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var info = JSON.parse(body);
+        console.log(response.statusCode);
+        console.log(info);
         res.status(response.statusCode).json(info);
       }else{
         var info = JSON.parse(body);

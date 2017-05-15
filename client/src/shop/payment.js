@@ -28,14 +28,16 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
   }, false);
 
 
-
+  $scope.paymentLoading=false;
 
   $rootScope.checkPayment = ()=>{
     if($rootScope.checkout.gateway == 'stripe'){
-      if($scope.paymentForm.$valid){
+      if($scope.paymentForm.$valid && (!$scope.paymentLoading)){
+        $scope.paymentLoading=true;
         $rootScope.changeOrderGateway();
       }else{
         $rootScope.error = {value: true, text:'data invalid'};
+        $scope.paymentLoading=false;
         setTimeout(function(){
           $rootScope.error = {value: false, text:'data invalid'};
           $rootScope.$apply();
@@ -56,6 +58,7 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
       $rootScope.paymentToProcess();
     }else if($rootScope.checkout.gateway == 'paypal-express'){
       var obj = {gateway: $rootScope.checkout.gateway};
+      $scope.paymentLoading=false;
       $http.post('/order/'+orderID+'/put', obj)
       .then( function(response){
         $rootScope.paymentToProcess_paypal();
@@ -92,11 +95,21 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
                 $rootScope.Processed={value: true, error:false, data:response.data.order};
                 $rootScope.Transaction = response.data.data;
                 $rootScope.pageLoading = false;
+                $scope.paymentLoading=false;
                 $location.path('/shop/processed/'+response.data.order.id+'/'+$rootScope.checkout.gateway, true);
+              }else{
+                console.log("payment failed!");
+                console.log(response);
+                $scope.paymentLoading=false;
+                $rootScope.Processed={value: true, error:true, data:response.data};
+                $rootScope.pageLoading = false;
+                $rootScope.cartLoading = false;
+                $location.path('/shop/processed/'+$rootScope.checkout.id+'/'+$rootScope.checkout.gateway+'/canceled', true);
               }
           }, function(response){
             console.log("payment failed!");
             console.log(response);
+            $scope.paymentLoading=false;
             $rootScope.Processed={value: true, error:true, data:response.data};
             $rootScope.pageLoading = false;
             $rootScope.cartLoading = false;
@@ -127,19 +140,19 @@ Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeou
               )
 
 
-
               if(response.data.data.paid){
+                $scope.paymentLoading=false;
                 $rootScope.cartLoading = false;
                 $rootScope.paymentProcessed = true;
                 $rootScope.thankYou = response.data;
-                  // $location.path('/shop/processed/'+orderID+'/'+$rootScope.checkout.gateway, true);
-
+                // $location.path('/shop/processed/'+orderID+'/'+$rootScope.checkout.gateway, true);
               }
 
 
           }, function(response){
             console.log("payment failed!");
             console.log(response);
+            $scope.paymentLoading=false;
             $rootScope.paymentProcessed = true;
             $rootScope.pageLoading = false;
           })
