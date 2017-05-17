@@ -118,15 +118,6 @@ $rootScope.shipmentToPayment = (event) =>{
 
 
 
-
-
-
-
-
-
-
-
-
   $scope.createOrder = ()=>{
     $http.post('/api/order/create', $rootScope.checkout)
     .then(function(response) {
@@ -183,11 +174,11 @@ if(!$rootScope.readCookie('user')){
 
 
 
-  $rootScope.backFromCheckout = function(){
-    $rootScope.template = $rootScope.templates[0];
-    $rootScope.showCart=true;
-    $rootScope.backFromPayment();
-  }
+$rootScope.backFromCheckout = function(){
+  $rootScope.template = $rootScope.templates[0];
+  $rootScope.showCart=true;
+  $rootScope.backFromPayment();
+}
 
 
 

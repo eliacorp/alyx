@@ -18,6 +18,7 @@
   </div>
 
 
+
 <!-- <form name="loggedForm" novalidate class="register-form" ng-if="readCookie('user')">
   <shipping-form ng-if="readCookie('user')"></shipping-form>
   <div class="isBillingDifferent">
@@ -41,19 +42,22 @@
 <!-- 2 -->
   <form name="checkoutForm" novalidate class="register-form" method="post"  ng-show="((checkout.customer.choice=='register') || (readCookie('user')))">
 
-
     <customer-form></customer-form>
 
+    <div class="termsAndServices">
+      <label for="termsAndServices">by clicking this field you agree to our <a href="/shop/shipment/terms">terms and services</a></label>
+      <input class="termsAndServices-input" type="checkbox" name="termsAndServices" value="false" ng-model="termsAndServices" required>
+    </div>
+
+    <div class="form-entry">
+      <select class="select" name="billing_address" ng-model="billing_address" required>
+        <option value="" selected>billing address</option>
+        <option ng-repeat="address in User.address.data" value="{{address.id}}">{{address.address1}}</option>
+      </select>
+    </div>
 
 
-  <div class="termsAndServices">
-    <label for="termsAndServices">by clicking this field you agree to our <a href="/shop/shipment/terms">terms and services</a></label>
-    <input class="termsAndServices-input" type="checkbox" name="termsAndServices" value="false" ng-model="termsAndServices" required>
-  </div>
-
-  <address-form></address-form>
-
-
+    <address-form></address-form>
 
 
   </form>
