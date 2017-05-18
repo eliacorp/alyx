@@ -53,7 +53,7 @@ Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', fu
   };
 }]);
 
-Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window){
+Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window','ga', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window, ga){
 
   // $scope.filtered = [];
   $rootScope.page = "product";
@@ -362,13 +362,7 @@ $rootScope.addToCart = function(id){
 
 
 
-//attaching item function cart
-  $rootScope.attachItemID=function(obj){
-      Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
-        $rootScope.Cart.contents[val].item=val;
-        // console.log(val + ' -> ' + obj[val]);
-      });
-  }
+
 
 
 
@@ -497,6 +491,16 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
     $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
       $rootScope.Detail = response.data;
       $scope.getVariationsLevel($rootScope.Detail.id);
+
+      ga('ec:addImpression', {
+        'id': $rootScope.Detail.id,                   // Product details are provided in an impressionFieldObject.
+        'name': $rootScope.Detail.title,
+        'category': $rootScope.Detail.category.value,
+        'brand': 'Alyx',
+        'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
+        'list': 'Detail',
+        'position': 1                     // 'position' indicates the product position in the list.
+      });
 
     }, function(error){
       console.log(error);

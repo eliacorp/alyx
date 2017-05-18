@@ -2,7 +2,7 @@
 
 var Cart = angular.module('myApp');
 
-Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost){
+Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost','ga', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, ga){
   $rootScope.Cart;
   $rootScope.showCart = false;
   $rootScope.cartChanged = false;
@@ -10,6 +10,9 @@ Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$
   $rootScope.openCart = function(){
     $rootScope.updateCart();
     $location.path('shop/cart', true);
+    ga('ec:setAction','cart', {
+        'step': 1
+    });
   }
 
   $rootScope.closeCart = function(){
@@ -74,8 +77,35 @@ $rootScope.removeItem = function(id){
 }
 
 
+
+$scope.google_cart=(products)=>{
+  for (var i in products){
+    var data = products[i];
+    ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+      'id': data.id,                   // Product ID (string).
+      'name': data.title, // Product name (string).
+      'category': data.category.value,            // Product category (string).
+      'brand': 'Alyx',                // Product brand (string).
+      'variant': data.sku.substr(data.sku.indexOf("_") + 1),               // Product variant (string).
+      'price': data.price,                 // Product price (currency).
+      'quantity': data.quantity                     // Product quantity (number).
+    });
+    ga('ec:setAction','shipment', {
+        'step': 2,
+        'option': 'register'
+    });
+  }
+}
+
+
+
+
+
+
+
   $rootScope.cartToShipment = function(){
     if($rootScope.Cart.total_items>0){
+      $scope.google_cart($rootScope.Cart.items);
       $location.path('/shop/shipment', true);
     }else{
       $rootScope.noProductsError=true;
@@ -86,6 +116,8 @@ $rootScope.removeItem = function(id){
 
     }
   }
+
+
 
 
   //function that animates the cart button when you add a product

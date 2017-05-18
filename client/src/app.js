@@ -10,8 +10,12 @@ import Prismic from 'prismic.io'
  // /*global $ */
 
 angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
-.run(['$rootScope', '$location','$route','$templateCache','$http', ($rootScope, $location, $route,$templateCache, $http)=>{
+.run(['$rootScope', '$location','$route','$templateCache','$http','ga', ($rootScope, $location, $route,$templateCache, $http, ga)=>{
   $rootScope.pageLoading = true;
+
+  $rootScope.$on('$routeChangeStart', function() {
+    ga('set', 'page', $location.url());
+});
 
     var original = $location.path;
     $location.path = function (path, reload) {
@@ -197,7 +201,13 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-
+  //attaching item function cart
+    $rootScope.attachItemID=function(obj){
+      Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
+        $rootScope.Cart.contents[val].item=val;
+        // console.log(val + ' -> ' + obj[val]);
+      });
+    }
 
 
 // function eraseCookie(name) {

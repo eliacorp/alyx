@@ -349,3 +349,38 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
 
 
 }]); //mailchimp service module
+
+Service.factory('ga', ['$window', function ($window) {
+
+    var ga = function() {
+        if (angular.isArray(arguments[0])) {
+            for(var i = 0; i < arguments.length; ++i) {
+                ga.apply(this, arguments[i]);
+            }
+            return;
+        }
+        // console.log('ga', arguments);
+        if ($window.ga) {
+            $window.ga.apply(this, arguments);
+        }
+    };
+
+    return ga;
+}]);
+
+
+// Service.service('AnalyticsService', function() {
+//     var title = 'Web App';
+//     var metaDescription = '';
+//     var metaKeywords = '';
+//     return {
+//        set: function(newTitle, newMetaDescription, newKeywords) {
+//            metaKeywords = newKeywords;
+//            metaDescription = newMetaDescription;
+//            title = newTitle;
+//        },
+//        metaTitle: function(){ return title; },
+//        metaDescription: function() { return metaDescription; },
+//        metaKeywords: function() { return metaKeywords; }
+//     }
+//  });
