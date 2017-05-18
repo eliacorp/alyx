@@ -44,17 +44,13 @@ $rootScope.checkout = {
 
 
 //shipment
-
   $rootScope.shipmentToPayment = (event) =>{
     if($scope.checkoutForm.$valid){
-
-
 
       $http.post('/cartToOrder', $rootScope.checkout)
 
       .then(function(response) {
         $rootScope.Order=response.data;
-        // $rootScope.payment.id = response.data.id;
         ga('ec:setAction','shipment', {
             'step': 2,
             'option': 'register'

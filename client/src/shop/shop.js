@@ -30,7 +30,6 @@ Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', fu
     //                     }
     //
     //                   }else if($rootScope.filter.collection.selected){
-    //
     //                     if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
     //                       $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
     //                     }
@@ -80,7 +79,6 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
     $rootScope.Product=[];
     $rootScope.Pagination={};
     $rootScope.getProductsFN(0);
-    // $scope.sort = $location.search().sort;
   });
 
 
