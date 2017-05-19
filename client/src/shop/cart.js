@@ -9,13 +9,19 @@ Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$
 
   $rootScope.openCart = function(){
     $rootScope.updateCart();
+    // $window.ga('ec:setAction','cart', {
+    //     'step': 1
+    // });
+    // $window.ga('send', 'pageview');
     $location.path('shop/cart', true);
-    $scope.$on('$viewContentLoaded', function(event) {
-      $window.ga('ec:setAction','cart', {
-          'step': 1
-      });
-      $window.ga('send', 'pageview');
+
+    $window.ga('ec:setAction','checkout', {
+        'step': 1
     });
+    $window.ga('send', 'pageview');
+
+    // In the case of checkout actions, an additional actionFieldObject can
+
   }
 
   $rootScope.closeCart = function(){
@@ -84,6 +90,7 @@ $rootScope.removeItem = function(id){
 $scope.google_cart=(products)=>{
   for (var i in products){
     var data = products[i];
+
     $window.ga('ec:addProduct', {               // Provide product details in an productFieldObject.
       'id': data.id,                   // Product ID (string).
       'name': data.title, // Product name (string).
@@ -93,15 +100,12 @@ $scope.google_cart=(products)=>{
       'price': data.price,                 // Product price (currency).
       'quantity': data.quantity                     // Product quantity (number).
     });
-    $window.ga('ec:setAction','shipment', {
-        'step': 2,
-        'option': 'register'
+    $window.ga('ec:setAction','checkout', {
+        'step': 2
     });
+    $window.ga('send', 'pageview');
   }
 }
-
-
-
 
 
 
