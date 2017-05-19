@@ -112,10 +112,7 @@ $scope.google_cart=(products)=>{
 
   $rootScope.cartToShipment = function(){
     if($rootScope.Cart.total_items>0){
-      $scope.$on('$viewContentLoaded', function(event) {
-        $scope.google_cart($rootScope.Cart.items);
-      });
-
+      $scope.google_cart($rootScope.Cart.items);
       $location.path('/shop/shipment', true);
     }else{
       $rootScope.noProductsError=true;

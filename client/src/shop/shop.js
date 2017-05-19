@@ -127,7 +127,6 @@ $scope.findCategory=(slug)=>{
       url=url+'&category='+category;
     }
 
-console.log(url);
 
     $http({method: 'GET', url: url}).then(function(response){
       $rootScope.Product = $rootScope.Product.concat(response.data.result);
