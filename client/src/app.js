@@ -10,12 +10,8 @@ import Prismic from 'prismic.io'
  // /*global $ */
 
 angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
-.run(['$rootScope', '$location','$route','$templateCache','$http','ga', ($rootScope, $location, $route,$templateCache, $http, ga)=>{
+.run(['$rootScope', '$location','$route','$templateCache','$http', ($rootScope, $location, $route,$templateCache, $http)=>{
   $rootScope.pageLoading = true;
-
-  $rootScope.$on('$routeChangeStart', function() {
-    ga('set', 'page', $location.url());
-});
 
     var original = $location.path;
     $location.path = function (path, reload) {
@@ -198,8 +194,15 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
         }
   }
 
-
-
+  // $scope.$on('$viewContentLoaded', function(event) {
+  //   $window.ga('send', 'pageview', { page: $location.url() });
+  // });
+  // $rootScope.$on("$stateChangeSuccess", function($location,$window){
+  //    var API_URL ="Your Url";//Put your url
+  //      var url = API_URL + $location.url();
+  //      console.log(url);
+  //      $window.ga('send', 'pageview', { page: url }); // line 54
+  //  });
 
   //attaching item function cart
     $rootScope.attachItemID=function(obj){

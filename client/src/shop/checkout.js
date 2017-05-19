@@ -2,7 +2,7 @@
 
 var Checkout = angular.module('myApp');
 
-Checkout.controller('checkoutCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'mailchimp', 'ga', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp, ga){
+Checkout.controller('checkoutCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'mailchimp', '$window', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp, $window){
 
 
 $rootScope.Order;
@@ -51,10 +51,11 @@ $rootScope.checkout = {
 
       .then(function(response) {
         $rootScope.Order=response.data;
-        ga('ec:setAction','shipment', {
+        $window.ga('ec:setAction','shipment', {
             'step': 2,
             'option': 'register'
         });
+        $window.ga('send', 'pageview');
         mailchimp.register($rootScope.checkout);
         $location.path('/shop/payment', true);
 

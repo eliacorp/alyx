@@ -52,7 +52,7 @@ Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', fu
   };
 }]);
 
-Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window','ga', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window, ga){
+Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window){
 
   // $scope.filtered = [];
   $rootScope.page = "product";
