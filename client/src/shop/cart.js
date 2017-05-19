@@ -10,8 +10,11 @@ Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$
   $rootScope.openCart = function(){
     $rootScope.updateCart();
     $location.path('shop/cart', true);
-    ga('ec:setAction','cart', {
-        'step': 1
+    $scope.$on('$viewContentLoaded', function(event) {
+      $window.ga('ec:setAction','cart', {
+          'step': 1
+      });
+      $window.ga('send', 'pageview');
     });
   }
 
@@ -81,7 +84,7 @@ $rootScope.removeItem = function(id){
 $scope.google_cart=(products)=>{
   for (var i in products){
     var data = products[i];
-    ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+    $window.ga('ec:addProduct', {               // Provide product details in an productFieldObject.
       'id': data.id,                   // Product ID (string).
       'name': data.title, // Product name (string).
       'category': data.category.value,            // Product category (string).
@@ -90,7 +93,7 @@ $scope.google_cart=(products)=>{
       'price': data.price,                 // Product price (currency).
       'quantity': data.quantity                     // Product quantity (number).
     });
-    ga('ec:setAction','shipment', {
+    $window.ga('ec:setAction','shipment', {
         'step': 2,
         'option': 'register'
     });
@@ -105,7 +108,10 @@ $scope.google_cart=(products)=>{
 
   $rootScope.cartToShipment = function(){
     if($rootScope.Cart.total_items>0){
-      $scope.google_cart($rootScope.Cart.items);
+      $scope.$on('$viewContentLoaded', function(event) {
+        $scope.google_cart($rootScope.Cart.items);
+      });
+
       $location.path('/shop/shipment', true);
     }else{
       $rootScope.noProductsError=true;
