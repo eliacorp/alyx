@@ -389,7 +389,7 @@ $rootScope.addToCart = function(id){
 
 
 
-Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams', '$route', '$http', function($rootScope, $scope, $location, $routeParams, $route, $http){
+Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams', '$route', '$http','$window', function($rootScope, $scope, $location, $routeParams, $route, $http, $window){
 
 
   $rootScope.Detail={};
@@ -492,7 +492,7 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
       $rootScope.Detail = response.data;
       $scope.getVariationsLevel($rootScope.Detail.id);
 
-      ga('ec:addImpression', {
+      $window.ga('ec:addImpression', {
         'id': $rootScope.Detail.id,                   // Product details are provided in an impressionFieldObject.
         'name': $rootScope.Detail.title,
         'category': $rootScope.Detail.category.value,
@@ -501,6 +501,19 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
         'list': 'Detail',
         'position': 1                     // 'position' indicates the product position in the list.
       });
+
+
+      $window.ga('ec:addProduct', {
+        'id': $rootScope.Detail.id,
+        'name': $rootScope.Detail.title,
+        'category': $rootScope.Detail.category.value,
+        'brand': 'Alyx',
+        'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
+      });
+
+      $window.ga('ec:setAction', 'detail');
+
+      $window.ga('send', 'pageview');       // Send product details view with the initial pageview.
 
     }, function(error){
       console.log(error);

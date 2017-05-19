@@ -2,7 +2,7 @@
 
 var Cart = angular.module('myApp');
 
-Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost','ga', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, ga){
+Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost','$window', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $window){
   $rootScope.Cart;
   $rootScope.showCart = false;
   $rootScope.cartChanged = false;
