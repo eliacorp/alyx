@@ -243,8 +243,8 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
 
 
         var data = {
-          'u':'61fd935403c1053312ebed13a',
-          'id':'e920e15af7',
+          'u':'c69875e2a87d7d52ccd6a29e3',
+          'id':'0d12ae09f2',
           'dc': 'us15',
           'username': 'alyxstudio',
           'ADDRESS':{

@@ -49,13 +49,11 @@ app.use(sessions({
 
 function generateCrypto(){
   var crypto_token;
- crypto.randomBytes(18, function(err, buffer) {
-  crypto_token = buffer.toString('hex');
-  //  console.log("crypto_token: "+crypto_token);
-
- });
-
-return crypto_token;
+   crypto.randomBytes(18, function(err, buffer) {
+    crypto_token = buffer.toString('hex');
+    //  console.log("crypto_token: "+crypto_token);
+   });
+  return crypto_token;
 }
 
 
@@ -69,8 +67,6 @@ app.use(function(req, res, next) {
     }else{
       moltin.Cart.Identifier(true, req.mySession.cartID);
     }
-
-
 
     if (!req.mySession.access_token || !req.mySession.expires) {
       res.setHeader('X-Seen-You', 'false');
@@ -96,30 +92,20 @@ app.use(function(req, res, next) {
 
 function authMoltin(req, res, next){
   moltin.Authenticate(function(data) {
-
     if(data){
-
       if(req.mySession.access_token && (req.mySession.access_token==data.access_token)){
-        console.log("1 runs");
         data.cart=req.mySession.cartID;
-        console.log(data);
-        //     console.log(data);
         // res.status(200).json(data);
 
       }else if(data.token){
-        console.log("2 runs");
         // console.log(data);
         req.mySession.access_token = data.token;
-
         data.cart=req.mySession.cartID;
-        console.log(data);
         // res.status(200).json(data);
       }else{
-        console.log("3 runs");
         req.mySession.access_token = data.access_token;
         // console.log(req.mySession.access_token);
         data.cart=req.mySession.cartID;
-        console.log(data);
         // res.status(200).json(data);
       }
 

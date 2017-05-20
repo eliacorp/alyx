@@ -9,13 +9,27 @@ Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$
 
   $rootScope.openCart = function(){
     $rootScope.updateCart();
+    // $window.ga('ec:setAction','cart', {
+    //     'step': 1
+    // });
+    // $window.ga('send', 'pageview');
     $location.path('shop/cart', true);
+<<<<<<< HEAD
     $scope.$on('$viewContentLoaded', function(event) {
       $window.ga('ec:setAction','cart', {
           'step': 1
       });
       $window.ga('send', 'pageview');
     });
+=======
+
+    $window.ga('ec:setAction','checkout', {
+        'step': 1
+    });
+    $window.ga('send', 'pageview');
+
+    // In the case of checkout actions, an additional actionFieldObject can
+>>>>>>> 8ed36e71bcb9b6c20b80591dc8d8f94c90898541
 
   }
 
@@ -85,6 +99,7 @@ $rootScope.removeItem = function(id){
 
 
 
+<<<<<<< HEAD
 $scope.google_cart=(products)=>{
   for (var i in products){
     var data = products[i];
@@ -107,7 +122,27 @@ $scope.google_cart=(products)=>{
 }
 
 
+=======
+  $scope.google_cart=(products)=>{
+    for (var i in products){
+      var data = products[i];
+>>>>>>> 8ed36e71bcb9b6c20b80591dc8d8f94c90898541
 
+      $window.ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+        'id': data.id,                   // Product ID (string).
+        'name': data.title, // Product name (string).
+        'category': data.category.value,            // Product category (string).
+        'brand': 'Alyx',                // Product brand (string).
+        'variant': data.sku.substr(data.sku.indexOf("_") + 1),               // Product variant (string).
+        'price': data.price,                 // Product price (currency).
+        'quantity': data.quantity                     // Product quantity (number).
+      });
+      $window.ga('ec:setAction','checkout', {
+          'step': 2
+      });
+      $window.ga('send', 'pageview');
+    }
+  }
 
 
 
