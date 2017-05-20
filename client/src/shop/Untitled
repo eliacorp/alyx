@@ -1,0 +1,59 @@
+<tr mc:edit="products"> <!-- // start: products \\ -->
+  <table mc:repeatable="content" mc:variant="variant_1" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td align="center" valign="top" width="50%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_1_1" mc:edit="product_image_1_1" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/4e9668de-39ff-47a3-b8e0-cfce0ec0ed14.jpg"/>
+        </a>
+      </td>
+      <td align="center" valign="top" width="50%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_1_2" mc:edit="product_image_1_2" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+    </tr>
+  </table>
+  <table mc:repeatable="content" mc:variant="variant_2" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td align="center" valign="top" width="33%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_2_1" mc:edit="product_image_2_1" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+      <td align="center" valign="top" width="33%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_2_3" mc:edit="product_image_2_2" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+      <td align="center" valign="top" width="33%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_2_2" mc:edit="product_image_2_3" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+    </tr>
+  </table>
+  <table mc:repeatable="content" mc:variant="variant_3" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td align="center" valign="top" width="25%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_3_1" mc:edit="product_image_3_1" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+      <td align="center" valign="top" width="25%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_3_2" mc:edit="product_image_3_2" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+      <td align="center" valign="top" width="25%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_3_3" mc:edit="product_image_3_3" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+      <td align="center" valign="top" width="25%">
+        <a href="*|CUSTOM_URL|*" target="_blank">
+          <img style="width:100%;" mc:label="product_image_3_4" mc:edit="product_image_3_4" mc:allowdesigner="" mc:allowtext="" src="https://gallery.mailchimp.com/c69875e2a87d7d52ccd6a29e3/images/9326c9f0-5d24-44cb-98d3-6f6b06ddef1a.jpg"/>
+        </a>
+      </td>
+    </tr>
+  </table>
+</tr><!-- // end: products \\ -->

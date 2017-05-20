@@ -87,25 +87,25 @@ $rootScope.removeItem = function(id){
 
 
 
-$scope.google_cart=(products)=>{
-  for (var i in products){
-    var data = products[i];
+  $scope.google_cart=(products)=>{
+    for (var i in products){
+      var data = products[i];
 
-    $window.ga('ec:addProduct', {               // Provide product details in an productFieldObject.
-      'id': data.id,                   // Product ID (string).
-      'name': data.title, // Product name (string).
-      'category': data.category.value,            // Product category (string).
-      'brand': 'Alyx',                // Product brand (string).
-      'variant': data.sku.substr(data.sku.indexOf("_") + 1),               // Product variant (string).
-      'price': data.price,                 // Product price (currency).
-      'quantity': data.quantity                     // Product quantity (number).
-    });
-    $window.ga('ec:setAction','checkout', {
-        'step': 2
-    });
-    $window.ga('send', 'pageview');
+      $window.ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+        'id': data.id,                   // Product ID (string).
+        'name': data.title, // Product name (string).
+        'category': data.category.value,            // Product category (string).
+        'brand': 'Alyx',                // Product brand (string).
+        'variant': data.sku.substr(data.sku.indexOf("_") + 1),               // Product variant (string).
+        'price': data.price,                 // Product price (currency).
+        'quantity': data.quantity                     // Product quantity (number).
+      });
+      $window.ga('ec:setAction','checkout', {
+          'step': 2
+      });
+      $window.ga('send', 'pageview');
+    }
   }
-}
 
 
 
