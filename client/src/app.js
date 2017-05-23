@@ -310,6 +310,47 @@ $rootScope.setPage = (page)=>{
 
 
 
+
+  //video functions
+  $rootScope.playPause = (id)=> {
+    var vid = document.getElementById(id);
+    if(vid.paused){
+      vid.play();
+    }else{
+      vid.pause();
+    }
+  }
+
+
+
+  //loading the final video
+  $rootScope.loadVideo = (id)=>{
+    setTimeout(function(){
+      var vid = document.getElementById(id);
+      vid.volume = 0.2;
+      $rootScope.$apply();
+    }, 2500);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var stockistRan = false;
 var collectionRan = false;
 

@@ -59,7 +59,7 @@ $rootScope.completePayment_Paypal = ()=>{
       $rootScope.changeOrderStatus($rootScope.Transaction);
     }
 
-    $rootScope.loadVideo();
+    $rootScope.loadVideo("processed-video");
   }, function(error){
     console.log(error);
     $rootScope.pageLoading = false;
@@ -113,23 +113,7 @@ $rootScope.changeOrderStatus =(data)=>{
 
 
 
-//loading the final video
-$rootScope.loadVideo = ()=>{
-  setTimeout(function(){
-    var vid = document.getElementById("processed-video");
-    vid.volume = 0.2;
-    $rootScope.playPause =()=> {
-      if(vid.paused){
-        vid.play();
-      }else{
-        vid.pause();
-      }
-    }
-    $rootScope.$apply();
-  }, 2500);
-}
-
-  $rootScope.loadVideo();
+$rootScope.loadVideo("processed-video");
 
 
 
