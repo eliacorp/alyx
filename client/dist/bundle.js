@@ -19,8 +19,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // /*global $ */
 
-_angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['$rootScope', '$location', '$route', '$templateCache', '$http', function ($rootScope, $location, $route, $templateCache, $http) {
+_angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['$rootScope', '$location', '$route', '$templateCache', '$http', 'ga', function ($rootScope, $location, $route, $templateCache, $http, ga) {
   $rootScope.pageLoading = true;
+
+  $rootScope.$on('$routeChangeStart', function () {
+    ga('set', 'page', $location.url());
+  });
 
   var original = $location.path;
   $location.path = function (path, reload) {
@@ -125,14 +129,14 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   .otherwise({ redirectTo: '/shop' });
 }]) //config
 
-.filter('trustUrl', function ($sce) {
+.filter('trustUrl', ['$sce', function ($sce) {
   return function (url) {
     // if (url){
     var trusted = $sce.trustAsResourceUrl(url);
     return trusted;
     // }
   };
-}).controller('appCtrl', function ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams) {
+}]).controller('appCtrl', ['$rootScope', '$location', '$window', '$timeout', '$http', 'anchorSmoothScroll', '$scope', '$anchorScroll', '$routeParams', function ($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams) {
   $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
@@ -147,6 +151,14 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     } else {
       // $anchorScroll();
     }
+  };
+
+  //attaching item function cart
+  $rootScope.attachItemID = function (obj) {
+    Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
+      $rootScope.Cart.contents[val].item = val;
+      // console.log(val + ' -> ' + obj[val]);
+    });
   };
 
   // function eraseCookie(name) {
@@ -186,8 +198,8 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
       method: 'GET',
       url: '/getCollections'
     }).then(function (response) {
+      console.log(response.data);
       $rootScope.Collection_shop = response.data;
-      console.log($rootScope.Collection_shop);
     }, function (response) {
       console.log(response);
       // called asynchronously if an error occurs
@@ -375,30 +387,30 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
   };
 
   $scope.landscapeFunction();
-}) // end of appCtrl
+}]) // end of appCtrl
 
-.directive('logoDirective', function ($rootScope, $location, $window, $timeout) {
+.directive('logoDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/components/logo.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('shopDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('shopDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('productDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('productDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/product.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('detailDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('detailDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/product-detail.html',
@@ -406,42 +418,42 @@ _angular2.default.module('myApp', ["ngRoute", "ngAnimate", "ngResource"]).run(['
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('cartDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('cartDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/cart.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('shipmentDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('shipmentDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/shipment.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('choiceDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('choiceDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/choice.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('paymentDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('paymentDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/payment.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('termsDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('termsDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/terms.html',
     replace: true,
     link: function link(scope, elem, attrs) {}
   };
-}).directive('processedDirective', function ($rootScope, $location, $window, $timeout) {
+}).directive('processedDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/shop/processed.html',
@@ -471,7 +483,7 @@ var social = require('./social/social.js');
 
 var Collection = angular.module('myApp');
 
-Collection.controller('collectionCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $routeParams) {
+Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $routeParams) {
 
 	$rootScope.collections = [];
 	$rootScope.Collection = [];
@@ -489,7 +501,7 @@ Collection.controller('collectionCtrl', function ($scope, $location, $rootScope,
 	};
 
 	$rootScope.getContentType('collection', 'my.collection.date desc');
-}).directive('lookbookDirective', function ($rootScope, $location) {
+}]).directive('lookbookDirective', function () {
 	return {
 		restrict: 'E',
 		templateUrl: 'views/collection/lookbook.html',
@@ -501,7 +513,7 @@ Collection.controller('collectionCtrl', function ($scope, $location, $rootScope,
 'use strict';
 
 var Lookbook = angular.module('myApp');
-Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
+Lookbook.controller('lookbookCtrl', ['$scope', '$anchorScroll', '$http', '$rootScope', '$location', '$routeParams', '$window', '$document', 'anchorSmoothScroll', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll) {
 
 	$scope.mainLook;
 	$scope.shiftImage = false;
@@ -733,14 +745,14 @@ Lookbook.controller('lookbookCtrl', function ($scope, $anchorScroll, $http, $roo
 	// 	 }
 	// }
 	//
-});
+}]);
 
 },{}],4:[function(require,module,exports){
 'use strict';
 
 var Nav = angular.module('myApp');
 
-Nav.controller('navCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $routeParams) {
+Nav.controller('navCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $routeParams) {
 
   $rootScope.firstBase;
   $rootScope.Location;
@@ -756,6 +768,33 @@ Nav.controller('navCtrl', function ($scope, $location, $rootScope, $timeout, $ht
     "slug": "automne-hiver-16",
     "name": "automne/hiver 2016"
   }];
+
+  $scope.isCollection = function (slug) {
+    if ($location.search().collection == slug) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.isGender = function (slug) {
+    if ($location.search().gender == slug) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.isQuery = function (key) {
+    var obj = {};
+    obj = $location.search();
+
+    if (obj.hasOwnProperty(key)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   $rootScope.isNavOpen = false;
 
@@ -832,7 +871,7 @@ Nav.controller('navCtrl', function ($scope, $location, $rootScope, $timeout, $ht
       }, 800);
     }
   });
-}).directive('navDirective', function ($rootScope, $location, $window, $timeout) {
+}]).directive('navDirective', function () {
   return {
     restrict: 'E',
     templateUrl: 'views/components/nav.html',
@@ -891,7 +930,7 @@ Service.factory("transformRequestAsFormPost", function () {
   }
 });
 
-Service.service('anchorSmoothScroll', function ($location, $rootScope) {
+Service.service('anchorSmoothScroll', ['$location', '$rootScope', function ($location, $rootScope) {
 
   this.scrollToJavascript = function (eID) {
 
@@ -1033,17 +1072,17 @@ Service.service('anchorSmoothScroll', function ($location, $rootScope) {
       );
     }, 100);
   };
-});
+}]);
 
-Service.service('mailchimp', function ($location, $rootScope, $resource) {
+Service.service('mailchimp', ['$location', '$rootScope', '$resource', function ($location, $rootScope, $resource) {
 
   this.register = function (checkout) {
 
     var data = {
-      'u': '1e9ad6956936b430ff4152132',
-      'id': 'f74ac40f8c',
-      'dc': 'us14',
-      'username': 'eliafornari',
+      'u': 'c69875e2a87d7d52ccd6a29e3',
+      'id': '0d12ae09f2',
+      'dc': 'us15',
+      'username': 'alyxstudio',
       'ADDRESS': {
         'addr1': checkout.shipment.address_1,
         'city': checkout.shipment.city,
@@ -1131,21 +1170,66 @@ Service.service('mailchimp', function ($location, $rootScope, $resource) {
 
     $rootScope.addSubscription(data);
   };
-}); //mailchimp service module
+}]); //mailchimp service module
+
+Service.factory('ga', ['$window', function ($window) {
+
+  var ga = function ga() {
+    if (angular.isArray(arguments[0])) {
+      for (var i = 0; i < arguments.length; ++i) {
+        ga.apply(this, arguments[i]);
+      }
+      return;
+    }
+    // console.log('ga', arguments);
+    if ($window.ga) {
+      $window.ga.apply(this, arguments);
+    }
+  };
+
+  return ga;
+}]);
+
+// Service.service('AnalyticsService', function() {
+//     var title = 'Web App';
+//     var metaDescription = '';
+//     var metaKeywords = '';
+//     return {
+//        set: function(newTitle, newMetaDescription, newKeywords) {
+//            metaKeywords = newKeywords;
+//            metaDescription = newMetaDescription;
+//            title = newTitle;
+//        },
+//        metaTitle: function(){ return title; },
+//        metaDescription: function() { return metaDescription; },
+//        metaKeywords: function() { return metaKeywords; }
+//     }
+//  });
 
 },{"./vendor/jquery-ui.min.js":13,"jquery":34}],6:[function(require,module,exports){
 'use strict';
 
 var Cart = angular.module('myApp');
 
-Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost) {
+Cart.controller('cartCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$window', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, $window) {
   $rootScope.Cart;
   $rootScope.showCart = false;
   $rootScope.cartChanged = false;
 
   $rootScope.openCart = function () {
     $rootScope.updateCart();
+    // $window.ga('ec:setAction','cart', {
+    //     'step': 1
+    // });
+    // $window.ga('send', 'pageview');
     $location.path('shop/cart', true);
+
+    $window.ga('ec:setAction', 'checkout', {
+      'step': 1
+    });
+    $window.ga('send', 'pageview');
+
+    // In the case of checkout actions, an additional actionFieldObject can
   };
 
   $rootScope.closeCart = function () {
@@ -1195,8 +1279,29 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
     });
   };
 
+  $scope.google_cart = function (products) {
+    for (var i in products) {
+      var data = products[i];
+
+      $window.ga('ec:addProduct', { // Provide product details in an productFieldObject.
+        'id': data.id, // Product ID (string).
+        'name': data.title, // Product name (string).
+        'category': data.category.value, // Product category (string).
+        'brand': 'Alyx', // Product brand (string).
+        'variant': data.sku.substr(data.sku.indexOf("_") + 1), // Product variant (string).
+        'price': data.price, // Product price (currency).
+        'quantity': data.quantity // Product quantity (number).
+      });
+      $window.ga('ec:setAction', 'checkout', {
+        'step': 2
+      });
+      $window.ga('send', 'pageview');
+    }
+  };
+
   $rootScope.cartToShipment = function () {
     if ($rootScope.Cart.total_items > 0) {
+      $scope.google_cart($rootScope.Cart.items);
       $location.path('/shop/shipment', true);
     } else {
       $rootScope.noProductsError = true;
@@ -1214,14 +1319,14 @@ Cart.controller('cartCtrl', function ($scope, $location, $rootScope, $timeout, $
       $rootScope.cartChanged = false;$rootScope.$apply();
     }, 900);
   };
-});
+}]);
 
 },{}],7:[function(require,module,exports){
 'use strict';
 
 var Checkout = angular.module('myApp');
 
-Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, mailchimp) {
+Checkout.controller('checkoutCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', 'mailchimp', 'ga', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, mailchimp, ga) {
 
   $rootScope.Order;
   $rootScope.shipment_forwardActive = false;
@@ -1233,7 +1338,7 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
       email: ''
     },
     gateway: '',
-    shipment_method: '1336838094099317449',
+    shipment_method: '1393837083386184430',
     fiscal_code: '',
     shipment: { first_name: '',
       last_name: '',
@@ -1264,8 +1369,12 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
       $http.post('/cartToOrder', $rootScope.checkout).then(function (response) {
         $rootScope.Order = response.data;
         // $rootScope.payment.id = response.data.id;
-        $location.path('/shop/payment', true);
+        ga('ec:setAction', 'shipment', {
+          'step': 2,
+          'option': 'register'
+        });
         mailchimp.register($rootScope.checkout);
+        $location.path('/shop/payment', true);
       }, function (response) {
         $rootScope.error = { value: true, text: response.data };
         // event.preventDefault();
@@ -1343,25 +1452,25 @@ Checkout.controller('checkoutCtrl', function ($scope, $location, $rootScope, $ti
     }
 
     if (NorthAmerica.indexOf($rootScope.checkout.shipment.country) != -1) {
-      $rootScope.checkout.shipment_method = '1374911520424591424';
+      $rootScope.checkout.shipment_method = '1393837083386184430';
     } else if ($rootScope.checkout.shipment.country == 'IT') {
-      $rootScope.checkout.shipment_method = '1374912184424857665';
+      $rootScope.checkout.shipment_method = '1393837083386184430';
     } else if (Europe.indexOf($rootScope.checkout.shipment.country) != -1) {
-      $rootScope.checkout.shipment_method = '1305371023712977230';
+      $rootScope.checkout.shipment_method = '1393837083386184430';
     } else if ($rootScope.checkout.shipment.country == 'RU') {
-      $rootScope.checkout.shipment_method = '1374912619718115394';
+      $rootScope.checkout.shipment_method = '1393837083386184430';
     } else {
-      $rootScope.checkout.shipment_method = '1374913497787269187';
+      $rootScope.checkout.shipment_method = '1393837083386184430';
     }
   }, true);
-});
+}]);
 
 },{}],8:[function(require,module,exports){
 'use strict';
 
 var Payment = angular.module('myApp');
 
-Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll) {
+Payment.controller('paymentCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', 'anchorSmoothScroll', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll) {
   $rootScope.payment;
   $rootScope.Transaction;
   $rootScope.Processed = { value: false, error: false, data: '' };
@@ -1385,12 +1494,16 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     }
   }, false);
 
+  $scope.paymentLoading = false;
+
   $rootScope.checkPayment = function () {
     if ($rootScope.checkout.gateway == 'stripe') {
-      if ($scope.paymentForm.$valid) {
+      if ($scope.paymentForm.$valid && !$scope.paymentLoading) {
+        $scope.paymentLoading = true;
         $rootScope.changeOrderGateway();
       } else {
         $rootScope.error = { value: true, text: 'data invalid' };
+        $scope.paymentLoading = false;
         setTimeout(function () {
           $rootScope.error = { value: false, text: 'data invalid' };
           $rootScope.$apply();
@@ -1407,6 +1520,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       $rootScope.paymentToProcess();
     } else if ($rootScope.checkout.gateway == 'paypal-express') {
       var obj = { gateway: $rootScope.checkout.gateway };
+      $scope.paymentLoading = false;
       $http.post('/order/' + orderID + '/put', obj).then(function (response) {
         $rootScope.paymentToProcess_paypal();
       }, function (error) {
@@ -1435,11 +1549,21 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
         $rootScope.Processed = { value: true, error: false, data: response.data.order };
         $rootScope.Transaction = response.data.data;
         $rootScope.pageLoading = false;
+        $scope.paymentLoading = false;
         $location.path('/shop/processed/' + response.data.order.id + '/' + $rootScope.checkout.gateway, true);
+      } else {
+        console.log("payment failed!");
+        console.log(response);
+        $scope.paymentLoading = false;
+        $rootScope.Processed = { value: true, error: true, data: response.data };
+        $rootScope.pageLoading = false;
+        $rootScope.cartLoading = false;
+        $location.path('/shop/processed/' + $rootScope.checkout.id + '/' + $rootScope.checkout.gateway + '/canceled', true);
       }
     }, function (response) {
       console.log("payment failed!");
       console.log(response);
+      $scope.paymentLoading = false;
       $rootScope.Processed = { value: true, error: true, data: response.data };
       $rootScope.pageLoading = false;
       $rootScope.cartLoading = false;
@@ -1465,6 +1589,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
       window.open(response.data.url, "_self", "", false);
 
       if (response.data.data.paid) {
+        $scope.paymentLoading = false;
         $rootScope.cartLoading = false;
         $rootScope.paymentProcessed = true;
         $rootScope.thankYou = response.data;
@@ -1473,6 +1598,7 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     }, function (response) {
       console.log("payment failed!");
       console.log(response);
+      $scope.paymentLoading = false;
       $rootScope.paymentProcessed = true;
       $rootScope.pageLoading = false;
     });
@@ -1484,14 +1610,14 @@ Payment.controller('paymentCtrl', function ($scope, $location, $rootScope, $time
     $rootScope.thankYou = false;
     $rootScope.cartLoading = false;
   };
-});
+}]);
 
 },{}],9:[function(require,module,exports){
 'use strict';
 
 var Processed = angular.module('myApp');
 
-Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams) {
+Processed.controller('processedCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', 'anchorSmoothScroll', '$routeParams', function ($scope, $location, $rootScope, $timeout, $http, transformRequestAsFormPost, anchorSmoothScroll, $routeParams) {
 
   //retrieve order data
   $rootScope.retrieveOrder = function () {
@@ -1654,66 +1780,81 @@ Processed.controller('processedCtrl', function ($scope, $location, $rootScope, $
       console.log(error);
     });
   };
-});
+}]);
 
 },{}],10:[function(require,module,exports){
 'use strict';
 
 var Shop = angular.module('myApp');
-Shop.filter('shopFilter', function ($sce, $routeParams, $rootScope, $location) {
+Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', function ($sce, $routeParams, $rootScope, $location) {
   return function (data) {
 
-    if ($rootScope.Product) {
-      var filter = $rootScope.filter;
-      $rootScope.filtered = [];
+    // if($rootScope.Product){
+    //             var filter = $rootScope.filter;
+    //             $rootScope.filtered = [];
+    //
+    //
+    //             if(!filter.collection.selected && !filter.gender.selected){
+    //               $location.search('');
+    //               return data;
+    //             }else{
+    //
+    //               // console.log('category: '+category);
+    //               for (var i in $rootScope.Product){
+    //
+    //                 if(!$rootScope.Product[i].collection){
+    //
+    //                 }else if($rootScope.Product[i].collection.value){
+    //
+    //                   if($rootScope.filter.collection.selected && $rootScope.filter.gender.selected){
+    //
+    //                     for (var c in $rootScope.Product[i].category.data){
+    //                       if(($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product[i].collection.data.slug == filter.collection.selected)){
+    //                         $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+    //                       }
+    //                     }
+    //
+    //                   }else if($rootScope.filter.collection.selected){
+    //
+    //                     if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
+    //                       $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+    //                     }
+    //
+    //                   }else if($rootScope.filter.gender.selected){
+    //                     for (var c in $rootScope.Product[i].category.data){
+    //                       if($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected){
+    //                         $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
+    //                         console.log(true);
+    //                       }
+    //                     }
+    //                   }
+    //                 }
+    //               }
+    //               return $rootScope.filtered;
+    //             }
 
-      if (!filter.collection.selected && !filter.gender.selected) {
-        $location.search('');
-        return data;
-      } else {
+    // }
 
-        // console.log('category: '+category);
-        for (var i in $rootScope.Product) {
-
-          if (!$rootScope.Product[i].collection) {} else if ($rootScope.Product[i].collection.value) {
-
-            if ($rootScope.filter.collection.selected && $rootScope.filter.gender.selected) {
-
-              for (var c in $rootScope.Product[i].category.data) {
-                if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected && $rootScope.Product[i].collection.data.slug == filter.collection.selected) {
-                  $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
-                }
-              }
-            } else if ($rootScope.filter.collection.selected) {
-
-              if ($rootScope.Product[i].collection.data.slug == filter.collection.selected) {
-                $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
-              }
-            } else if ($rootScope.filter.gender.selected) {
-              for (var c in $rootScope.Product[i].category.data) {
-                if ($rootScope.Product[i].category.data[c].slug == $rootScope.filter.gender.selected) {
-                  $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
-                }
-              }
-            }
-          }
-        }
-        return $rootScope.filtered;
-      }
-    }
   };
-});
+}]);
 
-Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', '$routeParams', '$window', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window) {
+Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'transformRequestAsFormPost', '$document', 'anchorSmoothScroll', '$routeParams', '$window', 'ga', function ($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window, ga) {
 
   // $scope.filtered = [];
   $rootScope.page = "product";
   $rootScope.shopSections = [];
   $rootScope.Section = {};
   $rootScope.isGradient = true;
+  $rootScope.Category = [{
+    id: '1374914795748196420',
+    slug: 'men'
+  }, {
+    id: '1374914959166668869',
+    slug: 'women'
+  }];
 
   $scope.$on('$routeUpdate', function () {
-    console.log("new query");
+    console.log("routeUpdate");
     $rootScope.Product = [];
     $rootScope.Pagination = {};
     $rootScope.getProductsFN(0);
@@ -1721,17 +1862,24 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   });
 
   $scope.findCollection = function (slug) {
+    for (var i in $rootScope.Collection_shop) {
+      if ($rootScope.Collection_shop[i].slug == slug) {
+        return $rootScope.Collection_shop[i].id;
+      }
+    }
+  };
+
+  $scope.findCategory = function (slug) {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
+      for (var _iterator = $rootScope.Category[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var category = _step.value;
 
-      for (var _iterator = $rootScope.Collection_shop[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var collection = _step.value;
-
-        if (collection.slug == slug) {
-          return collection.id;
+        if (category.slug == slug) {
+          return category.id;
         }
       }
     } catch (err) {
@@ -1759,17 +1907,18 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
     $rootScope.paginationInProcess = true;
     var url = '/product/list?offset=' + offset;
     if ($routeParams.collection) {
-
       var collection_id = $scope.findCollection($routeParams.collection);
-
       url = url + '&collection=' + collection_id;
-      console.log(url);
+    }
+
+    if ($routeParams.gender) {
+      var category = $scope.findCategory($routeParams.gender);
+      url = url + '&category=' + category;
     }
 
     $http({ method: 'GET', url: url }).then(function (response) {
       $rootScope.Product = $rootScope.Product.concat(response.data.result);
       $rootScope.Pagination = response.data.pagination;
-      console.log(response.data);
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
       $rootScope.paginationInProcess = false;
@@ -1828,7 +1977,10 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
     if (!id) {
       $rootScope.filter['collection'].selected = id;
       $rootScope.filter['gender'].selected = id;
+      $location.url($location.path());
     } else {
+      $rootScope.Product = [];
+      $rootScope.Pagination = {};
       $location.search(thistype, id);
       $rootScope.filter[thistype].selected = id;
     }
@@ -1852,7 +2004,6 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
       }
     }).then(function (response) {
       $rootScope.Cart = response;
-      console.log(response);
       $rootScope.updateCart();
     });
   }; //addToCart
@@ -1860,8 +2011,6 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   //......VARIATIONS
 
   $rootScope.addVariation = function () {
-
-    console.log($scope.maxVariation($rootScope.selectedVariation));
 
     if ($scope.maxVariation($rootScope.selectedVariation) == true) {
       if ($rootScope.selectedVariation) {
@@ -1930,21 +2079,13 @@ Shop.controller('shopCtrl', ['$scope', '$location', '$rootScope', '$http', 'tran
   //       });
   // }//updateCart
 
-  //attaching item function cart
-  $rootScope.attachItemID = function (obj) {
-    Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
-      $rootScope.Cart.contents[val].item = val;
-      // console.log(val + ' -> ' + obj[val]);
-    });
-  };
-
   $rootScope.thisProduct = function (id) {
     $rootScope.detailUpdate(id);
     $location.path('/shop/product/' + id, true);
   };
 }]); //shop controller
 
-Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routeParams, $route, $http) {
+Shop.controller('detailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$route', '$http', '$window', function ($rootScope, $scope, $location, $routeParams, $route, $http, $window) {
 
   $rootScope.Detail = {};
   $rootScope.selectedVariation = {};
@@ -2022,12 +2163,32 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   };
 
   $rootScope.getDetail = function (id) {
-    console.log("getDetail");
     //no detail yet let's pull it
     $http({ method: 'GET', url: '/product/' + id + '/get' }).then(function (response) {
-      console.log(response);
       $rootScope.Detail = response.data;
       $scope.getVariationsLevel($rootScope.Detail.id);
+
+      $window.ga('ec:addImpression', {
+        'id': $rootScope.Detail.id, // Product details are provided in an impressionFieldObject.
+        'name': $rootScope.Detail.title,
+        'category': $rootScope.Detail.category.value,
+        'brand': 'Alyx',
+        'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
+        'list': 'Detail',
+        'position': 1 // 'position' indicates the product position in the list.
+      });
+
+      $window.ga('ec:addProduct', {
+        'id': $rootScope.Detail.id,
+        'name': $rootScope.Detail.title,
+        'category': $rootScope.Detail.category.value,
+        'brand': 'Alyx',
+        'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1)
+      });
+
+      $window.ga('ec:setAction', 'detail');
+
+      $window.ga('send', 'pageview'); // Send product details view with the initial pageview.
     }, function (error) {
       console.log(error);
       console.log("products status 400");
@@ -2035,7 +2196,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   };
 
   $rootScope.detailUpdate = function (id) {
-    console.log("detailUpdate");
     $rootScope.selectedVariation = {};
     $rootScope.howManyVAriationsSelected = 0;
     $rootScope.Detail.total_variations = 0;
@@ -2043,8 +2203,6 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
     if (!$rootScope.Product || $rootScope.Product.length == 0) {
       $rootScope.getDetail(id);
     } else {
-      console.log("product is here already");
-      console.log("product:" + $rootScope.Product);
 
       for (var i in $rootScope.Product) {
         if ($rootScope.Product[i].id == id) {
@@ -2120,6 +2278,14 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   //
 
   $scope.orderSize = [{
+    title: "O/S",
+    type: 'string',
+    index: 0
+  }, {
+    title: "o/s",
+    type: 'string',
+    index: 0
+  }, {
     title: "XS",
     type: 'string',
     index: 0
@@ -2259,6 +2425,18 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
     title: "45",
     type: 'string',
     index: 28
+  }, {
+    title: "46",
+    type: 'string',
+    index: 28
+  }, {
+    title: "47",
+    type: 'string',
+    index: 28
+  }, {
+    title: "48",
+    type: 'string',
+    index: 28
   }];
 
   // "S",
@@ -2274,7 +2452,7 @@ Shop.controller('detailCtrl', function ($rootScope, $scope, $location, $routePar
   // "29",
   // "30",
   // "31"
-});
+}]);
 
 },{}],11:[function(require,module,exports){
 'use strict';
@@ -2563,7 +2741,7 @@ Social.controller('socialCtrl', ['$scope', '$timeout', '$rootScope', '$routePara
   } //end if mobile
 }]);
 
-Social.directive('instaHoverDirective', function ($location, $routeParams) {
+Social.directive('instaHoverDirective', ['$location', '$routeParams', function ($location, $routeParams) {
   return {
     restrict: "A",
     link: function link(scope, element, attrs) {
@@ -2640,7 +2818,7 @@ Social.directive('instaHoverDirective', function ($location, $routeParams) {
       };
     }
   };
-});
+}]);
 
 // //close button | product detail
 // Social.directive('instaCloseDirective', function($window){
@@ -2658,7 +2836,7 @@ Social.directive('instaHoverDirective', function ($location, $routeParams) {
 //     }
 //   });
 
-Social.directive('instaShareDirective', function ($routeParams) {
+Social.directive('instaShareDirective', ['$routeParams', function ($routeParams) {
   return {
     restrict: "E",
     replace: true,
@@ -2673,9 +2851,9 @@ Social.directive('instaShareDirective', function ($routeParams) {
       scope.instaShareUrl = 'social/' + $routeParams.number;
     }
   };
-});
+}]);
 
-Social.directive('onFinishRender', function ($timeout) {
+Social.directive('onFinishRender', ['$timeout', function ($timeout) {
   return {
     restrict: 'A',
     link: function link(scope, element, attr) {
@@ -2686,9 +2864,9 @@ Social.directive('onFinishRender', function ($timeout) {
       }
     }
   };
-});
+}]);
 
-Social.directive('filterActiveDirective', function ($timeout) {
+Social.directive('filterActiveDirective', ['$timeout', function ($timeout) {
   return {
     restrict: 'A',
     link: function link(scope, element, attr) {
@@ -2708,7 +2886,7 @@ Social.directive('filterActiveDirective', function ($timeout) {
       // }
     }
   };
-});
+}]);
 
 Social.directive('socialStyleParent', function () {
   return {
@@ -2756,7 +2934,7 @@ Social.directive('socialDetailStyleParent', function () {
   };
 });
 
-Social.directive("imageChange", function ($timeout) {
+Social.directive("imageChange", ['$timeout', function ($timeout) {
   return {
     restrict: "A",
     scope: {},
@@ -2773,13 +2951,13 @@ Social.directive("imageChange", function ($timeout) {
       });
     }
   };
-});
+}]);
 
 },{}],12:[function(require,module,exports){
 'use strict';
 
 var Support = angular.module('myApp');
-Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
+Support.controller('supportCtrl', ['$scope', '$anchorScroll', '$http', '$rootScope', '$location', '$routeParams', '$window', '$document', 'anchorSmoothScroll', '$route', '$templateCache', function ($scope, $anchorScroll, $http, $rootScope, $location, $routeParams, $window, $document, anchorSmoothScroll, $route, $templateCache) {
 
 	$scope.contact = [];
 	$scope.about;
@@ -2853,31 +3031,31 @@ Support.controller('supportCtrl', function ($scope, $anchorScroll, $http, $rootS
 			$rootScope.$apply();
 		});
 	}, 600);
-});
+}]);
 
-Support.directive('aboutDirective', function ($rootScope, $location) {
+Support.directive('aboutDirective', ['$rootScope', '$location', function ($rootScope, $location) {
 	return {
 		restrict: 'E',
 		templateUrl: 'views/support/about.html',
 		replace: true
 	};
-});
+}]);
 
-Support.directive('contactDirective', function ($rootScope, $location) {
+Support.directive('contactDirective', ['$rootScope', '$location', function ($rootScope, $location) {
 	return {
 		restrict: 'E',
 		templateUrl: 'views/support/contact.html',
 		replace: true
 	};
-});
+}]);
 
-Support.directive('stockistDirective', function ($rootScope, $location) {
+Support.directive('stockistDirective', ['$rootScope', '$location', function ($rootScope, $location) {
 	return {
 		restrict: 'E',
 		templateUrl: 'views/support/stockist.html',
 		replace: true
 	};
-});
+}]);
 
 },{}],13:[function(require,module,exports){
 "use strict";

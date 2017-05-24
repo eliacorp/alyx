@@ -15,7 +15,7 @@ $rootScope.checkout = {
               email:''
           },
           gateway:'',
-          shipment_method: '1336838094099317449',
+          shipment_method: '1393837083386184430',
           fiscal_code:'',
           shipment:
                    { first_name: '',
@@ -154,15 +154,15 @@ $scope.$watch('checkout', function(value){
   }
 
   if(NorthAmerica.indexOf( $rootScope.checkout.shipment.country ) != -1){
-    $rootScope.checkout.shipment_method='1374911520424591424';
+    $rootScope.checkout.shipment_method='1393837083386184430';
   }else if ($rootScope.checkout.shipment.country=='IT'){
-    $rootScope.checkout.shipment_method='1374912184424857665'
+    $rootScope.checkout.shipment_method='1393837083386184430'
   }else if (Europe.indexOf( $rootScope.checkout.shipment.country ) != -1){
-    $rootScope.checkout.shipment_method='1305371023712977230'
+    $rootScope.checkout.shipment_method='1393837083386184430'
   }else if ($rootScope.checkout.shipment.country==('RU')){
-    $rootScope.checkout.shipment_method='1374912619718115394'
+    $rootScope.checkout.shipment_method='1393837083386184430'
   }else{
-    $rootScope.checkout.shipment_method='1374913497787269187';
+    $rootScope.checkout.shipment_method='1393837083386184430';
   }
 }, true)
 
