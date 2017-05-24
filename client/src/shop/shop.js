@@ -286,7 +286,6 @@ $rootScope.addToCart = function(id){
           data: $rootScope.selectedVariation
         }).then(function(response){
           $rootScope.Cart = response;
-          console.log(response);
           $rootScope.updateCart();
         });
       }else{

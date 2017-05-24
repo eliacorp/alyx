@@ -176,7 +176,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   };
 }])
 
-.controller('appCtrl', [ '$rootScope', '$location', '$window', '$timeout', '$http', 'anchorSmoothScroll', '$scope', '$anchorScroll', '$routeParams', function($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams){
+.controller('appCtrl', [ '$rootScope', '$location', '$window', '$timeout', '$http', 'anchorSmoothScroll', '$scope', '$anchorScroll', '$routeParams','$q', function($rootScope, $location, $window, $timeout, $http, anchorSmoothScroll, $scope, $anchorScroll, $routeParams, $q){
   $rootScope.pageLoading = true;
   $rootScope.token;
   $rootScope.Collection_shop;
@@ -255,14 +255,13 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 //get shop collections
-  $rootScope.getCollections = function(){
+  $rootScope.getCollections_shop = function(){
 
         // Simple GET request example:
         $http({
           method: 'GET',
           url: '/getCollections'
         }).then(function (response) {
-          console.log(response.data);
               $rootScope.Collection_shop=response.data;
           }, function (response) {
             console.log(response);
@@ -272,7 +271,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
   }//getCollections
 
-$rootScope.getCollections();
+$rootScope.getCollections_shop();
 
 
 
@@ -336,87 +335,118 @@ $rootScope.setPage = (page)=>{
 
 
 
+  var stockistRan = false;
+  var collectionRan = false;
+
+  $rootScope.Stockist;
+
+
+  $rootScope.getStockist=()=>{
+    $http({
+      method: 'GET',
+      url: 'api/prismic/get/all?page=0&type=stockist'
+    }).then(function(response) {
+      console.log(response);
+      $rootScope.Stockist= response.data.results;
+    }, function(err) {
+      console.log(err);
+    });
+  }
+
+  $rootScope.getStockist();
+
+
+
+$rootScope.prismic_list_single=(type, page)=>{
+  $http({
+    method: 'GET',
+    url: 'api/prismic/get/single?type='+type+'&uid='+uid
+  }).then(function(response) {
+      deferred.resolve(response);
+    }, function(err) {
+      deferred.reject(err);
+    });
+}
+
+
+
+$rootScope.collections = [];
+$rootScope.getCollections_media=(type, page)=>{
+  $http({
+    method: 'GET',
+    url: 'api/prismic/get/all?page='+page+'&type='+type
+  }).then(function(response) {
+    console.log(response);
+    $rootScope.collections= response.data.results;
+  }, function(err) {
+    console.log(err);
+  });
+}
+//
+$rootScope.getCollections_media('collection',0);
 
 
 
 
+//   $rootScope.getContentType = function(type, orderField){
+//
+//         Prismic.Api('https://alyx.cdn.prismic.io/api', function (err, Api) {
+//             Api.form('everything')
+//                 .ref(Api.master())
+//                 .query(Prismic.Predicates.at("document.type", type))
+//                 .orderings('['+orderField+']')
+//                 .pageSize(100)
+//                 .submit(function (err, response) {
+//
+//
+//
+//                     var Data = response;
+//
+//                     if (type =='collection'){
+//                       $rootScope.collections = response.results;
+//                       $rootScope.chooseCollection();
+//                       if(collectionRan == false){
+//                         collectionRan = true;
+//                         // setTimeout(function(){
+//                           $rootScope.$broadcast('collectionReady');
+//                         // }, 900);
+//                         }
+//                       }else if(type =='stockist'){
+//                         stockistRan = true;
+//                         $rootScope.Stockist = response.results;
+//                         if(stockistRan == false){
+//                           stockistRan = true;
+//                           // setTimeout(function(){
+//                             $rootScope.$broadcast('stockistReady');
+//                           // }, 900);
+//                         }
+//
+//                       }else{ return false; }
+//                       $rootScope.$apply();
+//
+//
+//
+//                     // The documents object contains a Response object with all documents of type "product".
+//                     var page = response.page; // The current page number, the first one being 1
+//                     var results = response.results; // An array containing the results of the current page;
+//                     // you may need to retrieve more pages to get all results
+//                     var prev_page = response.prev_page; // the URL of the previous page (may be null)
+//                     var next_page = response.next_page; // the URL of the next page (may be null)
+//                     var results_per_page = response.results_per_page; // max number of results per page
+//                     var results_size = response.results_size; // the size of the current page
+//                     var total_pages = response.total_pages; // the number of pages
+//                     var total_results_size = response.total_results_size; // the total size of results across all pages
+//                     return results;
+//
+//                 });
+//           });
+//
+//
+//   };//get content type
 
 
 
-
-
-
-
-
-
-
-
-var stockistRan = false;
-var collectionRan = false;
-
-
-
-$rootScope.Stockist;
-
-  $rootScope.getContentType = function(type, orderField){
-
-        Prismic.Api('https://alyx.cdn.prismic.io/api', function (err, Api) {
-            Api.form('everything')
-                .ref(Api.master())
-                .query(Prismic.Predicates.at("document.type", type))
-                .orderings('['+orderField+']')
-                .pageSize(100)
-                .submit(function (err, response) {
-
-
-
-                    var Data = response;
-
-                    if (type =='collection'){
-                      $rootScope.collections = response.results;
-                      $rootScope.chooseCollection();
-                      if(collectionRan == false){
-                        collectionRan = true;
-                        // setTimeout(function(){
-                          $rootScope.$broadcast('collectionReady');
-                        // }, 900);
-                        }
-                      }else if(type =='stockist'){
-                        stockistRan = true;
-                        $rootScope.Stockist = response.results;
-                        if(stockistRan == false){
-                          stockistRan = true;
-                          // setTimeout(function(){
-                            $rootScope.$broadcast('stockistReady');
-                          // }, 900);
-                        }
-
-                      }else{ return false; }
-                      $rootScope.$apply();
-
-
-
-                    // The documents object contains a Response object with all documents of type "product".
-                    var page = response.page; // The current page number, the first one being 1
-                    var results = response.results; // An array containing the results of the current page;
-                    // you may need to retrieve more pages to get all results
-                    var prev_page = response.prev_page; // the URL of the previous page (may be null)
-                    var next_page = response.next_page; // the URL of the next page (may be null)
-                    var results_per_page = response.results_per_page; // max number of results per page
-                    var results_size = response.results_size; // the size of the current page
-                    var total_pages = response.total_pages; // the number of pages
-                    var total_results_size = response.total_results_size; // the total size of results across all pages
-                    return results;
-
-                });
-          });
-
-
-  };//get content type
-
-
-
-	$rootScope.getContentType('stockist', 'my.stockist.date desc');
+	// $rootScope.getContentType('stockist', 'my.stockist.date desc');
 
 
 
