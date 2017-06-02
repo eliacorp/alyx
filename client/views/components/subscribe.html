@@ -1,6 +1,9 @@
 <div class="subscribe">
 
   <form name="subscribeForm" class="subscribe-form" novalidate ng-if="!subscribe.result && !subscribe.error">
+    <button class="subscribe-button btn" ng-click="sendSubscribe(subscribe.email)">
+      subscribe
+    </button>
 
       <div class="form-entry">
         <input type="email" name="email" value="email" ng-model="subscribe.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
@@ -10,9 +13,6 @@
       </div>
 
 
-      <button class="subscribe-button btn" ng-click="sendSubscribe(subscribe.email)">
-        subscribe
-      </button>
 
 
     </form>

@@ -32,7 +32,6 @@
       color: $light-grey;
     }
     h2{
-      // color: $light-grey;
       @include hover-effect-color($black, $light-grey);
     }
     .nav-li-sub{
@@ -123,12 +122,18 @@
 
 .nav-subscribe{
   position: fixed;
-  left:$margin-sides;
+  right:$margin-sides;
   bottom: $margin-sides;
+  @include respond-to(phone){
+    width:100%;
+  }
 }
 
 .subscribe{
-  width: 200px;
+  width: 300px;
+  @include respond-to(phone){
+    width:100%;
+  }
   .subscribe-form{
     width: 100%;
     white-space: nowrap;
@@ -139,6 +144,8 @@
         border-top: 0;
         border-right: 0;
         border-left: 0;
+        text-align: right;
+        background-color: transparent;
       }
     }
     .subscribe-button{
