@@ -44,9 +44,12 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 				$scope.windowBottom = $scope.windowHeight + window.pageYOffset;
 				$scope.lookbookPosition=$scope.docHeight-$scope.lookbookLength;
 
-				if($scope.scroll>=$scope.lookbookPosition){
+				console.log($scope.scroll, $scope.lookbookPosition);
+
+				if(!$rootScope.Collection.data['collection.video_url']){
+					// $scope.scroll>=$scope.lookbookPosition
 					$rootScope.showLookbook=true;
-					$rootScope.$apply();
+					console.log("showLookbook", $rootScope.showLookbook);
 				}
 
 				angular.element($window).bind("scroll.collection", function() {
@@ -74,6 +77,7 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 						$rootScope.$apply();
 				});
+				$rootScope.$apply();
 		}
 
 
@@ -85,7 +89,7 @@ setTimeout(function(){
 }, 800)
 
 
-$scope.$on('$viewContentLoaded', function(){
+$rootScope.$on('$viewContentLoaded', function(){
 	if($rootScope.collectionCtrlLoaded){
 		$scope.collectionScroll();
 	}
