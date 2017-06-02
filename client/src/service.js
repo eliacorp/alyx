@@ -239,28 +239,37 @@ Service.service('anchorSmoothScroll', ['$location', '$rootScope', function($loca
 
 Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($location, $rootScope, $resource){
 
-    this.register = function(checkout) {
+    this.register = function(info, type) {
 
+        var data={}
 
-        var data = {
+      if(type=='checkout'){
+         data = {
           'u':'c69875e2a87d7d52ccd6a29e3',
           'id':'0d12ae09f2',
           'dc': 'us15',
           'username': 'alyxstudio',
           'ADDRESS':{
-              'addr1':checkout.shipment.address_1,
-              'city':checkout.shipment.city,
-              'state':checkout.shipment.county,
-              'zip':checkout.shipment.postcode,
-              'country':checkout.shipment.country
+              'addr1':info.shipment.address_1,
+              'city':info.shipment.city,
+              'state':info.shipment.county,
+              'zip':info.shipment.postcode,
+              'country':info.shipment.country
             },
-          'PHONE':checkout.shipment.phone,
-          'EMAIL':checkout.customer.email,
-          'FNAME':checkout.customer.first_name,
-          'LNAME':checkout.customer.last_name
+          'PHONE':info.shipment.phone,
+          'EMAIL':info.customer.email,
+          'FNAME':info.customer.first_name,
+          'LNAME':info.customer.last_name
         };
-
-
+      }else{
+        data = {
+         'u':'c69875e2a87d7d52ccd6a29e3',
+         'id':'0d12ae09f2',
+         'dc': 'us15',
+         'username': 'alyxstudio',
+         'EMAIL':info
+       }
+      }
 
 
 
@@ -316,6 +325,7 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
                 // Mailchimp returned an error.
                 if (response.result === 'error') {
                   if (response.msg) {
+                    console.log(response);
                     // Remove error numbers, if any.
                     var errorMessageParts = response.msg.split(' - ');
                     if (errorMessageParts.length > 1)
@@ -324,14 +334,21 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
                   } else {
                     mailchimp.errorMessage = 'Sorry! An unknown error occured.';
                   }
+                  $rootScope.$broadcast('mailchimp-subscribe-error', mailchimp.errorMessage, mailchimp.errorMessage);
                 }
                 // MailChimp returns a success.
                 else if (response.result === 'success') {
                   mailchimp.successMessage = response.msg;
+                  console.log(response);
+                  //Broadcast the result for global msgs
+                  if(type=='checkout'){
+                    $rootScope.$broadcast('mailchimp-response', response.result, response.msg);
+                  }else{
+                    $rootScope.$broadcast('mailchimp-subscribe-success', response.result, response.msg);
+                  }
                 }
 
-                //Broadcast the result for global msgs
-                $rootScope.$broadcast('mailchimp-response', response.result, response.msg);
+
               },
 
               // Error sending data to MailChimp

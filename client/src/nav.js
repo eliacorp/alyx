@@ -2,7 +2,7 @@
 
 var Nav = angular.module('myApp');
 
-Nav.controller('navCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams){
+Nav.controller('navCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams','mailchimp', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams, mailchimp){
 
 $rootScope.firstBase;
 $rootScope.Location;
@@ -97,41 +97,73 @@ $scope.getSecondPath=()=>{
 
 
 
-if(($scope.getFirstPath() =='shop')){
-  $rootScope.logoLeft=false;
-}else{
-  $rootScope.logoLeft=true;
-}
-
-
-
-$scope.$on('$routeChangeStart', function(){
-
-})
-
-$scope.$on('$routeChangeSuccess', function(){
-  $rootScope.Location=$location.path();
-  $rootScope.shopLocation=$scope.getSecondPath();
-  $rootScope.firstBase=$scope.getFirstPath();
-  $rootScope.pageLoading = true;
-  if( $scope.getFirstPath() =='shop'){
+  if(($scope.getFirstPath() =='shop')){
     $rootScope.logoLeft=false;
   }else{
     $rootScope.logoLeft=true;
   }
 
 
-  if($scope.getSecondPath){
-    setTimeout(function(){
-      $rootScope.pageLoading = false;
-      $rootScope.$apply();
-    }, 800);
-  }
 
-})
+  $scope.$on('$routeChangeSuccess', function(){
+    $rootScope.Location=$location.path();
+    $rootScope.shopLocation=$scope.getSecondPath();
+    $rootScope.firstBase=$scope.getFirstPath();
+    $rootScope.pageLoading = true;
+    if( $scope.getFirstPath() =='shop'){
+      $rootScope.logoLeft=false;
+    }else{
+      $rootScope.logoLeft=true;
+    }
+
+
+    if($scope.getSecondPath){
+      setTimeout(function(){
+        $rootScope.pageLoading = false;
+        $rootScope.$apply();
+      }, 800);
+    }
+  })
+
+
+$rootScope.subscribe={
+  result: false,
+  error: false,
+  email:''
+}
+
+$rootScope.sendSubscribe=(email)=>{
+    mailchimp.register(email, 'subscribe');
+    $rootScope.$on('mailchimp-subscribe-success', function(reponse, msg){
+      $rootScope.subscribe.result=true;
+    })
+
+    $rootScope.$on('mailchimp-subscribe-error', function(reponse, msg){
+      $rootScope.subscribe.result=false;
+      $rootScope.subscribe.error=msg;
+      setTimeout(function(){
+        $rootScope.subscribe.result=false;
+        $rootScope.subscribe.error=false;
+        $rootScope.$apply();
+      }, 2000);
+    })
+}
+
+
 
 
 }])
+
+.directive('subscribeDirective', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/components/subscribe.html',
+    replace: true,
+    link: function(scope, elem, attrs) {
+
+    }
+  };
+})
 
 .directive('navDirective', function() {
   return {

@@ -181,6 +181,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   $rootScope.token;
   $rootScope.Collection_shop;
   $rootScope.Product=[];
+  $window.dataLayer = window.dataLayer || [];
 
 
   $rootScope.noRefresh = function(url){

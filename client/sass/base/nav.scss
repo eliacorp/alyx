@@ -120,11 +120,57 @@
 
 
 
-// .logo{
-//   position: fixed;
-//   left: 50%;
-//   top: auto;
-// }
+
+.nav-subscribe{
+  position: fixed;
+  left:$margin-sides;
+  bottom: $margin-sides;
+}
+
+.subscribe{
+  width: 200px;
+  .subscribe-form{
+    width: 100%;
+    white-space: nowrap;
+    .form-entry{
+      display: inline-block;
+      width: 65%;
+      input{
+        border-top: 0;
+        border-right: 0;
+        border-left: 0;
+      }
+    }
+    .subscribe-button{
+      display: inline-block;
+      margin-left: 5%;
+      width: 30%;
+
+    }
+  }
+
+}
+
+.btn{
+  width:100%;
+  height: 30px;
+  line-height: 30px;
+  padding:0;
+  @include h2();
+  border:0;
+  // border-bottom: 5px solid $black;
+  text-align: center;
+  margin-top: $margin-top-input;
+  background: transparent;
+  // @include hover-effect-background-color($white, $black);
+  @include hover-effect-color($black, $light-grey);
+  @include transition(all, 0.6s, ease);
+  outline: 0;
+}
+
+
+
+
 
 
 .logo.corner{

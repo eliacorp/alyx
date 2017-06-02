@@ -12,12 +12,10 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 
 	$rootScope.chooseCollection=(type, uid)=>{
-		console.log(type, uid);
 		$http({
 	    method: 'GET',
 	    url: 'api/prismic/get/single?type='+type+'&uid='+uid
 	  }).then(function(response) {
-			console.log("single");
 			console.log(response);
 				$rootScope.Collection = response.data;
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
@@ -36,29 +34,23 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 
 		$scope.collectionScroll = ()=>{
+			$rootScope.collectionCtrlLoaded=true;
 
-			console.log('collection scroll');
-			$rootScope.$on('$viewContentLoaded', function(){
-
-				$scope.lookbookLength = document.getElementById("lookbook").scrollHeight;
+				var lookbookElement = angular.element('#lookbook')[0];
+				$scope.lookbookLength = lookbookElement.scrollHeight;
 				$scope.windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
 				$scope.docHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight,  document.documentElement.scrollHeight, document.documentElement.offsetHeight);
 				$scope.scroll = window.pageYOffset;
 				$scope.windowBottom = $scope.windowHeight + window.pageYOffset;
 				$scope.lookbookPosition=$scope.docHeight-$scope.lookbookLength;
-				console.log("$scope.docHeight", $scope.docHeight);
-				console.log("$scope.lookbookLength", $scope.lookbookLength);
+
 				if($scope.scroll>=$scope.lookbookPosition){
 					$rootScope.showLookbook=true;
+					$rootScope.$apply();
 				}
-
-				console.log($scope.scroll, $scope.lookbookPosition);
-
 
 				angular.element($window).bind("scroll.collection", function() {
 					$scope.scroll = window.pageYOffset;
-					console.log($scope.scroll, $scope.lookbookPosition);
-
 					if($scope.scroll>=$scope.lookbookPosition){
 						$rootScope.showLookbook=true;
 					}else{
@@ -69,7 +61,9 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 
 
-				jQuery($window).resize(function(){
+
+
+				jQuery('.lookbook').resize(function(){
 
 					$scope.lookbookLength = document.getElementById("lookbook").scrollHeight;
 					$scope.windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
@@ -80,15 +74,24 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 						$rootScope.$apply();
 				});
-
-
-			});
-
 		}
 
 
+$rootScope.collectionCtrlLoaded=false;
+setTimeout(function(){
+		if(!$rootScope.collectionCtrlLoaded){
+			$scope.collectionScroll();
+		}
+}, 800)
 
+
+$scope.$on('$viewContentLoaded', function(){
+	if($rootScope.collectionCtrlLoaded){
 		$scope.collectionScroll();
+	}
+})
+
+
 
 
 
@@ -96,6 +99,7 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 $scope.$on('$destroy', function(){
 	angular.element($window).unbind("scroll.collection");
+	jQuery('.lookbook').off("resize");
 })
 
 

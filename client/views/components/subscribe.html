@@ -1,0 +1,31 @@
+<div class="subscribe">
+
+  <form name="subscribeForm" class="subscribe-form" novalidate ng-if="!subscribe.result && !subscribe.error">
+
+      <div class="form-entry">
+        <input type="email" name="email" value="email" ng-model="subscribe.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+          <span class="form-error" ng-show="subscribeForm.email_customer.$error.required && subscribeForm.email.$touched">required</span>
+          <span class="form-error" ng-show="subscribeForm.email_customer.$error.email && subscribeForm.email.$touched">invalid email</span>
+        </input>
+      </div>
+
+
+      <button class="subscribe-button btn" ng-click="sendSubscribe(subscribe.email)">
+        subscribe
+      </button>
+
+
+    </form>
+
+
+    <div class="subscribe-result" ng-if="subscribe.result">
+      <h2>thank you</h2>
+    </div>
+
+    <div class="subscribe-error" ng-if="subscribe.error">
+      <p>{{subscribe.error}}</p>
+    </div>
+
+
+
+</div>
