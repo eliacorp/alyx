@@ -1,6 +1,6 @@
 <div class="collection-video">
 
-  <video class="collection-video-object" src="{{Collection.data['collection.video_url'].value.url | trustUrl}}" autoplay poster="posterimage.jpg" id="catalogue-video" ng-click="playPause('catalogue-video')">
+  <video class="collection-video-object" src="{{Collection.data['collection.video_url'].value.url | trustUrl}}" autoplay poster="{{Collection.data['collection.look'].value.image.value.main.url}}" id="catalogue-video" ng-click="playPause('catalogue-video')">
 
   </video>
 </div>
