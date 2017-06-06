@@ -140,8 +140,7 @@ function setToHappen(d){
 
 // This is the configuration for prismic.io
 app.use((req, res, next) => {
-  PrismicSDK.api(PrismicConfig.apiEndpoint, { req })
-  // accessToken: PrismicConfig.accessToken,
+  PrismicSDK.api(PrismicConfig.apiEndpoint, { accessToken: PrismicConfig.accessToken, req })
   .then((api) => {
     req.prismic = { api };
     // res.locals.ctx = {
@@ -154,6 +153,10 @@ app.use((req, res, next) => {
     res.status(err.status).send(message);
   });
 });
+
+// app.route('/preview').get((req, res) => (
+//   PrismicSDK.preview(req.prismic.api, PrismicConfig.linkResolver, req, res)
+// ));
 
 app.get('/api/prismic/get/single', function(req, res){
   prismic.getSingle(req, res);
