@@ -4,7 +4,7 @@ var Collection = angular.module('myApp');
 
 Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', '$routeParams','$window', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams,$window){
 
-
+console.log("collectionCtrl");
 	$rootScope.Collection = [];
 	var collectionRan = false;
 	$rootScope.showLookbook=false;
@@ -45,22 +45,27 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 				$scope.lookbookPosition=$scope.docHeight-$scope.lookbookLength;
 
 				console.log($scope.scroll, $scope.lookbookPosition);
-
-				if(!$rootScope.Collection.data['collection.video_url']){
-					// $scope.scroll>=$scope.lookbookPosition
-					$rootScope.showLookbook=true;
-					console.log("showLookbook", $rootScope.showLookbook);
+				if($rootScope.Collection.data){
+					console.log("Collection data");
+					if(!$rootScope.Collection.data['collection.video_url']){
+						// $scope.scroll>=$scope.lookbookPosition
+						$rootScope.showLookbook=true;
+						console.log("showLookbook", $rootScope.showLookbook);
+					}else{
+						angular.element($window).bind("scroll.collection", function() {
+							$scope.scroll = window.pageYOffset;
+							if($scope.scroll>=$scope.lookbookPosition){
+								$rootScope.showLookbook=true;
+							}else{
+								$rootScope.showLookbook=false;
+							}
+							$rootScope.$apply();
+						});
+					}
 				}
 
-				angular.element($window).bind("scroll.collection", function() {
-					$scope.scroll = window.pageYOffset;
-					if($scope.scroll>=$scope.lookbookPosition){
-						$rootScope.showLookbook=true;
-					}else{
-						$rootScope.showLookbook=false;
-					}
-					$rootScope.$apply();
-				});
+
+
 
 
 
@@ -89,7 +94,7 @@ setTimeout(function(){
 }, 800)
 
 
-$rootScope.$on('$viewContentLoaded', function(){
+$scope.$on('$viewContentLoaded', function(){
 	if($rootScope.collectionCtrlLoaded){
 		$scope.collectionScroll();
 	}

@@ -49,19 +49,19 @@ $rootScope.checkout = {
       $http.post('/cartToOrder', $rootScope.checkout)
       .then(function(response) {
         $rootScope.Order=response.data;
-        window.dataLayer.push({
-          'event': 'checkoutOption',
-          'ecommerce': {
-            'checkout_option': {
-              'actionField': {'step': 3}
-            }
-          }
-        });
-        // $window.ga('ec:setAction','shipment', {
-        //     'step': 2,
-        //     'option': 'register'
+        // window.dataLayer.push({
+        //   'event': 'checkoutOption',
+        //   'ecommerce': {
+        //     'checkout_option': {
+        //       'actionField': {'step': 3}
+        //     }
+        //   }
         // });
-        // $window.ga('send', 'pageview');
+        $window.ga('ec:setAction','shipment', {
+            'step': 2,
+            'option': 'register'
+        });
+        $window.ga('send', 'pageview');
         mailchimp.register($rootScope.checkout, 'checkout');
         $location.path('/shop/payment', true);
 

@@ -4,9 +4,6 @@ let request = require('request');
 let fs = require('fs');
 let Prismic = require('prismic-nodejs');
 
-var ENDPOINT = "http://alyx.cdn.prismic.io/api";
-var ACCESSTOKEN = null; // Only if your API is private
-
 exports.getAll = function (req, res) {
   var _page = req.query.page;
   var type= req.query.type;
