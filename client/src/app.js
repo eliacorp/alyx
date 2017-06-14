@@ -1,6 +1,5 @@
 'use strict'
 
-
 import angular from 'angular'
 import 'angular-route'
 import 'angular-animate'
@@ -149,6 +148,10 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
+    .when('/subscribe', {
+      templateUrl: 'views/components/subscribe.html'
+    })
+
     /*............................. Take-all routing ........................*/
 
 
@@ -171,6 +174,16 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   return function(url) {
     // if (url){
       var trusted = $sce.trustAsResourceUrl(url);
+      return trusted;
+    // }
+  };
+}])
+
+
+.filter('trustHtml', ['$sce',function ($sce) {
+  return function(html) {
+    // if (url){
+      var trusted = $sce.trustAsHtml(html);
       return trusted;
     // }
   };

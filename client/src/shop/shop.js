@@ -114,6 +114,7 @@ $scope.findCategory=(slug)=>{
 
   $rootScope.getProductsFN=function(offset){
     $rootScope.paginationInProcess=true;
+    console.log("getProductsFN");
     var url = '/product/list?offset='+offset;
     if($routeParams.collection){
       var collection_id = $scope.findCollection($routeParams.collection);
@@ -132,11 +133,7 @@ $scope.findCategory=(slug)=>{
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
       $rootScope.paginationInProcess=false;
-
-      for (var i in $rootScope.Product){
-        console.log($rootScope.Product[i].status.data.key);
-      }
-
+      console.log($rootScope.Product);
     }, function(error){
       console.log(error);
       console.log("products status 400");
@@ -163,6 +160,11 @@ $scope.findCategory=(slug)=>{
         var body = document.body, html = document.documentElement;
         var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
         var windowBottom = windowHeight + window.pageYOffset;
+
+        if($rootScope.showSubscribe){
+          console.log("$rootScope.showSubscribeFN(false);");
+          $rootScope.showSubscribeFN(false);
+        }
 
         if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
             // alert('bottom reached');

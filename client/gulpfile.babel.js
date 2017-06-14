@@ -28,8 +28,8 @@ gulp.task("transpile", () => {
       this.emit("end");
     })
     .pipe(source("bundle.min.js"))
-		// .pipe(buffer())
-		// .pipe(uglify())
+		.pipe(buffer())
+		.pipe(uglify())
     .pipe(gulp.dest("dist"));
 
 });

@@ -120,21 +120,24 @@
 
 
 
-.nav-subscribe{
+.shop-subscribe{
   position: fixed;
-  right:$margin-sides;
+  left:$margin-sides;
   bottom: $margin-sides;
+  z-index: $z-subscribe;
   @include respond-to(phone){
     width:100%;
   }
 }
 
-.subscribe{
+.subscribe-partial{
   width: 300px;
+  @include transform-element(translateX(-70%));
   @include respond-to(phone){
     width:100%;
   }
-  .subscribe-form{
+
+  .subscribe-partial-form{
     width: 100%;
     white-space: nowrap;
     .form-entry{
@@ -144,11 +147,11 @@
         border-top: 0;
         border-right: 0;
         border-left: 0;
-        text-align: right;
+        text-align: left;
         background-color: transparent;
       }
     }
-    .subscribe-button{
+    .subscribe-partial-button{
       display: inline-block;
       margin-left: 5%;
       width: 30%;
@@ -157,6 +160,72 @@
   }
 
 }
+
+.show_subscribe{
+  @include transform-element(translateX(0%));
+}
+
+.subscribe-partial.show_subscribe-remove.show_subscribe-remove-active{
+  -webkit-animation: subscribeOut $animation_speed_medium ease;
+  -moz-animation: subscribeOut $animation_speed_medium ease;
+  -ms-animation: subscribeOut $animation_speed_medium ease;
+  -o-animation: subscribeOut $animation_speed_medium ease;
+  animation: subscribeOut $animation_speed_medium ease;
+}
+
+.subscribe-partial.show_subscribe-add.show_subscribe-add-active{
+  -webkit-animation: subscribeIn $animation_speed_medium ease;
+  -moz-animation: subscribeIn $animation_speed_medium ease;
+  -ms-animation: subscribeIn $animation_speed_medium ease;
+  -o-animation: subscribeIn $animation_speed_medium ease;
+  animation: subscribeIn $animation_speed_medium ease;
+}
+
+
+
+.subscribe{
+  width: 100vw;
+  height: 100vh;
+  .subscribe-content{
+    width:400px;
+    display: block;
+    margin: auto;
+  }
+  .subscribe-form{
+    width:100%;
+    display: block;
+    margin: auto;
+  }
+  .subscribe-error{
+    position: relative;
+    width: 100%;
+    p{
+      width: 100%;
+      text-align: center;
+    }
+  }
+  .subscribe-result{
+    position: relative;
+    width: 100%;
+    p{
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+.subscribe-links{
+  margin-top: $margin-top-input;
+  a{
+    width: 100%;
+    display: block;
+  }
+}
+
+
+
+
+//button general
 
 .btn{
   width:100%;

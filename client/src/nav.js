@@ -2,7 +2,7 @@
 
 var Nav = angular.module('myApp');
 
-Nav.controller('navCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams','mailchimp', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams, mailchimp){
+Nav.controller('navCtrl', ['$scope', '$location', '$rootScope', '$timeout', '$http', 'transformRequestAsFormPost', '$routeParams','mailchimp','$sce', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, $routeParams, mailchimp, $sce){
 
 $rootScope.firstBase;
 $rootScope.Location;
@@ -132,21 +132,48 @@ $rootScope.subscribe={
   email:''
 }
 
-$rootScope.sendSubscribe=(email)=>{
-    mailchimp.register(email, 'subscribe');
+$rootScope.sendSubscribe=(data, type)=>{
+    mailchimp.register(data, type);
     $rootScope.$on('mailchimp-subscribe-success', function(reponse, msg){
       $rootScope.subscribe.result=true;
-    })
-
-    $rootScope.$on('mailchimp-subscribe-error', function(reponse, msg){
-      $rootScope.subscribe.result=false;
-      $rootScope.subscribe.error=msg;
       setTimeout(function(){
         $rootScope.subscribe.result=false;
         $rootScope.subscribe.error=false;
         $rootScope.$apply();
       }, 2000);
     })
+
+    $rootScope.$on('mailchimp-subscribe-error', function(reponse, msg){
+      $rootScope.subscribe.result=false;
+      $rootScope.subscribe.error=$sce.trustAsHtml(msg);;
+      if(type=='subscribe'){
+        setTimeout(function(){
+          $rootScope.subscribe.result=false;
+          $rootScope.subscribe.error=false;
+          $rootScope.$apply();
+        }, 3000);
+      }
+    })
+}
+
+
+$rootScope.rebootSubscribe=()=>{
+  $rootScope.subscribe.result=false;
+  $rootScope.subscribe.error=false;
+}
+
+
+$rootScope.showSubscribe=false;
+$rootScope.showSubscribeFN=(value)=>{
+  if(value){
+    $rootScope.showSubscribe=true;
+  }else{
+    setTimeout(function(){
+      $rootScope.showSubscribe=false;
+      $rootScope.$apply();
+    }, 1000);
+
+  }
 }
 
 
@@ -157,7 +184,7 @@ $rootScope.sendSubscribe=(email)=>{
 .directive('subscribeDirective', function() {
   return {
     restrict: 'E',
-    templateUrl: 'views/components/subscribe.html',
+    templateUrl: 'views/components/subscribe-partial.html',
     replace: true,
     link: function(scope, elem, attrs) {
 

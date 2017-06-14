@@ -237,6 +237,9 @@ Service.service('anchorSmoothScroll', ['$location', '$rootScope', function($loca
 }]);
 
 
+
+
+
 Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($location, $rootScope, $resource){
 
     this.register = function(info, type) {
@@ -261,13 +264,23 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
           'FNAME':info.customer.first_name,
           'LNAME':info.customer.last_name
         };
+      }else if(type=='page'){
+        data = {
+         'u':'c69875e2a87d7d52ccd6a29e3',
+         'id':'0d12ae09f2',
+         'dc': 'us15',
+         'username': 'alyxstudio',
+         'EMAIL':info.email,
+         'FNAME':info.first_name,
+         'LNAME':info.last_name
+       }
       }else{
         data = {
          'u':'c69875e2a87d7d52ccd6a29e3',
          'id':'0d12ae09f2',
          'dc': 'us15',
          'username': 'alyxstudio',
-         'EMAIL':info
+         'EMAIL':info.email
        }
       }
 
@@ -296,11 +309,14 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
                 newaddress = newaddress + '   ' +mailchimp.ADDRESS[i];
               }
             }
+
             mailchimp.ADDRESS = newaddress;
+            console.log(mailchimp.ADDRESS);
 
             for(var i = 0; i < fields.length; i++) {
               params[fields[i]] = mailchimp[fields[i]];
             }
+            console.log(params);
 
             params.c = 'JSON_CALLBACK';
 

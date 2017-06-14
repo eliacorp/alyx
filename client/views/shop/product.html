@@ -1,6 +1,11 @@
 <div class="product" id="products" ng-init="flip=false">
 
 
+<div class="shop-subscribe" ng-class="{'show_subscribe': showSubscribe}" ng-if="!isMobile">
+  <subscribe-directive></subscribe-directive>
+</div>
+
+
 <div class="product-filter">
 
   <ul class="product-filter-ul">
@@ -20,10 +25,6 @@
       <a ng-click="selectFilter('', '')">clear</a>
     </li>
   </ul>
-
-
-
-
 </div>
 
 
@@ -31,12 +32,10 @@
 
   <ul class="product-ul" >
     <!-- shopFilter -->
-    <li class="product-li" ng-repeat="p in Product | orderBy: '-date' track by $index" ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
+    <li class="product-li" ng-repeat="p in Product | orderBy: '-date' track by $index"  ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
       <!-- <div class="product-li-placeholder" ng-show="!p.images[0].url.https"></div> -->
-
       <a href="shop/product/{{p.id}}" >
         <!-- ng-click="thisProduct(p.sku)" -->
-
         <img src="{{p.images[0].url.https}}" alt="{{p.title}}" class="product-image product-image-one" ng-class="{'fadeOut': flip==true}"/>
         <img src="{{p.images[1].url.https}}" alt="{{p.title}}" class="product-image product-image-two" ng-class="{'fadeOut': flip==false}"/>
       </a>

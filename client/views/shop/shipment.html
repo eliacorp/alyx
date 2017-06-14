@@ -31,9 +31,7 @@
     <div class="form-entry" ng-if="checkout.shipment.country=='IT'">
       <input type="text" name="fiscal_code" value="fiscal code" ng-model="checkout.fiscal_code" required placeholder="fiscal code" ng-pattern="fiscalRegex" onfocus="this.placeholder = ''" onblur="this.placeholder = 'fiscal code'">
         <span class="form-error" ng-show="checkoutForm.fiscal_code.$error.required && checkoutForm.fiscal_code.$touched">required</span>
-        {{checkoutForm.fiscal_code.$error}}
       </input>
-      <!-- fiscalRegex -->
 
     </div>
     <div class="termsAndServices">
