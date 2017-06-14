@@ -1,0 +1,61 @@
+<div class="subscribe">
+
+  <table>
+    <tr>
+      <td>
+        <div class="subscribe-content">
+          <form name="subscribeForm" class="subscribe-form" novalidate ng-if="!subscribe.result && !subscribe.error">
+
+            <div class="form-entry">
+              <input type="text" name="name_customer" value="name" ng-model="subscribe.first_name" required placeholder="name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'name'">
+                <span class="form-error" ng-show="subscribeForm.name_customer.$error.required && subscribeForm.name_customer.$touched">required</span>
+              </input>
+            </div>
+
+            <div class="form-entry">
+              <input type="text" name="lastname_customer" value="lastname" ng-model="subscribe.last_name" required placeholder="lastname" onfocus="this.placeholder = ''" onblur="this.placeholder = 'lastname'">
+                <span class="form-error" ng-show="subscribeForm.lastname_customer.$error.required && subscribeForm.lastname_customer.$touched">required</span>
+              </input>
+            </div>
+
+              <div class="form-entry">
+                <input type="email" name="email" value="email" ng-model="subscribe.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+                  <span class="form-error" ng-show="subscribeForm.email.$error.required && subscribeForm.email.$touched">required</span>
+                  <span class="form-error" ng-show="subscribeForm.email.$error.email && subscribeForm.email.$touched">invalid email</span>
+                </input>
+              </div>
+
+
+              <button class="subscribe-button btn" ng-click="sendSubscribe(subscribe, 'page')">
+                subscribe
+              </button>
+
+
+            </form>
+            <div class="subscribe-result" ng-show="subscribe.result">
+              <p>thank you</p>
+              <a href="/shop">shop</a>
+            </div>
+
+            <div class="subscribe-error" ng-if="subscribe.error">
+              <p ng-bind-html="subscribe.error"></p>
+              <div class="subscribe-links">
+                <a ng-click="rebootSubscribe()">back</a>
+                <a href="/shop">shop</a>
+              </div>
+            </div>
+
+        </div>
+
+      </td>
+    </tr>
+  </table>
+
+
+
+
+
+
+
+
+</div>

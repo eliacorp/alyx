@@ -237,30 +237,52 @@ Service.service('anchorSmoothScroll', ['$location', '$rootScope', function($loca
 }]);
 
 
+
+
+
 Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($location, $rootScope, $resource){
 
-    this.register = function(checkout) {
+    this.register = function(info, type) {
 
+        var data={}
 
-        var data = {
+      if(type=='checkout'){
+         data = {
           'u':'c69875e2a87d7d52ccd6a29e3',
           'id':'0d12ae09f2',
           'dc': 'us15',
           'username': 'alyxstudio',
           'ADDRESS':{
-              'addr1':checkout.shipment.address_1,
-              'city':checkout.shipment.city,
-              'state':checkout.shipment.county,
-              'zip':checkout.shipment.postcode,
-              'country':checkout.shipment.country
+              'addr1':info.shipment.address_1,
+              'city':info.shipment.city,
+              'state':info.shipment.county,
+              'zip':info.shipment.postcode,
+              'country':info.shipment.country
             },
-          'PHONE':checkout.shipment.phone,
-          'EMAIL':checkout.customer.email,
-          'FNAME':checkout.customer.first_name,
-          'LNAME':checkout.customer.last_name
+          'PHONE':info.shipment.phone,
+          'EMAIL':info.customer.email,
+          'FNAME':info.customer.first_name,
+          'LNAME':info.customer.last_name
         };
-
-
+      }else if(type=='page'){
+        data = {
+         'u':'c69875e2a87d7d52ccd6a29e3',
+         'id':'0d12ae09f2',
+         'dc': 'us15',
+         'username': 'alyxstudio',
+         'EMAIL':info.email,
+         'FNAME':info.first_name,
+         'LNAME':info.last_name
+       }
+      }else{
+        data = {
+         'u':'c69875e2a87d7d52ccd6a29e3',
+         'id':'0d12ae09f2',
+         'dc': 'us15',
+         'username': 'alyxstudio',
+         'EMAIL':info.email
+       }
+      }
 
 
 
@@ -287,11 +309,14 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
                 newaddress = newaddress + '   ' +mailchimp.ADDRESS[i];
               }
             }
+
             mailchimp.ADDRESS = newaddress;
+            console.log(mailchimp.ADDRESS);
 
             for(var i = 0; i < fields.length; i++) {
               params[fields[i]] = mailchimp[fields[i]];
             }
+            console.log(params);
 
             params.c = 'JSON_CALLBACK';
 
@@ -316,6 +341,7 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
                 // Mailchimp returned an error.
                 if (response.result === 'error') {
                   if (response.msg) {
+                    console.log(response);
                     // Remove error numbers, if any.
                     var errorMessageParts = response.msg.split(' - ');
                     if (errorMessageParts.length > 1)
@@ -324,14 +350,21 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
                   } else {
                     mailchimp.errorMessage = 'Sorry! An unknown error occured.';
                   }
+                  $rootScope.$broadcast('mailchimp-subscribe-error', mailchimp.errorMessage, mailchimp.errorMessage);
                 }
                 // MailChimp returns a success.
                 else if (response.result === 'success') {
                   mailchimp.successMessage = response.msg;
+                  console.log(response);
+                  //Broadcast the result for global msgs
+                  if(type=='checkout'){
+                    $rootScope.$broadcast('mailchimp-response', response.result, response.msg);
+                  }else{
+                    $rootScope.$broadcast('mailchimp-subscribe-success', response.result, response.msg);
+                  }
                 }
 
-                //Broadcast the result for global msgs
-                $rootScope.$broadcast('mailchimp-response', response.result, response.msg);
+
               },
 
               // Error sending data to MailChimp
@@ -350,37 +383,35 @@ Service.service('mailchimp', ['$location', '$rootScope', '$resource', function($
 
 }]); //mailchimp service module
 
-Service.factory('ga', ['$window', function ($window) {
-
-    var ga = function() {
-        if (angular.isArray(arguments[0])) {
-            for(var i = 0; i < arguments.length; ++i) {
-                ga.apply(this, arguments[i]);
-            }
-            return;
-        }
-        // console.log('ga', arguments);
-        if ($window.ga) {
-            $window.ga.apply(this, arguments);
-        }
-    };
-
-    return ga;
-}]);
-
-
+// Service.factory('ga', ['$window', function ($window) {
+//
+//     var ga = function() {
+//         if (angular.isArray(arguments[0])) {
+//             for(var i = 0; i < arguments.length; ++i) {
+//               console.log(arguments[i]);
+//                 ga.apply(this, arguments[i]);
+//             }
+//             return;
+//         }
+//         // console.log('ga', arguments);
+//         if ($window.ga) {
+//             $window.ga.apply(this, arguments);
+//         }
+//     };
+//
+//     return ga;
+// }]);
+//
+//
 // Service.service('AnalyticsService', function() {
-//     var title = 'Web App';
-//     var metaDescription = '';
-//     var metaKeywords = '';
+//     var Step = '';
+//     var Action = '';
 //     return {
-//        set: function(newTitle, newMetaDescription, newKeywords) {
-//            metaKeywords = newKeywords;
-//            metaDescription = newMetaDescription;
-//            title = newTitle;
+//        setAction: function(newAction, newStep) {
+//            Action = newAction;
+//            Step = newStep;
 //        },
-//        metaTitle: function(){ return title; },
-//        metaDescription: function() { return metaDescription; },
-//        metaKeywords: function() { return metaKeywords; }
+//        Action: function(){ return Action; },
+//        Step: function() { return Step; }
 //     }
 //  });

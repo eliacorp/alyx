@@ -30,7 +30,6 @@ Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', fu
     //                     }
     //
     //                   }else if($rootScope.filter.collection.selected){
-    //
     //                     if($rootScope.Product[i].collection.data.slug == filter.collection.selected){
     //                       $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product[i]);
     //                     }
@@ -53,7 +52,7 @@ Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', fu
   };
 }]);
 
-Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window','ga', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window, ga){
+Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window){
 
   // $scope.filtered = [];
   $rootScope.page = "product";
@@ -80,7 +79,6 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
     $rootScope.Product=[];
     $rootScope.Pagination={};
     $rootScope.getProductsFN(0);
-    // $scope.sort = $location.search().sort;
   });
 
 
@@ -116,6 +114,7 @@ $scope.findCategory=(slug)=>{
 
   $rootScope.getProductsFN=function(offset){
     $rootScope.paginationInProcess=true;
+    console.log("getProductsFN");
     var url = '/product/list?offset='+offset;
     if($routeParams.collection){
       var collection_id = $scope.findCollection($routeParams.collection);
@@ -134,11 +133,7 @@ $scope.findCategory=(slug)=>{
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
       $rootScope.paginationInProcess=false;
-
-      for (var i in $rootScope.Product){
-        console.log($rootScope.Product[i].status.data.key);
-      }
-
+      console.log($rootScope.Product);
     }, function(error){
       console.log(error);
       console.log("products status 400");
@@ -165,6 +160,11 @@ $scope.findCategory=(slug)=>{
         var body = document.body, html = document.documentElement;
         var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
         var windowBottom = windowHeight + window.pageYOffset;
+
+        if($rootScope.showSubscribe){
+          console.log("$rootScope.showSubscribeFN(false);");
+          $rootScope.showSubscribeFN(false);
+        }
 
         if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
             // alert('bottom reached');
@@ -288,7 +288,6 @@ $rootScope.addToCart = function(id){
           data: $rootScope.selectedVariation
         }).then(function(response){
           $rootScope.Cart = response;
-          console.log(response);
           $rootScope.updateCart();
         });
       }else{
@@ -311,25 +310,28 @@ $rootScope.addToCart = function(id){
     for (var m in obj){
       var modifierId = obj[m].modifier_id;
       var variationId = obj[m].variation_id;
-      if($rootScope.Cart.contents.length==0){
-        return true;
-      }else {
-        for(var i in $rootScope.Cart.contents){
-          if($rootScope.Cart.contents[i].options[modifierId] == variationId){
-            if($rootScope.Cart.contents[i].stock_level > $rootScope.Cart.contents[i].quantity){
-              return true;
-            }else{
-              $rootScope.error = {value: true, text:"you reached the maximum amount of this variation"};
-              setTimeout(function(){
-                $rootScope.error = {value: false, text:""};
-                $rootScope.$apply();
-              }, 2000);
-              return false;
+      if($rootScope.Cart.contents){
+        if($rootScope.Cart.contents.length==0){
+          return true;
+        }else {
+          for(var i in $rootScope.Cart.contents){
+            if($rootScope.Cart.contents[i].options[modifierId] == variationId){
+              if($rootScope.Cart.contents[i].stock_level > $rootScope.Cart.contents[i].quantity){
+                return true;
+              }else{
+                $rootScope.error = {value: true, text:"you reached the maximum amount of this variation"};
+                setTimeout(function(){
+                  $rootScope.error = {value: false, text:""};
+                  $rootScope.$apply();
+                }, 2000);
+                return false;
+              }
             }
           }
+          return true;
         }
-        return true;
       }
+
     }
   }
 
@@ -490,29 +492,45 @@ Shop.controller('detailCtrl',['$rootScope', '$scope', '$location', '$routeParams
     $http({method: 'GET', url: '/product/'+id+'/get'}).then(function(response){
       $rootScope.Detail = response.data;
       $scope.getVariationsLevel($rootScope.Detail.id);
-
-      $window.ga('ec:addImpression', {
-        'id': $rootScope.Detail.id,                   // Product details are provided in an impressionFieldObject.
-        'name': $rootScope.Detail.title,
-        'category': $rootScope.Detail.category.value,
-        'brand': 'Alyx',
-        'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
-        'list': 'Detail',
-        'position': 1                     // 'position' indicates the product position in the list.
+      $window.dataLayer.push({
+        'ecommerce': {
+          'detail': {
+            'actionField': {'list': 'Detail'},    // 'detail' actions have an optional list property.
+            'products': [{
+              'name': $rootScope.Detail.title,         // Name or ID is required.
+              'id': $rootScope.Detail.id,
+              'price': $rootScope.Detail.price=data.price,
+              'brand': 'Alyx',
+              'category': $rootScope.Detail.category.value,
+              'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1)
+             }]
+           }
+         }
       });
+      $window.ga('send', 'pageview');
 
-
-      $window.ga('ec:addProduct', {
-        'id': $rootScope.Detail.id,
-        'name': $rootScope.Detail.title,
-        'category': $rootScope.Detail.category.value,
-        'brand': 'Alyx',
-        'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
-      });
-
-      $window.ga('ec:setAction', 'detail');
-
-      $window.ga('send', 'pageview');       // Send product details view with the initial pageview.
+      // $window.ga('ec:addImpression', {
+      //   'id': $rootScope.Detail.id,                   // Product details are provided in an impressionFieldObject.
+      //   'name': $rootScope.Detail.title,
+      //   'category': $rootScope.Detail.category.value,
+      //   'brand': 'Alyx',
+      //   'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
+      //   'list': 'Detail',
+      //   'position': 1                     // 'position' indicates the product position in the list.
+      // });
+      //
+      //
+      // $window.ga('ec:addProduct', {
+      //   'id': $rootScope.Detail.id,
+      //   'name': $rootScope.Detail.title,
+      //   'category': $rootScope.Detail.category.value,
+      //   'brand': 'Alyx',
+      //   'variant': $rootScope.Detail.sku.substr($rootScope.Detail.sku.indexOf("_") + 1),
+      // });
+      //
+      // $window.ga('ec:setAction', 'detail');
+      //
+      // $window.ga('send', 'pageview');       // Send product details view with the initial pageview.
 
     }, function(error){
       console.log(error);

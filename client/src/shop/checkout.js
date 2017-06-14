@@ -2,7 +2,7 @@
 
 var Checkout = angular.module('myApp');
 
-Checkout.controller('checkoutCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'mailchimp', 'ga', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp, ga){
+Checkout.controller('checkoutCtrl', ['$scope', '$location', '$rootScope', '$timeout',	'$http', 'transformRequestAsFormPost', 'mailchimp', '$window', function($scope, $location, $rootScope, $timeout,	$http, transformRequestAsFormPost, mailchimp, $window){
 
 
 $rootScope.Order;
@@ -44,22 +44,25 @@ $rootScope.checkout = {
 
 
 //shipment
-
   $rootScope.shipmentToPayment = (event) =>{
     if($scope.checkoutForm.$valid){
-
-
-
       $http.post('/cartToOrder', $rootScope.checkout)
-
       .then(function(response) {
         $rootScope.Order=response.data;
-        // $rootScope.payment.id = response.data.id;
-        ga('ec:setAction','shipment', {
+        // window.dataLayer.push({
+        //   'event': 'checkoutOption',
+        //   'ecommerce': {
+        //     'checkout_option': {
+        //       'actionField': {'step': 3}
+        //     }
+        //   }
+        // });
+        $window.ga('ec:setAction','shipment', {
             'step': 2,
             'option': 'register'
         });
-        mailchimp.register($rootScope.checkout);
+        $window.ga('send', 'pageview');
+        mailchimp.register($rootScope.checkout, 'checkout');
         $location.path('/shop/payment', true);
 
       }, function(response) {
@@ -110,16 +113,15 @@ $rootScope.checkout = {
 
 
 
+setTimeout(function(){
+  $scope.phoneRegex = '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$';
+  // ^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$
+  $scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
+  $scope.fiscalRegex = '^([A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1})|([0-9]{11})$';
+  // ^[A-Z]{6}[A-Z0-9]{2}[A-Z][A-Z0-9]{2}[A-Z][A-Z0-9]{3}[A-Z]$
+  // '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
+}, 1000);
 
-$scope.phoneRegex = '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$';
-// ^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$
-//
-$scope.postcodeRegex = '^\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d$';
-$scope.fiscalRegex = '^([A-Za-z]{6}[0-9lmnpqrstuvLMNPQRSTUV]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9lmnpqrstuvLMNPQRSTUV]{2}[A-Za-z]{1}[0-9lmnpqrstuvLMNPQRSTUV]{3}[A-Za-z]{1})|([0-9]{11})$';
-
-// ^[A-Z]{6}[A-Z0-9]{2}[A-Z][A-Z0-9]{2}[A-Z][A-Z0-9]{3}[A-Z]$
-
-// '/^[a-z]{1,2}[0-9][a-z0-9]?\s?[0-9][a-z]{2}$/i'
 
 
 
@@ -140,6 +142,7 @@ $scope.$watch('isBillingDifferent', function(value){
 var Europe = ['AL','AD','AM','AT','AZ','BY','BA','BG','HR','CY','CZ','DK','EE','FI','FR','GE','DE','GR','HU','IS','IE','KZ','XK','LV','LI','LT','LU','MK','MT','MD','MC','ME','NL','NO','PL','PT','RO','RU','SM','RS','SK','SI','ES','SE','CH','TR','UA','GB'];
 var NorthAmerica = ['US','CA','MX'];
 $scope.$watch('checkout', function(value){
+  console.log("checkoutchanged");
   // $rootScope.checkout.customer.first_name = $rootScope.checkout.shipment.first_name;
   // $rootScope.checkout.customer.last_name = $rootScope.checkout.shipment.last_name;
   if(!$scope.isBillingDifferent){
@@ -151,6 +154,7 @@ $scope.$watch('checkout', function(value){
       $rootScope.checkout.billing.country = $rootScope.checkout.shipment.country;
       $rootScope.checkout.billing.postcode = $rootScope.checkout.shipment.postcode;
       $rootScope.checkout.billing.phone = $rootScope.checkout.shipment.phone;
+      console.log($rootScope.checkout.shipment.phone);
   }
 
   if(NorthAmerica.indexOf( $rootScope.checkout.shipment.country ) != -1){

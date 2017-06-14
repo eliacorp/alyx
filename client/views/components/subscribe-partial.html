@@ -1,0 +1,30 @@
+<div class="subscribe-partial" ng-class="{'show_subscribe': showSubscribe}">
+
+  <form name="subscribeForm" class="subscribe-partial-form" novalidate ng-if="!subscribe.result && !subscribe.error" ng-mouseenter="showSubscribeFN(true)">
+
+
+      <div class="form-entry">
+        <input type="email" name="email" value="email" ng-model="subscribe.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+          <span class="form-error" ng-show="subscribeForm.email_customer.$error.required && subscribeForm.email.$touched">required</span>
+          <span class="form-error" ng-show="subscribeForm.email_customer.$error.email && subscribeForm.email.$touched">invalid email</span>
+        </input>
+      </div>
+
+      <button class="subscribe-partial-button btn" ng-click="sendSubscribe(subscribe, 'subscribe')">
+        subscribe
+      </button>
+
+    </form>
+
+
+    <div class="subscribe-partial-result" ng-if="subscribe.result">
+      <h2>thank you</h2>
+    </div>
+
+    <div class="subscribe-partial-error" ng-if="subscribe.error">
+      <p ng-bind-html="subscribe.error"></p>
+    </div>
+
+
+
+</div>

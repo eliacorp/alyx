@@ -65,9 +65,8 @@
 
 .lookbook-side{
   position: relative;
-  right:0;
+  margin-left: calc(100vw - 100px);
   top:0;
-  float: right;
   z-index: $z-lookbook-side;
   .lookbook-side-ul{
     width:auto;

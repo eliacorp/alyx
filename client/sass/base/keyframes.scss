@@ -158,3 +158,42 @@
   -webkit-animation-direction: normal, alternate;
   animation-direction: normal, alternate;
 }
+
+
+
+
+
+
+
+/* subscribeOut */
+@keyframes subscribeIn {
+  0% {transform:translateX(-70%);}
+  100% {transform:translateX(0%);}
+}
+
+@-webkit-keyframes subscribeIn {
+  0% {-webkit-transform:translateX(-70%);}
+  100% {-webkit-transform:translateX(0%);}
+}
+
+@-moz-keyframes subscribeIn {
+  0% {-moz-transform:translateX(-70%);}
+  100% {-moz-transform:translateX(0%);}
+}
+
+
+/* subscribeOut */
+@keyframes subscribeOut {
+  0% {transform:translateX(0%);}
+  100% {transform:translateX(-70%);}
+}
+
+@-webkit-keyframes subscribeOut {
+  0% {-webkit-transform:translateX(0%);}
+  100% {-webkit-transform:translateX(-70%);}
+}
+
+@-moz-keyframes subscribeOut {
+  0% {-moz-transform:translateX(0%);}
+  100% {-moz-transform:translateX(-70%);}
+}

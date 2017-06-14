@@ -29,13 +29,13 @@
     padding-top:0;
   }
   .product-li{
-    display: block;
+    display: inline-block;
     width: 22%;
     height: auto;
     margin:auto;
     margin-bottom: 20vh;
     margin-right:17%;
-    float:left;
+    // float:left;
     position: relative;
     @include respond-to(phone){
       width:100%;

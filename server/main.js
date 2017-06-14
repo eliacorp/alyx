@@ -13,6 +13,9 @@ let sessions = require('client-sessions');
 let request = require('request');
 let crypto = require('crypto');
 let order  = require('./order/order.js');
+const prismic  = require('./api/prismic');
+let PrismicConfig = require('./api/prismic/config.js');
+let PrismicSDK = require('prismic-nodejs');
 let app = express();
 
 
@@ -25,13 +28,13 @@ let moltin = require('moltin')({
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else
-        next();
-});
+// app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//         res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else
+//         next();
+// });
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -132,8 +135,42 @@ function setToHappen(d){
 
 
 
+//PRISMIC
 
 
+// This is the configuration for prismic.io
+app.use((req, res, next) => {
+  PrismicSDK.api(PrismicConfig.apiEndpoint, { accessToken: PrismicConfig.accessToken, req })
+  .then((api) => {
+    req.prismic = { api };
+    // res.locals.ctx = {
+    //   endpoint: PrismicConfig.apiEndpoint,
+    //   linkResolver: PrismicConfig.linkResolver
+    // };
+    next();
+  }).catch((err) => {
+    const message = err.status === 404 ? 'There was a problem connecting to your API, please check your configuration file for errors.' : `Error 500: ${err.message}`;
+    res.status(err.status).send(message);
+  });
+});
+
+// app.route('/preview').get((req, res) => (
+//   PrismicSDK.preview(req.prismic.api, PrismicConfig.linkResolver, req, res)
+// ));
+
+app.get('/api/prismic/get/single', function(req, res){
+  prismic.getSingle(req, res);
+});
+
+app.get('/api/prismic/get/all', function(req, res){
+  console.log('/api/prismic/get/all');
+  prismic.getAll(req, res);
+});
+
+
+app.get('/api/prismic/get/type', function(req, res){
+  prismic.getType(req, res);
+});
 
 
 
@@ -314,7 +351,6 @@ function setToHappen(d){
 
     var access_token = req.mySession.access_token;
 
-    console.log(url);
 
     request({
       url: url,
@@ -324,8 +360,6 @@ function setToHappen(d){
     }, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var info = JSON.parse(body);
-        console.log(response.statusCode);
-        console.log(info);
         res.status(response.statusCode).json(info);
       }else{
         var info = JSON.parse(body);

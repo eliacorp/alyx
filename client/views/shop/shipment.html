@@ -31,9 +31,7 @@
     <div class="form-entry" ng-if="checkout.shipment.country=='IT'">
       <input type="text" name="fiscal_code" value="fiscal code" ng-model="checkout.fiscal_code" required placeholder="fiscal code" ng-pattern="fiscalRegex" onfocus="this.placeholder = ''" onblur="this.placeholder = 'fiscal code'">
         <span class="form-error" ng-show="checkoutForm.fiscal_code.$error.required && checkoutForm.fiscal_code.$touched">required</span>
-        {{checkoutForm.fiscal_code.$error}}
       </input>
-      <!-- fiscalRegex -->
 
     </div>
     <div class="termsAndServices">
@@ -173,11 +171,12 @@
         </div>
 
         <div class="form-entry">
-          <input type="text" name="phone_billing" value="phone" ng-model="checkout.billing.phone" ng-pattern="phoneRegex" required  ng-minlength="10" placeholder="phone" onfocus="this.placeholder = ''" onblur="this.placeholder = 'phone'">
+          <input type="text" name="phone_billing" value="phone" ng-model="checkout.billing.phone" ng-pattern="phoneRegex" required ng-minlength="10" placeholder="phone" onfocus="this.placeholder = ''" onblur="this.placeholder = 'phone'">
             <span class="form-error" ng-show="checkoutForm.phone_billing.$error.required && checkoutForm.phone_billing.$touched">required</span>
             <span class="form-error" ng-show="checkoutForm.phone_billing.$error.minlength && checkoutForm.phone_billing.$touched">phone is too short.</span>
             <span class="form-error" ng-show="checkoutForm.phone_billing.$error.pattern && checkoutForm.phone_billing.$touched && !checkoutForm.phone_billing.$error.minlength">phone number is not in the correct format.</span>
           </input>
+
         </div>
 
 

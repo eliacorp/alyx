@@ -1,6 +1,7 @@
-<div class="collection" ng-controller="collectionCtrl">
+<div class="collection">
 
-
+  <video-directive ng-if="Collection.data['collection.video_url']"></video-directive>
+  <catalogue-directive ng-if="Collection.data['collection.catalogue_post'].value.length>0"></catalogue-directive>
   <lookbook-directive></lookbook-directive>
 
 </div>
