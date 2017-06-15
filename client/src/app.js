@@ -277,8 +277,9 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
           url: '/getCollections'
         }).then(function (response) {
               $rootScope.Collection_shop=response.data;
-          }, function (response) {
-            console.log(response);
+              $rootScope.$broadcast('Collection_shop_arrived');
+          }, function (err) {
+            console.log(err);
             // called asynchronously if an error occurs
             // or server returns response with an error status.
           });
@@ -360,7 +361,6 @@ $rootScope.setPage = (page)=>{
       method: 'GET',
       url: 'api/prismic/get/all?page=0&type=stockist'
     }).then(function(response) {
-      console.log(response);
       $rootScope.Stockist= response.data.results;
     }, function(err) {
       console.log(err);
@@ -390,7 +390,6 @@ $rootScope.getCollections_media=(type, page)=>{
     method: 'GET',
     url: 'api/prismic/get/all?page='+page+'&type='+type
   }).then(function(response) {
-    console.log(response);
     $rootScope.collections= response.data.results;
   }, function(err) {
     console.log(err);
