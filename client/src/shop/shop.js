@@ -75,7 +75,6 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
 
 
   $scope.$on('$routeUpdate', function(){
-    console.log("routeUpdate");
     $rootScope.Product=[];
     $rootScope.Pagination={};
     $rootScope.getProductsFN(0);
@@ -114,7 +113,6 @@ $scope.findCategory=(slug)=>{
 
   $rootScope.getProductsFN=function(offset){
     $rootScope.paginationInProcess=true;
-    console.log("getProductsFN");
     var url = '/product/list?offset='+offset;
     if($routeParams.collection){
       var collection_id = $scope.findCollection($routeParams.collection);
@@ -133,7 +131,6 @@ $scope.findCategory=(slug)=>{
       $rootScope.$broadcast("productArrived");
       $rootScope.pageLoading = false;
       $rootScope.paginationInProcess=false;
-      console.log($rootScope.Product);
     }, function(error){
       console.log(error);
       console.log("products status 400");
@@ -144,7 +141,15 @@ $scope.findCategory=(slug)=>{
   if($rootScope.Pagination){
     // $rootScope.getProductsFN($rootScope.Pagination.offsets.next);
   }else{
-    $rootScope.getProductsFN(0);
+    if($rootScope.Collection_shop){
+      $rootScope.getProductsFN(0);
+    }else{
+      $rootScope.$on('Collection_shop_arrived', function(){
+        $rootScope.getProductsFN(0);
+      });
+
+    }
+
   }
 
 
@@ -162,7 +167,6 @@ $scope.findCategory=(slug)=>{
         var windowBottom = windowHeight + window.pageYOffset;
 
         if($rootScope.showSubscribe){
-          console.log("$rootScope.showSubscribeFN(false);");
           $rootScope.showSubscribeFN(false);
         }
 
