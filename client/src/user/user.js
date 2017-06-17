@@ -65,7 +65,7 @@ $scope.isUser();
 
 
 
-  $rootScope.loginFN = (data)=>{
+  $rootScope.loginFN = (data, type)=>{
     $scope.login_inProgress=true;
     $http.post('/api/user/login', data)
     .then(function(response) {
@@ -75,7 +75,10 @@ $scope.isUser();
         $rootScope.User=response.data.data.user;
         $rootScope.createCookie('user', $rootScope.User.id, 3);
         $rootScope.getUser($rootScope.User.id);
-        $location.path('user/account/'+$rootScope.User.id, true);
+        if(type=='page'){
+          console.log("type: ", type);
+          $location.path('user/account/'+$rootScope.User.id, true);
+        }
       }else{
         $rootScope.message = {value: true, error:true, text:"wrong credentials"};
         $rootScope.removeError();

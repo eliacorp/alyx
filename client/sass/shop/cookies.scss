@@ -1,9 +1,9 @@
 .cookies{
   width: 100vw;
-  height: 100vh;
+  height: 70px;
   background-color: rgba(255,255,255, 0.9);
   position: fixed;
-  top:0;
+  bottom:0;
   left:0;
   z-index:999;
 }
@@ -13,5 +13,8 @@
   height: auto;
   display: block;
   margin: auto;
-  width: 400px;
+  width: 90vw;
+  a{
+    @include p();
+  }
 }

@@ -264,12 +264,12 @@ $rootScope.readCookie = function(name) {
 
 
 $rootScope.approveCookies=()=>{
-  $rootScope.createCookie('approval', true, 365);
+  $rootScope.createCookie('cookies_approval', true, 365);
 }
 
 
 $rootScope.isCookiesApproved=()=>{
-  if($rootScope.readCookie('approval')){
+  if($rootScope.readCookie('cookies_approval')){
     return true
   }else{
     return false

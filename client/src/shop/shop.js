@@ -3,53 +3,53 @@
 var Shop = angular.module('myApp');
 Shop.filter('shopFilter', ['$sce', '$routeParams', '$rootScope', '$location', function ($sce, $routeParams, $rootScope, $location) {
   return function(data) {
-
-    if($rootScope.Product.data){
-                var filter = $rootScope.filter;
-                $rootScope.filtered = [];
-
-
-                if(!filter.collection.selected && !filter.gender.selected){
-                  $location.search('');
-                  return data;
-                }else{
-
-                  // console.log('category: '+category);
-                  for (var i in $rootScope.Product.data){
-
-                    if(!$rootScope.Product.data[i].collection){
-
-                    }else if($rootScope.Product.data[i].collection.value){
-
-                      if($rootScope.filter.collection.selected && $rootScope.filter.gender.selected){
-
-                        for (var c in $rootScope.Product.data[i].category.data){
-                          if(($rootScope.Product.data[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product.data[i].collection.data.slug == filter.collection.selected)){
-                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
-                          }
-                        }
-
-                      }else if($rootScope.filter.collection.selected){
-
-                        if($rootScope.Product.data[i].collection.data.slug == filter.collection.selected){
-                          $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
-                        }
-
-                      }else if($rootScope.filter.gender.selected){
-                        for (var c in $rootScope.Product.data[i].category.data){
-                          if($rootScope.Product.data[i].category.data[c].slug == $rootScope.filter.gender.selected){
-                            $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
-                          }
-                        }
-                      }
-                    }
-                  }
-                  return $rootScope.filtered;
-                }
-
-    }
-
-  };
+  //
+  //   if($rootScope.Product.data){
+  //               var filter = $rootScope.filter;
+  //               $rootScope.filtered = [];
+  //
+  //
+  //               if(!filter.collection.selected && !filter.gender.selected){
+  //                 $location.search('');
+  //                 return data;
+  //               }else{
+  //
+  //                 // console.log('category: '+category);
+  //                 for (var i in $rootScope.Product.data){
+  //
+  //                   if(!$rootScope.Product.data[i].collection){
+  //
+  //                   }else if($rootScope.Product.data[i].collection.value){
+  //
+  //                     if($rootScope.filter.collection.selected && $rootScope.filter.gender.selected){
+  //
+  //                       for (var c in $rootScope.Product.data[i].category.data){
+  //                         if(($rootScope.Product.data[i].category.data[c].slug == $rootScope.filter.gender.selected) && ($rootScope.Product.data[i].collection.data.slug == filter.collection.selected)){
+  //                           $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
+  //                         }
+  //                       }
+  //
+  //                     }else if($rootScope.filter.collection.selected){
+  //
+  //                       if($rootScope.Product.data[i].collection.data.slug == filter.collection.selected){
+  //                         $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
+  //                       }
+  //
+  //                     }else if($rootScope.filter.gender.selected){
+  //                       for (var c in $rootScope.Product.data[i].category.data){
+  //                         if($rootScope.Product.data[i].category.data[c].slug == $rootScope.filter.gender.selected){
+  //                           $rootScope.filtered = $rootScope.filtered.concat($rootScope.Product.data[i]);
+  //                         }
+  //                       }
+  //                     }
+  //                   }
+  //                 }
+  //                 return $rootScope.filtered;
+  //               }
+  //
+  //   }
+  //
+  }
 }]);
 
 Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','transformRequestAsFormPost','$document','anchorSmoothScroll','$routeParams', '$window', function($scope, $location, $rootScope, $http, transformRequestAsFormPost, $document, anchorSmoothScroll, $routeParams, $window){
@@ -152,6 +152,11 @@ Shop.controller('shopCtrl', [ '$scope','$location', '$rootScope', '$http','trans
       var body = document.body, html = document.documentElement;
       var docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
       var windowBottom = windowHeight + window.pageYOffset;
+
+      if(!$rootScope.isCookiesApproved()){
+        $rootScope.approveCookies();
+      }
+
       if ((windowBottom >= docHeight) &&($rootScope.paginationInProcess==false)) {
         if($rootScope.Product.page<$rootScope.Product.pages){
           var nextPage = $rootScope.Product.page + 1;
@@ -653,6 +658,113 @@ $scope.orderSize=[
     type: 'string',
     index:5
   },
+
+
+
+  {
+    title:"4.5",
+    type: 'string',
+    index:1
+  },
+  {
+    title:"5",
+    type: 'string',
+    index:2
+  },
+  {
+    title:"5.5",
+    type: 'string',
+    index:3
+  },
+  {
+    title:"6",
+    type: 'string',
+    index:4
+  },
+  {
+    title:"6.5",
+    type: 'string',
+    index:5
+  },
+  {
+    title:"7",
+    type: 'string',
+    index:6
+  },
+  {
+    title:"7.5",
+    type: 'string',
+    index:7
+  },
+  {
+    title:"8",
+    type: 'string',
+    index:8
+  },
+  {
+    title:"8.5",
+    type: 'string',
+    index:9
+  },
+
+  {
+    title:"9",
+    type: 'string',
+    index:10
+  },
+  {
+    title:"9.5",
+    type: 'string',
+    index:11
+  },
+  {
+    title:"10",
+    type: 'string',
+    index:12
+  },
+  {
+    title:"10.5",
+    type: 'string',
+    index:13
+  },
+  {
+    title:"11",
+    type: 'string',
+    index:14
+  },
+  {
+    title:"11.5",
+    type: 'string',
+    index:15
+  },
+  {
+    title:"12",
+    type: 'string',
+    index:16
+  },
+  {
+    title:"12.5",
+    type: 'string',
+    index:17
+  },
+  {
+    title:"13",
+    type: 'string',
+    index:18
+  },
+  {
+    title:"13.5",
+    type: 'string',
+    index:19
+  },
+  {
+    title:"14",
+    type: 'string',
+    index:20
+  },
+
+
+
   {
     title:"23",
     type: 'string',

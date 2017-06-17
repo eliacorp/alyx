@@ -33,16 +33,17 @@
 
     <h2 class="form-sub-title">CREDENTIALS</h2>
     <login-form></login-form>
-    <button type="button" name="button" ng-click="loginFN(login)" class="btn">SUBMIT</button>
+    <button type="button" name="button" ng-click="loginFN(login, 'checkout')" class="btn">SUBMIT</button>
 
   </form>
 
 
 
 <!-- 2 -->
-  <form name="checkoutForm" novalidate class="register-form" method="post"  ng-show="((checkout.customer.choice=='register') || (readCookie('user')))">
+  <form name="checkoutForm" novalidate class="register-form" ng-show="((checkout.customer.choice=='register') || (readCookie('user')))">
 
     <customer-form></customer-form>
+    <button type="button" name="button" class="btn" ng-click="saveCustomerInfo(User)">save</button>
 
     <div class="termsAndServices">
       <label for="termsAndServices">by clicking this field you agree to our <a href="/shop/shipment/terms">terms and services</a></label>
@@ -69,6 +70,6 @@
 
 
 
-  <terms-directive></terms-directive>
+  <terms-directive ng-cloak></terms-directive>
 
 </div>
