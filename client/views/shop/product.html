@@ -11,7 +11,7 @@
 </div>
 
 
-<div class="product-filter">
+<!-- <div class="product-filter">
 
   <ul class="product-filter-ul">
     <li class="product-filter-li" ng-repeat="c in Collection_shop | orderBy: 'collection_index'" ng-class="{'filter-selected': isCollection(c.slug)}" ng-if="c.status.data.key==1">
@@ -30,17 +30,15 @@
       <a ng-click="selectFilter('', '')">clear</a>
     </li>
   </ul>
-</div>
+</div> -->
 
 
 
 
-  <ul class="product-ul" >
-    <!-- shopFilter -->
+  <!-- <ul class="product-ul" >
+
     <li class="product-li" ng-repeat="p in Product | orderBy: '-date' track by $index"  ng-if="(p.stock_level>0 && p.status.data.key==1)" ng-mouseenter="flip=true" ng-mouseleave="flip=false">
-      <!-- <div class="product-li-placeholder" ng-show="!p.images[0].url.https"></div> -->
       <a href="shop/product/{{p.id}}" >
-        <!-- ng-click="thisProduct(p.sku)" -->
         <img src="{{p.images[0].url.https}}" alt="{{p.title}}" class="product-image product-image-one" ng-class="{'fadeOut': flip==true}"/>
         <img src="{{p.images[1].url.https}}" alt="{{p.title}}" class="product-image product-image-two" ng-class="{'fadeOut': flip==false}"/>
       </a>
@@ -51,7 +49,7 @@
         no products match the selected filters
       </p>
     </div>
-  </ul>
+  </ul> -->
 
 
 

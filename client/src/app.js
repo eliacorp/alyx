@@ -55,60 +55,87 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/product/:detail', {
-      templateUrl: 'views/shop/product-detail.html',
-      controller: 'detailCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/product/:detail',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/product-detail.html',
+    //   controller: 'detailCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
 
-    .when('/shop/collection', {
-      templateUrl: 'views/shop/product.html',
-      reloadOnSearch: false
-    })
+    .when('/shop/collection',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/product.html',
+    //   reloadOnSearch: false
+    // }
+  )
 
 
-    .when('/shop/cart', {
-      templateUrl: 'views/shop/cart.html',
-      controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/cart',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/cart.html',
+    //   controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
-    .when('/shop/shipment', {
-      templateUrl: 'views/shop/shipment.html',
-      // controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/shipment',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/shipment.html',
+    //   // controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
-    .when('/shop/shipment/terms', {
-      templateUrl: 'views/shop/shipment.html',
-      // controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/shipment/terms',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/shipment.html',
+    //   // controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
-    .when('/shop/choice', {
-      templateUrl: 'views/shop/choice.html',
-      // controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/choice',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/choice.html',
+    //   // controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
-    .when('/shop/payment', {
-      templateUrl: 'views/shop/payment.html',
-      // controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/payment',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/payment.html',
+    //   // controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
-    .when('/shop/processed/:order/:method', {
-      templateUrl: 'views/shop/processed.html',
-      // controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/processed/:order/:method',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/processed.html',
+    //   // controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
-    .when('/shop/processed/:order/:method/canceled', {
-      templateUrl: 'views/shop/processed-canceled.html',
-      // controller: 'shopCtrl',
-      reloadOnSearch: false
-    })
+    .when('/shop/processed/:order/:method/canceled',
+    {redirectTo: '/shop'}
+    // {
+    //   templateUrl: 'views/shop/processed-canceled.html',
+    //   // controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    // }
+  )
 
 
     .when('/shop/privacy', {
