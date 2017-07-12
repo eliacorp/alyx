@@ -23,6 +23,25 @@ exports.getAll = function (req, res) {
 };
 
 
+exports.getAllStockists = function (req, res) {
+  var _page = req.query.page;
+  var type= req.query.type;
+  console.log(type);
+  console.log(_page);
+  req.prismic.api.query(
+    Prismic.Predicates.at('document.type', type),
+    { pageSize : 200, page : _page, orderings : '[my.'+type+'.date desc]' }
+).then((response) =>{
+  res.status(200).json(response);
+}).catch((err) => {
+// Don't forget error management
+  res.status(500).send(`Error 500: ${err.message}`);
+});
+
+
+};
+
+
 exports.getSingle = function (req, res) {
   var type = req.query.type;
   var uid = req.query.uid;

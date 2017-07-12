@@ -386,9 +386,10 @@ $rootScope.setPage = (page)=>{
   $rootScope.getStockist=()=>{
     $http({
       method: 'GET',
-      url: 'api/prismic/get/all?page=0&type=stockist'
+      url: 'api/prismic/get/all/stockists?page=0&type=stockist'
     }).then(function(response) {
       $rootScope.Stockist= response.data.results;
+      console.log($rootScope.Stockist);
     }, function(err) {
       console.log(err);
     });
