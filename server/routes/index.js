@@ -6,6 +6,13 @@ exports.index = function(req, res){
 
 };
 
+exports.sitemap = function (req, res) {
+  // var name = req.params.name;
+  res.render('sitemap.xml');
+  // res.render('partials/' + name);
+
+};
+
 exports.partials = function (req, res) {
   // var name = req.params.name;
   res.render('index');
