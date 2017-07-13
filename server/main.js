@@ -845,7 +845,7 @@ function updateProductStock(req, res){
 
 
 
-
+    app.get('/sitemap.xml', routes.sitemap);
 
     app.get('*', routes.index);
     app.listen(8081, () => console.log("listening on 8081"));

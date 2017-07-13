@@ -48,7 +48,10 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   $locationProvider.html5Mode(true);
   $routeProvider
 
-
+    .when('/sitemap.xml', {
+      templateUrl: '/sitemap.xml',
+      reloadOnSearch: false
+    })
 
     .when('/googledf3523ad2411ec20.html', {
       templateUrl: '/googledf3523ad2411ec20.html',

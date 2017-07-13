@@ -12,3 +12,11 @@ exports.partials = function (req, res) {
   // res.render('partials/' + name);
 
 };
+
+
+exports.sitemap = function (req, res) {
+  // var name = req.params.name;
+  res.render('sitemap.xml');
+  res.render('sitemap');
+
+};
