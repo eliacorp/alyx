@@ -16,6 +16,25 @@
       <loc>https://alyxstudio.com/collection/vans</loc>
      <lastmod>2017-07-12T10:15:44+00:00</lastmod>
       <changefreq>monthly</changefreq>
+      <image:image>
+         <image:loc>https://alyx.cdn.prismic.io/alyx/bf665d81ae88c642c8387ba292d164c27c734357_61380003.jpg</image:loc>
+         <image:caption>Vans by Alyx</image:caption>
+      </image:image>
+      <video:video>
+        <video:content_loc>
+          https://alyxstudio.com/collection/vans
+        </video:content_loc>
+        <video:player_loc allow_embed="yes" autoplay="ap=1">
+          https://player.vimeo.com/external/218545708.hd.mp4?s=6043f5adaf8e0bc872c0fe268d6bcf81f47c5412&profile_id=174
+        </video:player_loc>
+        <video:thumbnail_loc>
+          https://alyx.cdn.prismic.io/alyx/bf665d81ae88c642c8387ba292d164c27c734357_61380003.jpg
+        </video:thumbnail_loc>
+        <video:title>Vans by Alyx</video:title>
+        <video:description>
+          Vans by Alyx
+        </video:description>
+      </video:video>
    </url>
 
    <url>
