@@ -13,6 +13,15 @@ exports.sitemap = function (req, res) {
 
 };
 
+
+
+
+exports.shop = function (req, res) {
+   res.redirect("https://shop.alyxstudio.com");
+   console.log("redirect to shop.alyxstudio.com");
+};
+
+
 exports.partials = function (req, res) {
   // var name = req.params.name;
   res.render('index');

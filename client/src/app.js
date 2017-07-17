@@ -12,6 +12,11 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 .run(['$rootScope', '$location','$route','$templateCache','$http', ($rootScope, $location, $route,$templateCache, $http)=>{
   $rootScope.pageLoading = true;
 
+
+
+
+
+
     var original = $location.path;
     $location.path = function (path, reload) {
         if (reload === false) {
@@ -55,42 +60,42 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/product/:detail',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/product-detail.html',
-    //   controller: 'detailCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
-
-
-    .when('/shop/collection',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/product.html',
-    //   reloadOnSearch: false
-    // }
-  )
-
-
-    .when('/shop/cart',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/cart.html',
-    //   controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
-
-    .when('/shop/shipment',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/shipment.html',
-    //   // controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
+  //   .when('/shop/product/:detail',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/product-detail.html',
+  //   //   controller: 'detailCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
+  //
+  //
+  //   .when('/shop/collection',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/product.html',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
+  //
+  //
+  //   .when('/shop/cart',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/cart.html',
+  //   //   controller: 'shopCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
+  //
+  //   .when('/shop/shipment',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/shipment.html',
+  //   //   // controller: 'shopCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
 
     .when('/shop/shipment/terms',
     {redirectTo: '/shop'}
@@ -101,41 +106,41 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     // }
   )
 
-    .when('/shop/choice',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/choice.html',
-    //   // controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
+  //   .when('/shop/choice',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/choice.html',
+  //   //   // controller: 'shopCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
+  //
+  //   .when('/shop/payment',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/payment.html',
+  //   //   // controller: 'shopCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
+  //
+  //   .when('/shop/processed/:order/:method',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/processed.html',
+  //   //   // controller: 'shopCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
 
-    .when('/shop/payment',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/payment.html',
-    //   // controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
-
-    .when('/shop/processed/:order/:method',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/processed.html',
-    //   // controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
-
-    .when('/shop/processed/:order/:method/canceled',
-    {redirectTo: '/shop'}
-    // {
-    //   templateUrl: 'views/shop/processed-canceled.html',
-    //   // controller: 'shopCtrl',
-    //   reloadOnSearch: false
-    // }
-  )
+  //   .when('/shop/processed/:order/:method/canceled',
+  //   {redirectTo: '/shop'}
+  //   // {
+  //   //   templateUrl: 'views/shop/processed-canceled.html',
+  //   //   // controller: 'shopCtrl',
+  //   //   reloadOnSearch: false
+  //   // }
+  // )
 
 
     .when('/shop/privacy', {
@@ -182,15 +187,29 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
     /*............................. Take-all routing ........................*/
 
 
+    // .when('/shop', {
+    //   templateUrl: 'views/shop/product.html',
+    //   controller: 'shopCtrl',
+    //   reloadOnSearch: false
+    //   // redirectTo: 'https://shop.alyxstudio.com'
+    //
+    // })
+
     .when('/shop', {
-      templateUrl: 'views/shop/product.html',
-      controller: 'shopCtrl',
-      reloadOnSearch: false
+      redirectTo: function(routeParams) {
+          window.location = 'http://shop.alyxstudio.com';
+      }
     })
+
+    .when('/', {
+        redirectTo: function(routeParams) {
+            window.location = 'http://shop.alyxstudio.com';
+        }
+    });
 
 
     // put your least specific route at the bottom
-    .otherwise({redirectTo: '/shop'})
+    // .otherwise({redirectTo: '/contact'})
 
 
 
@@ -234,6 +253,25 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
           // $anchorScroll();
         }
   }
+
+
+
+    $rootScope.isShopPath=()=>{
+      var first = $location.path();
+      first.indexOf(1);
+      first.toLowerCase();
+      first = first.split("/")[1];
+      return first;
+    }
+
+    console.log($rootScope.isShopPath());
+
+    if(($rootScope.isShopPath()=='')||($rootScope.isShopPath()=='shop')){
+      console.log('isShopPath');
+      $location.absUrl('https://shop.alyxstudio.com');
+    }
+
+
 
   // $scope.$on('$viewContentLoaded', function(event) {
   //   $window.ga('send', 'pageview', { page: $location.url() });

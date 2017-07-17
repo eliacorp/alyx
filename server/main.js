@@ -28,13 +28,13 @@ let moltin = require('moltin')({
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else
-        next();
-});
+// app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//         res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else
+//         next();
+// });
 app.use( express.static(__dirname + "/../client/assets/images") );
 app.use(express.static('/../node_modules/jquery/dist/jquery.min.js'));
 app.set('views', __dirname + '/../client');
@@ -851,8 +851,9 @@ function updateProductStock(req, res){
 
 
 
-
-
+    app.get('/shop', routes.shop);
+    app.get('/shop/*', routes.shop);
+    app.get('/', routes.shop);
     app.get('/sitemap.xml', routes.sitemap);
     app.get('*', routes.index);
     app.listen(8081, () => console.log("listening on 8081"));
