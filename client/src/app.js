@@ -155,6 +155,11 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: true
     })
 
+    .when('/career', {
+      templateUrl: 'views/career.html',
+      controller: 'careerCtrl',
+      reloadOnSearch: false
+    })
 
     .when('/about', {
       templateUrl: 'views/support/support.html',
@@ -333,25 +338,25 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
 
 
 
-//get shop collections
-  $rootScope.getCollections_shop = function(){
+// //get shop collections
+//   $rootScope.getCollections_shop = function(){
+//
+//         // Simple GET request example:
+//         $http({
+//           method: 'GET',
+//           url: '/getCollections'
+//         }).then(function (response) {
+//               $rootScope.Collection_shop=response.data;
+//               $rootScope.$broadcast('Collection_shop_arrived');
+//           }, function (err) {
+//             console.log(err);
+//             // called asynchronously if an error occurs
+//             // or server returns response with an error status.
+//           });
+//
+//   }//getCollections
 
-        // Simple GET request example:
-        $http({
-          method: 'GET',
-          url: '/getCollections'
-        }).then(function (response) {
-              $rootScope.Collection_shop=response.data;
-              $rootScope.$broadcast('Collection_shop_arrived');
-          }, function (err) {
-            console.log(err);
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-          });
-
-  }//getCollections
-
-$rootScope.getCollections_shop();
+// $rootScope.getCollections_shop();
 
 
 
@@ -424,7 +429,7 @@ $rootScope.setPage = (page)=>{
   $rootScope.getStockist=()=>{
     $http({
       method: 'GET',
-      url: 'api/prismic/get/all/stockists?page=0&type=stockist'
+      url: 'api/prismic/get/all?page=0&type=stockist'
     }).then(function(response) {
       $rootScope.Stockist= response.data.results;
       console.log($rootScope.Stockist);
@@ -454,7 +459,7 @@ $rootScope.collections = [];
 $rootScope.getCollections_media=(type, page)=>{
   $http({
     method: 'GET',
-    url: 'api/prismic/get/all?page='+page+'&type='+type
+    url: 'api/prismic/get/all/seasons?page='+page+'&type='+type
   }).then(function(response) {
     $rootScope.collections= response.data.results;
   }, function(err) {
@@ -801,7 +806,4 @@ var collection = require('./collection/collection.js');
 var lookbook = require('./collection/lookbook.js');
 var support = require('./support/support.js');
 var social = require('./social/social.js');
-
-
-
-//
+var career = require('./career/career.js');

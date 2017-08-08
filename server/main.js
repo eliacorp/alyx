@@ -158,8 +158,14 @@ app.use((req, res, next) => {
 //   PrismicSDK.preview(req.prismic.api, PrismicConfig.linkResolver, req, res)
 // ));
 
+
 app.get('/api/prismic/get/single', function(req, res){
   prismic.getSingle(req, res);
+});
+
+app.get('/api/prismic/get/all/seasons', function(req, res){
+  console.log('/api/prismic/get/all/seasons');
+  prismic.getAllSeasons(req, res);
 });
 
 app.get('/api/prismic/get/all', function(req, res){
@@ -167,10 +173,7 @@ app.get('/api/prismic/get/all', function(req, res){
   prismic.getAll(req, res);
 });
 
-app.get('/api/prismic/get/all/stockists', function(req, res){
-  console.log('/api/prismic/get/all/stockists');
-  prismic.getAllStockists(req, res);
-});
+
 
 
 

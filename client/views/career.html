@@ -1,0 +1,18 @@
+<div class="career">
+
+  <ul class="career-ul">
+    <h1 class="form-title">Careers</h1>
+    <li class="career-li" ng-repeat="c in Career">
+      <h2>{{c.data['career.role'].value[0].text}}</h2>
+      <!-- <p class="career-qualification-header">qualifications:</p> -->
+      <p class="career-qualification-{{q.type}}" id="career-qualification-{{q.type}}-{{$index}}" ng-repeat="q in c.data['career.qualifications'].value">
+        {{q.text}}
+      </p>
+      <a class="career-apply"
+     href="mailto:career@alyxstudio.com?subject=career {{c.slug}} Alyx&body=Hi, I would like to apply for the {{c.data['career.role'].value[0].text}} position at ALYX."
+      target="_blank">apply</a>
+
+    </li>
+  </ul>
+
+</div>

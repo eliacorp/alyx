@@ -4,11 +4,9 @@ let request = require('request');
 let fs = require('fs');
 let Prismic = require('prismic-nodejs');
 
-exports.getAll = function (req, res) {
+exports.getAllSeasons = function (req, res) {
   var _page = req.query.page;
   var type= req.query.type;
-  console.log(type);
-  console.log(_page);
   req.prismic.api.query(
     Prismic.Predicates.at('document.type', type),
     { pageSize : 10, page : _page, orderings : '[my.'+type+'.date desc]', fetch : [type+'.slug', type+'.season'] }
@@ -23,11 +21,10 @@ exports.getAll = function (req, res) {
 };
 
 
-exports.getAllStockists = function (req, res) {
+exports.getAll = function (req, res) {
   var _page = req.query.page;
   var type= req.query.type;
-  console.log(type);
-  console.log(_page);
+  console.log("get all "+type);
   req.prismic.api.query(
     Prismic.Predicates.at('document.type', type),
     { pageSize : 200, page : _page, orderings : '[my.'+type+'.date desc]' }
@@ -40,6 +37,9 @@ exports.getAllStockists = function (req, res) {
 
 
 };
+
+
+
 
 
 exports.getSingle = function (req, res) {
