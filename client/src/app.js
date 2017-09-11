@@ -155,7 +155,7 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: true
     })
 
-    .when('/career', {
+    .when('/careers', {
       templateUrl: 'views/career.html',
       controller: 'careerCtrl',
       reloadOnSearch: false
