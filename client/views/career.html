@@ -6,13 +6,13 @@
       <h2>{{c.data['career.role'].value[0].text}}</h2>
       <!-- <p class="career-qualification-header">qualifications:</p> -->
       <div class="career-section" ng-if="c.data['career.experience'].value">
-        <p class="">required experience:</p>
+        <p class="">Required experience:</p>
         <p>{{c.data['career.experience'].value}}</p>
 
       </div>
 
       <div class="career-section" >
-        <p>qualifications:</p>
+        <p>Qualifications:</p>
         <p class="career-qualification-{{q.type}}" id="career-qualification-{{q.type}}-{{$index}}" ng-repeat="q in c.data['career.qualifications'].value">
           {{q.text}}
         </p>
