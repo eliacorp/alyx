@@ -100,8 +100,8 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
       reloadOnSearch: false
     })
 
-    .when('/shop/shipment/terms', {
-      templateUrl: 'views/shop/shipment.html',
+    .when('/terms', {
+      templateUrl: 'views/shop/terms.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     })
