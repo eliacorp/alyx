@@ -1,0 +1,49 @@
+
+.career{
+  width:100vw;
+
+}
+
+.career-ul{
+  padding-top: $margin-top;
+  padding-bottom: $margin-top;
+  width: 400px;
+  height: auto;
+  margin: auto;
+  @include respond-to(phone){
+    padding-bottom: 80px;
+    display: block;
+  }
+  .career-li{
+    width: 100%;
+    display: block;
+    position: relative;
+    margin-top: $margin-top-list;
+    .career-qualification-header{
+      margin-top: $margin-top-p;
+    }
+    .career-section{
+      margin-top: $margin-top-p;
+    }
+    .career-qualification-paragraph{
+      // margin-top: $margin-top-p;
+      // margin-left: 5px;
+      &:nth-child(1){
+        margin-top: 0;
+      }
+    }
+    .career-qualification-list-item{
+      margin-left: 5px;
+    }
+    .career-apply{
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+
+// #career-qualification-paragraph-0{
+//   margin-top: 0;
+// }

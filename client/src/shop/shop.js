@@ -818,6 +818,107 @@ $scope.orderSize=[
 
 
   {
+    title:"4.5",
+    type: 'string',
+    index:1
+  },
+  {
+    title:"5",
+    type: 'string',
+    index:2
+  },
+  {
+    title:"5.5",
+    type: 'string',
+    index:3
+  },
+  {
+    title:"6",
+    type: 'string',
+    index:4
+  },
+  {
+    title:"6.5",
+    type: 'string',
+    index:5
+  },
+  {
+    title:"7",
+    type: 'string',
+    index:6
+  },
+  {
+    title:"7.5",
+    type: 'string',
+    index:7
+  },
+  {
+    title:"8",
+    type: 'string',
+    index:8
+  },
+  {
+    title:"8.5",
+    type: 'string',
+    index:9
+  },
+
+  {
+    title:"9",
+    type: 'string',
+    index:10
+  },
+  {
+    title:"9.5",
+    type: 'string',
+    index:11
+  },
+  {
+    title:"10",
+    type: 'string',
+    index:12
+  },
+  {
+    title:"10.5",
+    type: 'string',
+    index:13
+  },
+  {
+    title:"11",
+    type: 'string',
+    index:14
+  },
+  {
+    title:"11.5",
+    type: 'string',
+    index:15
+  },
+  {
+    title:"12",
+    type: 'string',
+    index:16
+  },
+  {
+    title:"12.5",
+    type: 'string',
+    index:17
+  },
+  {
+    title:"13",
+    type: 'string',
+    index:18
+  },
+  {
+    title:"13.5",
+    type: 'string',
+    index:19
+  },
+  {
+    title:"14",
+    type: 'string',
+    index:20
+  },
+  {
     title:"23",
     type: 'string',
     index:6

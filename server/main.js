@@ -158,14 +158,24 @@ app.use((req, res, next) => {
 //   PrismicSDK.preview(req.prismic.api, PrismicConfig.linkResolver, req, res)
 // ));
 
+
 app.get('/api/prismic/get/single', function(req, res){
   prismic.getSingle(req, res);
+});
+
+app.get('/api/prismic/get/all/seasons', function(req, res){
+  console.log('/api/prismic/get/all/seasons');
+  prismic.getAllSeasons(req, res);
 });
 
 app.get('/api/prismic/get/all', function(req, res){
   console.log('/api/prismic/get/all');
   prismic.getAll(req, res);
 });
+
+
+
+
 
 
 app.get('/api/prismic/get/type', function(req, res){
@@ -844,8 +854,9 @@ function updateProductStock(req, res){
 
 
 
-
+    app.get('/shop', routes.shop);
+    app.get('/shop/*', routes.shop);
+    app.get('/', routes.shop);
     app.get('/sitemap.xml', routes.sitemap);
-
     app.get('*', routes.index);
     app.listen(8081, () => console.log("listening on 8081"));

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -10,6 +11,18 @@
       <lastmod>2017-07-12T10:15:44+00:00</lastmod>
        <changefreq>monthly</changefreq>
        <priority>1</priority>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
+    <url>
+       <loc>https://shop.alyxstudio.com/</loc>
+      <lastmod>2017-07-12T10:15:44+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+>>>>>>> 9a81f99698cd8b0af4d39ce3835f77f2dd713702
     </url>
 
 
@@ -17,13 +30,30 @@
       <loc>https://alyxstudio.com/collection/vans</loc>
      <lastmod>2017-07-12T10:15:44+00:00</lastmod>
       <changefreq>monthly</changefreq>
+<<<<<<< HEAD
       <priority>2</priority>
+=======
+      <image:image>
+         <image:loc>https://alyx.cdn.prismic.io/alyx/bf665d81ae88c642c8387ba292d164c27c734357_61380003.jpg</image:loc>
+         <image:caption>Vans by Alyx</image:caption>
+      </image:image>
+      <video:video>
+        <video:content_loc>https://alyxstudio.com/collection/vans</video:content_loc>
+        <video:player_loc allow_embed="yes" autoplay="ap=1">
+          https://player.vimeo.com/external/218545708.hd.mp4?s=6043f5adaf8e0bc872c0fe268d6bcf81f47c5412&amp;profile_id=174
+        </video:player_loc>
+        <video:thumbnail_loc>https://alyx.cdn.prismic.io/alyx/bf665d81ae88c642c8387ba292d164c27c734357_61380003.jpg</video:thumbnail_loc>
+        <video:title>Vans by Alyx</video:title>
+        <video:description>Vans by Alyx</video:description>
+      </video:video>
+>>>>>>> 9a81f99698cd8b0af4d39ce3835f77f2dd713702
    </url>
 
    <url>
       <loc>https://alyxstudio.com/stockists</loc>
      <lastmod>2017-07-12T10:15:44+00:00</lastmod>
       <changefreq>monthly</changefreq>
+<<<<<<< HEAD
       <priority>2</priority>
    </url>
 
@@ -32,13 +62,30 @@
      <lastmod>2017-07-12T10:15:44+00:00</lastmod>
       <changefreq>monthly</changefreq>
       <priority>2</priority>
+=======
+   </url>
+
+   <url>
+      <loc>https://alyxstudio.com/contact</loc>
+     <lastmod>2017-07-12T10:15:44+00:00</lastmod>
+      <changefreq>monthly</changefreq>
+   </url>
+
+   <url>
+      <loc>https://alyxstudio.com/about</loc>
+     <lastmod>2017-07-12T10:15:44+00:00</lastmod>
+      <changefreq>monthly</changefreq>
+>>>>>>> 9a81f99698cd8b0af4d39ce3835f77f2dd713702
    </url>
 
    <url>
       <loc>https://alyxstudio.com/social</loc>
       <lastmod>2017-07-12T10:15:44+00:00</lastmod>
       <changefreq>monthly</changefreq>
+<<<<<<< HEAD
       <priority>2</priority>
+=======
+>>>>>>> 9a81f99698cd8b0af4d39ce3835f77f2dd713702
    </url>
 
 

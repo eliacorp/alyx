@@ -86,6 +86,8 @@ $scope.getFirstPath=()=>{
   return first;
 }
 
+
+
 $scope.getSecondPath=()=>{
   var first = $location.path();
   first.indexOf(1);
@@ -99,6 +101,7 @@ $scope.getSecondPath=()=>{
 
   if(($scope.getFirstPath() =='shop')){
     $rootScope.logoLeft=false;
+    $location.absUrl('https://shop.alyxstudio.com');
   }else{
     $rootScope.logoLeft=true;
   }
@@ -110,8 +113,12 @@ $scope.getSecondPath=()=>{
     $rootScope.shopLocation=$scope.getSecondPath();
     $rootScope.firstBase=$scope.getFirstPath();
     $rootScope.pageLoading = true;
-    if( $scope.getFirstPath() =='shop'){
+
+    if($scope.getFirstPath() =='shop'){
       $rootScope.logoLeft=false;
+      $location.absUrl('https://shop.alyxstudio.com');
+    }else if($scope.getFirstPath() ==''){
+      $location.absUrl('https://shop.alyxstudio.com');
     }else{
       $rootScope.logoLeft=true;
     }

@@ -1,13 +1,13 @@
 <nav class="nav" ng-show="isNavOpen" ng-controller="navCtrl" ng-init="navCollectionOpen=false">
   <!-- <div class="nav-close" ng-click="closeNav()"> -->
 
-  </div>
+  <!-- </div> -->
   <table>
     <tr>
       <td>
         <ul class="nav-ul">
           <li class="nav-li">
-            <a href="/shop" ng-click="closeNav()"><h2 ng-class="{'active': firstBase == 'shop'}">shop</h2></a>
+            <a href="http://shop.alyxstudio.com" ng-click="closeNav()"><h2 ng-class="{'active': firstBase == 'shop'}">shop</h2></a>
           </li>
           <li class="nav-li">
             <h2 ng-click="navCollectionOpen=!navCollectionOpen" ng-class="{'active': firstBase =='collection' }">collections</h2>
@@ -27,11 +27,19 @@
             <a href="/stockists" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/stockists'}">stockists</h2></a>
           </li>
           <li class="nav-li">
+            <a href="/career" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/career'}">career</h2></a>
+          </li>
+          <li class="nav-li">
             <a href="/social" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/social'}">social</h2></a>
+          </li>
+          <li class="nav-li">
+            <a href="/subscribe" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/careers'}">careers</h2></a>
           </li>
           <li class="nav-li">
             <a href="/subscribe" ng-click="closeNav()"><h2 ng-class="{'active': Location == '/subscribe'}">subscribe</h2></a>
           </li>
+
+
 
         </ul>
       </td>
