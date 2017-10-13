@@ -4,6 +4,16 @@
   <h1 class="lookbook-title-h1">{{Collection.data['collection.title'].value}}</h1>
 </div>
 
+<div class="lookbook-gender-filter">
+  <h3 class="lookbook-gender-filter-name"
+  ng-repeat="g in Collection.data['collection.body1'].value"
+  ng-click="selectGender(g['non-repeat'].slug.value, $index)"
+  ng-class="{'active': Gender == g['non-repeat'].slug.value}"
+  >
+      {{g['non-repeat'].title.value[0].text}}
+  </h3>
+</div>
+
 <!-- story -->
 
   <!-- <div class="lookbook-description" ng-class="{readStoryScroll: readActive}" ng-click="showDescription()" ng-if="!isMobile">
@@ -40,24 +50,27 @@
   <div class="lookbook-main" ng-show="showLookbook">
     <!-- ng-show="mainLookShow" -->
     <!-- <p class="lookbook-text-p">look {{mainLook}}</p> -->
-
     <!-- <div class="lookbook-text"  ng-if="!isMobile">
-
       <p class="lookbook-text-readstory">
         <a ng-click="showDescription()">{{lookbookStatus}} story</a>
       </p>
     </div> -->
-
-
-<!-- ng-click="showDescription()" -->
+    <!-- ng-click="showDescription()" -->
     <img src="{{mainLook.image.value.main.url}}" alt="{{Collection.slug}}" class="lookbook-main-img" ng-class="{'shift-image': shiftImage}" />
   </div>
 
 
 <!-- side images -->
   <div class="lookbook-side">
-    <ul class="lookbook-side-ul">
-      <li ng-repeat="l in Collection.data['collection.look'].value" class="lookbook-side-li" ng-click="selectMainLook($index)">
+    <ul class="lookbook-side-ul"  ng-if="!Collection.data['collection.body1'].value">
+      <li ng-repeat="l in Collection.data['collection.look'].value" class="lookbook-side-li"
+      ng-click="selectMainLook($index)">
+        <img src="{{l.image.value.main.url}}" alt="{{Collection.slug}}" class="lookbook-side-li-img"/>
+      </li>
+    </ul>
+    <ul class="lookbook-side-ul" ng-if="Collection.data['collection.body1'].value">
+      <li ng-repeat="l in Lookbook.repeat" class="lookbook-side-li"
+      ng-click="selectMainLookG($index)">
         <img src="{{l.image.value.main.url}}" alt="{{Collection.slug}}" class="lookbook-side-li-img"/>
       </li>
     </ul>

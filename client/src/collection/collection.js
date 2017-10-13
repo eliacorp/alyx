@@ -6,6 +6,7 @@ Collection.controller('collectionCtrl', ['$scope', '$location', '$rootScope', '$
 
 console.log("collectionCtrl");
 	$rootScope.Collection = [];
+	$rootScope.Lookbook;
 	var collectionRan = false;
 	$rootScope.showLookbook=false;
 	// $rootScope.getContentType('collection', 'my.collection.date desc');
@@ -16,8 +17,9 @@ console.log("collectionCtrl");
 	    method: 'GET',
 	    url: 'api/prismic/get/single?type='+type+'&uid='+uid
 	  }).then(function(response) {
-			console.log(response);
 				$rootScope.Collection = response.data;
+				console.log($rootScope.Collection);
+				console.log(response);
 				$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 	    }, function(err) {
 	      console.log(err);
@@ -33,8 +35,8 @@ console.log("collectionCtrl");
   	// $rootScope.getContentType('collection', 'my.collection.date desc');
 
 
-		$scope.collectionScroll = ()=>{
-			$rootScope.collectionCtrlLoaded=true;
+		$rootScope.collectionScroll = ()=>{
+			// $rootScope.collectionCtrlLoaded=true;
 
 				var lookbookElement = angular.element('#lookbook')[0];
 				$scope.lookbookLength = lookbookElement.scrollHeight;
@@ -47,9 +49,14 @@ console.log("collectionCtrl");
 				console.log($scope.scroll, $scope.lookbookPosition);
 				if($rootScope.Collection.data){
 					console.log("Collection data");
+					$rootScope.$broadcast('collectionReady');
+					// if($rootScope.Collection.data['collection.body1'].value){
+					// 	$rootScope.Lookbook=$rootScope.Collection.data['collection.body1'].value[0];
+					// }
 					if(!$rootScope.Collection.data['collection.video_url']){
 						// $scope.scroll>=$scope.lookbookPosition
 						$rootScope.showLookbook=true;
+						$rootScope.$apply();
 						console.log("showLookbook", $rootScope.showLookbook);
 					}else{
 						angular.element($window).bind("scroll.collection", function() {
@@ -64,45 +71,37 @@ console.log("collectionCtrl");
 					}
 				}
 
-
-
-
-
-
-
-
-				jQuery('.lookbook').resize(function(){
-
-					$scope.lookbookLength = document.getElementById("lookbook").scrollHeight;
-					$scope.windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-					$scope.docHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight,  document.documentElement.scrollHeight, document.documentElement.offsetHeight);
-					$scope.scroll = window.pageYOffset;
-					$scope.windowBottom = $scope.windowHeight + window.pageYOffset;
-					$scope.lookbookPosition=$scope.docHeight-$scope.lookbookLength;
-
-						$rootScope.$apply();
-				});
 				$rootScope.$apply();
 		}
 
 
 $rootScope.collectionCtrlLoaded=false;
 setTimeout(function(){
-		if(!$rootScope.collectionCtrlLoaded){
-			$scope.collectionScroll();
-		}
+		// if(!$rootScope.collectionCtrlLoaded){
+			$rootScope.collectionScroll();
+		// }
 }, 800)
 
 
 $scope.$on('$viewContentLoaded', function(){
 	if($rootScope.collectionCtrlLoaded){
-		$scope.collectionScroll();
+		$rootScope.collectionScroll();
 	}
 })
 
 
 
+jQuery('.lookbook').resize(function(){
 
+	$scope.lookbookLength = document.getElementById("lookbook").scrollHeight;
+	$scope.windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+	$scope.docHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight,  document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+	$scope.scroll = window.pageYOffset;
+	$scope.windowBottom = $scope.windowHeight + window.pageYOffset;
+	$scope.lookbookPosition=$scope.docHeight-$scope.lookbookLength;
+
+		$rootScope.$apply();
+});
 
 
 

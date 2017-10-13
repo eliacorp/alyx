@@ -10,9 +10,22 @@ $scope.animating = false;
 $rootScope.readActive= false;
 $scope.lookbookStatus ="read";
 
-
 $scope.selectMainLook=(index)=>{
 	$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+};
+
+$scope.selectMainLookG=(index)=>{
+	$scope.mainLook = $rootScope.Lookbook.repeat[index];
+};
+
+$scope.Gender='woman';
+
+
+$scope.selectGender=(gender, index)=>{
+	console.log(gender, index);
+	$scope.Gender=gender;
+	$rootScope.Lookbook=$rootScope.Collection.data['collection.body1'].value[index];
+	$scope.mainLook = $rootScope.Lookbook.repeat[0];
 };
 
 
@@ -22,7 +35,11 @@ $scope.selectMainLook=(index)=>{
 
 $rootScope.$on("collectionReady", function(){
 	// $scope.selectMainLook(1);
-	$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
+	if($rootScope.Collection.data['collection.body1']){
+		$scope.selectGender('woman', 0);
+	}
+
+	// $scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
 
 });
 
@@ -39,8 +56,6 @@ $scope.showDescription = function(){
 			$scope.lookbookStatus ="read";
 		}
 	}
-
-		//
 		// $rootScope.readScrollDisable();
 
 		if($scope.animating == true){
@@ -181,9 +196,6 @@ var newMain;
 
 			 // handle cursor keys
 			 if (event.keyCode == 39) {
-
-
-
 				if(index <arrayLength){
 					index = index+1;
 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
