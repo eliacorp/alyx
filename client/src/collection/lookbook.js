@@ -37,6 +37,9 @@ $rootScope.$on("collectionReady", function(){
 	// $scope.selectMainLook(1);
 	if($rootScope.Collection.data['collection.body1']){
 		$scope.selectGender('woman', 0);
+		$scope.keyGender();
+	}else{
+		$scope.keyNoGender();
 	}
 
 	// $scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
@@ -186,39 +189,74 @@ $scope.showDescription = function(){
 var newMain;
 
 //navigating with keys
- jQuery(document.documentElement).keyup(function (event) {
-
-				event.preventDefault();
-				//globals
-				var arrayLength = $rootScope.Collection.data['collection.look'].value.length-1;
-				var index = $rootScope.Collection.data['collection.look'].value.indexOf($scope.mainLook);
 
 
-			 // handle cursor keys
-			 if (event.keyCode == 39) {
-				if(index <arrayLength){
-					index = index+1;
-					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
-				}else{
-					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
+$scope.keyNoGender=()=>{
+	jQuery(document.documentElement).keyup(function (event) {
+
+				 event.preventDefault();
+				 //globals
+				 var arrayLength = $rootScope.Collection.data['collection.look'].value.length-1;
+				 var index = $rootScope.Collection.data['collection.look'].value.indexOf($scope.mainLook);
+
+				// handle cursor keys
+				if (event.keyCode == 39) {
+				 if(index <arrayLength){
+					 index = index+1;
+					 $scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+				 }else{
+					 $scope.mainLook = $rootScope.Collection.data['collection.look'].value[0];
+				 }
+
+
+				} else if (event.keyCode == 37) {
+				 if(index > 0){
+					 index = index-1;
+					 $scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
+				 }else{
+					 $scope.mainLook = $rootScope.Collection.data['collection.look'].value[arrayLength];
+				 }
+				}
+				$scope.$apply();
+		});
+}
+
+
+$scope.keyGender=()=>{
+	jQuery(document.documentElement).keyup(function (event) {
+
+				 event.preventDefault();
+				 //globals
+				 var arrayLength = $rootScope.Lookbook.repeat.length-1;
+				 var index = $rootScope.Lookbook.repeat.indexOf($scope.mainLook);
+
+
+
+				// handle cursor keys
+				if (event.keyCode == 39) {
+				 if(index <arrayLength){
+					 index = index+1;
+					 $scope.mainLook = $rootScope.Lookbook.repeat[index];
+				 }else{
+					 $scope.mainLook = $rootScope.Lookbook.repeat[0];
+				 }
+
+
+				} else if (event.keyCode == 37) {
+				 if(index > 0){
+					 index = index-1;
+					 $scope.mainLook = $rootScope.Lookbook.repeat[index];
+				 }else{
+					 $scope.mainLook = $rootScope.Lookbook.repeat[arrayLength];
+				 }
 				}
 
+				$scope.$apply();
 
-			 } else if (event.keyCode == 37) {
-
- 				if(index > 0){
- 					index = index-1;
- 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[index];
- 				}else{
- 					$scope.mainLook = $rootScope.Collection.data['collection.look'].value[arrayLength];
- 				}
+		});
+}
 
 
-			 }
-
-			 $scope.$apply();
-
-	 });
 //
 //
 //

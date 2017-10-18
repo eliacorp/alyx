@@ -28,6 +28,7 @@
     "hover.css": "^2.0.2",
     "jquery": "^3.0.0",
     "jquery-ui": "^1.12.0",
+    "mandrill-api": "^1.0.45",
     "moltin": "^1.0.3",
     "nodemailer": "^2.7.2",
     "path": "^0.12.7",

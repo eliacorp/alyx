@@ -100,13 +100,22 @@ angular.module('myApp', ["ngRoute", "ngAnimate", "ngResource"])
   //   // }
   // )
 
-    .when('/terms',
+  .when('/terms',
     {
       templateUrl: 'views/shop/terms.html',
       // controller: 'shopCtrl',
       reloadOnSearch: false
     }
   )
+
+
+    .when('/returns',
+      {
+        templateUrl: 'views/shop/returns.html',
+        controller: 'returnsCtrl',
+        reloadOnSearch: false
+      }
+    )
 
   //   .when('/shop/choice',
   //   {redirectTo: '/shop'}
@@ -807,5 +816,6 @@ var service = require('./service.js');
 var collection = require('./collection/collection.js');
 var lookbook = require('./collection/lookbook.js');
 var support = require('./support/support.js');
+var returns = require('./support/returns.js');
 var social = require('./social/social.js');
 var career = require('./career/career.js');

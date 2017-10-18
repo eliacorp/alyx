@@ -101,6 +101,9 @@
     bottom: auto;
     margin: auto;
   }
+  a{
+
+  }
   img{
     left: 100%;
     bottom: 5px;
@@ -109,6 +112,13 @@
     position: absolute;
   }
 
+}
+
+.logo-status{
+  position: absolute;
+  display: inline-block;
+  left:55px;
+  bottom: 0;
 }
 
 

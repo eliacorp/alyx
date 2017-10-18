@@ -1,0 +1,57 @@
+<div class="returns">
+
+
+<div class="returns-left">
+  <div class="returns-left-content">
+      <!-- <h3></h3> -->
+      <p>
+        if something you ordered from us isn’t quite right, you have 14 days upon receipt of your order - that is from the date you receive your order - to return your items or to exchange them for a different size of the same items.
+        please note that all returned items must be unworn, unwashed, complete with original tags and/or packaging. items returned in non-resalable conditions, won’t be eligible for refund and will be sent back to you.
+        if returning footwear, please ensure the shoe box is protected with an outer packaging. the shoe box is part of the product, therefore any damage to the box may result in the return being refused.
+      </p>
+
+      <p>
+        to start your return process you just have to send an email to <a href="mailto:service@alyxstudio.com">service@alyxstudio.com</a> and provide:
+
+        -      order number
+        -      item you want to return
+        -      pick up address
+        -      email + phone
+        -      if you want to do an exchange the size
+      </p>
+
+      <p>
+        we’ll arrange the pick up of your parcel wherever you wish. you just need to pack the items in their original box (or any rigid cardboard box), stick the shipping label (we’ll provide it) on the box, download the return slip from your account, and wait for the courier. before collecting your parcel, the courier will get in touch to confirm the pick up time.
+        the returns are not free, the return shipping costs will be deducted from your refund.
+      </p>
+
+      <p>
+        when returning items from outside the eu, you might incur import duties. they are charged once the parcel reaches its destination country, and must be paid by customers.
+        please note that any eventual import duties related to your return will be deducted from your refund, while for exchanges, we’ll ask you to provide your payment before sending out your new size.
+      </p>
+    </div>
+
+  </div>
+  <div class="returns-right">
+    <form name="returnsForm" novalidate class="shipment-form" method="post">
+
+    <div class="customer">
+      <h2 class="form-sub-title">form</h2>
+      <div class="form-entry">
+        <input type="text" name="name_returns" value="name" ng-model="Returns.first_name" required placeholder="name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'name'">
+          <span class="form-error" ng-show="returnsForm.name_returns.$error.required && returnsForm.name_returns.$touched">required</span>
+        </input>
+        <input type="text" name="lastname_returns" value="name" ng-model="Returns.lastname" required placeholder="lastname" onfocus="this.placeholder = ''" onblur="this.placeholder = 'lastname'">
+          <span class="form-error" ng-show="returnsForm.lastname_returns.$error.required && returnsForm.lastname_returns.$touched">required</span>
+        </input>
+        <input type="email" name="email_returns" value="name" ng-model="Returns.email" required placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+          <span class="form-error" ng-show="returnsForm.email_returns.$error.required && returnsForm.email_returns.$touched">required</span>
+        </input>
+      </div>
+
+
+      <a ng-click="sendReturnForm(Returns)">send</a>
+
+    </form>
+
+</div>

@@ -1,6 +1,5 @@
 "use strict"
 
-
 let https = require("https");
 let fs = require('fs');
 let express = require("express");
@@ -16,6 +15,7 @@ let order  = require('./order/order.js');
 const prismic  = require('./api/prismic');
 let PrismicConfig = require('./api/prismic/config.js');
 let PrismicSDK = require('prismic-nodejs');
+let mandrill = require('./api/mandrill');
 let app = express();
 
 
@@ -182,6 +182,12 @@ app.get('/api/prismic/get/type', function(req, res){
   prismic.getType(req, res);
 });
 
+
+
+
+app.post('/api/mandrill/send', function(req, res){
+  mandrill.send(req, res);
+});
 
 
 
