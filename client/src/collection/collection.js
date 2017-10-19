@@ -57,10 +57,13 @@ console.log("collectionCtrl");
 						// $scope.scroll>=$scope.lookbookPosition
 						$rootScope.showLookbook=true;
 						$rootScope.$apply();
+						console.log("no video");
 						console.log("showLookbook", $rootScope.showLookbook);
 					}else{
 						angular.element($window).bind("scroll.collection", function() {
 							$scope.scroll = window.pageYOffset;
+							console.log("is video");
+							console.log("showLookbook", $rootScope.showLookbook);
 							if($scope.scroll>=$scope.lookbookPosition){
 								$rootScope.showLookbook=true;
 							}else{

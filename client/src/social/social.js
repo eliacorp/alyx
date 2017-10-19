@@ -80,7 +80,7 @@ $scope.thisSocialImage = function(number){
 
     if(!$scope.instaTotal[numberOne].videos){
       $scope.isVideo = false;
-        $scope.mainSocialImage = $scope.instaTotal[numberOne].images.standard_resolution.url;
+        $scope.mainSocialImage = $sce.trustAsResourceUrl($scope.instaTotal[numberOne].images.standard_resolution.url);
     }else if($scope.instaTotal[numberOne].videos){
       $scope.isVideo = true;
       var riskyVideo = $scope.instaTotal[numberOne].videos.standard_resolution.url;
@@ -271,14 +271,14 @@ $scope.filterAllLoadMore = function(){
 
 
 
-
-
+// 16826015.d8005a1.d5bcfc243dca47d6b82ff55ffdc2dd0a new
+// 16826015.d8005a1.744387638806403c90dfcc2a747fa970
 //..............................................................................the GET request
 
 
-	var endpoint = "https://api.instagram.com/v1/users/16826015/media/recent?access_token=16826015.d8005a1.744387638806403c90dfcc2a747fa970&callback=JSON_CALLBACK";
-				$http({url: endpoint, method: 'JSONP', cache: true, isArray: true}).success(function(response){
-							$scope.instaTotal = response.data;
+	var endpoint = $sce.trustAsResourceUrl("https://api.instagram.com/v1/users/16826015/media/recent?access_token=16826015.d8005a1.d5bcfc243dca47d6b82ff55ffdc2dd0a");
+				$http({url: endpoint, method: 'JSONP', cache: true, isArray: false}).then(function(response){
+							$scope.instaTotal = response.data.data;
               setTimeout(function(){
                 $scope.thisSocialImage(1);
                 $rootScope.pageLoading=false;
